@@ -1,21 +1,21 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import path from 'path';
+import path from 'node:path'
 
 export default defineNuxtConfig({
-  srcDir: "./src",
+  srcDir: './src',
   modules: [
-    'nuxt-primevue'
+    'nuxt-primevue',
   ],
   primevue: {
     options: {
-      unstyled: true,
+      unstyled: false,
     },
     importPT: {
-      from: path.resolve(__dirname, "./src/presets/lara/"),
-      as: "TailwindLara"
+      from: path.resolve(__dirname, './src/presets/lara/'),
+      as: 'TailwindLara',
     },
     components: {
-      include: "*",
+      include: '*',
     },
   },
   postcss: {
@@ -27,10 +27,10 @@ export default defineNuxtConfig({
 
   app: {
     layoutTransition: {
-      name: "slide-right",
-      mode: "out-in",
+      name: 'slide-right',
+      mode: 'out-in',
     },
   },
-  css: ["~/assets/scss/main.scss"],
+  css: ['~/assets/scss/main.scss'],
 
 })
