@@ -1,15 +1,98 @@
+<script setup>
+import { onMounted, ref } from 'vue'
+import { FilterMatchMode, FilterOperator } from 'primevue/api'
+import { CustomerService } from '@/services/sampleData'
+
+const filters = ref()
+const representatives = ref([
+  { name: 'Amy Elsner', image: 'amyelsner.png' },
+  { name: 'Anna Fali', image: 'annafali.png' },
+  { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
+  { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
+  { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
+  { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
+  { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
+  { name: 'Onyama Limba', image: 'onyamalimba.png' },
+  { name: 'Stephen Shaw', image: 'stephenshaw.png' },
+  { name: 'XuXue Feng', image: 'xuxuefeng.png' },
+])
+const statuses = ref([
+  'unqualified',
+  'qualified',
+  'new',
+  'negotiation',
+  'renewal',
+  'proposal',
+])
+
+function initFilters() {
+  filters.value = {
+    'global': { value: null, matchMode: FilterMatchMode.CONTAINS },
+    'name': {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+    },
+    'country.name': {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
+    },
+    'representative': { value: null, matchMode: FilterMatchMode.IN },
+    'date': {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+    },
+    'balance': {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+    },
+    'status': {
+      operator: FilterOperator.OR,
+      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
+    },
+  }
+}
+
+initFilters()
+
+function formatCurrency(value) {
+  return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' })
+}
+function clearFilter() {
+  initFilters()
+}
+
+function getSeverity(status) {
+  switch (status) {
+    case 'unqualified':
+      return 'danger'
+
+    case 'qualified':
+      return 'success'
+
+    case 'new':
+      return 'info'
+
+    case 'negotiation':
+      return 'warning'
+
+    case 'renewal':
+      return null
+  }
+}
+</script>
+
 <template>
   <div class="card">
     <DataTable
       v-model:filters="filters"
       :value="CustomerService"
       paginator
-      responsiveLayout="scroll"
-      showGridlines
+      responsive-layout="scroll"
+      show-gridlines
       :rows="10"
-      dataKey="id"
-      filterDisplay="menu"
-      :globalFilterFields="[
+      data-key="id"
+      filter-display="menu"
+      :global-filter-fields="[
         'name',
         'country.name',
         'representative.name',
@@ -32,15 +115,19 @@
               class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600"
             />
             <InputText
-              v-model="filters['global'].value"
+              v-model="filters.global.value"
               placeholder="Keyword Search"
               class="pl-10 font-normal rounded-lg"
             />
           </span>
         </div>
       </template>
-      <template #empty> No customers found. </template>
-      <template #loading> Loading customers data. Please wait. </template>
+      <template #empty>
+        No customers found.
+      </template>
+      <template #loading>
+        Loading customers data. Please wait.
+      </template>
       <Column field="name" header="Name" style="min-width: 12rem">
         <template #body="{ data }">
           {{ data.name }}
@@ -56,7 +143,7 @@
       </Column>
       <Column
         header="Country"
-        filterField="country.name"
+        filter-field="country.name"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
@@ -66,7 +153,7 @@
               src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png"
               :class="`flag flag-${data.country.code}`"
               style="width: 24px"
-            />
+            >
             <span>{{ data.country.name }}</span>
           </div>
         </template>
@@ -82,27 +169,29 @@
           <Button
             type="button"
             icon="pi pi-times"
-            @click="filterCallback()"
             severity="secondary"
-          ></Button>
+            @click="filterCallback()"
+          />
         </template>
         <template #filterapply="{ filterCallback }">
           <Button
             type="button"
             icon="pi pi-check"
-            @click="filterCallback()"
             severity="success"
-          ></Button>
+            @click="filterCallback()"
+          />
         </template>
         <template #filterfooter>
-          <div class="px-3 pt-0 pb-3 text-center">Customized Buttons</div>
+          <div class="px-3 pt-0 pb-3 text-center">
+            Customized Buttons
+          </div>
         </template>
       </Column>
       <Column
         header="Agent"
-        filterField="representative"
-        :showFilterMatchModes="false"
-        :filterMenuStyle="{ width: '14rem' }"
+        filter-field="representative"
+        :show-filter-match-modes="false"
+        :filter-menu-style="{ width: '14rem' }"
         style="min-width: 14rem"
       >
         <template #body="{ data }">
@@ -111,7 +200,7 @@
               :alt="data.representative.name"
               :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`"
               style="width: 32px"
-            />
+            >
             <span>{{ data.representative.name }}</span>
           </div>
         </template>
@@ -119,7 +208,7 @@
           <MultiSelect
             v-model="filterModel.value"
             :options="representatives"
-            optionLabel="name"
+            option-label="name"
             placeholder="Any"
             class="p-column-filter"
           >
@@ -129,7 +218,7 @@
                   :alt="slotProps.option.name"
                   :src="`https://primefaces.org/cdn/primevue/images/avatar/${slotProps.option.image}`"
                   style="width: 32px"
-                />
+                >
                 <span>{{ slotProps.option.name }}</span>
               </div>
             </template>
@@ -138,8 +227,8 @@
       </Column>
       <Column
         header="Date"
-        filterField="date"
-        dataType="date"
+        filter-field="date"
+        data-type="date"
         style="min-width: 10rem"
       >
         <template #body="{ data }">
@@ -148,7 +237,7 @@
         <template #filter="{ filterModel }">
           <Calendar
             v-model="filterModel.value"
-            dateFormat="mm/dd/yy"
+            date-format="mm/dd/yy"
             placeholder="mm/dd/yyyy"
             mask="99/99/9999"
           />
@@ -156,8 +245,8 @@
       </Column>
       <Column
         header="Balance"
-        filterField="balance"
-        dataType="numeric"
+        filter-field="balance"
+        data-type="numeric"
         style="min-width: 10rem"
       >
         <template #body="{ data }">
@@ -175,7 +264,7 @@
       <Column
         header="Status"
         field="status"
-        :filterMenuStyle="{ width: '14rem' }"
+        :filter-menu-style="{ width: '14rem' }"
         style="min-width: 12rem"
       >
         <template #body="{ data }">
@@ -187,7 +276,7 @@
             :options="statuses"
             placeholder="Select One"
             class="p-column-filter"
-            showClear
+            show-clear
           >
             <template #option="slotProps">
               <Tag
@@ -219,86 +308,3 @@
     </DataTable>
   </div>
 </template>
-
-<script setup>
-import { ref, onMounted } from "vue";
-import { CustomerService } from "@/services/sampleData";
-import { FilterMatchMode, FilterOperator } from "primevue/api";
-
-const filters = ref();
-const representatives = ref([
-  { name: "Amy Elsner", image: "amyelsner.png" },
-  { name: "Anna Fali", image: "annafali.png" },
-  { name: "Asiya Javayant", image: "asiyajavayant.png" },
-  { name: "Bernardo Dominic", image: "bernardodominic.png" },
-  { name: "Elwin Sharvill", image: "elwinsharvill.png" },
-  { name: "Ioni Bowcher", image: "ionibowcher.png" },
-  { name: "Ivan Magalhaes", image: "ivanmagalhaes.png" },
-  { name: "Onyama Limba", image: "onyamalimba.png" },
-  { name: "Stephen Shaw", image: "stephenshaw.png" },
-  { name: "XuXue Feng", image: "xuxuefeng.png" },
-]);
-const statuses = ref([
-  "unqualified",
-  "qualified",
-  "new",
-  "negotiation",
-  "renewal",
-  "proposal",
-]);
-
-const initFilters = () => {
-  filters.value = {
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    name: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    "country.name": {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
-    },
-    representative: { value: null, matchMode: FilterMatchMode.IN },
-    date: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-    },
-    balance: {
-      operator: FilterOperator.AND,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-    status: {
-      operator: FilterOperator.OR,
-      constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-    },
-  };
-};
-
-initFilters();
-
-const formatCurrency = (value) => {
-  return value.toLocaleString("en-US", { style: "currency", currency: "USD" });
-};
-const clearFilter = () => {
-  initFilters();
-};
-
-const getSeverity = (status) => {
-  switch (status) {
-    case "unqualified":
-      return "danger";
-
-    case "qualified":
-      return "success";
-
-    case "new":
-      return "info";
-
-    case "negotiation":
-      return "warning";
-
-    case "renewal":
-      return null;
-  }
-};
-</script>

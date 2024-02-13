@@ -1,9 +1,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import DataListView from '~/components/dataLibrary/DataListView.vue'
+import DataTable from '../../components/dataLibrary/DataList.vue'
 
-// const router = useRouter()
 const home = ref({
   icon: 'pi pi-home',
   route: '/',
@@ -11,6 +10,8 @@ const home = ref({
 
 const selectedUsecase = ref()
 const selectedTemplate = ref()
+const showData = ref(false)
+const preview = ref(false)
 
 const use_cases = ref([
   { name: 'From to Doc' },
@@ -21,6 +22,16 @@ const templates = ref([
   { name: 'Template 1' },
   { name: 'Template 2' },
 ])
+
+function handleShowData() {
+  // set showData
+  showData.value = !showData.value
+}
+
+function handlePreview() {
+  // set showData
+  preview.value = !preview.value
+}
 
 const items = ref([{ label: 'Data Library', route: '/data-library' }])
 </script>
@@ -50,12 +61,12 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
       </template>
     </Breadcrumb>
 
-    <div class="mx-4 px-8 py-5 shadow rounded-md bg-white">
+    <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white">
       <div class="font-semibold text-2xl mb-7 mt-5">
         Data Library
       </div>
 
-      <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 py-5">
+      <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 py-5 mx-8">
         <div>
           <label for="use_case" class="block text-lg font-medium leading-6 sr-only">Select Use case</label>
           <Dropdown
@@ -73,32 +84,54 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
             :options="templates"
             option-label="name"
             placeholder="Select template"
-            class=" w-full h-14 md:w-[14rem] flex justify-between rounded pr-2"
+            class=" w-full h-14 md:w-[14rem] flex justify-between rounded pr-2 "
           />
         </div>
 
-        <Button label="Preview" outlined class="w-28 h-14 text-primaryBlue justify-center items-center shadow-sm" />
-        <Button label="Show data" severity="secondary" class="w-44 text-center bg-primaryBlue h-14 shadow-sm" />
+        <Button
+          label="Preview"
+          outlined
+          class="w-28 h-14 text-primaryBlue bg-white justify-center items-center shadow-sm
+         hover:text-white hover:bg-primaryBlue border-primaryBlue hover:border-white"
+          @click="handlePreview()"
+        />
+
+        <Button
+          :label="showData ? 'Hide Data' : 'Show Data'"
+          severity="secondary"
+          class="w-44 text-center bg-primaryBlue h-14 shadow-sm group hover:border-primaryBlue hover:text-primaryBlue hover:bg-white"
+          @click="handleShowData()"
+        />
       </div>
 
-      <div class="flex flex-col justify-center text-center mt-10 space-y-2 ">
+      <div v-if="showData" class="flex flex-col justify-center text-center mt-10 space-y-2 ">
         <div class="flex flex-wrap flex-column md:flex-row justify-between mx-10 mb-5">
           <div class="text-left">
             <p class="text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium text-left">
-              All data related to form
+              All data related to form.
             </p>
-            <p class="text-sm md:text-base lg:text-base xl:text-lg font-normal text-gray-500">
+            <p class="text-xs md:text-sm lg:text-sm xl:text-base mt-2 font-normal text-gray-500">
               Here you have data of every time the form is filled.
             </p>
           </div>
           <Button label="Export " severity="secondary" class="w-28 rounded-md text-center bg-primaryBlue h-14 shadow" icon="pi pi-download" />
         </div>
 
-        <div class=" shadow-md p-2 mt-5">
-          <DataListView />
+        <div class=" p-2 mt-5">
+          <DataTable />
         </div>
       </div>
     </div>
+
+    <!-- Preview Modal -->
+    <Dialog v-model:visible="preview" modal header=" " :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" class="text-center">
+      <div class="flex flex-col justify-center items-center space-y-5">
+        <p class="text-xl font-semibold">
+          Selected Template
+        </p>
+        <img src="https://i0.wp.com/statisticsbyjim.com/wp-content/uploads/2021/11/discrete_data_ex.png?fit=576%2C384&ssl=1" alt="" class=" w-56 h-36 rounded-lg ">
+      </div>
+    </Dialog>
   </div>
 </template>
 
