@@ -1,6 +1,5 @@
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 import DataTable from '../../components/dataLibrary/DataList.vue'
 
 const home = ref({
@@ -67,13 +66,13 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
       </div>
 
       <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 py-5 mx-8">
-        <div>
+        <div class=" mr-3">
           <label for="use_case" class="block text-lg font-medium leading-6 sr-only">Select Use case</label>
           <Dropdown
             v-model="selectedUsecase"
             :options="use_cases" option-label="name"
             placeholder="Select Use case"
-            class="w-full h-14 md:w-[14rem] bg-white flex justify-between z-50 rounded pr-2"
+            class="w-full h-14 md:w-[14rem] bg-white flex justify-between text-gray-600 z-50 rounded-xl px-2"
           />
         </div>
 
@@ -84,7 +83,7 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
             :options="templates"
             option-label="name"
             placeholder="Select template"
-            class=" w-full h-14 md:w-[14rem] flex justify-between rounded pr-2 "
+            class=" w-full h-14 md:w-[14rem] flex justify-between rounded-xl px-2 text-gray-600"
           />
         </div>
 
@@ -92,14 +91,14 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
           label="Preview"
           outlined
           class="w-28 h-14 text-primaryBlue bg-white justify-center items-center shadow-sm
-         hover:text-white hover:bg-primaryBlue border-primaryBlue hover:border-white"
+          hover:bg-blue-100 border-primaryBlue "
           @click="handlePreview()"
         />
 
         <Button
           :label="showData ? 'Hide Data' : 'Show Data'"
           severity="secondary"
-          class="w-44 text-center bg-primaryBlue h-14 shadow-sm group hover:border-primaryBlue hover:text-primaryBlue hover:bg-white"
+          class="w-44 text-center bg-primaryBlue h-14  hover:bg-blue-500 rounded-lg"
           @click="handleShowData()"
         />
       </div>
@@ -124,7 +123,7 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
     </div>
 
     <!-- Preview Modal -->
-    <Dialog v-model:visible="preview" modal header=" " :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" class="text-center">
+    <Dialog v-model:visible="preview" modal header=" " :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" class="text-center rounded-lg">
       <div class="flex flex-col justify-center items-center space-y-5">
         <p class="text-xl font-semibold">
           Selected Template

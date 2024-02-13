@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import { CustomerService } from '@/services/sampleData'
 
