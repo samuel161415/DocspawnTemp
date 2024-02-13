@@ -8,6 +8,7 @@ This repository serves as a ready-to-use toolkit and project skeleton that enabl
 It leverages advanced technologies and frameworks like TurboRepo, AdonisJS, Nuxt 3, TypeScript to facilitate seamless and efficient software development.
 
 ### Prerequisites
+
 Before you can get started, you will need to have the following installed on your machine.
 
 - Node.js (v18 or higher)
@@ -18,7 +19,7 @@ Before you can get started, you will need to have the following installed on you
 ### Apps and Packages
 
 - `api`: an [Adonis.js](https://https://adonisjs.com/) api
-- `ui`: a  Nuxt component library with [PrimeVue.js](https://tailwind.primevue.org/)
+- `ui`: a Nuxt component library with [PrimeVue.js](https://tailwind.primevue.org/)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 - `web`: a [Nuxt.js](https://nuxtjs.org) app
 - `docs`: a [VitePress](https://vitepress.vuejs.org/) documentation
@@ -33,6 +34,7 @@ This turborepo has some additional tools already setup for you:
 - [Commintlint](https://commitlint.js.org/#/) for git code message linting
 
 ### How to install a package
+
 To install a package to the supastarter monorepo you need to decide whether you want to install it to the root of the monorepo or to a specific workspace. Installing it to the root makes it available to all packages, while installing it to a specific workspace makes it available only to that workspace.
 
 To install a package globally, run:
@@ -47,24 +49,19 @@ To install a package to a specific workspace, run:
 
 ```json
 {
-  "recommendations": [
-    "vue.volar",
-    "dbaeumer.vscode-eslint",
-    "eamodio.gitlens"
-  ]
+  "recommendations": ["vue.volar", "dbaeumer.vscode-eslint", "eamodio.gitlens"]
 }
 ```
 
 ### Required
 
-* `vue.volar` - Vue Language Features (Volar)
-* `dbaeumer.vscode-eslint` - VS Code ESLint extension.
+- `vue.volar` - Vue Language Features (Volar)
+- `dbaeumer.vscode-eslint` - VS Code ESLint extension.
 
 ### Optional
 
-* `eamodio.gitlens` - GitLens - Git supercharged.
-* `mikestead.dotenv` - DotENV - Support for dotenv file syntax
-
+- `eamodio.gitlens` - GitLens - Git supercharged.
+- `mikestead.dotenv` - DotENV - Support for dotenv file syntax
 
 ### Commitlint message
 
