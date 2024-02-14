@@ -21,7 +21,7 @@ Before you can get started, you will need to have the following installed on you
 - `ui`: a  Nuxt component library with [PrimeVue.js](https://tailwind.primevue.org/)
 - `tsconfig`: `tsconfig.json`s used throughout the monorepo
 - `web`: a [Nuxt.js](https://nuxtjs.org) app
-- `docs`: a [VitePress](https://vitepress.vuejs.org/) documentation
+- `docs`: a [Nuxt.js](https://nuxtjs.org) theme based on [Docus] (https://github.com/nuxt-themes/docus)
 
 ### Utilities
 
@@ -64,7 +64,6 @@ To install a package to a specific workspace, run:
 
 * `eamodio.gitlens` - GitLens - Git supercharged.
 * `mikestead.dotenv` - DotENV - Support for dotenv file syntax
-
 
 ### Commitlint message
 
