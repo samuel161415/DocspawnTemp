@@ -1,3 +1,13 @@
+<script setup>
+import { ref } from 'vue'
+
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/',
+})
+const items = ref([{ label: 'Data Table', route: '/datatable' }])
+</script>
+
 <template>
   <div class="h-full w-full bg-stone-100">
     <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
@@ -9,11 +19,10 @@
           custom
         >
           <a :href="href" v-bind="props.action" @click="navigate">
-            <span :class="[item.icon, 'text-color']" />
+            <span class="text-color" :class="[item.icon]" />
             <span
               class="text-primary-500 dark:text-primary-400 font-semibold"
-              >{{ item.label }}</span
-            >
+            >{{ item.label }}</span>
           </a>
         </router-link>
         <a v-else :href="item.url" :target="item.target" v-bind="props.action">
@@ -29,14 +38,6 @@
   </div>
 </template>
 
-<script setup>
-import { ref } from "vue";
-const home = ref({
-  icon: "pi pi-home",
-  route: "/",
-});
-const items = ref([{ label: "Data Table", route: "/datatable" }]);
-</script>
 <style>
 /* Your CSS here */
 </style>
