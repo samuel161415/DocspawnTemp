@@ -22,7 +22,7 @@
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
-        :value="props.data"
+        :value="filteredData"
         show-gridlines
         paginator
         responsive-layout="scroll"
@@ -39,16 +39,35 @@
         @update:filters="onFilterChange"
       >
         <template #header>
-          <div class="flex justify-between">
-            <Button
-              type="button"
-              icon="pi pi-filter-slash"
-              label="Clear"
-              outlined
-              class="p-7 rounded-xl border-primaryBlue text-primaryBlue hover:bg-blue-100"
-              @click="clearFilter()"
-            />
-            <span class="relative">
+          <div class="flex justify-between mt-2">
+            <div class="flex flex-col md:flex-row  space-x-2">
+              <div v-if="props.hasFilterActions" class="">
+                <Button 
+                  type="button"
+                  label="Form to Doc" 
+                  class="p-7 rounded-xl bg-primaryBlue  hover:bg-blue-600"
+                  icon="pi pi-filter"
+                  raised />
+                  
+                  <Button 
+                  type="button"
+                  label="Data to Doc" 
+                  class="p-7 rounded-xl bg-primaryPink  hover:bg-pink-500 mr-2"
+                  icon="pi pi-filter" 
+                  raised />
+              </div>
+
+              <Button
+                type="button"
+                icon="pi pi-filter-slash"
+                label="Clear"
+                outlined
+                raised
+                class="p-7 rounded-xl raised text-primaryBlue border-primaryBlue hover:bg-blue-50"
+                @click="clearFilter()"
+              />
+            </div>
+            <span class="relative flex-shrink-0">
               <i
                 class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
                 style="color: rgb(117, 119, 120);"
@@ -78,8 +97,8 @@
           :data-type="column.data_type"
         >
           <template #body="{ data }">
-            <div class="flex space-x-2">
-              <i v-if="column.header === 'Type'" class="pi pi-file text-gray-400 mr-2"></i>
+            <div class="flex ">
+              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ data[column.field] }}
             </div>
           </template>
@@ -148,6 +167,10 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  hasFilterActions: {
+    type: Boolean,
+    required: false,
+  },
   title: {
     type: String,
     required: true,
@@ -172,6 +195,10 @@ const props = defineProps({
 
 const filters = ref(props.filters)
 
+const filteredData = ref(props.data)
+
+const typefilter = ref('')
+
 const dataTableRef = ref()
 
 function onFilterChange(updatedFilters) {
@@ -181,6 +208,20 @@ function onFilterChange(updatedFilters) {
 function getPlaceholder(header) {
   return `Search by ${header}`
 }
+
+function filterData(type) {
+  // emit('filterData', { type })
+  console.log('filterData', type)
+  console.log(props.data)
+  // fitlter data by type
+
+  if(type === ''){
+    filteredData.value= props.data
+  }
+  filteredData.value= props.data.filter((item) => item.type === type)
+
+}
+// watch changes in typefilter
 
 function showDataInModal() {
   emit('showModal', true)
@@ -199,3 +240,13 @@ function clearFilter() {
   initFilters()
 }
 </script>
+<style scoped>
+.p-datatable .p-datatable-tbody > tr > td {
+    border-right: 2px solid #393a3b;
+    border-bottom: 2px solid #393a3b;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+    border-right: 1px solid #393a3b;
+}
+</style>
