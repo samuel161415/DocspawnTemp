@@ -11,7 +11,7 @@
           <a :href="href" v-bind="props.action" @click="navigate">
             <span class="text-color" :class="[item.icon]"></span>
             <span
-              class="text-primary-500 dark:text-primary-400 font-semibold"
+              class=" text-xl text-primary-500 dark:text-primary-400 font-semibold"
             >{{ item.label }}</span>
           </a>
         </router-link>
@@ -23,10 +23,7 @@
       </template>
     </Breadcrumb>
 
-    <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white">
-      <div class="font-semibold text-2xl mb-7 mt-5">
-        Documents Library
-      </div>
+    <div class="mx-4 mt-4 px-8 pt-14 pb-5 shadow rounded-md bg-white">
     
       <DataTableComponent
         :data="documentLibraryData"
@@ -45,7 +42,7 @@
 <script setup>
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
-import DataTableComponent from '../../components/DataTableComponent.vue'
+import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
 import { documentLibraryData } from '../../services/sampleData'
 
 // import { useRouter } from 'vue-router'
@@ -84,7 +81,6 @@ const filters = ref({
 )
 
 const colomnData = ref([
-  // { field: 'type', header: 'Type', filterField: 'type', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'created_by', header: 'Created By', filterField: 'created_by', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'template_name', header: 'Template Name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'no_documents', header: 'No. of Documents', filterField: 'no_documents', data_type: 'numeric' },

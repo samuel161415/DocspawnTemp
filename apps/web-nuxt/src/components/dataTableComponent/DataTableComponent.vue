@@ -1,24 +1,7 @@
 <template>
   <div class="box overflow-hidden z-1 p-5 table-container shadow-sm">
-    <div class="flex justify-between">
-      <div class="text-left">
-        <p class="text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium text-left">
-          {{ props.title }}
-        </p>
-        <p class="text-xs md:text-sm lg:text-sm xl:text-base mt-2 font-normal text-gray-500">
-          {{ props.info }}
-        </p>
-      </div>
-      <Button
-        v-if="exportFile"
-        type="button"
-        icon="pi pi-download"
-        label="Export CSV"
-        class="flex p-3 rounded-lg bg-primaryBlue text-white mb-5"
-        @click="exportCSVHandler"
-      />
-    </div>
-    <div class="border border-gray-100">
+    <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
+    <div>
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
@@ -33,56 +16,17 @@
         overlay-visible
         striped-rows
         csv-separator
-        :global-filter-fields="props.columns.map(column => column.field)"
+        :global-filter-fields="['type', 'template_name', 'created_by', 'date']"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         current-page-report-template="Showing {first} to {last} of {totalRecords} entries"
         @update:filters="onFilterChange"
       >
         <template #header>
-          <div class="flex flex-col md:flex-row  justify-between mt-2 space-y-2 md:space-y-0">
-            <div class="flex flex-col md:flex-row space-x-0  md:space-x-2 space-y-2 md:space-y-0">
-              <div v-if="props.hasFilterActions" class="">
-                <Button 
-                  type="button"
-                  label="Form to Doc" 
-                  class="p-7 rounded-xl bg-primaryBlue hover:bg-primaryBlue mr-2"
-                  icon="pi pi-filter"
-                  raised 
-                  @click="filterData('Form to Doc')"/>
-                  
-                  <Button 
-                  type="button"
-                  label="Data to Doc" 
-                  class="p-7 rounded-xl bg-primaryPink  hover:bg-primaryPink "
-                  icon="pi pi-filter" 
-                  raised 
-                  @click="filterData('Data to Doc')"/>
-              </div>
-
-              <Button
-                type="button"
-                icon="pi pi-filter-slash"
-                label="Clear"
-                outlined
-                raised
-                class="p-7  rounded-xl w-1/2 md:w-24 raised text-primaryBlue border-primaryBlue hover:bg-blue-50"
-                @click="clearFilter()"
-              />
-            </div>
-            <span class="relative flex-shrink-0">
-              <i
-                class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
-                style="color: rgb(117, 119, 120);"
-              ></i>
-              <InputText
-                placeholder="Keyword Search"
-                class="pl-10 font-normal rounded-xl border-gray-300"
-              />
-            </span>
-          </div>
+          <DataTableFilters :filters="filters" :hasFilterActions="props.hasFilterActions" :typefilter="typefilter" @filterData="filterData" @clearFilter="clearFilter" />
         </template>
+
         <template #empty>
-          No customers found.
+          No data found.
         </template>
         <template #loading>
           Loading data. Please wait.
@@ -100,7 +44,7 @@
         >
           <template #body="{ data }">
             <div class="flex ">
-              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryBlue font-bold mr-4 text-xl"></i>
+              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryPurple font-bold mr-4 text-xl"></i>
               {{ data[column.field] }}
             </div>
           </template>
@@ -130,14 +74,14 @@
                   rounded
                   text
                   :icon="props.icon1"
-                  class="text-primaryPink bg-pink-200 mr-2 text-xl rounded-xl"
+                  class="text-primaryPurple mr-2 text-xl rounded-xl"
                   @click="showDataInModal"
                 />
                 <Button
                   rounded
                   :icon="props.icon2"
                   text
-                  class="text-primaryBlue bg-blue-200 text-xl rounded-xl"
+                  class="text-primaryPurple text-xl rounded-xl"
                   @click="downloadDataAsPdf"
                 />
               </div>
@@ -151,6 +95,9 @@
 
 <script setup>
 import { defineProps, ref } from 'vue'
+import DataTableHeader from './DataTableHeader.vue'
+import DataTableFilters from './DataTableFilters.vue';
+
 
 const props = defineProps({
   data: {
@@ -195,6 +142,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits();
+
 const filters = ref(props.filters)
 
 const filteredData = ref(props.data)
@@ -208,11 +157,18 @@ function onFilterChange(updatedFilters) {
 }
 
 function getPlaceholder(header) {
-  return `Search by ${header}`
+  return `Search by ${header}`;
+}
+
+function exportCSVHandler() {
+  if (dataTableRef.value) {
+    dataTableRef.value.exportCSV();
+  }
 }
 
 function filterData(type) {
-
+  typefilter.value = type
+  
   if(type === ''){
     filteredData.value= props.data
   }else{
@@ -230,12 +186,13 @@ function downloadDataAsPdf() {
   emit('downloadPdf', true)
 }
 
-function exportCSVHandler() {
-  if (dataTableRef.value)
-    dataTableRef.value.exportCSV()
-}
-
 function clearFilter() {
   filterData('')
+  typefilter.value = '';  
+
+  Object.keys(filters.value).forEach((key) => {
+    console.log("her", key)
+    filters.value[key] = '';
+  });
 }
 </script>
