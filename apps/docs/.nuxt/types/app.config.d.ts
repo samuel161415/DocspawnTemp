@@ -1,10 +1,10 @@
 
 import type { CustomAppConfig } from 'nuxt/schema'
 import type { Defu } from 'defu'
-import cfg0 from "/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/app.config"
-import cfg1 from "/Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@nuxt-themes+docus@1.15.0_nuxt@3.9.2_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/docus/app.config"
-import cfg2 from "/Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@nuxt-themes+typography@0.11.0_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/typography/app.config"
-import cfg3 from "/Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@nuxt-themes+elements@0.9.5_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/elements/app.config"
+import cfg0 from "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/app.config"
+import cfg1 from "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@nuxt-themes+docus@1.15.0_nuxt@3.9.2_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/docus/app.config"
+import cfg2 from "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@nuxt-themes+typography@0.11.0_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/typography/app.config"
+import cfg3 from "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@nuxt-themes+elements@0.9.5_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/elements/app.config"
 
 declare const inlineConfig = {
   "nuxt": {

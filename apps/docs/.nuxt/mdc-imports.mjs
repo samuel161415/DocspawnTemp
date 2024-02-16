@@ -1,4 +1,4 @@
-import Highlight from '/Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/dist/runtime/highlighter/rehype.mjs'
+import Highlight from '/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/dist/runtime/highlighter/rehype.mjs'
 
 export const remarkPlugins = {
 }
