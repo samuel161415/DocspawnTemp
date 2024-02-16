@@ -30,12 +30,26 @@ This turborepo has some additional tools already setup for you:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
 - [ESLint](https://eslint.org/) for code linting , the current config also do some prettier so we dont use prettier
-- [Husky](https://typicode.github.io/husky/) to manager git hooks
+- [Husky](https://typicode.github.io/husky/) to manage git hooks
 - [Commintlint](https://commitlint.js.org/#/) for git code message linting
+
+### How to runt he project
+
+On root, run:
+
+`pnpm insall`
+
+then if you to run all package at once
+
+`pnpm run dev`
+
+If you want to run a specific package only you can the following
+
+`pnpm run dev --filter=<package-name>`
 
 ### How to install a package
 
-To install a package to the supastarter monorepo you need to decide whether you want to install it to the root of the monorepo or to a specific workspace. Installing it to the root makes it available to all packages, while installing it to a specific workspace makes it available only to that workspace.
+To install a package to the  monorepo you need to decide whether you want to install it to the root of the monorepo or to a specific workspace. Installing it to the root makes it available to all packages, while installing it to a specific workspace makes it available only to that workspace.
 
 To install a package globally, run:
 
