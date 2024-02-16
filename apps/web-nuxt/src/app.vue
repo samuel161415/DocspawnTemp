@@ -11,12 +11,10 @@
   </NuxtLayout>
 </template>
 
+<script lang="ts" setup>
+import 'primeicons/primeicons.css'
+</script>
+
 <style>
 /* style */
 </style>
-
-<script lang="ts" setup>
-import "primevue/resources/themes/saga-blue/theme.css"
-import "primevue/resources/primevue.min.css"
-import "primeicons/primeicons.css"
-</script>

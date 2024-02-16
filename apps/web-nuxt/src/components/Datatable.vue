@@ -5,7 +5,7 @@
       :value="CustomerService"
       paginator
       responsive-layout="scroll"
-      show-gridlines
+      show-gridlines="true"
       :rows="10"
       data-key="id"
       filter-display="menu"
