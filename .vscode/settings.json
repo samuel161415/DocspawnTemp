@@ -9,7 +9,7 @@
     "*.css": "tailwindcss"
   },
   "editor.quickSuggestions": {
-      "strings": true
+    "strings": true
   },
   // Enable the ESlint flat config support
   "eslint.experimental.useFlatConfig": true,

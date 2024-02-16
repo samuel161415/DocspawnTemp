@@ -5,6 +5,7 @@ export default defineNuxtConfig({
   srcDir: './src',
   modules: [
     'nuxt-primevue',
+    'nuxt-gtag',
   ],
   primevue: {
     options: {
