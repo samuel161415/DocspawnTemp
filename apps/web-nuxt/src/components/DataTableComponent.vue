@@ -3,10 +3,10 @@
     <div class="flex justify-between">
       <div class="text-left">
         <p class="text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium text-left">
-          {{ title }}
+          {{ props.title }}
         </p>
         <p class="text-xs md:text-sm lg:text-sm xl:text-base mt-2 font-normal text-gray-500">
-          {{ info }}
+          {{ props.info }}
         </p>
       </div>
       <Button
@@ -39,22 +39,24 @@
         @update:filters="onFilterChange"
       >
         <template #header>
-          <div class="flex justify-between mt-2">
-            <div class="flex flex-col md:flex-row  space-x-2">
+          <div class="flex flex-col md:flex-row  justify-between mt-2 space-y-2 md:space-y-0">
+            <div class="flex flex-col md:flex-row space-x-0  md:space-x-2 space-y-2 md:space-y-0">
               <div v-if="props.hasFilterActions" class="">
                 <Button 
                   type="button"
                   label="Form to Doc" 
-                  class="p-7 rounded-xl bg-primaryBlue  hover:bg-blue-600"
+                  class="p-7 rounded-xl bg-primaryBlue hover:bg-primaryBlue mr-2"
                   icon="pi pi-filter"
-                  raised />
+                  raised 
+                  @click="filterData('Form to Doc')"/>
                   
                   <Button 
                   type="button"
                   label="Data to Doc" 
-                  class="p-7 rounded-xl bg-primaryPink  hover:bg-pink-500 mr-2"
+                  class="p-7 rounded-xl bg-primaryPink  hover:bg-primaryPink "
                   icon="pi pi-filter" 
-                  raised />
+                  raised 
+                  @click="filterData('Data to Doc')"/>
               </div>
 
               <Button
@@ -63,7 +65,7 @@
                 label="Clear"
                 outlined
                 raised
-                class="p-7 rounded-xl raised text-primaryBlue border-primaryBlue hover:bg-blue-50"
+                class="p-7  rounded-xl w-1/2 md:w-24 raised text-primaryBlue border-primaryBlue hover:bg-blue-50"
                 @click="clearFilter()"
               />
             </div>
@@ -173,11 +175,11 @@ const props = defineProps({
   },
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   info: {
     type: String,
-    required: true,
+    required: false,
   },
   icon1: {
     type: String,
@@ -210,18 +212,15 @@ function getPlaceholder(header) {
 }
 
 function filterData(type) {
-  // emit('filterData', { type })
-  console.log('filterData', type)
-  console.log(props.data)
-  // fitlter data by type
 
   if(type === ''){
     filteredData.value= props.data
-  }
-  filteredData.value= props.data.filter((item) => item.type === type)
+  }else{
 
+    filteredData.value= props.data.filter((item) => item.type === type)
+  }
+  
 }
-// watch changes in typefilter
 
 function showDataInModal() {
   emit('showModal', true)
@@ -237,16 +236,6 @@ function exportCSVHandler() {
 }
 
 function clearFilter() {
-  initFilters()
+  filterData('')
 }
 </script>
-<style scoped>
-.p-datatable .p-datatable-tbody > tr > td {
-    border-right: 2px solid #393a3b;
-    border-bottom: 2px solid #393a3b;
-}
-
-.p-datatable .p-datatable-thead > tr > th {
-    border-right: 1px solid #393a3b;
-}
-</style>
