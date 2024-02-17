@@ -3,51 +3,51 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, getQuery as getQuery$1, getCookie, createError, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getResponseStatusText } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/h3@1.10.0/node_modules/h3/dist/index.mjs';
-import { visit } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unist-util-visit@5.0.0/node_modules/unist-util-visit/index.js';
-import { toString as toString$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/hast-util-to-string@3.0.0/node_modules/hast-util-to-string/index.js';
-import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/vue-bundle-renderer@2.0.0/node_modules/vue-bundle-renderer/dist/runtime.mjs';
-import { stringify, uneval } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/devalue@4.3.2/node_modules/devalue/index.js';
-import { renderToString } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/vue@3.4.14_typescript@5.3.3/node_modules/vue/server-renderer/index.mjs';
-import { renderSSRHead } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@unhead+ssr@1.8.10/node_modules/@unhead/ssr/dist/index.mjs';
-import { createFetch as createFetch$1, Headers as Headers$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/ofetch@1.3.3/node_modules/ofetch/dist/node.mjs';
-import destr, { destr as destr$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/destr@2.0.2/node_modules/destr/dist/index.mjs';
-import { createCall, createFetch } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unenv@1.9.0/node_modules/unenv/runtime/fetch/index.mjs';
-import { createHooks } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
-import { snakeCase, kebabCase, pascalCase, camelCase } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/scule@1.2.0/node_modules/scule/dist/index.mjs';
-import { klona } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
-import defu, { defuFn, defu as defu$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
-import { hash } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/ohash@1.1.3/node_modules/ohash/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withLeadingSlash, withoutTrailingSlash, isRelative } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/ufo@1.3.2/node_modules/ufo/dist/index.mjs';
-import { createStorage, prefixStorage } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/dist/index.mjs';
-import unstorage_47drivers_47fs from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/drivers/fs.mjs';
-import { toRouteMatcher, createRouter } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/radix3@1.1.0/node_modules/radix3/dist/index.mjs';
-import { isSpecialLang, isSpecialTheme, addClassToHast, getHighlighterCore } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/core.mjs';
-import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerNotationErrorLevel } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@shikijs+transformers@1.1.2/node_modules/@shikijs/transformers/dist/index.mjs';
-import { extname } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/pathe@1.1.2/node_modules/pathe/dist/index.mjs';
-import { unified } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unified@11.0.4/node_modules/unified/index.js';
-import { toString } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/mdast-util-to-string@4.0.0/node_modules/mdast-util-to-string/index.js';
-import { postprocess, preprocess } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/micromark@4.0.0/node_modules/micromark/dev/index.js';
-import { stringifyPosition } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unist-util-stringify-position@4.0.0/node_modules/unist-util-stringify-position/index.js';
-import { markdownLineEnding, markdownSpace } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/micromark-util-character@2.1.0/node_modules/micromark-util-character/dev/index.js';
-import { push, splice } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/micromark-util-chunked@2.0.0/node_modules/micromark-util-chunked/dev/index.js';
-import { resolveAll } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/micromark-util-resolve-all@2.0.0/node_modules/micromark-util-resolve-all/index.js';
-import { normalizeUri } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/micromark-util-sanitize-uri@2.0.0/node_modules/micromark-util-sanitize-uri/dev/index.js';
-import slugify from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/slugify@1.6.6/node_modules/slugify/slugify.js';
-import remarkParse from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/remark-parse@11.0.0/node_modules/remark-parse/index.js';
-import remark2rehype from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/remark-rehype@11.1.0/node_modules/remark-rehype/index.js';
-import remarkMDC, { parseFrontMatter } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/remark-mdc@3.0.2/node_modules/remark-mdc/dist/index.mjs';
-import Slugger from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/github-slugger@2.0.0/node_modules/github-slugger/index.js';
-import { detab } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/detab@3.0.2/node_modules/detab/index.js';
-import remarkEmoji from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/remark-emoji@4.0.1/node_modules/remark-emoji/index.js';
-import remarkGFM from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/remark-gfm@4.0.0/node_modules/remark-gfm/index.js';
-import rehypeExternalLinks from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/rehype-external-links@3.0.0/node_modules/rehype-external-links/index.js';
-import rehypeSortAttributeValues from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/rehype-sort-attribute-values@5.0.0/node_modules/rehype-sort-attribute-values/index.js';
-import rehypeSortAttributes from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/rehype-sort-attributes@5.0.0/node_modules/rehype-sort-attributes/index.js';
-import rehypeRaw from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/rehype-raw@7.0.0/node_modules/rehype-raw/index.js';
-import { version, unref } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/vue@3.4.14_typescript@5.3.3/node_modules/vue/index.mjs';
-import { createServerHead as createServerHead$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/unhead@1.8.10/node_modules/unhead/dist/index.mjs';
-import { defineHeadPlugin } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/@unhead+shared@1.8.10/node_modules/@unhead/shared/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, getQuery as getQuery$1, getCookie, createError, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getResponseStatusText } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/h3@1.10.0/node_modules/h3/dist/index.mjs';
+import { visit } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unist-util-visit@5.0.0/node_modules/unist-util-visit/index.js';
+import { toString as toString$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/hast-util-to-string@3.0.0/node_modules/hast-util-to-string/index.js';
+import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/vue-bundle-renderer@2.0.0/node_modules/vue-bundle-renderer/dist/runtime.mjs';
+import { stringify, uneval } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/devalue@4.3.2/node_modules/devalue/index.js';
+import { renderToString } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/vue@3.4.14_typescript@5.3.3/node_modules/vue/server-renderer/index.mjs';
+import { renderSSRHead } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@unhead+ssr@1.8.10/node_modules/@unhead/ssr/dist/index.mjs';
+import { createFetch as createFetch$1, Headers as Headers$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ofetch@1.3.3/node_modules/ofetch/dist/node.mjs';
+import destr, { destr as destr$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/destr@2.0.2/node_modules/destr/dist/index.mjs';
+import { createCall, createFetch } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unenv@1.9.0/node_modules/unenv/runtime/fetch/index.mjs';
+import { createHooks } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
+import { snakeCase, kebabCase, pascalCase, camelCase } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/scule@1.2.0/node_modules/scule/dist/index.mjs';
+import { klona } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
+import defu, { defuFn, defu as defu$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
+import { hash } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ohash@1.1.3/node_modules/ohash/dist/index.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withLeadingSlash, withoutTrailingSlash, isRelative } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ufo@1.3.2/node_modules/ufo/dist/index.mjs';
+import { createStorage, prefixStorage } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/dist/index.mjs';
+import unstorage_47drivers_47fs from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/drivers/fs.mjs';
+import { toRouteMatcher, createRouter } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/radix3@1.1.0/node_modules/radix3/dist/index.mjs';
+import { isSpecialLang, isSpecialTheme, addClassToHast, getHighlighterCore } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/core.mjs';
+import { transformerNotationDiff, transformerNotationFocus, transformerNotationHighlight, transformerNotationErrorLevel } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@shikijs+transformers@1.1.2/node_modules/@shikijs/transformers/dist/index.mjs';
+import { extname } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/pathe@1.1.2/node_modules/pathe/dist/index.mjs';
+import { unified } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unified@11.0.4/node_modules/unified/index.js';
+import { toString } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/mdast-util-to-string@4.0.0/node_modules/mdast-util-to-string/index.js';
+import { postprocess, preprocess } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/micromark@4.0.0/node_modules/micromark/dev/index.js';
+import { stringifyPosition } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unist-util-stringify-position@4.0.0/node_modules/unist-util-stringify-position/index.js';
+import { markdownLineEnding, markdownSpace } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/micromark-util-character@2.1.0/node_modules/micromark-util-character/dev/index.js';
+import { push, splice } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/micromark-util-chunked@2.0.0/node_modules/micromark-util-chunked/dev/index.js';
+import { resolveAll } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/micromark-util-resolve-all@2.0.0/node_modules/micromark-util-resolve-all/index.js';
+import { normalizeUri } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/micromark-util-sanitize-uri@2.0.0/node_modules/micromark-util-sanitize-uri/dev/index.js';
+import slugify from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/slugify@1.6.6/node_modules/slugify/slugify.js';
+import remarkParse from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/remark-parse@11.0.0/node_modules/remark-parse/index.js';
+import remark2rehype from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/remark-rehype@11.1.0/node_modules/remark-rehype/index.js';
+import remarkMDC, { parseFrontMatter } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/remark-mdc@3.0.2/node_modules/remark-mdc/dist/index.mjs';
+import Slugger from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/github-slugger@2.0.0/node_modules/github-slugger/index.js';
+import { detab } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/detab@3.0.2/node_modules/detab/index.js';
+import remarkEmoji from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/remark-emoji@4.0.1/node_modules/remark-emoji/index.js';
+import remarkGFM from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/remark-gfm@4.0.0/node_modules/remark-gfm/index.js';
+import rehypeExternalLinks from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/rehype-external-links@3.0.0/node_modules/rehype-external-links/index.js';
+import rehypeSortAttributeValues from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/rehype-sort-attribute-values@5.0.0/node_modules/rehype-sort-attribute-values/index.js';
+import rehypeSortAttributes from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/rehype-sort-attributes@5.0.0/node_modules/rehype-sort-attributes/index.js';
+import rehypeRaw from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/rehype-raw@7.0.0/node_modules/rehype-raw/index.js';
+import { version, unref } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/vue@3.4.14_typescript@5.3.3/node_modules/vue/index.mjs';
+import { createServerHead as createServerHead$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unhead@1.8.10/node_modules/unhead/dist/index.mjs';
+import { defineHeadPlugin } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/@unhead+shared@1.8.10/node_modules/@unhead/shared/dist/index.mjs';
 
 const r=Object.create(null),E=e=>globalThis.process?.env||globalThis._importMeta_.env||globalThis.Deno?.env.toObject()||globalThis.__env__||(e?r:globalThis),s=new Proxy(r,{get(e,o){return E()[o]??r[o]},has(e,o){const i=E();return o in i||o in r},set(e,o,i){const g=E(!0);return g[o]=i,!0},deleteProperty(e,o){if(!o)return !1;const i=E(!0);return delete i[o],!0},ownKeys(){const e=E(!0);return Object.keys(e)}}),t=typeof process<"u"&&process.env&&"development"||"",p=[["APPVEYOR"],["AWS_AMPLIFY","AWS_APP_ID",{ci:!0}],["AZURE_PIPELINES","SYSTEM_TEAMFOUNDATIONCOLLECTIONURI"],["AZURE_STATIC","INPUT_AZURE_STATIC_WEB_APPS_API_TOKEN"],["APPCIRCLE","AC_APPCIRCLE"],["BAMBOO","bamboo_planKey"],["BITBUCKET","BITBUCKET_COMMIT"],["BITRISE","BITRISE_IO"],["BUDDY","BUDDY_WORKSPACE_ID"],["BUILDKITE"],["CIRCLE","CIRCLECI"],["CIRRUS","CIRRUS_CI"],["CLOUDFLARE_PAGES","CF_PAGES",{ci:!0}],["CODEBUILD","CODEBUILD_BUILD_ARN"],["CODEFRESH","CF_BUILD_ID"],["DRONE"],["DRONE","DRONE_BUILD_EVENT"],["DSARI"],["GITHUB_ACTIONS"],["GITLAB","GITLAB_CI"],["GITLAB","CI_MERGE_REQUEST_ID"],["GOCD","GO_PIPELINE_LABEL"],["LAYERCI"],["HUDSON","HUDSON_URL"],["JENKINS","JENKINS_URL"],["MAGNUM"],["NETLIFY"],["NETLIFY","NETLIFY_LOCAL",{ci:!1}],["NEVERCODE"],["RENDER"],["SAIL","SAILCI"],["SEMAPHORE"],["SCREWDRIVER"],["SHIPPABLE"],["SOLANO","TDDIUM"],["STRIDER"],["TEAMCITY","TEAMCITY_VERSION"],["TRAVIS"],["VERCEL","NOW_BUILDER"],["VERCEL","VERCEL",{ci:!1}],["VERCEL","VERCEL_ENV",{ci:!1}],["APPCENTER","APPCENTER_BUILD_ID"],["CODESANDBOX","CODESANDBOX_SSE",{ci:!1}],["STACKBLITZ"],["STORMKIT"],["CLEAVR"],["ZEABUR"],["CODESPHERE","CODESPHERE_APP_ID",{ci:!0}],["RAILWAY","RAILWAY_PROJECT_ID"],["RAILWAY","RAILWAY_SERVICE_ID"]];function B(){if(globalThis.process?.env)for(const e of p){const o=e[1]||e[0];if(globalThis.process?.env[o])return {name:e[0].toLowerCase(),...e[2]}}return globalThis.process?.env?.SHELL==="/bin/jsh"&&globalThis.process?.versions?.webcontainer?{name:"stackblitz",ci:!1}:{name:"",ci:!1}}const l=B(),d=l.name;function n(e){return e?e!=="false":!1}const I=globalThis.process?.platform||"",T=n(s.CI)||l.ci!==!1,R=n(globalThis.process?.stdout&&globalThis.process?.stdout.isTTY);n(s.DEBUG);const C=t==="test"||n(s.TEST);n(s.MINIMAL)||T||C||!R;const a=/^win/i.test(I);!n(s.NO_COLOR)&&(n(s.FORCE_COLOR)||(R||a)&&s.TERM!=="dumb"||T);const _=(globalThis.process?.versions?.node||"").replace(/^v/,"")||null;Number(_?.split(".")[0])||null;const W=globalThis.process||Object.create(null),c={versions:{}};new Proxy(W,{get(e,o){if(o==="env")return s;if(o in e)return e[o];if(o in c)return c[o]}});const A=globalThis.process?.release?.name==="node",L=!!globalThis.Bun||!!globalThis.process?.versions?.bun,D=!!globalThis.Deno,O=!!globalThis.fastly,S=!!globalThis.Netlify,N=!!globalThis.EdgeRuntime,u=globalThis.navigator?.userAgent==="Cloudflare-Workers",b=!!globalThis.__lagon__,F=[[S,"netlify"],[N,"edge-light"],[u,"workerd"],[O,"fastly"],[D,"deno"],[L,"bun"],[A,"node"],[b,"lagon"]];function G(){const e=F.find(o=>o[0]);if(e)return {name:e[1]}}const P=G();P?.name||"";
 
@@ -347,7 +347,7 @@ const _inlineRuntimeConfig = {
   },
   "pinceau": {
     "studio": true,
-    "outputDir": "/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/pinceau/"
+    "outputDir": "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/pinceau/"
   },
   "content": {
     "cacheVersion": 2,
@@ -1484,7 +1484,7 @@ new Proxy(/* @__PURE__ */ Object.create(null), {
   }
 });
 
-const serverAssets = [{"baseName":"server","dir":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/server/assets"}];
+const serverAssets = [{"baseName":"server","dir":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/server/assets"}];
 
 const assets = createStorage();
 
@@ -1496,14 +1496,14 @@ const storage = createStorage({});
 
 storage.mount('/assets', assets);
 
-storage.mount('pinceau', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/pinceau/theme","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('content:source:content', unstorage_47drivers_47fs({"name":"content:source:content","driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/content","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('cache:content', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/content-cache","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/server","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/cache","ignore":["**/node_modules/**","**/.git/**"]}));
-storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.data/kv","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('pinceau', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/pinceau/theme","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('content:source:content', unstorage_47drivers_47fs({"name":"content:source:content","driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/content","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('cache:content', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/content-cache","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('root', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('src', unstorage_47drivers_47fs({"driver":"fs","readOnly":true,"base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/server","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('build', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('cache', unstorage_47drivers_47fs({"driver":"fs","readOnly":false,"base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/cache","ignore":["**/node_modules/**","**/.git/**"]}));
+storage.mount('data', unstorage_47drivers_47fs({"driver":"fs","base":"/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.data/kv","ignore":["**/node_modules/**","**/.git/**"]}));
 
 function useStorage(base = "") {
   return base ? prefixStorage(storage, base) : storage;
@@ -1930,7 +1930,7 @@ if (!window.__NUXT_DEVTOOLS_TIME_METRIC__) {
 window.__NUXT_DEVTOOLS_TIME_METRIC__.appInit = Date.now()
 `;
 
-const _EGwRh7ZS6H = (function(nitro) {
+const _eI8TWbWQoP = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script$1}<\/script>`);
   });
@@ -1981,16 +1981,16 @@ const nitro = (async function(nitro) {
 
 const script = "\"use strict\";(()=>{const a=window,e=document.documentElement,m=[\"dark\",\"light\"],c=window&&window.localStorage&&window.localStorage.getItem&&window.localStorage.getItem(\"nuxt-color-mode\")||\"system\";let n=c===\"system\"?d():c;const l=e.getAttribute(\"data-color-mode-forced\");l&&(n=l),i(n),a[\"__NUXT_COLOR_MODE__\"]={preference:c,value:n,getColorScheme:d,addColorScheme:i,removeColorScheme:f};function i(o){const t=\"\"+o+\"\",s=\"theme\";e.classList?e.classList.add(t):e.className+=\" \"+t,s&&e.setAttribute(\"data-\"+s,o)}function f(o){const t=\"\"+o+\"\",s=\"theme\";e.classList?e.classList.remove(t):e.className=e.className.replace(new RegExp(t,\"g\"),\"\"),s&&e.removeAttribute(\"data-\"+s)}function r(o){return a.matchMedia(\"(prefers-color-scheme\"+o+\")\")}function d(){if(a.matchMedia&&r(\"\").media!==\"not all\"){for(const o of m)if(r(\":\"+o).matches)return o}return\"light\"}})();\n";
 
-const _p7EludUBuo = (function(nitro) {
+const _zVvkn97lu7 = (function(nitro) {
   nitro.hooks.hook("render:html", (htmlContext) => {
     htmlContext.head.push(`<script>${script}<\/script>`);
   });
 });
 
 const plugins = [
-  _EGwRh7ZS6H,
+  _eI8TWbWQoP,
 nitro,
-_p7EludUBuo
+_zVvkn97lu7
 ];
 
 const errorHandler = (async function errorhandler(error, event) {
@@ -2081,7 +2081,7 @@ function createShikiHighlighter({
     const shiki2 = await getHighlighterCore({
       langs,
       themes,
-      loadWasm: () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/wasm.mjs')
+      loadWasm: () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/wasm.mjs')
     });
     for await (const config of await getConfigs()) {
       await config.shiki?.setup?.(shiki2);
@@ -2221,33 +2221,33 @@ function createShikiHighlighter({
 }
 
 const bundledLangs = {
-"javascript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/javascript.mjs'),
-"js": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/javascript.mjs'),
-"jsx": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/jsx.mjs'),
-"json": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/json.mjs'),
-"typescript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/typescript.mjs'),
-"ts": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/typescript.mjs'),
-"tsx": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/tsx.mjs'),
-"vue": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/vue.mjs'),
-"css": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/css.mjs'),
-"html": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/html.mjs'),
-"shellscript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
-"bash": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
-"sh": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
-"shell": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
-"zsh": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
-"markdown": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/markdown.mjs'),
-"md": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/markdown.mjs'),
-"mdc": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/mdc.mjs'),
-"yaml": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/yaml.mjs'),
-"yml": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/yaml.mjs'),
-"diff": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/diff.mjs'),
-"ini": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/ini.mjs'),
-"properties": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/ini.mjs'),
+"javascript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/javascript.mjs'),
+"js": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/javascript.mjs'),
+"jsx": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/jsx.mjs'),
+"json": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/json.mjs'),
+"typescript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/typescript.mjs'),
+"ts": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/typescript.mjs'),
+"tsx": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/tsx.mjs'),
+"vue": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/vue.mjs'),
+"css": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/css.mjs'),
+"html": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/html.mjs'),
+"shellscript": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
+"bash": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
+"sh": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
+"shell": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
+"zsh": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/shellscript.mjs'),
+"markdown": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/markdown.mjs'),
+"md": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/markdown.mjs'),
+"mdc": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/mdc.mjs'),
+"yaml": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/yaml.mjs'),
+"yml": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/yaml.mjs'),
+"diff": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/diff.mjs'),
+"ini": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/ini.mjs'),
+"properties": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/langs/ini.mjs'),
 };
 const bundledThemes = {
-"github-dark": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/themes/github-dark.mjs').then(r => r.default),
-"github-light": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/themes/github-light.mjs').then(r => r.default),
+"github-dark": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/themes/github-dark.mjs').then(r => r.default),
+"github-light": () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/shiki@1.1.2/node_modules/shiki/dist/themes/github-light.mjs').then(r => r.default),
 };
 const options = {"theme":{"dark":"github-dark","default":"github-light"}};
 const highlighter = createShikiHighlighter({ bundledLangs, bundledThemes, options, getMdcConfigs });
@@ -2258,7 +2258,7 @@ const mdcHighlighter = /*#__PURE__*/Object.freeze({
   default: highlighter
 });
 
-const _zBvoGn = eventHandler(async (event) => {
+const _EKQogE = eventHandler(async (event) => {
   const { code, lang, theme: themeString, options: optionsStr } = getQuery$1(event);
   const theme = JSON.parse(themeString);
   const options = optionsStr ? JSON.parse(optionsStr) : {};
@@ -3988,7 +3988,7 @@ const json = defineTransformer({
     let parsed;
     if (typeof content === "string") {
       if (_id.endsWith("json5")) {
-        parsed = (await import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/node_modules/.pnpm/json5@2.2.3/node_modules/json5/lib/index.js').then((m) => m.default || m)).parse(content);
+        parsed = (await import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/json5@2.2.3/node_modules/json5/lib/index.js').then((m) => m.default || m)).parse(content);
       } else if (_id.endsWith("json")) {
         parsed = destr$1(content);
       }
@@ -4598,7 +4598,7 @@ const getContentQuery = (event) => {
   return query;
 };
 
-const _KGs4O6 = defineEventHandler(async (event) => {
+const _7IkLm2 = defineEventHandler(async (event) => {
   const query = getContentQuery(event);
   const { advanceQuery } = useRuntimeConfig().public.content.experimental;
   if (query.first) {
@@ -4627,7 +4627,7 @@ const _KGs4O6 = defineEventHandler(async (event) => {
   return serverQueryContent$1(event, query).find();
 });
 
-const _vFSzOo = defineEventHandler(async (event) => {
+const _gUEi9G = defineEventHandler(async (event) => {
   const { content } = useRuntimeConfig();
   const now = Date.now();
   const contents = await serverQueryContent$1(event).find();
@@ -4735,7 +4735,7 @@ function isObject(obj) {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
-const _VX5HDz = defineEventHandler(async (event) => {
+const _vak25T = defineEventHandler(async (event) => {
   const query = getContentQuery(event);
   if (!isPreview(event) && Object.keys(query).length === 0) {
     const cache = await cacheStorage.getItem("content-navigation.json");
@@ -4772,23 +4772,23 @@ const _VX5HDz = defineEventHandler(async (event) => {
   return createNav(contents?.result || contents, configs);
 });
 
-const _lazy_QwxPWG = () => Promise.resolve().then(function () { return search$1; });
-const _lazy_WnjcId = () => Promise.resolve().then(function () { return opensearch_xml$1; });
-const _lazy_f76Zir = () => Promise.resolve().then(function () { return renderer$1; });
+const _lazy_kBKtxv = () => Promise.resolve().then(function () { return search$1; });
+const _lazy_SGmadc = () => Promise.resolve().then(function () { return opensearch_xml$1; });
+const _lazy_uhl4V3 = () => Promise.resolve().then(function () { return renderer$1; });
 
 const handlers = [
-  { route: '/api/search', handler: _lazy_QwxPWG, lazy: true, middleware: false, method: undefined },
-  { route: '/opensearch.xml', handler: _lazy_WnjcId, lazy: true, middleware: false, method: undefined },
-  { route: '/__nuxt_error', handler: _lazy_f76Zir, lazy: true, middleware: false, method: undefined },
-  { route: '/api/_mdc/highlight', handler: _zBvoGn, lazy: false, middleware: false, method: undefined },
-  { route: '/api/_content/query/:qid/**:params', handler: _KGs4O6, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/query/:qid', handler: _KGs4O6, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/query', handler: _KGs4O6, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/cache.json', handler: _vFSzOo, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/navigation/:qid/**:params', handler: _VX5HDz, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/navigation/:qid', handler: _VX5HDz, lazy: false, middleware: false, method: "get" },
-  { route: '/api/_content/navigation', handler: _VX5HDz, lazy: false, middleware: false, method: "get" },
-  { route: '/**', handler: _lazy_f76Zir, lazy: true, middleware: false, method: undefined }
+  { route: '/api/search', handler: _lazy_kBKtxv, lazy: true, middleware: false, method: undefined },
+  { route: '/opensearch.xml', handler: _lazy_SGmadc, lazy: true, middleware: false, method: undefined },
+  { route: '/__nuxt_error', handler: _lazy_uhl4V3, lazy: true, middleware: false, method: undefined },
+  { route: '/api/_mdc/highlight', handler: _EKQogE, lazy: false, middleware: false, method: undefined },
+  { route: '/api/_content/query/:qid/**:params', handler: _7IkLm2, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/query/:qid', handler: _7IkLm2, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/query', handler: _7IkLm2, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/cache.json', handler: _gUEi9G, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/navigation/:qid/**:params', handler: _vak25T, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/navigation/:qid', handler: _vak25T, lazy: false, middleware: false, method: "get" },
+  { route: '/api/_content/navigation', handler: _vak25T, lazy: false, middleware: false, method: "get" },
+  { route: '/**', handler: _lazy_uhl4V3, lazy: true, middleware: false, method: undefined }
 ];
 
 function createNitroApp() {
@@ -5188,8 +5188,8 @@ const appRootTag = "div";
 
 globalThis.__buildAssetsURL = buildAssetsURL;
 globalThis.__publicAssetsURL = publicAssetsURL;
-const getClientManifest = () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
-const getServerEntry = () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawn/apps/docs/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
+const getClientManifest = () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/dist/server/client.manifest.mjs').then((r) => r.default || r).then((r) => typeof r === "function" ? r() : r);
+const getServerEntry = () => import('file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/apps/docs/.nuxt/dist/server/server.mjs').then((r) => r.default || r);
 const getSSRRenderer = lazyCachedFunction(async () => {
   const manifest = await getClientManifest();
   if (!manifest) {
