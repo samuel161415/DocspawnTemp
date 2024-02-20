@@ -43,12 +43,14 @@
           :data-type="column.data_type"
         >
           <template #body="{ data }">
-            <div class="flex ">
+            <div v-if="column.header === 'Date'" > {{ formatDate(data[column.field]) }}</div>
+            <div v-else class="flex ">
               <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryPurple font-bold mr-4 text-xl"></i>
-              {{ data[column.field] }}
+              {{  data[column.field] }}
             </div>
           </template>
           <template v-if="column.header === 'Date'" #filter="{ filterModel }">
+            
             <Calendar
               v-model="filterModel.value"
               date-format="mm/dd/yy"
@@ -97,7 +99,7 @@
 import { defineProps, ref } from 'vue'
 import DataTableHeader from './DataTableHeader.vue'
 import DataTableFilters from './DataTableFilters.vue';
-
+import formatDate from '~/utils';
 
 const props = defineProps({
   data: {

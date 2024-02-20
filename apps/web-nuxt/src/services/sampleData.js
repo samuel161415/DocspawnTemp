@@ -116,7 +116,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'INVOICE FORM',
     no_documents: 1,
-    date: formatDate('2024-01-01'),
+    date: new Date('2024-01-01'),
     created_by: 'John Doe',
   },
   {
@@ -124,7 +124,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'FORM',
     no_documents: 2,
-    date: formatDate('2024-01-15'),
+    date: new Date('2024-01-15'),
     created_by: 'Emly Hall',
   },
   {
@@ -132,7 +132,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'FORM',
     no_documents: 4,
-    date: formatDate('2024-02-20'),
+    date: new Date('2024-02-20'),
     created_by: 'John Doe',
   },
   {
@@ -140,7 +140,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'FORM',
     no_documents: 3,
-    date: formatDate('2024-01-01'),
+    date: new Date('2024-01-01'),
     created_by: 'Robert Smith',
   },
   {
@@ -148,7 +148,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'INVOICE FORM',
     no_documents: 2,
-    date: formatDate('2024-01-15'),
+    date: new Date('2024-01-15'),
     created_by: 'Sam Taylor',
   },
   {
@@ -156,7 +156,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'RESUME FORM',
     no_documents: 2,
-    date: formatDate('2024-03-10'),
+    date: new Date('2024-03-10'),
     created_by: 'John Doe',
   },
   {
@@ -164,7 +164,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'APPLICATION FORM',
     no_documents: 1,
-    date: formatDate('2024-04-05'),
+    date: new Date('2024-04-05'),
     created_by: 'Emly Hall',
   },
   {
@@ -172,7 +172,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'SURVEY FORM',
     no_documents: 3,
-    date: formatDate('2024-03-16'),
+    date: new Date('2024-03-16'),
     created_by: 'Sam Taylor',
   },
   {
@@ -180,7 +180,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'FEEDBACK FORM',
     no_documents: 1,
-    date: formatDate('2024-03-15'),
+    date: new Date('2024-03-15'),
     created_by: 'John Doe',
   },
   {
@@ -188,7 +188,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'REGISTRATION FORM',
     no_documents: 1,
-    date: formatDate('2024-04-20'),
+    date: new Date('2024-04-20'),
     created_by: 'Sam Taylor',
   },
   {
@@ -196,7 +196,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'EMPLOYEE SURVEY',
     no_documents: 1,
-    date: formatDate('2024-05-05'),
+    date: new Date('2024-05-05'),
     created_by: 'John Doe',
   },
   {
@@ -204,7 +204,7 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'EVENT REGISTRATION',
     no_documents: 1,
-    date: formatDate('2024-06-10'),
+    date: new Date('2024-06-10'),
     created_by: 'Robert Smith',
   },
   {
@@ -212,7 +212,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'PRODUCT FEEDBACK',
     no_documents: 2,
-    date: formatDate('2024-07-15'),
+    date: new Date('2024-07-15'),
     created_by: 'John Doe',
   },
   {
@@ -220,7 +220,7 @@ export const documentLibraryData = [
     type: 'Form to Doc',
     template_name: 'CUSTOMER SURVEY',
     no_documents: 3,
-    date: formatDate('2024-08-20'),
+    date: new Date('2024-08-20'),
     created_by: 'John Doe',
   },
   {
@@ -228,13 +228,8 @@ export const documentLibraryData = [
     type: 'Data to Doc',
     template_name: 'JOB APPLICATION',
     no_documents: 1,
-    date: formatDate('2024-09-01'),
+    date: new Date('2024-09-01'),
     created_by: 'Robert Smith',
   },
-]
+];
 
-function formatDate(inputDate) {
-  const formattedDate = new Date(inputDate)
-  const options = { year: 'numeric', month: '2-digit', day: '2-digit' }
-  return new Intl.DateTimeFormat('en-US', options).format(formattedDate)
-}

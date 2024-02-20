@@ -65,16 +65,11 @@ const filters = ref({
     operator: FilterOperator.AND,
     constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
   },
-  date: {
-    operator: FilterOperator.AND,
-    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
-  },
+  date: { 
+    operator: FilterOperator.AND, 
+    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
   no_documents: {
     operator: FilterOperator.AND,
-    constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-  },
-  status: {
-    operator: FilterOperator.OR,
     constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
   },
 },
@@ -84,7 +79,7 @@ const colomnData = ref([
   { field: 'created_by', header: 'Created By', filterField: 'created_by', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'template_name', header: 'Template Name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'no_documents', header: 'No. of Documents', filterField: 'no_documents', data_type: 'numeric' },
-  { field: 'date', header: 'Date', style: 'min-width: 12rem', data_type: 'date' },
+  { field: 'date', header: 'Date', filterField: 'date', data_type: 'date', filterMenuStyle: { width: '14rem' } },
 ])
 
 const hasActionsColumn = ref(true)
