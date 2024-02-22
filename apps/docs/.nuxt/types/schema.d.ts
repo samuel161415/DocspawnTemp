@@ -249,7 +249,7 @@ declare module 'nuxt/schema' {
 
                description: string,
 
-               tags: Array<any>,
+               tags: Array<string>,
 
                id: string,
 
@@ -259,7 +259,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -307,7 +307,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -341,7 +341,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -375,7 +375,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -409,7 +409,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -443,7 +443,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -477,7 +477,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -511,7 +511,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -585,7 +585,7 @@ declare module 'nuxt/schema' {
 
                description: string,
 
-               tags: Array<any>,
+               tags: Array<string>,
 
                id: string,
 
@@ -595,7 +595,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -623,7 +623,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -637,7 +637,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -651,7 +651,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -661,7 +661,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -675,7 +675,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -689,7 +689,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -703,7 +703,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -717,7 +717,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -731,7 +731,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -745,7 +745,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -779,7 +779,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      tsType: string,
 
@@ -795,7 +795,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -865,7 +865,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -875,7 +875,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
 
@@ -889,7 +889,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            tsType: string,
 
@@ -969,7 +969,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -1017,7 +1017,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 
@@ -1027,7 +1027,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            tsType: string,
 
@@ -1039,7 +1039,7 @@ declare module 'nuxt/schema' {
 
                                  description: string,
 
-                                 tags: Array<any>,
+                                 tags: Array<string>,
 
                                  id: string,
 
@@ -1115,7 +1115,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
                         },
@@ -1159,7 +1159,7 @@ declare module 'nuxt/schema' {
 
                            description: string,
 
-                           tags: Array<any>,
+                           tags: Array<string>,
 
                            id: string,
                         },
@@ -1199,7 +1199,7 @@ declare module 'nuxt/schema' {
 
                      description: string,
 
-                     tags: Array<any>,
+                     tags: Array<string>,
 
                      id: string,
 

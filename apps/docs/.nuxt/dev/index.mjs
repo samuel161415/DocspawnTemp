@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { mkdirSync } from 'node:fs';
 import { parentPort, threadId } from 'node:worker_threads';
-import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, getQuery as getQuery$1, getCookie, createError, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getResponseStatusText } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/h3@1.10.0/node_modules/h3/dist/index.mjs';
+import { defineEventHandler, handleCacheHeaders, splitCookiesString, isEvent, createEvent, getRequestHeader, eventHandler, setHeaders, sendRedirect, proxyRequest, setResponseHeader, send, getResponseStatus, setResponseStatus, setResponseHeaders, getRequestHeaders, getQuery as getQuery$1, getCookie, createError, createApp, createRouter as createRouter$1, toNodeListener, fetchWithEvent, lazyEventHandler, getResponseStatusText } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/h3@1.10.1/node_modules/h3/dist/index.mjs';
 import { visit } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unist-util-visit@5.0.0/node_modules/unist-util-visit/index.js';
 import { toString as toString$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/hast-util-to-string@3.0.0/node_modules/hast-util-to-string/index.js';
 import { getRequestDependencies, getPreloadLinks, getPrefetchLinks, createRenderer } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/vue-bundle-renderer@2.0.0/node_modules/vue-bundle-renderer/dist/runtime.mjs';
@@ -14,11 +14,11 @@ import { createFetch as createFetch$1, Headers as Headers$1 } from 'file:///User
 import destr, { destr as destr$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/destr@2.0.2/node_modules/destr/dist/index.mjs';
 import { createCall, createFetch } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unenv@1.9.0/node_modules/unenv/runtime/fetch/index.mjs';
 import { createHooks } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/hookable@5.5.3/node_modules/hookable/dist/index.mjs';
-import { snakeCase, kebabCase, pascalCase, camelCase } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/scule@1.2.0/node_modules/scule/dist/index.mjs';
+import { snakeCase, kebabCase, pascalCase, camelCase } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/scule@1.3.0/node_modules/scule/dist/index.mjs';
 import { klona } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/klona@2.0.6/node_modules/klona/dist/index.mjs';
 import defu, { defuFn, defu as defu$1 } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/defu@6.1.4/node_modules/defu/dist/defu.mjs';
 import { hash } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ohash@1.1.3/node_modules/ohash/dist/index.mjs';
-import { parseURL, withoutBase, joinURL, getQuery, withQuery, withLeadingSlash, withoutTrailingSlash, isRelative } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ufo@1.3.2/node_modules/ufo/dist/index.mjs';
+import { parseURL, withoutBase, joinURL, getQuery, withQuery, withLeadingSlash, withoutTrailingSlash, isRelative } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/ufo@1.4.0/node_modules/ufo/dist/index.mjs';
 import { createStorage, prefixStorage } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/dist/index.mjs';
 import unstorage_47drivers_47fs from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/unstorage@1.10.1/node_modules/unstorage/drivers/fs.mjs';
 import { toRouteMatcher, createRouter } from 'file:///Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_modules/.pnpm/radix3@1.1.0/node_modules/radix3/dist/index.mjs';
@@ -536,19 +536,24 @@ const _inlineRuntimeConfig = {
           }
         },
         "prose": {
-          "title": "",
+          "title": "Prose configuration from Nuxt Typography",
           "description": "",
-          "tags": [],
+          "tags": [
+            "@studioIcon material-symbols:short-text-rounded",
+            "@studioInput icon"
+          ],
           "id": "#appConfig/prose",
           "properties": {
             "copyButton": {
-              "title": "",
+              "title": "Copy button (used in code blocks)",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:content-copy"
+              ],
               "id": "#appConfig/prose/copyButton",
               "properties": {
                 "iconCopy": {
-                  "title": "",
+                  "title": "Icon displayed to copy",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/prose/copyButton/iconCopy",
@@ -556,7 +561,7 @@ const _inlineRuntimeConfig = {
                   "type": "string"
                 },
                 "iconCopied": {
-                  "title": "",
+                  "title": "Icon displayed when copied",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/prose/copyButton/iconCopied",
@@ -571,13 +576,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "headings": {
-              "title": "",
+              "title": "Default configuration for all headings (h1, h2, h3, h4, h5 and h6)",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:title"
+              ],
               "id": "#appConfig/prose/headings",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Default icon for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -592,13 +599,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h1": {
-              "title": "",
+              "title": "First heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h1"
+              ],
               "id": "#appConfig/prose/h1",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -613,13 +622,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h2": {
-              "title": "",
+              "title": "Second heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h2"
+              ],
               "id": "#appConfig/prose/h2",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -634,13 +645,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h3": {
-              "title": "",
+              "title": "Third heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h3"
+              ],
               "id": "#appConfig/prose/h3",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -655,13 +668,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h4": {
-              "title": "",
+              "title": "Fourth heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h4"
+              ],
               "id": "#appConfig/prose/h4",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -676,13 +691,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h5": {
-              "title": "",
+              "title": "Fifth heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h5"
+              ],
               "id": "#appConfig/prose/h5",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -697,13 +714,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "h6": {
-              "title": "",
+              "title": "Sixth heading configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:format-h6"
+              ],
               "id": "#appConfig/prose/h6",
               "properties": {
                 "icon": {
-                  "title": "",
+                  "title": "Icon displayed for anchor link on hover",
                   "description": "",
                   "tags": [],
                   "tsType": "string|false",
@@ -748,21 +767,25 @@ const _inlineRuntimeConfig = {
           }
         },
         "docus": {
-          "title": "",
+          "title": "Docus theme configuration.",
           "description": "",
-          "tags": [],
+          "tags": [
+            "@studioIcon material-symbols:docs"
+          ],
           "id": "#appConfig/docus",
           "properties": {
             "title": {
-              "title": "",
+              "title": "Website title, used as header default title and meta title.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:title"
+              ],
               "id": "#appConfig/docus/title",
               "default": "Docus",
               "type": "string"
             },
             "titleTemplate": {
-              "title": "",
+              "title": "The website title template, to overwrite the default one.",
               "description": "",
               "tags": [],
               "id": "#appConfig/docus/titleTemplate",
@@ -770,79 +793,108 @@ const _inlineRuntimeConfig = {
               "type": "string"
             },
             "description": {
-              "title": "",
+              "title": "Website description, used for meta description.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon material-symbols:description"
+              ],
               "id": "#appConfig/docus/description",
               "default": "The best place to start your documentation.",
               "type": "string"
             },
             "image": {
-              "title": "",
+              "title": "Cover image.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@example '/cover.jpg'",
+                "@studioIcon dashicons:cover-image",
+                "@studioInput file"
+              ],
               "id": "#appConfig/docus/image",
               "default": "https://user-images.githubusercontent.com/904724/185365452-87b7ca7b-6030-4813-a2db-5e65c785bf88.png",
               "type": "string"
             },
             "socials": {
-              "title": "",
-              "description": "",
-              "tags": [],
+              "title": "Social links",
+              "description": "Will be used in AppSocialIcons component.",
+              "tags": [
+                "@studioIcon material-symbols:share-outline"
+              ],
               "id": "#appConfig/docus/socials",
               "properties": {
                 "twitter": {
-                  "title": "",
+                  "title": "Twitter social handle",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example 'nuxt_js'",
+                    "@studioIcon simple-icons:twitter"
+                  ],
                   "id": "#appConfig/docus/socials/twitter",
                   "default": "",
                   "type": "string"
                 },
                 "github": {
-                  "title": "",
+                  "title": "GitHub org or repository",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example 'nuxt/framework'",
+                    "@studioIcon simple-icons:github"
+                  ],
                   "id": "#appConfig/docus/socials/github",
                   "default": "",
                   "type": "string"
                 },
                 "facebook": {
-                  "title": "",
+                  "title": "Facebook page url",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example https://www.facebook.com/groups/nuxtjs",
+                    "@studioIcon simple-icons:facebook"
+                  ],
                   "id": "#appConfig/docus/socials/facebook",
                   "default": "",
                   "type": "string"
                 },
                 "instagram": {
-                  "title": "",
+                  "title": "Instagram page url",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example https://www.instagram.com/wearenuxt",
+                    "@studioIcon simple-icons:instagram"
+                  ],
                   "id": "#appConfig/docus/socials/instagram",
                   "default": "",
                   "type": "string"
                 },
                 "tiktok": {
-                  "title": "",
+                  "title": "Instagram page url",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example https://www.youtube.com/@NuxtLabs",
+                    "@studioIcon simple-icons:youtube"
+                  ],
                   "id": "#appConfig/docus/socials/tiktok",
                   "default": "",
                   "type": "string"
                 },
                 "youtube": {
-                  "title": "",
+                  "title": "TikTok page url",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example https://www.tiktok.com/@tiktok",
+                    "@studioIcon simple-icons:tiktok"
+                  ],
                   "id": "#appConfig/docus/socials/youtube",
                   "default": "",
                   "type": "string"
                 },
                 "medium": {
-                  "title": "",
+                  "title": "Medium page url",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@example https://medium.com/nuxt",
+                    "@studioIcon simple-icons:medium"
+                  ],
                   "id": "#appConfig/docus/socials/medium",
                   "default": "",
                   "type": "string"
@@ -860,30 +912,34 @@ const _inlineRuntimeConfig = {
               }
             },
             "layout": {
-              "title": "",
+              "title": "Theme layout configuration.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon tabler:arrow-autofit-width"
+              ],
               "tsType": "'default'|'page'",
               "id": "#appConfig/docus/layout",
               "default": "default",
               "type": "string"
             },
             "aside": {
-              "title": "",
+              "title": "Aside navigation configuration.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon fluent:document-page-24-regular"
+              ],
               "id": "#appConfig/docus/aside",
               "properties": {
                 "level": {
-                  "title": "",
-                  "description": "",
+                  "title": "Aside navigation level",
+                  "description": "Use 0 to disable all nesting. Use 1 and more to display nested navigation in header and aside navigation.",
                   "tags": [],
                   "id": "#appConfig/docus/aside/level",
                   "default": 0,
                   "type": "number"
                 },
                 "collapsed": {
-                  "title": "",
+                  "title": "Specify if default collapsibles state globally for aside navigation.",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/docus/aside/collapsed",
@@ -891,7 +947,7 @@ const _inlineRuntimeConfig = {
                   "type": "boolean"
                 },
                 "exclude": {
-                  "title": "",
+                  "title": "Paths to be excluded from aside navigation.",
                   "description": "",
                   "tags": [],
                   "tsType": "string[]",
@@ -911,38 +967,45 @@ const _inlineRuntimeConfig = {
               }
             },
             "header": {
-              "title": "",
+              "title": "Header configuration.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon fluent:document-header-24-regular"
+              ],
               "id": "#appConfig/docus/header",
               "properties": {
                 "title": {
-                  "title": "",
-                  "description": "",
-                  "tags": [],
+                  "title": "Website title",
+                  "description": "Title to be displayed in header or as aria-label if logo is defined.\nDefault to docus.title",
+                  "tags": [
+                    "@studioIcon material-symbols:title"
+                  ],
                   "id": "#appConfig/docus/header/title",
                   "default": "",
                   "type": "string"
                 },
                 "logo": {
-                  "title": "",
-                  "description": "",
-                  "tags": [],
+                  "title": "Logo configuration",
+                  "description": "Boolean to disable or use the `Logo.vue` component.\nString to be used as a name of a component.\nObject that sets the light and dark logos.",
+                  "tags": [
+                    "@example 'MyLogo'",
+                    "@studioInput boolean"
+                  ],
                   "tsType": "boolean|string|{dark: string, light: string}",
                   "id": "#appConfig/docus/header/logo",
                   "default": false,
                   "type": "boolean"
                 },
                 "showLinkIcon": {
-                  "title": "",
-                  "description": "",
+                  "title": "Header links",
+                  "description": "Toggle links icons in the header.",
                   "tags": [],
                   "id": "#appConfig/docus/header/showLinkIcon",
                   "default": false,
                   "type": "boolean"
                 },
                 "exclude": {
-                  "title": "",
+                  "title": "Paths to be excluded from header links.",
                   "description": "",
                   "tags": [],
                   "tsType": "string[]",
@@ -954,7 +1017,7 @@ const _inlineRuntimeConfig = {
                   }
                 },
                 "fluid": {
-                  "title": "",
+                  "title": "Makes the content of the header fluid.",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/docus/header/fluid",
@@ -972,13 +1035,15 @@ const _inlineRuntimeConfig = {
               }
             },
             "main": {
-              "title": "",
+              "title": "Main content configuration.",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon fluent:document-header-footer-24-filled"
+              ],
               "id": "#appConfig/docus/main",
               "properties": {
                 "fluid": {
-                  "title": "",
+                  "title": "Makes the content of the main container fluid.",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/docus/main/fluid",
@@ -986,7 +1051,7 @@ const _inlineRuntimeConfig = {
                   "type": "boolean"
                 },
                 "padded": {
-                  "title": "",
+                  "title": "Makes the content of the main container padded.",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/docus/main/padded",
@@ -1001,22 +1066,28 @@ const _inlineRuntimeConfig = {
               }
             },
             "footer": {
-              "title": "",
+              "title": "Footer configuration",
               "description": "",
-              "tags": [],
+              "tags": [
+                "@studioIcon fluent:document-footer-24-regular"
+              ],
               "id": "#appConfig/docus/footer",
               "properties": {
                 "credits": {
-                  "title": "",
+                  "title": "Website credits configuration.",
                   "description": "",
-                  "tags": [],
+                  "tags": [
+                    "@studioIcon material-symbols:copyright"
+                  ],
                   "tsType": "false|{icon: string, text: string, href: string}",
                   "id": "#appConfig/docus/footer/credits",
                   "properties": {
                     "icon": {
-                      "title": "",
+                      "title": "Icon to show on credits",
                       "description": "",
-                      "tags": [],
+                      "tags": [
+                        "@formtype Icon"
+                      ],
                       "id": "#appConfig/docus/footer/credits/icon",
                       "default": "IconDocus",
                       "type": "string"
@@ -1066,9 +1137,11 @@ const _inlineRuntimeConfig = {
                       }
                     }
                   },
-                  "title": "",
-                  "description": "",
-                  "tags": [],
+                  "title": "Text links",
+                  "description": "Will be added into center section of the footer.",
+                  "tags": [
+                    "@studioIcon material-symbols:add-link"
+                  ],
                   "id": "#appConfig/docus/footer/textLinks"
                 },
                 "iconLinks": {
@@ -1098,13 +1171,15 @@ const _inlineRuntimeConfig = {
                       }
                     }
                   },
-                  "title": "",
-                  "description": "",
-                  "tags": [],
+                  "title": "Icon links",
+                  "description": "Icons to be added to Social Icons in footer.",
+                  "tags": [
+                    "@studioIcon material-symbols:add-link"
+                  ],
                   "id": "#appConfig/docus/footer/iconLinks"
                 },
                 "fluid": {
-                  "title": "",
+                  "title": "Makes the content of the footer fluid.",
                   "description": "",
                   "tags": [],
                   "id": "#appConfig/docus/footer/fluid",
@@ -1123,54 +1198,56 @@ const _inlineRuntimeConfig = {
               }
             },
             "github": {
-              "title": "",
-              "description": "",
-              "tags": [],
+              "title": "GitHub integration",
+              "description": "Configure the Edit on Github integration.",
+              "tags": [
+                "@studioIcon simple-icons:github"
+              ],
               "id": "#appConfig/docus/github",
               "properties": {
                 "baseUrl": {
-                  "title": "",
-                  "description": "",
+                  "title": "Base URL",
+                  "description": "You can use this to link to GitHub Enterprise.",
                   "tags": [],
                   "id": "#appConfig/docus/github/baseUrl",
                   "default": "https://github.com",
                   "type": "string"
                 },
                 "dir": {
-                  "title": "",
-                  "description": "",
+                  "title": "Directory",
+                  "description": "Your GitHub repository root directory.",
                   "tags": [],
                   "id": "#appConfig/docus/github/dir",
                   "default": "",
                   "type": "string"
                 },
                 "branch": {
-                  "title": "",
-                  "description": "",
+                  "title": "Branch",
+                  "description": "Your GitHub repository branch.",
                   "tags": [],
                   "id": "#appConfig/docus/github/branch",
                   "default": "",
                   "type": "string"
                 },
                 "repo": {
-                  "title": "",
-                  "description": "",
+                  "title": "Repository",
+                  "description": "Your GitHub repository name.",
                   "tags": [],
                   "id": "#appConfig/docus/github/repo",
                   "default": "",
                   "type": "string"
                 },
                 "owner": {
-                  "title": "",
-                  "description": "",
+                  "title": "Owner",
+                  "description": "Your GitHub repository owner.",
                   "tags": [],
                   "id": "#appConfig/docus/github/owner",
                   "default": "",
                   "type": "string"
                 },
                 "edit": {
-                  "title": "",
-                  "description": "",
+                  "title": "EditOnGithub",
+                  "description": "Display EditOnGithub button.",
                   "tags": [],
                   "id": "#appConfig/docus/github/edit",
                   "default": false,

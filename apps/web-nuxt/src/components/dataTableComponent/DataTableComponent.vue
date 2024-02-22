@@ -1,7 +1,8 @@
 <template>
   <div class="box overflow-hidden z-1 p-5 table-container shadow-sm">
     <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
-    <div>
+    
+    <div class="mt-10">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
@@ -58,7 +59,8 @@
               mask="99/99/9999"
             />
           </template>
-          <template v-else #filter="{ filterModel }">
+
+          <template v-else-if="column.header !== 'Image'" #filter="{ filterModel }">
             <InputText
               v-model="filterModel.value"
               type="text"
@@ -154,6 +156,16 @@ const typefilter = ref('')
 
 const dataTableRef = ref()
 
+const op = ref(null);
+
+function showOverlay(event) {
+  op.value.toggle(event);
+}
+
+function hideOverlay() {
+  op.value.hide();
+}
+
 function onFilterChange(updatedFilters) {
   emit('update:filters', updatedFilters)
 }
@@ -193,7 +205,6 @@ function clearFilter() {
   typefilter.value = '';  
 
   Object.keys(filters.value).forEach((key) => {
-    console.log("her", key)
     filters.value[key] = '';
   });
 }
