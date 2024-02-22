@@ -1,40 +1,3 @@
-<script setup>
-import { ref } from 'vue'
-import DataTable from '../../components/dataLibrary/DataList.vue'
-
-const home = ref({
-  icon: 'pi pi-home',
-  route: '/',
-})
-
-const selectedUsecase = ref()
-const selectedTemplate = ref()
-const showData = ref(false)
-const preview = ref(false)
-
-const use_cases = ref([
-  { name: 'From to Doc' },
-  { name: 'Data to Doc' },
-
-])
-const templates = ref([
-  { name: 'Template 1' },
-  { name: 'Template 2' },
-])
-
-function handleShowData() {
-  // set showData
-  showData.value = !showData.value
-}
-
-function handlePreview() {
-  // set showData
-  preview.value = !preview.value
-}
-
-const items = ref([{ label: 'Data Library', route: '/data-library' }])
-</script>
-
 <template>
   <div class="h-full w-full bg-stone-100 overflow-scroll">
     <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
@@ -61,79 +24,95 @@ const items = ref([{ label: 'Data Library', route: '/data-library' }])
     </Breadcrumb>
 
     <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white">
-      <div class="font-semibold text-2xl mb-7 mt-5">
-        Data Library
+
+      <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 mt-10 mx-8">
+        <div class=" flex justify-center">
+          <TreeSelect v-model="selectedValue" :options="NodeData" selectionMode="multiple" placeholder="Select Item" class="md:w-[20rem] w-full" />
+        </div>
+
       </div>
 
-      <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 py-5 mx-8">
-        <div class=" mr-3">
-          <label for="use_case" class="block text-lg font-medium leading-6 sr-only">Select Use case</label>
-          <Dropdown
-            v-model="selectedUsecase"
-            :options="use_cases" option-label="name"
-            placeholder="Select Use case"
-            class="w-full h-14 md:w-[14rem] bg-white flex justify-between text-gray-600 z-50 rounded-xl px-2"
-          />
-        </div>
-
-        <div class="mr-5">
-          <label for="location" class="block text-lg font-medium leading-6 sr-only">Select template</label>
-          <Dropdown
-            v-model="selectedTemplate"
-            :options="templates"
-            option-label="name"
-            placeholder="Select template"
-            class=" w-full h-14 md:w-[14rem] flex justify-between rounded-xl px-2 text-gray-600"
-          />
-        </div>
-
-        <Button
-          label="Preview"
-          outlined
-          class="w-28 h-14 text-primaryBlue bg-white justify-center items-center shadow-sm
-          hover:bg-blue-100 border-primaryBlue "
-          @click="handlePreview()"
-        />
-
-        <Button
-          :label="showData ? 'Hide Data' : 'Show Data'"
-          severity="secondary"
-          class="w-44 text-center bg-primaryBlue h-14  hover:bg-blue-500 rounded-lg"
-          @click="handleShowData()"
-        />
-      </div>
-
-      <div v-if="showData" class="flex flex-col justify-center text-center mt-10 space-y-2 ">
-        <div class="flex flex-wrap flex-column md:flex-row justify-between mx-10 mb-5">
-          <div class="text-left">
-            <p class="text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium text-left">
-              All data related to form.
-            </p>
-            <p class="text-xs md:text-sm lg:text-sm xl:text-base mt-2 font-normal text-gray-500">
-              Here you have data of every time the form is filled.
-            </p>
-          </div>
-          <Button label="Export " severity="secondary" class="w-28 rounded-md text-center bg-primaryBlue h-14 shadow" icon="pi pi-download" />
-        </div>
-
+      <div  class="flex flex-col justify-center text-center mt-5 space-y-2 ">
         <div class=" p-2 mt-5">
-          <DataTable />
+          <DataList  
+              :data="dataLibraryData"
+              :filters="filters"
+              :title="title"
+              :info="info"
+              :columns="columns"
+              :has-actions-column="hasActionsColumn"
+              :has-filter-actions="hasFilterActions"
+              :export-file="true" />
         </div>
       </div>
     </div>
 
-    <!-- Preview Modal -->
-    <Dialog v-model:visible="preview" modal header=" " :style="{ width: '30rem' }" :breakpoints="{ '1199px': '75vw', '575px': '90vw' }" class="text-center rounded-lg">
-      <div class="flex flex-col justify-center items-center space-y-5">
-        <p class="text-xl font-semibold">
-          Selected Template
-        </p>
-        <img src="https://i0.wp.com/statisticsbyjim.com/wp-content/uploads/2021/11/discrete_data_ex.png?fit=576%2C384&ssl=1" alt="" class=" w-56 h-36 rounded-lg ">
-      </div>
-    </Dialog>
   </div>
 </template>
 
-<style scoped>
+<script setup>
+import { ref } from 'vue'
+import { FilterMatchMode, FilterOperator } from 'primevue/api';
+import { dataLibraryData, NodeData }  from '../../services/sampleData'
+import DataList from '~/components/dataLibrary/DataList.vue';
 
-</style>
+const home = ref({
+  icon: 'pi pi-home',
+  route: '/',
+})
+
+const exportFile = ref(true)
+
+const showData = ref(false)
+
+const selectedValue = ref(null)
+
+const filteredDataList = ref([])
+
+const filteredData = computed(() => {
+  if (!selectedValue.value) {
+    return []; 
+  }
+
+  return dataLibraryData.filter(item => {
+    const type = item.type;
+    const templateName = item.templateName;
+
+    return selectedValue.value[type] || selectedValue.value[templateName];
+  });
+  
+});
+
+watch(filteredData, (filteredData) => {
+  filteredDataList.value = filteredData;
+})
+
+const title = ref('All data related to form.')
+
+const info = ref('Here you have data of every time the form is filled.')
+
+function handleShowData() {
+  showData.value = !showData.value
+}
+
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  filled_on: { 
+    operator: FilterOperator.AND, 
+    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+  },
+  text_filled: { value: null, matchMode: FilterMatchMode.CONTAINS },
+});
+
+const columns = ref([
+  {field: 'filled_on', header: 'Filled On', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem',  filterMenuStyle: { width: '14rem' } },
+  {field: 'image', header: 'Image', data_type: 'text'},
+  {field: 'text_filled', header: 'Text Filled', filterField: 'text_filled', data_type: 'text', style: 'min-width: 10rem', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' } },
+])
+
+const hasActionsColumn = ref(false)
+const hasFilterActions = ref(false);
+
+const items = ref([{ label: 'Data Library', route: '/data-library' }])
+</script>
+

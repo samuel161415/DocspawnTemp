@@ -1,28 +1,12 @@
 <template>
   <div class="box overflow-hidden z-1 p-5 table-container shadow-sm">
-    <div class="flex justify-between">
-      <div class="text-left">
-        <p class="text-lg md:text-xl lg:text-2xl xl:text-2xl font-medium text-left">
-          {{ title }}
-        </p>
-        <p class="text-xs md:text-sm lg:text-sm xl:text-base mt-2 font-normal text-gray-500">
-          {{ info }}
-        </p>
-      </div>
-      <Button
-        v-if="exportFile"
-        type="button"
-        icon="pi pi-download"
-        label="Export CSV"
-        class="flex p-3 rounded-lg bg-primaryBlue text-white mb-5"
-        @click="exportCSVHandler"
-      />
-    </div>
-    <div class="border border-gray-100">
+    <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
+    
+    <div class="mt-10">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
-        :value="props.data"
+        :value="filteredData"
         show-gridlines
         paginator
         responsive-layout="scroll"
@@ -33,35 +17,17 @@
         overlay-visible
         striped-rows
         csv-separator
-        :global-filter-fields="props.columns.map(column => column.field)"
+        :global-filter-fields="['type', 'template_name', 'created_by', 'date']"
         paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
         current-page-report-template="Showing {first} to {last} of {totalRecords} entries"
         @update:filters="onFilterChange"
       >
         <template #header>
-          <div class="flex justify-between">
-            <Button
-              type="button"
-              icon="pi pi-filter-slash"
-              label="Clear"
-              outlined
-              class="p-7 rounded-xl border-primaryBlue text-primaryBlue hover:bg-blue-100"
-              @click="clearFilter()"
-            />
-            <span class="relative">
-              <i
-                class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
-                style="color: rgb(117, 119, 120);"
-              ></i>
-              <InputText
-                placeholder="Keyword Search"
-                class="pl-10 font-normal rounded-xl border-gray-300"
-              />
-            </span>
-          </div>
+          <DataTableFilters :filters="filters" :hasFilterActions="props.hasFilterActions" :typefilter="typefilter" @filterData="filterData" @clearFilter="clearFilter" />
         </template>
+
         <template #empty>
-          No customers found.
+          No data found.
         </template>
         <template #loading>
           Loading data. Please wait.
@@ -78,12 +44,14 @@
           :data-type="column.data_type"
         >
           <template #body="{ data }">
-            <div class="flex space-x-2">
-              <i v-if="column.header === 'Type'" class="pi pi-file text-gray-400 mr-2"></i>
-              {{ data[column.field] }}
+            <div v-if="column.header === 'Date'" > {{ formatDate(data[column.field]) }}</div>
+            <div v-else class="flex ">
+              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryPurple font-bold mr-4 text-xl"></i>
+              {{  data[column.field] }}
             </div>
           </template>
           <template v-if="column.header === 'Date'" #filter="{ filterModel }">
+            
             <Calendar
               v-model="filterModel.value"
               date-format="mm/dd/yy"
@@ -91,7 +59,8 @@
               mask="99/99/9999"
             />
           </template>
-          <template v-else #filter="{ filterModel }">
+
+          <template v-else-if="column.header !== 'Image'" #filter="{ filterModel }">
             <InputText
               v-model="filterModel.value"
               type="text"
@@ -109,14 +78,14 @@
                   rounded
                   text
                   :icon="props.icon1"
-                  class="text-primaryPink bg-pink-200 mr-2 text-xl rounded-xl"
+                  class="text-primaryPurple mr-2 text-xl rounded-xl"
                   @click="showDataInModal"
                 />
                 <Button
                   rounded
                   :icon="props.icon2"
                   text
-                  class="text-primaryBlue bg-blue-200 text-xl rounded-xl"
+                  class="text-primaryPurple text-xl rounded-xl"
                   @click="downloadDataAsPdf"
                 />
               </div>
@@ -130,6 +99,9 @@
 
 <script setup>
 import { defineProps, ref } from 'vue'
+import DataTableHeader from './DataTableHeader.vue'
+import DataTableFilters from './DataTableFilters.vue';
+import formatDate from '~/utils';
 
 const props = defineProps({
   data: {
@@ -148,13 +120,17 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
+  hasFilterActions: {
+    type: Boolean,
+    required: false,
+  },
   title: {
     type: String,
-    required: true,
+    required: false,
   },
   info: {
     type: String,
-    required: true,
+    required: false,
   },
   icon1: {
     type: String,
@@ -170,16 +146,50 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits();
+
 const filters = ref(props.filters)
 
+const filteredData = ref(props.data)
+
+const typefilter = ref('')
+
 const dataTableRef = ref()
+
+const op = ref(null);
+
+function showOverlay(event) {
+  op.value.toggle(event);
+}
+
+function hideOverlay() {
+  op.value.hide();
+}
 
 function onFilterChange(updatedFilters) {
   emit('update:filters', updatedFilters)
 }
 
 function getPlaceholder(header) {
-  return `Search by ${header}`
+  return `Search by ${header}`;
+}
+
+function exportCSVHandler() {
+  if (dataTableRef.value) {
+    dataTableRef.value.exportCSV();
+  }
+}
+
+function filterData(type) {
+  typefilter.value = type
+  
+  if(type === ''){
+    filteredData.value= props.data
+  }else{
+
+    filteredData.value= props.data.filter((item) => item.type === type)
+  }
+  
 }
 
 function showDataInModal() {
@@ -190,12 +200,12 @@ function downloadDataAsPdf() {
   emit('downloadPdf', true)
 }
 
-function exportCSVHandler() {
-  if (dataTableRef.value)
-    dataTableRef.value.exportCSV()
-}
-
 function clearFilter() {
-  initFilters()
+  filterData('')
+  typefilter.value = '';  
+
+  Object.keys(filters.value).forEach((key) => {
+    filters.value[key] = '';
+  });
 }
 </script>

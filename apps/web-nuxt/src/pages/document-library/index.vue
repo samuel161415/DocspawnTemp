@@ -11,7 +11,7 @@
           <a :href="href" v-bind="props.action" @click="navigate">
             <span class="text-color" :class="[item.icon]"></span>
             <span
-              class="text-primary-500 dark:text-primary-400 font-semibold"
+              class=" text-xl text-primary-500 dark:text-primary-400 font-semibold"
             >{{ item.label }}</span>
           </a>
         </router-link>
@@ -23,41 +23,14 @@
       </template>
     </Breadcrumb>
 
-    <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white">
-      <div class="font-semibold text-2xl mb-7 mt-5">
-        Documents Library
-      </div>
-      <div class="flex flex-col md:flex-row md:justify-end space-y-4 md:space-y-0 md:space-x-4 px-5">
-        <div>
-          <p class="text-base text-primaryBlue font-medium mb-2 px-5 tracking-wide">
-            Sort By
-          </p>
-          <Dropdown
-            v-model="sortBy"
-            :options="sortMethod"
-            option-label="name"
-            placeholder="Newer First"
-            class="w-full md:w-[12rem] border-blue-300 bg-blue-50 text-gray-600 font-medium hover:border-primaryBlue rounded-full px-4"
-          />
-        </div>
-        <div>
-          <p class="text-base text-primaryBlue font-medium mb-2 px-4 tracking-wide">
-            Filter By
-          </p>
-          <Dropdown
-            v-model="filterBy"
-            :options="filterMethod"
-            option-label="name"
-            placeholder="All"
-            class="w-full md:w-[12rem] border-blue-300 bg-blue-50 text-gray-600 font-medium hover:border-primaryBlue rounded-full px-4"
-          />
-        </div>
-      </div>
+    <div class="mx-4 mt-4 px-8 pt-14 pb-5 shadow rounded-md bg-white">
+    
       <DataTableComponent
         :data="documentLibraryData"
         :filters="filters"
         :columns="colomnData"
         :has-actions-column="hasActionsColumn"
+        :has-filter-actions="hasFilterActions"
         icon1="pi pi-eye"
         icon2="pi pi-download"
         :export-file="exportFile"
@@ -69,7 +42,7 @@
 <script setup>
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
-import DataTableComponent from '../../components/DataTableComponent.vue'
+import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
 import { documentLibraryData } from '../../services/sampleData'
 
 // import { useRouter } from 'vue-router'
@@ -83,46 +56,34 @@ const exportFile = ref(false)
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  type: { value: null, matchMode: FilterMatchMode.IS },
   template_name: {
     operator: FilterOperator.AND,
     constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
   },
-  type: { value: null, matchMode: FilterMatchMode.IN },
-  date: {
+  created_by: { 
     operator: FilterOperator.AND,
-    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+    constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
   },
+  date: { 
+    operator: FilterOperator.AND, 
+    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
   no_documents: {
     operator: FilterOperator.AND,
-    constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
-  },
-  status: {
-    operator: FilterOperator.OR,
     constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
   },
 },
 )
 
 const colomnData = ref([
-  { field: 'type', header: 'Type', filterField: 'type', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
+  { field: 'created_by', header: 'Created By', filterField: 'created_by', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'template_name', header: 'Template Name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'no_documents', header: 'No. of Documents', filterField: 'no_documents', data_type: 'numeric' },
-  { field: 'date', header: 'Date', style: 'min-width: 12rem', data_type: 'date' },
+  { field: 'date', header: 'Date', filterField: 'date', data_type: 'date', filterMenuStyle: { width: '14rem' } },
 ])
 
 const hasActionsColumn = ref(true)
+const hasFilterActions = ref(true);
 
-const sortBy = ref()
-const sortMethod = ref([
-  { name: 'Newer First' },
-  { name: 'Old First' },
-])
-
-const filterBy = ref()
-const filterMethod = ref([
-  { name: 'All' },
-  { name: 'Form to Doc' },
-  { name: 'Data to Doc' },
-])
 const items = ref([{ label: 'Document Library', route: '/document-library' }])
 </script>
