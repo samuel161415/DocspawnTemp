@@ -1,29 +1,29 @@
 <template>
   <div class="h-full w-full bg-stone-100 overflow-scroll">
-    <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-      <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate }"
-          :to="item.route"
-          custom
-        >
-          <a :href="href" v-bind="props.action" @click="navigate">
-            <span class="text-color" :class="[item.icon]"></span>
-            <span
-              class=" text-xl text-primary-500 dark:text-primary-400 font-semibold"
-            >{{ item.label }}</span>
-          </a>
-        </router-link>
-        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-          <span class="text-surface-700 dark:text-surface-0/80">{{
-            item.label
-          }}</span>
-        </a>
-      </template>
-    </Breadcrumb>
-
+    
     <div class="mx-4 mt-4 px-8 pt-14 pb-5 shadow rounded-md bg-white">
+      <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
+        <template #item="{ item, props }">
+          <router-link
+            v-if="item.route"
+            v-slot="{ href, navigate }"
+            :to="item.route"
+            custom
+          >
+            <a :href="href" v-bind="props.action" @click="navigate">
+              <span class="text-color" :class="[item.icon]"></span>
+              <span
+                class=" text-xl text-primary-500 dark:text-primary-400 font-semibold"
+              >{{ item.label }}</span>
+            </a>
+          </router-link>
+          <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+            <span class="text-surface-700 dark:text-surface-0/80">{{
+              item.label
+            }}</span>
+          </a>
+        </template>
+      </Breadcrumb>
     
       <DataTableComponent
         :data="documentLibraryData"

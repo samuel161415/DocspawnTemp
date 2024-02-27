@@ -1,51 +1,53 @@
 <template>
-  <div class="h-full w-full bg-stone-100 overflow-scroll">
-    <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-      <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate }"
-          :to="item.route"
-          custom
-        >
-          <a :href="href" v-bind="props.action" @click="navigate">
-            <span class="text-color" :class="[item.icon]" />
-            <span
-              class="text-primary-500 dark:text-primary-400 font-semibold"
-            >{{ item.label }}</span>
-          </a>
-        </router-link>
-        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-          <span class="text-surface-700 dark:text-surface-0/80">{{
-            item.label
-          }}</span>
-        </a>
-      </template>
-    </Breadcrumb>
-
-    <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white">
-
-      <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 mt-10 mx-8">
-        <div class=" flex justify-center">
-          <TreeSelect v-model="selectedValue" :options="NodeData" selectionMode="multiple" placeholder="Select Item" class="md:w-[20rem] w-full" />
+  
+  <div class="h-full w-full bg-stone-100 overflow-scroll ">
+ 
+      <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white ">
+        <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
+          <template #item="{ item, props }">
+            <router-link
+              v-if="item.route"
+              v-slot="{ href, navigate }"
+              :to="item.route"
+              custom
+            >
+              <a :href="href" v-bind="props.action" @click="navigate">
+                <span class="text-color" :class="[item.icon]" />
+                <span
+                  class="text-primary-500 dark:text-primary-400 font-semibold"
+                >{{ item.label }}</span>
+              </a>
+            </router-link>
+            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+              <span class="text-surface-700 dark:text-surface-0/80">{{
+                item.label
+              }}</span>
+            </a>
+          </template>
+        </Breadcrumb>
+  
+        <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 mt-10 mx-8">
+          <div class=" flex justify-center">
+            <TreeSelect v-model="selectedValue" :options="NodeData" selectionMode="multiple" placeholder="Select Item" class="md:w-[20rem] w-full" />
+          </div>
+  
         </div>
-
-      </div>
-
-      <div  class="flex flex-col justify-center text-center mt-5 space-y-2 ">
-        <div class=" p-2 mt-5">
-          <DataList  
-              :data="dataLibraryData"
-              :filters="filters"
-              :title="title"
-              :info="info"
-              :columns="columns"
-              :has-actions-column="hasActionsColumn"
-              :has-filter-actions="hasFilterActions"
-              :export-file="true" />
+  
+        <div  class="flex flex-col justify-center text-center mt-5 space-y-2 ">
+          <div class=" p-2 mt-5">
+            <DataList  
+                :data="dataLibraryData"
+                :filters="filters"
+                :title="title"
+                :info="info"
+                :columns="columns"
+                :has-actions-column="hasActionsColumn"
+                :has-filter-actions="hasFilterActions"
+                :export-file="true" />
+          </div>
         </div>
       </div>
-    </div>
+ 
 
   </div>
 </template>
@@ -55,6 +57,7 @@ import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { dataLibraryData, NodeData }  from '../../services/sampleData'
 import DataList from '~/components/dataLibrary/DataList.vue';
+
 
 const home = ref({
   icon: 'pi pi-home',
