@@ -22,11 +22,11 @@
           </div>
         </div>
         <div
-          @click="selectOption('Data to Doc')"
+          @click="selectOption('Table to doc')"
           class="w-[250px] cursor-pointer hover:shadow-2xl h-[180px] p-5 grid place-items-center border-2 border-primaryBlue rounded-lg"
         >
           <div class="flex flex-col items-center justify-center gap-3">
-            <p class="text-primaryBlue text-2xl font-bold">Data to Doc</p>
+            <p class="text-primaryBlue text-2xl font-bold">Table to doc</p>
             <p class="text-primaryBlue text-center text-lg">
               Generate documents from external data sources in csv or xlsx
               format
@@ -84,7 +84,7 @@
           <Button
             :disabled="!value"
             label="CONTINUE"
-            @click="active = selectedOption === 'Data to Doc' ? 3 : 1"
+            @click="active = selectedOption === 'Table to doc' ? 3 : 1"
             severity="primary"
             class="bg-primaryBlue w-32 text-white"
           />
@@ -166,7 +166,7 @@ const stepInfo = ref({
 });
 
 watch(selectedOption, (newVal) => {
-  if (newVal === "Data to Doc") {
+  if (newVal === "Table to doc") {
     genInfoSteps.value.push({
       label: "Upload Dataset File in CSV or XLSX format",
     });

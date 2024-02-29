@@ -121,7 +121,7 @@ export const documentLibraryData = [
   },
   {
     id: 2,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'FORM',
     no_documents: 2,
     date: new Date('2024-01-15'),
@@ -137,7 +137,7 @@ export const documentLibraryData = [
   },
   {
     id: 4,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'FORM',
     no_documents: 3,
     date: new Date('2024-01-01'),
@@ -161,7 +161,7 @@ export const documentLibraryData = [
   },
   {
     id: 7,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'APPLICATION FORM',
     no_documents: 1,
     date: new Date('2024-04-05'),
@@ -169,7 +169,7 @@ export const documentLibraryData = [
   },
   {
     id: 8,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'SURVEY FORM',
     no_documents: 3,
     date: new Date('2024-03-16'),
@@ -193,7 +193,7 @@ export const documentLibraryData = [
   },
   {
     id: 11,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'EMPLOYEE SURVEY',
     no_documents: 1,
     date: new Date('2024-05-05'),
@@ -201,7 +201,7 @@ export const documentLibraryData = [
   },
   {
     id: 12,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'EVENT REGISTRATION',
     no_documents: 1,
     date: new Date('2024-06-10'),
@@ -225,7 +225,7 @@ export const documentLibraryData = [
   },
   {
     id: 15,
-    type: 'Data to Doc',
+    type: 'Table to doc',
     template_name: 'JOB APPLICATION',
     no_documents: 1,
     date: new Date('2024-09-01'),
@@ -239,7 +239,7 @@ export const dataLibraryData = [
     filled_on: new Date('2024-01-01'),
     image: 'https://img.freepik.com/free-vector/illustration-application-form_53876-18193.jpg',
     text_filled: 'Lorem Ipsum',
-    type: 'Data to Doc',
+    type: 'Table to doc',
     templateName: 'PDF FORM',
   },
   {
@@ -247,7 +247,7 @@ export const dataLibraryData = [
     filled_on: new Date('2024-02-15'),
     image: 'https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg',
     text_filled: 'Dolor Sit Amet',
-    type: 'Data to Doc',
+    type: 'Table to doc',
     templateName: 'INVOICE FORM',
   },
   {
@@ -255,7 +255,7 @@ export const dataLibraryData = [
     filled_on: new Date('2024-01-01'),
     image: 'https://assets-global.website-files.com/5ebb0930dd82631397ddca92/61b8ef1f82c1b3167fe39e0a_product-template-forms-finance.png',
     text_filled: 'Lorem Ipsum',
-    type: 'Data to Doc',
+    type: 'Table to doc',
     templateName: 'INVOICE FORM',
   },
   {
@@ -313,9 +313,9 @@ export const NodeData = [
       ]
   },
   {
-      key: 'Data to Doc',
-      label: 'Data to Doc',
-      data: 'Data to Doc',
+      key: 'Table to doc',
+      label: 'Table to doc',
+      data: 'Table to doc',
       icon: 'pi pi-fw pi-calendar',
       children: [
           { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },

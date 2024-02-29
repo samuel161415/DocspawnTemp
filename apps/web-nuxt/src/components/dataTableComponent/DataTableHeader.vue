@@ -17,7 +17,7 @@
             type="button"
             icon="pi pi-download"
             label="Export CSV"
-            class="flex p-1 md:p-3 rounded-lg bg-primaryPurple text-white mb-5 text-xs md:text-sm ml-2"
+            class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white mb-5 text-xs md:text-sm ml-2"
             @click="exportCSVHandler"
           />
         </div>

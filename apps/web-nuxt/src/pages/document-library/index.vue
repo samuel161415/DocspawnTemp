@@ -1,7 +1,7 @@
 <template>
   <div class="h-full w-full bg-stone-100 overflow-scroll">
     
-    <div class="mx-4 mt-4 px-8 pt-14 pb-5 shadow rounded-md bg-white">
+    <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white ">
       <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
         <template #item="{ item, props }">
           <router-link
@@ -13,7 +13,7 @@
             <a :href="href" v-bind="props.action" @click="navigate">
               <span class="text-color" :class="[item.icon]"></span>
               <span
-                class=" text-xl text-primary-500 dark:text-primary-400 font-semibold"
+                class=" text-lg text-primary-500 dark:text-primary-400 font-semibold"
               >{{ item.label }}</span>
             </a>
           </router-link>

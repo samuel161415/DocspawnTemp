@@ -68,7 +68,7 @@
               </div>
             </div>
             <div v-else-if="column.header === 'Filled On'">
-              <i class="pi pi-calendar text-primaryPurple font-bold mr-4 text-xl"></i>
+              <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDate(data[column.field]) }}
             </div>
             <div v-else class="flex ">

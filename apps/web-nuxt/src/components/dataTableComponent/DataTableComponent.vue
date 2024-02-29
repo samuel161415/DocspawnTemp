@@ -46,7 +46,7 @@
           <template #body="{ data }">
             <div v-if="column.header === 'Date'" > {{ formatDate(data[column.field]) }}</div>
             <div v-else class="flex ">
-              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryPurple font-bold mr-4 text-xl"></i>
+              <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryBlue font-bold mr-4 text-xl"></i>
               {{  data[column.field] }}
             </div>
           </template>
@@ -78,14 +78,14 @@
                   rounded
                   text
                   :icon="props.icon1"
-                  class="text-primaryPurple mr-2 text-xl rounded-xl"
+                  class="text-primaryBlue mr-2 text-xl rounded-xl"
                   @click="showDataInModal"
                 />
                 <Button
                   rounded
                   :icon="props.icon2"
                   text
-                  class="text-primaryPurple text-xl rounded-xl"
+                  class="text-primaryBlue text-xl rounded-xl"
                   @click="downloadDataAsPdf"
                 />
               </div>
@@ -201,8 +201,6 @@ function downloadDataAsPdf() {
 }
 
 function clearFilter() {
-  filterData('')
-  typefilter.value = '';  
 
   Object.keys(filters.value).forEach((key) => {
     filters.value[key] = '';

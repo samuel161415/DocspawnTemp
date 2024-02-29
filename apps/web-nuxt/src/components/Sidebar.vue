@@ -4,7 +4,7 @@
 
     <div class="z-50 fixed mt-14" :class="{ 'w-20': isCollapsed, 'w-60': !isCollapsed }">
       <button
-        class="absolute justify-end z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 p-3 shadow-xl hover:bg-primaryPurple hover:text-white"
+        class="absolute justify-end z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 p-3 shadow-xl hover:bg-primaryBlue hover:text-white"
         @click="toggleCollapse">
         <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed, }"></i>
       </button>
@@ -25,9 +25,9 @@
         </div>
         <!-- menu Items -->
         <li v-for="item in menuItems" :key="item.title" class=" w-full cursor-pointer px-3 ml-2 "
-          :class="{ '': isCollapsed, 'mb-2': !isCollapsed, 'border-l-2 text-primaryPurple border-primaryPurple': baseRoute === item.route }">
+          :class="{ '': isCollapsed, 'mb-2': !isCollapsed, 'border-l-2 text-primaryBlue border-primaryBlue': baseRoute === item.route }">
 
-          <div :key="item.title" class="hover:bg-primaryPurple hover:text-white rounded-md flex text-center items-center"
+          <div :key="item.title" class="hover:bg-primaryBlue hover:text-white rounded-md flex text-center items-center"
             :class="{ 'flex-col text-center items-center py-2 mr-2 text-sm': isCollapsed, 'my-2 py-3 px-3': !isCollapsed, }"
             @click="navigate(item.route)" @mouseenter="setIsHovered(item, true)" @mouseleave="setIsHovered(item, false)">
 
@@ -35,20 +35,20 @@
               item.icon, 'mr-2',
               {
                 'text-white': item.isHovered,
-                'text-primaryPurple': baseRoute === item.route,
+                'text-primaryBlue': baseRoute === item.route,
                 'text-gray-500': !item.isHovered
               }
             ]">
             </i>
 
             <i v-if="!isCollapsed" style="font-size: 1.4rem"
-              :class="[item.icon, 'mr-2', { 'text-white': item.isHovered, 'text-primaryPurple': baseRoute === item.route, 'text-gray-500': !item.isHovered }]">
+              :class="[item.icon, 'mr-2', { 'text-white': item.isHovered, 'text-primaryBlue': baseRoute === item.route, 'text-gray-500': !item.isHovered }]">
             </i>
 
             <span v-if="!isCollapsed" class=" text-lg font-medium text-gray-500 ml-2 " :class="{
               'text-white': item.isHovered,
 
-              'text-primaryPurple text-lg': baseRoute === item.route,
+              'text-primaryBlue text-lg': baseRoute === item.route,
               'text-gray-500': !item.isHovered
             }">
               {{ item.title }}
@@ -61,27 +61,27 @@
         <!-- settings -->
         <li class="mt-7  cursor-pointer ml-2 mr-2 w-full  py-4">
 
-          <hr class="text-gray-300" />
-          <div class="px-3" :class="{ 'border-l-2 text-primaryPurple border-primaryPurple': openSubMenu }">
+          <hr class="text-gray-300 mx-4" />
+          <div class="px-3" :class="{ 'border-l-2 text-primaryBlue border-primaryBlue': openSubMenu }">
 
-            <div class="hover:bg-primaryPurple hover:text-white  rounded-md mt-2 flex  text-center items-center"
-              :class="{ ' px-2  mr-2 text-sm': isCollapsed, ' py-3 px-3': !isCollapsed, 'text-primaryPurple': openSubMenu }"
+            <div class="hover:bg-primaryBlue hover:text-white  rounded-md mt-2 flex  text-center items-center"
+              :class="{ ' px-2  mr-2 text-sm': isCollapsed, ' py-3 px-3': !isCollapsed, 'text-primaryBlue': openSubMenu }"
               @mouseenter="settingHovered = true" @mouseleave="settingHovered = false" @click="toggle">
 
               <i v-if="isCollapsed" class="pi pi-cog cursor-pointer text-gray-500  text-center mb-2 py-3"
                 style="font-size: 1.5rem" :class="{
                   'text-white': settingHovered,
-                  'text-primaryPurple': openSubMenu,
+                  'text-primaryBlue': openSubMenu,
                 }"></i>
 
               <i v-if="!isCollapsed" style="font-size: 1.4rem" class="pi pi-cog text-gray-500 mr-2" :class="{
                 'text-white': settingHovered,
-                'text-primaryPurple': openSubMenu,
+                'text-primaryBlue': openSubMenu,
               }">
               </i>
               <span v-if="!isCollapsed" class=" text-lg font-medium text-gray-500 ml-2 " :class="{
                 'text-white': settingHovered,
-                'text-primaryPurple': openSubMenu,
+                'text-primaryBlue': openSubMenu,
               }">
                 Settings
               </span>
@@ -116,15 +116,15 @@
         <ul class=" z-1">
           <li v-for="subItem in subItems" :key="subItem.title" class="rounded-lg cursor-pointer flex flex-col">
             <div :key="subItem.title" class=" rounded-md flex px-4 py-2"
-              :class="{ 'bg-primaryPurple': baseRoute === subItem.route }" @click="navigate(subItem.route)"
+              :class="{ 'bg-primaryBlue': baseRoute === subItem.route }" @click="navigate(subItem.route)"
               @mouseenter="setSubIsHovered(subItem, true)" @mouseleave="setSubIsHovered(subItem, false)">
 
               <i style="font-size: 1rem" class="space-y-2 "
-                :class="['pi pi-cog', 'mr-2', { 'text-primaryPurple': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }]">
+                :class="['pi pi-cog', 'mr-2', { 'text-primaryBlue': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }]">
               </i>
 
               <span class=" text-base font-medium ml-2 "
-                :class="{ 'text-primaryPurple': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }">{{
+                :class="{ 'text-primaryBlue': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }">{{
                   subItem.title }}</span>
             </div>
           </li>

@@ -256,7 +256,7 @@ export default {
       },
 
       // --- Severity Button States ---
-      "focus:outline-none focus:outline-offset-0 focus:ring",
+      "focus:outline-none focus:outline-offset-0 ",
 
       // Link
       {
@@ -283,17 +283,6 @@ export default {
           !props.outlined &&
           !props.plain,
       },
-      {
-        "focus:ring-primary-400/50 dark:focus:ring-primary-300/50":
-          props.severity === null,
-      },
-      // Text & Outlined Button
-      {
-        "hover:bg-primary-300/20":
-          (props.text || props.outlined) &&
-          props.severity === null &&
-          !props.plain,
-      },
 
       // Secondary
       {
@@ -303,10 +292,7 @@ export default {
           !props.outlined &&
           !props.plain,
       },
-      {
-        "focus:ring-surface-400/50 dark:focus:ring-surface-300/50":
-          props.severity === "secondary",
-      },
+      
       // Text & Outlined Button
       {
         "hover:bg-surface-300/20":
@@ -322,10 +308,6 @@ export default {
           !props.text &&
           !props.outlined &&
           !props.plain,
-      },
-      {
-        "focus:ring-green-400/50 dark:focus:ring-green-300/50":
-          props.severity === "success",
       },
       // Text & Outlined Button
       {
@@ -343,10 +325,7 @@ export default {
           !props.outlined &&
           !props.plain,
       },
-      {
-        "focus:ring-blue-400/50 dark:focus:ring-blue-300/50":
-          props.severity === "info",
-      },
+   
       // Text & Outlined Button
       {
         "hover:bg-blue-300/20":
@@ -363,10 +342,10 @@ export default {
           !props.outlined &&
           !props.plain,
       },
-      {
-        "focus:ring-orange-400/50 dark:focus:ring-orange-300/50":
-          props.severity === "warning",
-      },
+      // {
+      //   "focus:ring-orange-400/50 dark:focus:ring-orange-300/50":
+      //     props.severity === "warning",
+      // },
       // Text & Outlined Button
       {
         "hover:bg-orange-300/20":
@@ -382,10 +361,6 @@ export default {
           !props.text &&
           !props.outlined &&
           !props.plain,
-      },
-      {
-        "focus:ring-purple-400/50 dark:focus:ring-purple-300/50":
-          props.severity === "help",
       },
       // Text & Outlined Button
       {

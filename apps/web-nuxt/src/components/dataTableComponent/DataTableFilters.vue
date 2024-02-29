@@ -5,7 +5,7 @@
           <Button 
             type="button"
             label="Form to Doc" 
-            class="px-7 py-2 flex rounded-xl border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
+            class="px-4  flex rounded-xl border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
             :class="[typefilter === 'Form to Doc' ? 'bg-primaryBlue border-primaryBlue text-white' : 'bg-white text-primaryBlue']"
             :outlined="typefilter !== 'Form to Doc'"
             raised 
@@ -13,22 +13,22 @@
             @mouseenter="formToDocActive = true"
             @mouseleave="typefilter !== 'Form to Doc' ? formToDocActive = false : formToDocActive = true"
             >
-              <img :src="formToDocActive? formToDocWhiteIcon : formToDoc" alt="Form to Doc" class="w-6 h-5" /> <p>Form to Doc</p>
+              <img :src="formToDocActive? formToDocWhiteIcon : formToDoc" alt="Form to Doc" class="w-9 h-6 mr-2" /> <p>Form to Doc</p>
           </Button>
                     
           <Button 
             type="button"
-            label="Data to Doc" 
-            class="px-7 rounded-xl text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:text-white"
-            :class="[typefilter === 'Data to Doc' ? 'bg-primaryPink border-primaryPink text-white' : 'bg-white text-primaryPink border-primaryPink']"
+            label="Table to doc" 
+            class="px-4 rounded-xl text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:text-white"
+            :class="[typefilter === 'Table to doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
             :icon="dataToDoc" 
-            :outlined="typefilter !== 'Data to Doc'"
+            :outlined="typefilter !== 'Table to doc'"
             raised 
-            @click="filterData('Data to Doc')"
+            @click="filterData('Table to doc')"
             @mouseenter="dataToDocActive = true"
-            @mouseleave="typefilter !== 'Data to Doc' ? dataToDocActive = false: dataToDocActive = true"
+            @mouseleave="typefilter !== 'Table to doc' ? dataToDocActive = false: dataToDocActive = true"
           >
-          <img :src="dataToDocActive? dataToDocWhiteIcon : dataToDoc" alt="Data to Doc" class="w-6 h-5" /> <p>Data to Doc</p>
+          <img :src="dataToDocActive? dataToDocWhiteIcon : dataToDoc" alt="Table to doc" class="w-9 h-6 mr-2" /> <p>Table to doc</p>
           </Button>
         </div>
       </div>
@@ -38,8 +38,9 @@
           type="button"
           icon="pi pi-filter-slash"
           label="Clear"
+          outlined
           raised
-          class="p-7  rounded-xl w-1/2 md:w-24 raised bg-primaryPurple border-primaryPurple"
+          class="p-7  rounded-xl w-1/2 md:w-24 raised  border-primaryBlue"
           @click="clearFilter"
         />
         <span class="relative flex">
@@ -75,13 +76,14 @@
   const currentFilter = ref('');
 
   function filterData(type) {
-  
+   
     formToDocActive.value = type === 'Form to Doc';
-    dataToDocActive.value = type === 'Data to Doc';
-    
+    dataToDocActive.value = type === 'Table to doc';
+
     if (currentFilter.value !== '' ) {
       type = '' 
     }
+    
     emit('filterData', type);
   
     currentFilter.value = type;

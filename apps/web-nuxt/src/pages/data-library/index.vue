@@ -14,7 +14,7 @@
               <a :href="href" v-bind="props.action" @click="navigate">
                 <span class="text-color" :class="[item.icon]" />
                 <span
-                  class="text-primary-500 dark:text-primary-400 font-semibold"
+                  class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
                 >{{ item.label }}</span>
               </a>
             </router-link>
