@@ -37,25 +37,25 @@ export const useSubItems = () => {
       {
         title: "List",
         icon: "pi pi-list",
-        route: "settings/list",
+        route: "/list",
         isHovered: false,
       },
       {
         title: "Field formats",
         icon: "pi pi-home",
-        route: "settings/field_formats",
+        route: "/field-formats",
         isHovered: false
       },
       {
         title: "Archive",
         icon: "pi pi-sliders-h",
-        route: "settings/archive",
+        route: "/archive",
         isHovered: false
       },
       {
         title: "User",
         icon: "pi pi-users",
-        route: "settings/user",
+        route: "/user",
         isHovered: false
       },
     ]);

@@ -1,5 +1,5 @@
 <template>
-  <div class="box overflow-hidden z-1 p-5 table-container shadow-sm">
+  <div class="box overflow-hidden z-1 p-5 table-container">
     <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
     
     <div class="mt-10">

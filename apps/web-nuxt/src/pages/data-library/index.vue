@@ -2,7 +2,7 @@
   
   <div class="h-full w-full bg-stone-100 overflow-scroll ">
  
-      <div class="mx-4 mt-4 px-8 py-5 shadow rounded-md bg-white ">
+      <div class="mx-4 mt-4 px-8 py-5  rounded-md bg-white ">
         <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
           <template #item="{ item, props }">
             <router-link
