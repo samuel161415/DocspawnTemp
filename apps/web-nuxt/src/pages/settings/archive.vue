@@ -1,28 +1,30 @@
 <template>
-    <div class="h-full w-full bg-stone-100 overflow-scroll">
-      <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-        <template #item="{ item, props }">
-          <router-link
-            v-if="item.route"
-            v-slot="{ href, navigate }"
-            :to="item.route"
-            custom
-          >
-            <a :href="href" v-bind="props.action" @click="navigate">
-              <span :class="[item.icon, 'text-color']" />
-              <span
-                class="text-primary-500 dark:text-primary-400 font-semibold"
-                >{{ item.label }}</span
-              >
-            </a>
-          </router-link>
-          <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-            <span class="text-surface-700 dark:text-surface-0/80">{{
-              item.label
-            }}</span>
-          </a>
-        </template>
-      </Breadcrumb>
+    <div class="h-full w-full overflow-scroll">
+        <div class="mx-4 mt-4 px-8 py-5  rounded-md bg-white ">
+            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
+            <template #item="{ item, props }">
+                <router-link
+                v-if="item.route"
+                v-slot="{ href, navigate }"
+                :to="item.route"
+                custom
+                >
+                <a :href="href" v-bind="props.action" @click="navigate">
+                    <span class="text-color" :class="[item.icon]" />
+                    
+                    <span
+                    class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
+                    >{{ item.label }}</span>
+                </a>
+                </router-link>
+                <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+                <span class="text-surface-700 dark:text-surface-0/80">{{
+                    item.label
+                }}</span>
+                </a>
+            </template>
+            </Breadcrumb>
+        </div>
     </div>
   </template>
   
@@ -36,7 +38,7 @@
     route: "/",
   });
   
-  const items = ref([{ label: "Settings", route: "/settings" }]);
+  const items = ref([{label: "Settings", route: "/settings" }, {label: "Archive", route: "/settings/archive"}]);
   </script>
   <style>
   /* Your CSS here */

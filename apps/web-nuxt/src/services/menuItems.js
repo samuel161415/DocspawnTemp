@@ -61,7 +61,7 @@ export const useSubItems = () => {
       {
         title: "User",
         icon: "pi pi-users",
-        route: "/user",
+        route: "/users",
         isHovered: false
       },
      
