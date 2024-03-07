@@ -1,6 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div class="z-auto sticky bg-white mb-0  ">
+  <div class="z-auto sticky bg-white mb-0 ">
 
     <div class="z-50 fixed mt-14" :class="{ 'w-20': isCollapsed, 'w-60': !isCollapsed }">
       <button
@@ -11,29 +11,31 @@
     </div>
 
     <div 
-      class=" flex flex-col justify-between  h-full overflow-y-scroll"
+      class=" flex flex-col justify-between  h-full overflow-y-scroll overflow-x-hidden"
       :class="{ 'w-20 justify-center overflow-x-hidden': isCollapsed, 'w-60': !isCollapsed, 'py-6': true }">
 
       <ul class="mt-2">
         <!-- Logo -->
-        <div 
-          class="mb-7" 
-          :class="{ 'flex justify-center items-center': isCollapsed, 'pl-1':!isCollapsed }">
+        <div class="mb-7 flex pl-4" >
 
           <NuxtLink to="/">
-            <img v-if="!isCollapsed" src="../assets/Logo.png" class="w-40 h-auto ml-2" />
-            <img v-else src="../assets/LogoSquare.png" class="w-12 h-auto" />
+            <div class="flex">
+              <img  src="../assets/icons/LogoMark.svg" class="w-12 h-auto" />
+              <img v-if="!isCollapsed" src="../assets/icons/logotext.svg" class="w-36 ml-2 h-auto" />
+            </div>
           </NuxtLink>
         </div>
 
         <!-- menu Items -->
-        <li v-for="item in menuItems" :key="item.title" class="w-full cursor-pointer pr-1 ml-1 mb-2"
+        <li v-for="item in menuItems" 
+          :key="item.title" 
+          class="w-full cursor-pointer pr-1 ml-1 mb-2"
           :class="{ 'border-l-2 text-primaryBlue border-primaryBlue': baseRoute === item.route }">
 
           <div 
             :key="item.title" 
-            class="hover:bg-primaryBlue hover:text-white flex text-center items-center"
-            :class="{ 'flex-col text-center items-center py-1 text-sm': isCollapsed, 'my-4 pl-4': !isCollapsed, }"
+            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-4 pl-6"
+            
             @click="navigate(item.route)" 
             @mouseenter="setIsHovered(item, true)" 
             @mouseleave="setIsHovered(item, false)">
@@ -50,12 +52,13 @@
                 }]">
             </i>
 
-            <span v-if="!isCollapsed" class=" text-lg font-medium text-gray-500 ml-2 " :class="{
-              'text-white': item.isHovered,
-
-              'text-primaryBlue text-lg': baseRoute === item.route,
-              'text-gray-500': !item.isHovered
-            }">
+            <span v-if="!isCollapsed" 
+              class=" text-lg font-medium text-gray-500 ml-3" 
+              :class="{
+                'text-white': item.isHovered,
+                'text-primaryBlue text-lg': baseRoute === item.route,
+                'text-gray-500': !item.isHovered
+              }">
               {{ item.title }}
             </span>
           </div>
@@ -64,13 +67,15 @@
 
       <ul>
         <!-- settings -->
-        <li class="mt-7 cursor-pointer ml-1 w-full py-4 pr-1 mr-4">
+        <li class="mt-7 cursor-pointer ml-1 w-full py-2 pr-1 mr-4">
 
           <hr class="text-gray-300 mx-4" />
-          <div  :class="{ 'border-l-2 text-primaryBlue border-primaryBlue px-0': openSubMenu }">
 
-            <div class="hover:bg-primaryBlue hover:text-white mt-2 flex text-center items-center"
-              :class="{ 'flex-col text-center items-center py-2 text-sm': isCollapsed, 'my-2 py-1 px-3': !isCollapsed }"
+          <div :class="{ 'border-l-2 text-primaryBlue border-primaryBlue px-0': openSubMenu }">
+
+            <div 
+              class="hover:bg-primaryBlue hover:text-white mt-2 flex text-center items-center my-4 pl-6"
+            
               @mouseenter="settingHovered = true" 
               @mouseleave="settingHovered = false" 
               @click="toggle">
@@ -78,34 +83,36 @@
               <i style="font-size: 1.4rem" class="pi pi-cog text-gray-500"
               :class="[
                 { 
-                  'mr-2 py-2' : !isCollapsed, 
+                  'mr-2 py-3' : !isCollapsed, 
                   'text-center py-3': isCollapsed,
                   'text-white': settingHovered,
                   'text-primaryBlue': openSubMenu,
                 }]">
               </i>
 
-              <span v-if="!isCollapsed" class=" text-lg font-medium text-gray-500 ml-2 " :class="{
-                'text-white': settingHovered,
-                'text-primaryBlue': openSubMenu,
-              }">
+              <span v-if="!isCollapsed" 
+                class=" text-lg font-medium text-gray-500 ml-2 " 
+                :class="{
+                  'text-white': settingHovered,
+                  'text-primaryBlue': openSubMenu,
+                }">
                 Settings
               </span>
             </div>
           </div>
         </li>
+
         <!-- avatar -->
-        <div class="flex  mt-auto px-3 "
-          :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'space-x-2 ml-1': !isCollapsed }">
+        <div class="flex pl-6">
 
           <span class="relative inline-block">
-            <img class="h-10 w-10 rounded-full"
+            <img class="h-9 w-9 rounded-full"
               src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
               alt="" />
             <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
           </span>
 
-          <p v-if="!isCollapsed" class="text-gray-500 text-center pt-2" :class="{ 'ml-14': !isCollapsed }">John Doe</p>
+          <p v-if="!isCollapsed" class="text-lg text-gray-500 text-center pt-1 ml-4">John Doe</p>
 
         </div>
       </ul>
