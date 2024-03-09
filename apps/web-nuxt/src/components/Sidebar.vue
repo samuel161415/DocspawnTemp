@@ -83,7 +83,9 @@
 
       <ul>
         <!-- avatar -->
-        <div class="flex px-4">
+        <div 
+          class="flex  mt-auto px-3 "
+          :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'space-x-2 ml-1': !isCollapsed }">
 
           <span class="relative inline-block">
             <img class="h-9 w-9 rounded-full"
@@ -91,7 +93,14 @@
               alt="" />
             <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
           </span>
-          <p v-if="!isCollapsed" class="text-lg text-gray-500 text-center pt-1 ml-4">John Doe</p>
+
+          <p 
+            v-if="!isCollapsed" 
+            class="text-gray-500 text-center pt-2" 
+            :class="{ 'ml-14': !isCollapsed }">
+            John Doe
+          </p>
+
         </div>
       </ul>
     </div>
