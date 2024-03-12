@@ -1,47 +1,49 @@
 <template>
-    <div class="card">
-        <TabView class="tabview-custom">
-            <TabPanel>
-                <template #header>
-                    <div class="flex align-items-center gap-2">
-                       <i class="pi pi-list"></i>
-                        <span class="font-bold white-space-nowrap">Amy Elsner</span>
-                    </div>
+    <div class="h-full w-full  flex overflow-scroll">
+        
+        <MenuBar />
+        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
+            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
+                <template #item="{ item, props }">
+                    <router-link
+                    v-if="item.route"
+                    v-slot="{ href, navigate }"
+                    :to="item.route"
+                    custom
+                    >
+                    <a :href="href" v-bind="props.action" @click="navigate">
+                        <span class="text-color" :class="[item.icon]" />
+                        
+                        <span
+                        class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
+                        >{{ item.label }}</span>
+                    </a>
+                    </router-link>
+                    <a v-else :href="item.url" :target="item.target" v-bind="props.action">
+                    <span class="text-surface-700 dark:text-surface-0/80">{{
+                        item.label
+                    }}</span>
+                    </a>
                 </template>
-                <p class="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </TabPanel>
-            <TabPanel>
-                <template #header>
-                    <div class="flex align-items-center gap-2">
-                        <i class=""></i>
-                        <span class="font-bold white-space-nowrap">Onyama Limba</span>
-                    </div>
-                </template>
-                <p class="m-0">
-                    Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
-                    ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                </p>
-            </TabPanel>
-            <TabPanel>
-                <template #header>
-                    <div class="flex align-items-center gap-2">
-                        <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png" shape="circle" />
-                        <span class="font-bold white-space-nowrap">Ioni Bowcher</span>
-                        <Badge value="2" />
-                    </div>
-                </template>
-                <p class="m-0">
-                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-                    officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                </p>
-            </TabPanel>
-        </TabView>
+            </Breadcrumb>
+        </div>
     </div>
+
 </template>
 
 <script setup>
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import MenuBar from "~/components/settings/MenuBar.vue";
+
+const router = useRouter();
+
+const home = ref({
+icon: "pi pi-home",
+route: "/",
+});
+
+const items = ref([{ label: "Settings", route: "/settings" }, {label: "User", route: "/settings/user"}]);
+
 </script>
 

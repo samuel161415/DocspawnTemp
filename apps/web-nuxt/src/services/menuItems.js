@@ -38,34 +38,83 @@ export const useMenuItems = () => {
   return { menuItems };
 };
 
-export const useSubItems = () => {
-    const subItems = ref([
+export const useSettingItems = () => {
+    const settingItems = ref([
       {
         title: "List",
         icon: "pi pi-list",
         route: "/list",
         isHovered: false,
+        subitems: [
+          {
+            title: "List 1",
+            icon: "pi pi-list",
+            route: "/list",
+            isHovered: false
+          },
+          {
+            title: "List 2",
+            icon: "pi pi-list",
+            route: "/list",
+            isHovered: false
+          }
+        ]
       },
       {
         title: "Field formats",
         icon: "pi pi-home",
         route: "/field-formats",
-        isHovered: false
+        isHovered: false,
+        subitems: [
+          {
+            title: "Date formats",
+            icon: "pi pi-list",
+            route: "/field-formats/date_formats",
+            isHovered: false
+          },
+          {
+            title: "list formats",
+            icon: "pi pi-list",
+            route: "/field-formats/list_formats",
+            isHovered: false
+          },
+          {
+            title: "Checkbox formats ",
+            icon: "pi pi-list",
+            route: "/field-formats/checkbox_formats",
+            isHovered: false
+          },
+        ]
       },
       {
         title: "Archive",
         icon: "pi pi-sliders-h",
         route: "/archive",
-        isHovered: false
+        isHovered: false,
+        subitems: [
+          {
+            title: "Archive 1",
+            icon: "pi pi-list",
+            route: "/archive",
+            isHovered: false
+          },
+          {
+            title: "Archive 2",
+            icon: "pi pi-list",
+            route: "/archive",
+            isHovered: false
+          },     
+        ]
       },
       {
         title: "User",
         icon: "pi pi-users",
         route: "/users",
-        isHovered: false
+        isHovered: false,
+        subitems:[]
       },
      
     ]);
   
-    return { subItems };
+    return { settingItems };
   };

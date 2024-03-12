@@ -1,6 +1,8 @@
 <template>
-     <div class="h-full w-full  overflow-scroll">
-        <div class="mx-4 mt-4 px-8 py-5  rounded-md bg-white ">
+     <div class="h-full w-full  flex overflow-scroll">
+        
+        <MenuBar />
+        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
             <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
                 <template #item="{ item, props }">
                     <router-link
@@ -46,9 +48,9 @@
             </div>
         </div>
 
+
         <!-- components -->
         <Toast />
-
         <Modal 
             v-model:visible="visible" 
             @createList="handleCreateList" 
@@ -66,6 +68,8 @@ import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import Modal from '~/components/settings/Modal.vue';
 import DataTableComponent from '~/components/dataTableComponent/DataTableComponent.vue'
 import { useToast } from "primevue/usetoast";
+import MenuBar from "~/components/settings/MenuBar.vue";
+
 const toast = useToast();
 
 const router = useRouter();
@@ -95,10 +99,6 @@ const hasFilterActions = ref(false);
 
 const visible = ref(false);
 
-const handleModalClose = () => {
-    visible.value = false;
-};
-
 const newListData = ref([]);
 
 const handleCreateList = (data) => {
@@ -108,11 +108,11 @@ const handleCreateList = (data) => {
 }
 
 const showSuccess = () => {
-    toast.add({ severity: 'success', summary: 'Success Message', detail: 'Message Content', life: 3000 });
+    toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 });
 };
 
 const showError = () => {
-    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Fill all the required fields', life: 3000 });
+    toast.add({ severity: 'error', summary: 'Error Message', detail: 'Fill all the required fields.', life: 3000 });
 };
 </script>
 

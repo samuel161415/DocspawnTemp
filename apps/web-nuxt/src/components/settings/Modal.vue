@@ -1,25 +1,22 @@
 <template>
-    <Dialog v-model:visible="visible" modal header=" " :style="{  width: '35rem' }">
-      <template #header>
-        <div class="inline-flex align-items-center justify-content-center gap-2 mb-5">   
-          <span class="font-semibold text-xl white-space-nowrap mt-4 pl-5">Add List Info</span>
-        </div>
-      </template>
-      <div class="px-8">
+    <Dialog v-model:visible="visible" modal header="Create List " :style="{  width: '35rem' }">
+     
+      
+      <div class="px-5">
 
           <div class="flex flex-col align-items-center gap-3 mb-5">
-            <label for="listname" class="font-medium w-6rem text-lg">List Name</label>
-            <InputText id="listname" class="flex-auto" v-model="listName" autocomplete="off" />
+            <label for="listname" class="font-semibold w-6rem text-lg">List Name</label>
+            <InputText id="listname" class="flex-auto" v-model="listName" placeholder="List name" autocomplete="off" />
           </div>
-          <div class="flex flex-col align-items-center gap-3 mb-3">
-            <label for="listitems" class="font-medium w-6rem text-lg ">List Items</label>
+          <div class="flex flex-col align-items-center gap-2 mb-3">
+            <label for="listitems" class="font-semibold w-6rem text-lg ">List Items</label>
             <span class="text-sm text-surface-500">Multiple entries are allowed <br/> Enter after each entry</span>
             <Chips v-model="listItems" separator="," inputClass="bg-primaryBlue text-blue"/>
           </div>
       </div>
       <template #footer>
-        <Button label="Cancel" outlined @click="handleCancel" class="text-primaryblue" />
-        <Button label="Create List" class="bg-primaryblue text-white mr-8" @click="handleCreateList" />
+        <Button label="Cancel" icon="pi pi-times" outlined @click="handleCancel" class="text-primaryblue" />
+        <Button label="Create List" icon="pi pi-check" class="bg-primaryblue border-primaryBlue text-white mr-5" @click="handleCreateList" />
       </template>
 
     </Dialog>

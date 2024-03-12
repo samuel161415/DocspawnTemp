@@ -1,6 +1,8 @@
 <template>
-    <div class="h-full w-fulloverflow-scroll">
-        <div class="mx-4 mt-4 px-8 py-5  rounded-md bg-white ">
+    <div class="h-full w-full flex overflow-scroll">
+           
+        <MenuBar />
+        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
             <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
             <template #item="{ item, props }">
                 <router-link
@@ -31,7 +33,8 @@
   <script setup>
   import { ref } from "vue";
   import { useRouter } from "vue-router";
-  
+  import MenuBar from "~/components/settings/MenuBar.vue";
+
   const router = useRouter();
   const home = ref({
     icon: "pi pi-home",
