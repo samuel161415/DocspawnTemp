@@ -1,8 +1,14 @@
 <template>
   <div class="box overflow-hidden z-1 p-5 table-container">
-    <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
 
-    <div class="mt-10">
+    <div class="flex flex-col  gap-2 left-0 md:mb-14">
+      <p class="text-surface-600 text-left text-lg mb-2">Select a template to display data.</p>
+      <TreeSelect v-model="selectedValue" :options="NodeData" placeholder="Select Template" class="md:w-[20rem] w-full" />
+    </div>
+    
+    <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
+
+    <div class="mt-10" v-if="filteredData.length > 0 ">
         <DataTable
             ref="dataTableRef"
             v-model:filters="filters"
@@ -44,10 +50,14 @@
 
           </template>
           <template #empty>
-            Select a template to display data.
+            <div class="flex justify-center">
+              Select a template to display data.
+            </div>
           </template>
           <template #loading>
-            Loading data. Please wait.
+            <div class="flex justify-center">
+              Loading data. Please wait.
+            </div>
           </template>
           <Column
             v-for="(column, index) of selectedColumns"
@@ -114,7 +124,7 @@ import { ref } from 'vue';
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue';
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
 import formatDate from '~/utils';
-
+import { NodeData } from '~/services/sampleData';
 
 const props = defineProps({
   data: {
@@ -169,7 +179,26 @@ const onToggle = (val) => {
 
 const filters = ref(props.filters)
 
-const filteredData = ref(props.data)
+const selectedValue = ref()
+
+const templatefiltered = ref([])
+
+watch(selectedValue, (selectedValue) => {
+
+
+  templatefiltered.value = props.data.filter(item => {
+    const type = item.type;
+    const templateName = item.templateName;
+
+    return selectedValue[type] || selectedValue[templateName];
+  });
+
+});
+
+
+const filteredData = ref(templatefiltered)
+
+
 
 const typefilter = ref('');
 

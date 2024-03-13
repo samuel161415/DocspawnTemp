@@ -26,14 +26,7 @@
           </template>
         </Breadcrumb>
   
-        <div class="flex flex-wrap flex-column md:flex-row md:align-items-center gap-2 mt-10 mx-8">
-          <div class=" flex justify-center">
-            <TreeSelect v-model="selectedValue" :options="NodeData" selectionMode="multiple" placeholder="Select Item" class="md:w-[20rem] w-full" />
-          </div>
-  
-        </div>
-  
-        <div  class="flex flex-col justify-center text-center mt-5 space-y-2 ">
+        <div  class="flex flex-col justify-center text-center space-y-2 ">
           <div class=" p-2 mt-5">
             <DataList  
                 :data="dataLibraryData"
@@ -44,59 +37,29 @@
                 :has-actions-column="hasActionsColumn"
                 :has-filter-actions="hasFilterActions"
                 :export-file="true" />
-          </div>
+          </div> 
         </div>
       </div>
- 
-
   </div>
 </template>
 
 <script setup>
+
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-import { dataLibraryData, NodeData }  from '../../services/sampleData'
+import { dataLibraryData }  from '../../services/sampleData'
 import DataList from '~/components/dataLibrary/DataList.vue';
-
 
 const home = ref({
   icon: 'pi pi-home',
   route: '/',
 })
 
-const exportFile = ref(true)
-
-const showData = ref(false)
-
-const selectedValue = ref(null)
-
-const filteredDataList = ref([])
-
-const filteredData = computed(() => {
-  if (!selectedValue.value) {
-    return []; 
-  }
-
-  return dataLibraryData.filter(item => {
-    const type = item.type;
-    const templateName = item.templateName;
-
-    return selectedValue.value[type] || selectedValue.value[templateName];
-  });
-  
-});
-
-watch(filteredData, (filteredData) => {
-  filteredDataList.value = filteredData;
-})
+const items = ref([{ label: 'Data Library', route: '/data-library' }]);
 
 const title = ref('All data related to form.')
 
 const info = ref('Here you have data of every time the form is filled.')
-
-function handleShowData() {
-  showData.value = !showData.value
-}
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -114,8 +77,6 @@ const columns = ref([
 ])
 
 const hasActionsColumn = ref(false)
-const hasFilterActions = ref(false);
+const hasFilterActions = ref(false)
 
-const items = ref([{ label: 'Data Library', route: '/data-library' }])
 </script>
-
