@@ -1,7 +1,7 @@
 w<template>
   <NuxtLayout>
     <div class="flex flex-col w-full">
-      <!-- <Header v-if="$route.path !== '/signin'" /> -->
+
       <div class="flex h-screen w-screen">
        
         <SideBar v-if="$route.path !== '/signin' && $route.path !== '/signup'" />
@@ -11,7 +11,6 @@ w<template>
         </div>
       </div>
     </div>
-    <!-- <NuxtLoadingIndicator color="repeating-linear-gradient(to right,#cf59e6 0%,#6bc5f8 100%)" /> -->
   </NuxtLayout>
 </template>
 

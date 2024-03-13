@@ -32,10 +32,11 @@
   --surface-800: 31 41 55;
   --surface-900: 17 24 39;
   --surface-950: 8 8 8;
+  --white: 255 255 255;
 }
 
 :root {
-  --body-bg: rgb(var(--surface-50));
+  --body-bg: rgb(var(--white));
   --body-text-color: rgb(var(--surface-900));
   --card-border: 1px solid var(--border-color);
   --card-bg: rgb(var(--surface-0));

@@ -27,6 +27,12 @@ export const useMenuItems = () => {
         route: "/data-library",
         isHovered: false
       },
+      {
+        title: "Settings",
+        icon: "pi pi-cog",
+        route: "/settings",
+        isHovered: false
+      }
   ]);
 
   return { menuItems };
@@ -58,6 +64,7 @@ export const useSubItems = () => {
         route: "/user",
         isHovered: false
       },
+     
     ]);
   
     return { subItems };

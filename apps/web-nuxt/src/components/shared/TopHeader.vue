@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white w-full z-50">
+    <div class="bg-white w-full -z-10">
         <Menubar class="bg-white border-none ">
             <template #end>
                 <div class="flex items-center text-center justify-center gap-2 mr-14 space-x-2">

@@ -1,109 +1,89 @@
 <template>
   <!-- side bar component -->
-  <div class="z-auto sticky bg-white mb-0 ">
+  <div 
+    class="z-20 sticky bg-white mb-0  " 
+    :style="{ width: menuWidth, transition: 'width 200ms ease-in-out' }">
 
-    <div class="z-50 fixed mt-14" :class="{ 'w-20': isCollapsed, 'w-60': !isCollapsed }">
+    <div 
+      class="z-50 fixed mt-10" 
+      :class="{ 'w-16': isCollapsed, 'w-60': !isCollapsed }">
       <button
-        class="absolute justify-end z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 p-3 shadow-xl hover:bg-primaryBlue hover:text-white"
+        class="absolute justify-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 px-2 py-2 shadow-sm hover:bg-primaryBlue hover:text-white"
         @click="toggleCollapse">
-        <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed, }"></i>
+        <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
       </button>
     </div>
 
     <div 
       class=" flex flex-col justify-between  h-full overflow-y-scroll overflow-x-hidden"
-      :class="{ 'w-20 justify-center overflow-x-hidden': isCollapsed, 'w-60': !isCollapsed, 'py-6': true }">
+      :class="{ 'w-16 justify-center overflow-x-hidden': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
 
-      <ul class="mt-2">
+      <ul class="mt-0">
         <!-- Logo -->
-        <div class="mb-7 flex pl-4" >
-
+        <div class="mb-7 flex pl-3" >
           <NuxtLink to="/">
             <div class="flex">
-              <img  src="../assets/icons/LogoMark.svg" class="w-12 h-auto" />
-              <img v-if="!isCollapsed" src="../assets/icons/logotext.svg" class="w-36 ml-2 h-auto" />
+              <img  src="../assets/icons/LogoMark.svg" class="w-12 h-auto " />
+              <img v-if="!isCollapsed" src="../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
             </div>
           </NuxtLink>
         </div>
 
         <!-- menu Items -->
-        <li v-for="item in menuItems" 
+        <li 
+          v-for="item in menuItems" 
           :key="item.title" 
-          class="w-full cursor-pointer pr-1 ml-1 mb-2"
-          :class="{ 'border-l-2 text-primaryBlue border-primaryBlue': baseRoute === item.route }">
+          class="w-full cursor-pointer ml-1"
+          :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route }">
 
           <div 
             :key="item.title" 
-            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-4 pl-6"
-            
+            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 px-4 py-1"
             @click="navigate(item.route)" 
+            
             @mouseenter="setIsHovered(item, true)" 
             @mouseleave="setIsHovered(item, false)">
 
-            <i style="font-size: 1.4rem"
+            <i style="font-size: 1.2rem"
               :class="[
                 item.icon, 
+                'py-3',
                 { 
-                  'mr-2 py-3' : !isCollapsed, 
-                  'text-center py-3': isCollapsed,
+                  'mr-2' : !isCollapsed, 
+                  'text-center ml-1': isCollapsed,
                   'text-white': item.isHovered, 
                   'text-primaryBlue': baseRoute === item.route, 
                   'text-gray-500': !item.isHovered
                 }]">
             </i>
-
-            <span v-if="!isCollapsed" 
+               
+            <span v-if="!isCollapsed " 
               class=" text-lg font-medium text-gray-500 ml-3" 
               :class="{
                 'text-white': item.isHovered,
-                'text-primaryBlue text-lg': baseRoute === item.route,
+                'text-primaryBlue text-base': baseRoute === item.route,
                 'text-gray-500': !item.isHovered
               }">
               {{ item.title }}
             </span>
+
+            <div 
+              v-if="isCollapsed && item.isHovered" 
+              class="pop_up absolute  bg-white z-50 py-2 w-max px-3 rounded-md shadow-sm border border-surface-50"
+              :style="{ marginLeft: '2rem', left: '50%'}">
+
+              <p class="text-sm font-medium text-gray-600" >
+                {{ item.title }}
+              </p>
+            </div>
+
           </div>
         </li>
       </ul>
 
       <ul>
-        <!-- settings -->
-        <li class="mt-7 cursor-pointer ml-1 w-full py-2 pr-1 mr-4">
-
-          <hr class="text-gray-300 mx-4" />
-
-          <div :class="{ 'border-l-2 text-primaryBlue border-primaryBlue px-0': openSubMenu }">
-
-            <div 
-              class="hover:bg-primaryBlue hover:text-white mt-2 flex text-center items-center my-4 pl-6"
-            
-              @mouseenter="settingHovered = true" 
-              @mouseleave="settingHovered = false" 
-              @click="toggle">
-
-              <i style="font-size: 1.4rem" class="pi pi-cog text-gray-500"
-              :class="[
-                { 
-                  'mr-2 py-3' : !isCollapsed, 
-                  'text-center py-3': isCollapsed,
-                  'text-white': settingHovered,
-                  'text-primaryBlue': openSubMenu,
-                }]">
-              </i>
-
-              <span v-if="!isCollapsed" 
-                class=" text-lg font-medium text-gray-500 ml-2 " 
-                :class="{
-                  'text-white': settingHovered,
-                  'text-primaryBlue': openSubMenu,
-                }">
-                Settings
-              </span>
-            </div>
-          </div>
-        </li>
-
         <!-- avatar -->
-        <div class="flex pl-6">
+        <div class="flex px-4">
 
           <span class="relative inline-block">
             <img class="h-9 w-9 rounded-full"
@@ -111,39 +91,10 @@
               alt="" />
             <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
           </span>
-
           <p v-if="!isCollapsed" class="text-lg text-gray-500 text-center pt-1 ml-4">John Doe</p>
-
         </div>
       </ul>
     </div>
-
-    <!-- setting popup -->
-    <OverlayPanel ref="op" style="height: 0px; width: 0; margin-left: 18px;" @hide="openSubMenu = false">
-
-      <div class="pop_up absolute border border-gray-100 bg-white z-5  h-44 bottom-0 mb-5 p-4 rounded-sm w-60"
-        :class="{ ' ml-8': isCollapsed, ' ml-48 ': !isCollapsed }">
-
-        <ul class=" z-1">
-          <li v-for="subItem in subItems" :key="subItem.title" class="rounded-lg cursor-pointer flex flex-col">
-            <div :key="subItem.title" class=" rounded-md flex px-4 py-2"
-              :class="{ 'bg-primaryBlue': baseRoute === subItem.route }" 
-              @click="navigate('settings' + subItem.route)"
-              @mouseenter="setSubIsHovered(subItem, true)" 
-              @mouseleave="setSubIsHovered(subItem, false)">
-
-              <i style="font-size: 1rem" class="space-y-2 "
-                :class="['pi pi-cog', 'mr-2', { 'text-primaryBlue': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }]">
-              </i>
-
-              <span class=" text-base font-medium ml-2 "
-                :class="{ 'text-primaryBlue': subItem.isHovered || baseRoute === subItem.route, 'text-gray-500': !subItem.isHovered }">{{
-                  subItem.title }}</span>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </OverlayPanel>
 
   </div>
 </template>
@@ -152,15 +103,13 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
-import { useMenuItems, useSubItems } from '../services/menuItems';
+import { useMenuItems } from '../services/menuItems';
 
 const router = useRouter();
 
 const baseRoute = ref(router.currentRoute.value.path);
 
 const isCollapsed = ref(false);
-
-const settingHovered = ref(false);
 
 const op = ref();
 
@@ -172,19 +121,16 @@ const navigate = (route) => {
   baseRoute.value = route;
 };
 
+
 // nav bar items
 const { menuItems } = useMenuItems();
-
-const { subItems } = useSubItems();
 
 //   mouse hover effect
 const setIsHovered = (item, val) => {
   item.isHovered = val;
+  op.value.toggle(event);
 };
 
-const setSubIsHovered = (subItem, val) => {
-  subItem.isHovered = val;
-};
 
 // check if the window is resized
 const handleResize = () => {
@@ -198,12 +144,6 @@ onMounted(() => {
 
 const openSubMenu = ref(false);
 
-// toggle the overlay panel
-const toggle = (event) => {
-  openSubMenu.value = !openSubMenu.value;
-  op.value.toggle(event);
-}
-
 // toggle the side bar
 const toggleCollapse = () => {
   isCollapsed.value = !isCollapsed.value;
@@ -213,7 +153,7 @@ const toggleCollapse = () => {
   
 <style scoped>
 .pop_up {
-  z-index: 10000 !important;
+  z-index: 9999 !important;
 
 }
 </style>
