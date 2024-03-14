@@ -41,71 +41,122 @@ export const useMenuItems = () => {
 export const useSettingItems = () => {
     const settingItems = ref([
       {
-        title: "List",
-        icon: "pi pi-list",
-        route: "/list",
-        isHovered: false,
-        subitems: [
+        title:'Account',
+        icon:'pi pi-user',
+        route:'/account',
+        isHovered:false,
+        subitems:[
           {
-            title: "List 1",
+            title: "General",
             icon: "pi pi-list",
-            route: "/list",
-            isHovered: false
-          },
-          {
-            title: "List 2",
-            icon: "pi pi-list",
-            route: "/list",
-            isHovered: false
+            route: "/general",
+            isHovered: false,
+            subitems: [],
+            nestedMenuVisible: false
+          
           }
         ]
       },
       {
-        title: "Field formats",
-        icon: "pi pi-home",
-        route: "/field-formats",
+        title: 'Workspace',
+        icon: 'pi pi-home',
+        route: '/workspace',
         isHovered: false,
         subitems: [
           {
-            title: "Date formats",
+            title: "Workspace 0",
             icon: "pi pi-list",
-            route: "/field-formats/date_formats",
-            isHovered: false
-          },
-          {
-            title: "list formats",
-            icon: "pi pi-list",
-            route: "/field-formats/list_formats",
-            isHovered: false
-          },
-          {
-            title: "Checkbox formats ",
-            icon: "pi pi-list",
-            route: "/field-formats/checkbox_formats",
-            isHovered: false
-          },
+            route: "/list",
+            isHovered: false,
+            subitems: [],
+            nestedMenuVisible: false
+          }
         ]
       },
       {
-        title: "Archive",
-        icon: "pi pi-sliders-h",
-        route: "/archive",
+        title: 'Options',
+        icon: 'pi pi-home',
+        route: '/workspace',
         isHovered: false,
         subitems: [
           {
-            title: "Archive 1",
+            title: "List",
             icon: "pi pi-list",
-            route: "/archive",
-            isHovered: false
+            route: "/list",
+            isHovered: false,
+            nestedMenuVisible: false,
+            subitems: [
+              {
+                title: "List 1",
+                icon: "pi pi-list",
+                route: "/list",
+                isHovered: false
+              },
+              {
+                title: "List 2",
+                icon: "pi pi-list",
+                route: "/list",
+                isHovered: false
+              }
+            ]
           },
           {
-            title: "Archive 2",
-            icon: "pi pi-list",
+            title: "Field formats",
+            icon: "pi pi-home",
+            route: "/field_formats",
+            isHovered: false,
+            nestedMenuVisible: false,
+            subitems: [
+              {
+                title: "Date formats",
+                icon: "pi pi-list",
+                componentId: "date-formats",
+                route: "/field_formats",
+                isHovered: false
+              },
+              {
+                title: "list formats",
+                icon: "pi pi-list",
+                route: "/field_formats",
+                componentId: 'list-formats',
+                isHovered: false
+              },
+              {
+                title: "Checkbox formats ",
+                icon: "pi pi-list",
+                route: "/field_formats",
+                componentId: "checkbox-formats",
+                isHovered: false
+              },
+            ]
+          },
+          {
+            title: "Archive",
+            icon: "pi pi-sliders-h",
             route: "/archive",
-            isHovered: false
-          },     
+            isHovered: false,
+            nestedMenuVisible: false,
+            subitems: [
+              {
+                title: "Archive 1",
+                icon: "pi pi-list",
+                route: "/archive",
+                componentId: "archive1",
+                isHovered: false
+              },
+              {
+                title: "Archive 2",
+                icon: "pi pi-list",
+                route: "/archive",
+                componentId: "archive2",
+                isHovered: false
+              },     
+            ]
+          },
+         
         ]
       },
+    
       {
         title: "User",
         icon: "pi pi-users",

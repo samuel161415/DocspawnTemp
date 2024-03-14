@@ -1,8 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div 
-    class="z-20 sticky bg-white mb-0  " 
-    :style="{ width: menuWidth, transition: 'width 200ms ease-in-out' }">
+  <div class="z-auto sticky bg-white mb-0 h-full overflow-y-scroll " :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div 
       class="z-50 fixed mt-10" 
@@ -130,7 +128,6 @@ const navigate = (route) => {
   baseRoute.value = route;
 };
 
-
 // nav bar items
 const { menuItems } = useMenuItems();
 
@@ -139,7 +136,6 @@ const setIsHovered = (item, val) => {
   item.isHovered = val;
   op.value.toggle(event);
 };
-
 
 // check if the window is resized
 const handleResize = () => {

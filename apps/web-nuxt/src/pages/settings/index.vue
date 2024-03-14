@@ -1,12 +1,8 @@
 <template>
   <div class="h-full w-full bg-white overflow-scroll">
-    
-    <div class="flex h-screen ml-2">
-       
-       <MenuBar />
        <div class="flex flex-col w-full">
        </div>
-     </div>
+  
   </div>
 </template>
 

@@ -1,5 +1,5 @@
 <template>
     <div>
-        List of formats
+        <p>Account</p>
     </div>
 </template>

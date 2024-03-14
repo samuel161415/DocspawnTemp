@@ -1,8 +1,7 @@
 <template>
-    <div class="h-full w-full flex overflow-scroll">
+    <div class="h-full w-full overflow-scroll">
            
-        <MenuBar />
-        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
+        <div class="mx-2  px-8 py-5  rounded-md bg-white  w-full">
             <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
             <template #item="{ item, props }">
                 <router-link
@@ -15,7 +14,7 @@
                     <span class="text-color" :class="[item.icon]" />
                     
                     <span
-                    class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
+                    class="text-lg text-primary-500 dark:text-primary-400 font-thin"
                     >{{ item.label }}</span>
                 </a>
                 </router-link>
@@ -26,6 +25,25 @@
                 </a>
             </template>
             </Breadcrumb>
+
+            <div class="text-lg text-surface-500" id="date-formats">
+                <p>
+                    Date Formats
+                </p>
+                <DateFormats />
+            </div>
+            <div class="" id="list-formats">
+                <P class="text-lg text-surface-500 ">
+                    List Formats
+                </P>
+                <ListFormats />
+            </div>
+            <div class="text-lg text-surface-500" id="checkbox-formats">
+                <P>
+                    Checkbox Formats
+                </P>
+                <CheckboxFormats />
+            </div>
         </div>
     </div>
   </template>
@@ -33,7 +51,9 @@
   <script setup>
   import { ref } from "vue";
   import { useRouter } from "vue-router";
-  import MenuBar from "~/components/settings/MenuBar.vue";
+  import DateFormats from "~/components/settings/fieldFormats/DateFormats.vue";
+  import ListFormats from "~/components/settings/fieldFormats/ListFormats.vue";
+  import CheckboxFormats from "~/components/settings/fieldFormats/CheckboxFormats.vue";
 
   const router = useRouter();
   const home = ref({
