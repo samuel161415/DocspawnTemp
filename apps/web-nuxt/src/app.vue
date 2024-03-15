@@ -1,14 +1,13 @@
-w<template>
+<template>
   <NuxtLayout>
-    <div class="flex flex-col w-full ">
-      <!-- <Header v-if="$route.path !== '/signin'" /> -->
-      <div class="flex h-screen w-screen overflow-hidden fixed">
+    <div class="flex flex-col w-full">
+
+      <div class="flex fixed h-screen w-screen">
        
         <SideBar v-if="$route.path !== '/signin' && $route.path !== '/signup'" />
         <div class="flex flex-col w-full">
           <TopHeader v-if="$route.path !== '/signin'" />
-          <div class="flex  h-full">
-            
+          <div class="flex flex-row h-full">
             <MenuBar v-if="isSettingsRoute($route.path)" />
             <NuxtPage />
           </div>

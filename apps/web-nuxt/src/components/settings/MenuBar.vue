@@ -67,7 +67,7 @@ const baseRoute = ref(router.currentRoute.value.path);
 const handleDisplaynestedMenuVisible = (item) => {
 
     item.nestedMenuVisible = !item.nestedMenuVisible;
-    navigate('settings' + item.route);
+    // navigate('settings' + item.route);
 };
 
 const handleSubSubItemClick = (subSubItem) => {

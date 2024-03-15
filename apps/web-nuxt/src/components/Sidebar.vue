@@ -1,20 +1,22 @@
 <template>
   <!-- side bar component -->
-  <div class="z-auto sticky bg-white mb-0 h-full overflow-y-scroll " :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
+  <div class="z-20  bg-white mb-0 h-full overflow-y-scroll overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div 
       class="z-50 fixed mt-10" 
-      :class="{ 'w-16': isCollapsed, 'w-60': !isCollapsed }">
+      :class="{ 'w-20': isCollapsed, 'w-60': !isCollapsed }">
+
       <button
         class="absolute justify-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 px-2 py-2 shadow-sm hover:bg-primaryBlue hover:text-white"
         @click="toggleCollapse">
         <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
       </button>
+
     </div>
 
     <div 
-      class=" flex flex-col justify-between  h-full overflow-y-scroll overflow-x-hidden"
-      :class="{ 'w-16 justify-center overflow-x-hidden': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
+      class=" flex flex-col justify-between  h-full "
+      :class="{ 'w-18 justify-center ': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
 
       <ul class="mt-0">
         <!-- Logo -->
@@ -36,19 +38,19 @@
 
           <div 
             :key="item.title" 
-            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 px-4 py-1"
-            @click="navigate(item.route)" 
+            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 px-5 py-1"
             
+            @click="navigate(item.route)" 
             @mouseenter="setIsHovered(item, true)" 
             @mouseleave="setIsHovered(item, false)">
 
             <i style="font-size: 1.2rem"
               :class="[
                 item.icon, 
-                'py-3',
+                'py-3 ml-1',
                 { 
                   'mr-2' : !isCollapsed, 
-                  'text-center ml-1': isCollapsed,
+                  'text-center  ': isCollapsed,
                   'text-white': item.isHovered, 
                   'text-primaryBlue': baseRoute === item.route, 
                   'text-gray-500': !item.isHovered
@@ -67,8 +69,8 @@
 
             <div 
               v-if="isCollapsed && item.isHovered" 
-              class="pop_up absolute  bg-white z-50 py-2 w-max px-3 rounded-md shadow-sm border border-surface-50"
-              :style="{ marginLeft: '2rem', left: '50%'}">
+              class="pop_up absolute bg-white z-50 py-2 w-max px-3 rounded-md shadow-sm border border-surface-50"
+              :style="{ left: '4.8rem'}">
 
               <p class="text-sm font-medium text-gray-600" >
                 {{ item.title }}
@@ -139,7 +141,7 @@ const setIsHovered = (item, val) => {
 
 // check if the window is resized
 const handleResize = () => {
-  isCollapsed.value = window.innerWidth <= 768;
+  isCollapsed.value = window.innerWidth <= 990;
 };
 
 onMounted(() => {
