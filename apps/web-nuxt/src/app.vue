@@ -26,7 +26,8 @@ import MenuBar from './components/settings/MenuBar.vue';
 const isSettingsRoute = (path: string) => {
 
   return path.split('/').includes('settings')
-  };
+};
+
 </script>
 
 <style>

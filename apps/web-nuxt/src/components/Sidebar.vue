@@ -1,6 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div class="z-20  bg-white mb-0 h-full overflow-y-scroll overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
+  <div class="z-20  bg-white mb-0 h-full  overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div 
       class="z-50 fixed mt-10" 
@@ -15,7 +15,7 @@
     </div>
 
     <div 
-      class=" flex flex-col justify-between  h-full "
+      class=" flex flex-col justify-between overflow-y-scroll no-scrollbar h-full "
       :class="{ 'w-18 justify-center ': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
 
       <ul class="mt-0">

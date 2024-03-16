@@ -1,9 +1,8 @@
 <template>
 
     <div class=" bg-white mb-0 border-l border-surface-100">
-        <div class=" flex flex-col justify-between  h-full overflow-y-scroll w-60 py-6">
-            <ul class="mt-2 ">
-                
+        <div class=" flex flex-col justify-between  h-full overflow-y-scroll w-60 py-6 no-scrollbar">
+            <ul class="mt-2 mb-14">   
                 <li 
                     v-for="items in settingItems" :key="items.title" 
                     class="cursor-pointer flex flex-col mt-2  w-full mr-4 ">
