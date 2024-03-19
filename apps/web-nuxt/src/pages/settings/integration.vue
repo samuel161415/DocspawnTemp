@@ -14,7 +14,7 @@
                     <span class="text-color" :class="[item.icon]" />
                     
                     <span
-                    class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
+                    class="text-lg text-primary-500 dark:text-primary-400 font-normal"
                     >{{ item.label }}</span>
                 </a>
                 </router-link>
@@ -39,7 +39,7 @@
     route: "/",
   });
   
-  const items = ref([{label: "Settings", route: "/settings" }, {label: "Archive", route: "/settings/archive"}]);
+  const items = ref([{label: "Settings", route: "/settings" }, {label: "Integrations", route: "/settings/integration"}]);
   </script>
   
   <style>

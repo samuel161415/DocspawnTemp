@@ -1,6 +1,5 @@
 <template>
     <Dialog v-model:visible="visible" modal header="Create List " :style="{  width: '40rem' }">
-     
       
       <div class="px-5">
 
@@ -11,8 +10,8 @@
 
         <div class="flex flex-col align-items-center gap-2 mb-3">
           <label for="listitems" class="font-semibold w-6rem text-lg ">List Items</label>
-          <span class="text-sm text-surface-500">Multiple entries are allowed <br/> ( Comma separated entries)</span>
-          <InputText id="listItems" v-model="listItem" class="flex-auto" placeholder="List Item" autocomplete="off" />
+          <span class="text-sm text-surface-500">Multiple entries are allowed <br/> (Comma separated entries)</span>
+          <Textarea id="listItems"v-model="listItem" rows="3" cols="30" placeholder="List Item"/>
         </div>
        
         <Button 
@@ -22,9 +21,8 @@
           class="text-white bg-primaryBlue my-2" /> 
 
           <DataTable 
-            :value="products" 
-            :reorderableColumns="true" 
-            @columnReorder="onColReorder" 
+            :value="listItems" 
+            :reorderableColumns="true"  
             @rowReorder="onRowReorder" 
             tableStyle="min-width: 30rem">
                 <Column rowReorder headerStyle="width: 3rem" :reorderableColumn="false" />
@@ -33,8 +31,7 @@
                   <template #body="{data}">
                     
                     <div v-if="col.field === 'action' " class="flex justify-center">
-                      <i class="pi pi-trash text-primaryBlue" @click="deleteItem(data)"></i>
-                    
+                      <i class="pi pi-trash text-primaryBlue cursor-pointer" @click="deleteItem(data)"></i>
                     </div>
                     <div v-else>
                       {{ data[col.field] }}
@@ -71,7 +68,13 @@
   const listItems = ref([]);
  
   const handleAdd = () => {
-    const trial = listItem.value.split(',')
+    const items = listItem.value.split(/[\n,]+/)
+                .map(item => item.trim())
+                .filter(item => item !== '')
+                .map(item => ({ name: item }));
+    
+    listItems.value = listItems.value.concat(items);
+    
   };
 
   const handleCreateList = () => {
@@ -80,12 +83,15 @@
       emit('error')
     }
     else if (listName.value !== '' && listItems.value.length > 0){
-        // set listItems array to [{name: 'item1', code: 'item1'}] format
+        
         listItems.value = listItems.value.map((item) => {
-          return { name: item, code: item }
+          return item
         });
+
         emit('createList', { listName: listName.value, listItems: listItems.value });
+
         listName.value = '';
+        listItem.value = '';
         listItems.value = [];
 
         emit('success')
@@ -94,79 +100,28 @@
   };
   
   const handleCancel = () => {
-
     visible.value = false;
+
+    listName.value = '';
+    listItem.value = '';
+    listItems.value = [];
+    
     emit('cancel');
+  };
+
+  const deleteItem = (data) => {
+    listItems.value = listItems.value.filter(item => item.name !== data.name);
   };
 
   // data table
   const columns = ref([
     {field: 'name', header: 'Name'},
     {field: 'action', header: 'Action'},
-]);
-const products = ref([
-  {
-    id: '1000',
-    name: 'Bamboo Watch',
-    
-  },
-  {
-    id: '1001',
-    name: 'Black Watch',
-    
-  },
-  {
-    id: '1002',
-    name: 'Blue Watch',
-    
-  },
-  {
-    id: '1003',
-    name: 'Brown Watch',
-    
-  },
-  {
-    id: '1004',
-    name: 'Green Watch',
-    
-  },
-  {
-    id: '1005',
-    name: 'Orange Watch',
-    
-  },
-  {
-    id: '1006',
-    name: 'Pink Watch',
-    
-  },
-  {
-    id: '1007',
-    name: 'Purple Watch',
-    
-  },
-  {
-    id: '1008',
-    name: 'Red Watch',
-    
-  },
-  {
-    id: '1009',
-    name: 'Silver Watch',
-    
-  },
-  {
-    id: '1010',
-    name: 'White Watch',
-    
-  },
-  {
-    id: '1011',
-    name: 'Yellow Watch',
-    
-  },
-]);
+  ]);
 
-  
+  const onRowReorder = (event) => {
+    listItems.value = event.value;
+      
+  };
   </script>
   

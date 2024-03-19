@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import SideBar from './components/Sidebar.vue';
+import SideBar from './components/layout/Sidebar.vue';
 import 'primeicons/primeicons.css'
 import TopHeader from './components/shared/TopHeader.vue';
 import MenuBar from './components/settings/MenuBar.vue';

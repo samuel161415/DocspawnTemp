@@ -14,7 +14,7 @@
                         <span class="text-color" :class="[item.icon]" />
                         
                         <span
-                        class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
+                        class="text-lg text-primary-500 dark:text-primary-400 font-normal"
                         >{{ item.label }}</span>
                     </a>
                     </router-link>

@@ -1,21 +1,20 @@
 <template>
-     <div class="h-full w-full  flex overflow-scroll">
-        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
+     <div class="h-full w-full flex overflow-scroll">
+        <div class="mx-2 mt-4 px-8 py-5 rounded-md bg-white  w-full">
             <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
                 <template #item="{ item, props }">
                     <router-link
-                    v-if="item.route"
-                    v-slot="{ href, navigate }"
-                    :to="item.route"
-                    custom
-                    >
-                    <a :href="href" v-bind="props.action" @click="navigate">
-                        <span class="text-color" :class="[item.icon]" />
-                        
-                        <span
-                        class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
-                        >{{ item.label }}</span>
-                    </a>
+                        v-if="item.route"
+                        v-slot="{ href, navigate }"
+                        :to="item.route"
+                        custom>
+                        <a :href="href" v-bind="props.action" @click="navigate">
+                            <span class="text-color" :class="[item.icon]" />
+                            
+                            <span class="text-lg text-primary-500 dark:text-primary-400 font-normal" >
+                                {{ item.label }}
+                            </span>
+                        </a>
                     </router-link>
                     <a v-else :href="item.url" :target="item.target" v-bind="props.action">
                     <span class="text-surface-700 dark:text-surface-0/80">{{
@@ -65,7 +64,7 @@ import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import Modal from '~/components/settings/Modal.vue';
 import DataTableComponent from '~/components/dataTableComponent/DataTableComponent.vue'
 import { useToast } from "primevue/usetoast";
-import MenuBar from "~/components/settings/MenuBar.vue";
+
 
 const toast = useToast();
 

@@ -1,55 +1,17 @@
 import { ref } from 'vue';
 
-
-export const useMenuItems = () => {
-  const menuItems = ref([
-    {
-      title: "Home",
-      icon: "pi pi-home",
-      route: "/",
-      isHovered: false
-    },
-    {
-        title: "Templates",
-        icon: "pi pi-file-edit",
-        route: "/templates",
-        isHovered: false
-      },
-      {
-        title: "Documents Library",
-        icon: "pi pi-server",
-        route: "/document-library",
-        isHovered: false
-      },
-      {
-        title: "Data Library",
-        icon: "pi pi-chart-bar",
-        route: "/data-library",
-        isHovered: false
-      },
-      {
-        title: "Settings",
-        icon: "pi pi-cog",
-        route: "/settings",
-        isHovered: false
-      }
-  ]);
-
-  return { menuItems };
-};
-
 export const useSettingItems = () => {
     const settingItems = ref([
       {
         title:'Settings',
         icon:'pi pi-user',
-        route:'/account',
+        route:'/',
         isHovered:false,
         subitems:[
           {
             title: "Time zone",
             icon: "pi pi-list",
-            route: "/general",
+            route: "/settings",
             isHovered: false,
             subitems: [],
             nestedMenuVisible: false
@@ -58,7 +20,7 @@ export const useSettingItems = () => {
           {
             title: "Dark mode",
             icon: "pi pi-list",
-            route: "/general",
+            route: "/settings",
             isHovered: false,
             subitems: [],
             nestedMenuVisible: false
@@ -75,25 +37,29 @@ export const useSettingItems = () => {
           {
             title: 'Members',
             icon: "pi pi-list",
-            route: "/members",
+            route: "/workspace",
+            componentId: "members",
             isHovered: false,
             subitems: [
               {
                 title: "User groups",
                 icon: "pi pi-list",
                 route: "/list",
+                componentId: "user-groups",
                 isHovered: false
               },
               {
                 title: "User roles",
                 icon: "pi pi-list",
-                route: "/list",
+                route: "/workspace",
+                componentId: "user-roles",
                 isHovered: false
               },
               {
                 title: "Billing",
                 icon: "pi pi-list",
-                route: "/list",
+                route: "/workspace",
+                componentId: "billing",
                 isHovered: false
               },
             ],
@@ -121,6 +87,7 @@ export const useSettingItems = () => {
             route: "/list",
             isHovered: false,
             nestedMenuVisible: false,
+            componentId: "lists",
             subitems:[]
           },
           {
@@ -129,6 +96,7 @@ export const useSettingItems = () => {
             route: "/list",
             isHovered: false,
             nestedMenuVisible: false,
+            componentId: "sublists",
             subitems:[]
           },
           {
@@ -137,6 +105,7 @@ export const useSettingItems = () => {
             route: "/list",
             isHovered: false,
             nestedMenuVisible: false,
+            componentId: "associative-lists",
             subitems:[]
           }
         ]
@@ -144,21 +113,21 @@ export const useSettingItems = () => {
       {
         title: "User management",
         icon: "pi pi-sliders-h",
-        route: "/archive",
+        route: "/user_management",
         isHovered: false,
         subitems: [
           {
             title: "User groups",
             icon: "pi pi-list",
-            route: "/archive",
-            componentId: "archive1",
+            route: "/user_management",
             isHovered: false,
+            componentId: "user-groups",
             nestedMenuVisible: false,
           },
           {
             title: "User roles",
             icon: "pi pi-list",
-            route: "/archive",
+            route: "/user_management",
             componentId: "archive2",
             isHovered: false,
             nestedMenuVisible: false,
@@ -195,7 +164,7 @@ export const useSettingItems = () => {
       {
         title: "Integrations",
         icon: "pi pi-link",
-        route: "/integrations",
+        route: "/integration",
         isHovered: false,
         subitems:[]
       },

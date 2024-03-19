@@ -4,27 +4,27 @@
 
     <div 
       class="z-50 fixed mt-10" 
-      :class="{ 'w-20': isCollapsed, 'w-60': !isCollapsed }">
+      :class="{ 'w-20': isCollapsed, 'w-60 ml-2': !isCollapsed }">
 
       <button
-        class="absolute justify-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 px-2 py-2 shadow-sm hover:bg-primaryBlue hover:text-white"
+        class="absolute justify-center items-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center bg-gray-50  shadow-sm hover:bg-primaryBlue hover:text-white flex"
         @click="toggleCollapse">
-        <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
+        <i style="font-size: 1.4rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
       </button>
 
     </div>
 
     <div 
-      class=" flex flex-col justify-between overflow-y-scroll no-scrollbar h-full "
-      :class="{ 'w-18 justify-center ': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
+      class=" flex flex-col justify-between overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
+      :class="{ 'w-18 justify-center ': isCollapsed, 'w-64': !isCollapsed, 'py-4': true }">
 
       <ul class="mt-0">
         <!-- Logo -->
         <div class="mb-7 flex pl-3" >
           <NuxtLink to="/">
             <div class="flex">
-              <img  src="../assets/icons/LogoMark.svg" class="w-12 h-auto " />
-              <img v-if="!isCollapsed" src="../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
+              <img  src="../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
+              <img v-if="!isCollapsed" src="../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
             </div>
           </NuxtLink>
         </div>
@@ -61,7 +61,7 @@
               class=" text-lg font-medium text-gray-500 ml-3" 
               :class="{
                 'text-white': item.isHovered,
-                'text-primaryBlue text-base': baseRoute === item.route,
+                'text-primaryBlue text-base': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                 'text-gray-500': !item.isHovered
               }">
               {{ item.title }}
@@ -112,7 +112,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
-import { useMenuItems } from '../services/menuItems';
+import { useMenuItems } from '../../composables/useMenuItems';
 
 const router = useRouter();
 
@@ -129,6 +129,9 @@ const navigate = (route) => {
   router.push(route);
   baseRoute.value = route;
 };
+
+// settings route
+const isSettingsRoute = computed(() => baseRoute.value.startsWith('/settings'));
 
 // nav bar items
 const { menuItems } = useMenuItems();
@@ -148,8 +151,6 @@ onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
 });
-
-const openSubMenu = ref(false);
 
 // toggle the side bar
 const toggleCollapse = () => {
