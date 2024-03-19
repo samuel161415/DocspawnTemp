@@ -34,7 +34,7 @@
           v-for="item in menuItems" 
           :key="item.title" 
           class="w-full cursor-pointer ml-1"
-          :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route }">
+          :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }">
 
           <div 
             :key="item.title" 
@@ -52,7 +52,7 @@
                   'mr-2' : !isCollapsed, 
                   'text-center  ': isCollapsed,
                   'text-white': item.isHovered, 
-                  'text-primaryBlue': baseRoute === item.route, 
+                  'text-primaryBlue': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'), 
                   'text-gray-500': !item.isHovered
                 }]">
             </i>
