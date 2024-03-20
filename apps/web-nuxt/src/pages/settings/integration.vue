@@ -1,7 +1,8 @@
 <template>
-  <div class="h-full w-full bg-white overflow-scroll">
-    <div class="mx-2 mt-4 px-4 py-5  rounded-md bg-white  w-full">
-        <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
+    <div class="h-full w-full flex overflow-scroll">
+       
+        <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
+            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
             <template #item="{ item, props }">
                 <router-link
                 v-if="item.route"
@@ -23,32 +24,25 @@
                 }}</span>
                 </a>
             </template>
-        </Breadcrumb>
-
-        <div class="mt-4 px-2">
-
-          <p class="text-surface-500">Settings</p>
-          <p class="text-surface-500">Time Zone</p>
-          <p class="text-surface-500">Dark Mode</p>
+            </Breadcrumb>
         </div>
-       </div>
+    </div>
+  </template>
   
-  </div>
-</template>
+  <script setup>
+  import { ref } from "vue";
+  import { useRouter } from "vue-router";
 
-<script setup>
-import { ref } from "vue";
-import { useRouter } from "vue-router";
-import MenuBar from "~/components/settings/MenuBar.vue";
-
-const router = useRouter();
-const home = ref({
-  icon: "pi pi-home",
-  route: "/",
-});
-
-const items = ref([{ label: "Settings", route: "/settings" }]);
-</script>
-<style>
-/* Your CSS here */
-</style>
+  const router = useRouter();
+  const home = ref({
+    icon: "pi pi-home",
+    route: "/",
+  });
+  
+  const items = ref([{label: "Settings", route: "/settings" }, {label: "Integrations", route: "/settings/integration"}]);
+  </script>
+  
+  <style>
+  /* Your CSS here */
+  </style>
+  

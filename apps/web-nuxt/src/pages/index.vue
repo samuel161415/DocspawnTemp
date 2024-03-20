@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-screen bg-stone-100">
+  <div class="h-full w-full bg-stone-100">
     <div class="m-5 flex gap-3">
       <NuxtLink
         to="/datatable"
@@ -122,11 +122,11 @@
   <Toast position="bottom-right" />
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import ProgressBar from "primevue/progressbar";
 import { useToast } from "primevue/usetoast";
 import { step1Items, step2Items, step3Items } from "~/services/sampleData";
-import { watch } from "vue";
+
 const visible = ref(false);
 const toast = useToast();
 const step = ref(1);

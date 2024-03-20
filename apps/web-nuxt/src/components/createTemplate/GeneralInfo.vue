@@ -196,7 +196,7 @@ function selectOption(option) {
 
 function finishProcess() {
   // Here you can handle the final step's action
-  console.log(stepInfo.value);
+ 
   toast.add({
     severity: "success",
     summary: "Process Completed",

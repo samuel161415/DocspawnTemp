@@ -27,7 +27,9 @@
         </template>
 
         <template #empty>
-          No data found.
+          <div class="flex justify-center text-center py-5">
+              No data found.
+          </div>
         </template>
         <template #loading>
           Loading data. Please wait.
@@ -45,7 +47,11 @@
         >
           <template #body="{ data }">
             <div v-if="column.header === 'Date'" > {{ formatDate(data[column.field]) }}</div>
-            <div v-else class="flex ">
+            <div v-else-if="column.header === 'Items'">
+              <Dropdown v-model="selectedItem" :options="data[column.field]" optionLabel="name" placeholder="" class="w-full md:w-[14rem]" />
+
+            </div>
+            <div v-else class="flex">
               <i v-if="column.header === 'Created By'" class="pi pi-users text-primaryBlue font-bold mr-4 text-xl"></i>
               {{  data[column.field] }}
             </div>
@@ -68,6 +74,7 @@
               :placeholder="getPlaceholder(column.header)"
             />
           </template>
+  
         </Column>
 
         <template v-if="props.hasActionsColumn">
@@ -146,6 +153,9 @@ const props = defineProps({
   },
 })
 
+// for settings list page
+const selectedItem = ref();
+
 const emit = defineEmits();
 
 const filters = ref(props.filters)
@@ -158,13 +168,6 @@ const dataTableRef = ref()
 
 const op = ref(null);
 
-function showOverlay(event) {
-  op.value.toggle(event);
-}
-
-function hideOverlay() {
-  op.value.hide();
-}
 
 function onFilterChange(updatedFilters) {
   emit('update:filters', updatedFilters)

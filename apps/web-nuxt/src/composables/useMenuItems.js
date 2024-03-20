@@ -37,35 +37,3 @@ export const useMenuItems = () => {
 
   return { menuItems };
 };
-
-export const useSubItems = () => {
-    const subItems = ref([
-      {
-        title: "List",
-        icon: "pi pi-list",
-        route: "/list",
-        isHovered: false,
-      },
-      {
-        title: "Field formats",
-        icon: "pi pi-home",
-        route: "/field-formats",
-        isHovered: false
-      },
-      {
-        title: "Archive",
-        icon: "pi pi-sliders-h",
-        route: "/archive",
-        isHovered: false
-      },
-      {
-        title: "User",
-        icon: "pi pi-users",
-        route: "/user",
-        isHovered: false
-      },
-     
-    ]);
-  
-    return { subItems };
-  };

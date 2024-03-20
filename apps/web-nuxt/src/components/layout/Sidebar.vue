@@ -1,30 +1,30 @@
 <template>
   <!-- side bar component -->
-  <div 
-    class="z-20 sticky bg-white mb-0  " 
-    :style="{ width: menuWidth, transition: 'width 200ms ease-in-out' }">
+  <div class="z-20  bg-white mb-0 h-full  overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div 
       class="z-50 fixed mt-10" 
-      :class="{ 'w-16': isCollapsed, 'w-60': !isCollapsed }">
+      :class="{ 'w-20': isCollapsed, 'w-60 ml-2': !isCollapsed }">
+
       <button
-        class="absolute justify-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center items-center bg-gray-50 px-2 py-2 shadow-sm hover:bg-primaryBlue hover:text-white"
+        class="absolute justify-center items-center z-10 top-18 -right-5 rounded-full w-12 h-12 text-center bg-gray-50  shadow-sm hover:bg-primaryBlue hover:text-white flex"
         @click="toggleCollapse">
-        <i style="font-size: 1.5rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
+        <i style="font-size: 1.4rem" :class="{ 'pi pi-caret-right': isCollapsed, 'pi pi-caret-left': !isCollapsed }"/>
       </button>
+
     </div>
 
     <div 
-      class=" flex flex-col justify-between  h-full overflow-y-scroll overflow-x-hidden"
-      :class="{ 'w-16 justify-center overflow-x-hidden': isCollapsed, 'w-60': !isCollapsed, 'py-4': true }">
+      class=" flex flex-col justify-between overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
+      :class="{ 'w-18 justify-center ': isCollapsed, 'w-64': !isCollapsed, 'py-4': true }">
 
       <ul class="mt-0">
         <!-- Logo -->
         <div class="mb-7 flex pl-3" >
           <NuxtLink to="/">
             <div class="flex">
-              <img  src="../assets/icons/LogoMark.svg" class="w-12 h-auto " />
-              <img v-if="!isCollapsed" src="../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
+              <img  src="../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
+              <img v-if="!isCollapsed" src="../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
             </div>
           </NuxtLink>
         </div>
@@ -34,25 +34,25 @@
           v-for="item in menuItems" 
           :key="item.title" 
           class="w-full cursor-pointer ml-1"
-          :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route }">
+          :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }">
 
           <div 
             :key="item.title" 
-            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 px-4 py-1"
-            @click="navigate(item.route)" 
+            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 px-5 py-1"
             
+            @click="navigate(item.route)" 
             @mouseenter="setIsHovered(item, true)" 
             @mouseleave="setIsHovered(item, false)">
 
             <i style="font-size: 1.2rem"
               :class="[
                 item.icon, 
-                'py-3',
+                'py-3 ml-1',
                 { 
                   'mr-2' : !isCollapsed, 
-                  'text-center ml-1': isCollapsed,
+                  'text-center  ': isCollapsed,
                   'text-white': item.isHovered, 
-                  'text-primaryBlue': baseRoute === item.route, 
+                  'text-primaryBlue': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'), 
                   'text-gray-500': !item.isHovered
                 }]">
             </i>
@@ -61,7 +61,7 @@
               class=" text-lg font-medium text-gray-500 ml-3" 
               :class="{
                 'text-white': item.isHovered,
-                'text-primaryBlue text-base': baseRoute === item.route,
+                'text-primaryBlue text-base': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                 'text-gray-500': !item.isHovered
               }">
               {{ item.title }}
@@ -69,8 +69,8 @@
 
             <div 
               v-if="isCollapsed && item.isHovered" 
-              class="pop_up absolute  bg-white z-50 py-2 w-max px-3 rounded-md shadow-sm border border-surface-50"
-              :style="{ marginLeft: '2rem', left: '50%'}">
+              class="pop_up absolute bg-white z-50 py-2 w-max px-3 rounded-md shadow-sm border border-surface-50"
+              :style="{ left: '4.8rem'}">
 
               <p class="text-sm font-medium text-gray-600" >
                 {{ item.title }}
@@ -83,7 +83,9 @@
 
       <ul>
         <!-- avatar -->
-        <div class="flex px-4">
+        <div 
+          class="flex  mt-auto px-3 "
+          :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'space-x-2 ml-1': !isCollapsed }">
 
           <span class="relative inline-block">
             <img class="h-9 w-9 rounded-full"
@@ -91,7 +93,14 @@
               alt="" />
             <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
           </span>
-          <p v-if="!isCollapsed" class="text-lg text-gray-500 text-center pt-1 ml-4">John Doe</p>
+
+          <p 
+            v-if="!isCollapsed" 
+            class="text-gray-500 text-center pt-2" 
+            :class="{ 'ml-14': !isCollapsed }">
+            John Doe
+          </p>
+
         </div>
       </ul>
     </div>
@@ -103,7 +112,7 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from 'vue-router';
-import { useMenuItems } from '../services/menuItems';
+import { useMenuItems } from '../../composables/useMenuItems';
 
 const router = useRouter();
 
@@ -121,6 +130,8 @@ const navigate = (route) => {
   baseRoute.value = route;
 };
 
+// settings route
+const isSettingsRoute = computed(() => baseRoute.value.startsWith('/settings'));
 
 // nav bar items
 const { menuItems } = useMenuItems();
@@ -131,18 +142,15 @@ const setIsHovered = (item, val) => {
   op.value.toggle(event);
 };
 
-
 // check if the window is resized
 const handleResize = () => {
-  isCollapsed.value = window.innerWidth <= 768;
+  isCollapsed.value = window.innerWidth <= 990;
 };
 
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
 });
-
-const openSubMenu = ref(false);
 
 // toggle the side bar
 const toggleCollapse = () => {
