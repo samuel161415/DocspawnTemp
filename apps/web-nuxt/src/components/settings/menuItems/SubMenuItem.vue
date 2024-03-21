@@ -1,17 +1,19 @@
 <template>
-    <div class="border-l ml-8">
-        <div class="py-2 space-y-2 pl-2 hover:bg-surface-100 hover:border-l hover:border-surface-400" @click="toggleVisible">
-            <p class="text-base font-normal ml-2 text-gray-500">
-            {{ subItem.title }}
-            </p>
+    <div class="ml-6">
+        <div class="flex py-2 pl-2 hover:bg-surface-100 items-center" @click="toggleVisible">
+            <i style="font-size: 0.9rem" :class="[subItem.icon, 'ml-1 py-1 text-gray-500']"></i>
+            <p class="text-base font-normal ml-2 text-gray-500">{{ subItem.title }}</p>
         </div>
+
         <ul v-if="subItem.nestedMenuVisible">
             <li v-if="subItem.nestedMenuVisible">
                 <div  
                     v-for="subSubItem in subItem.subitems"
                     :key="subSubItem.title"
-                    class="ml-6 py-2 pl-2 hover:bg-surface-100"
+                    class="flex ml-6 py-2 pl-2 hover:bg-surface-100"
                     @click="handleSubSubItemClick(subSubItem)"  >
+                    <i style="font-size: 0.9rem" :class="[subSubItem?.icon, 'py-1 ml-1 text-gray-500']"></i>
+
                     <p class="text-base font-normal ml-2 text-gray-500">
                         {{ subSubItem?.title }}
                     </p>

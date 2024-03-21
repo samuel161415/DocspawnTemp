@@ -43,12 +43,6 @@
       
 
       <template #footer>
-        <Button 
-          label="Cancel" 
-          icon="pi pi-times" 
-          outlined 
-          @click="handleCancel" 
-          class="text-primaryblue" />
         <Button label="Create List" icon="pi pi-check" class="bg-primaryblue border-primaryBlue text-white mr-5" @click="handleCreateList" />
       </template>
 
