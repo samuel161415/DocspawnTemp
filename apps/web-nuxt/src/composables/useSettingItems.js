@@ -10,7 +10,7 @@ export const useSettingItems = () => {
         subitems:[
           {
             title: "Time zone",
-            icon: "pi pi-list",
+            icon: "pi pi-calendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -19,7 +19,7 @@ export const useSettingItems = () => {
           },
           {
             title: "Dark mode",
-            icon: "pi pi-list",
+            icon: "pi pi-moon",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -36,30 +36,23 @@ export const useSettingItems = () => {
         subitems: [
           {
             title: 'Members',
-            icon: "pi pi-list",
+            icon: "pi pi-users",
             route: "/workspace",
             componentId: "members",
             isHovered: false,
             subitems: [
               {
                 title: "User groups",
-                icon: "pi pi-list",
+                icon: "pi pi-user",
                 route: "/list",
                 componentId: "user-groups",
                 isHovered: false
               },
               {
                 title: "User roles",
-                icon: "pi pi-list",
+                icon: "pi pi-user",
                 route: "/workspace",
                 componentId: "user-roles",
-                isHovered: false
-              },
-              {
-                title: "Billing",
-                icon: "pi pi-list",
-                route: "/workspace",
-                componentId: "billing",
                 isHovered: false
               },
             ],
@@ -67,7 +60,7 @@ export const useSettingItems = () => {
           },
           {
             title: 'Workspace management',
-            icon: "pi pi-list",
+            icon: "pi pi-table",
             route: "/workspace_management",
             isHovered: false,
             subitems:[],
@@ -92,7 +85,7 @@ export const useSettingItems = () => {
           },
           {
             title: "Sublists",
-            icon: "pi pi-list",
+            icon: "pi pi-bars",
             route: "/list",
             isHovered: false,
             nestedMenuVisible: false,
@@ -101,7 +94,7 @@ export const useSettingItems = () => {
           },
           {
             title: "Associative lists",
-            icon: "pi pi-list",
+            icon: "pi pi-sort-amount-up-alt",
             route: "/list",
             isHovered: false,
             nestedMenuVisible: false,
@@ -111,31 +104,6 @@ export const useSettingItems = () => {
         ]
       },
       {
-        title: "User management",
-        icon: "pi pi-sliders-h",
-        route: "/user_management",
-        isHovered: false,
-        subitems: [
-          {
-            title: "User groups",
-            icon: "pi pi-list",
-            route: "/user_management",
-            isHovered: false,
-            componentId: "user-groups",
-            nestedMenuVisible: false,
-          },
-          {
-            title: "User roles",
-            icon: "pi pi-list",
-            route: "/user_management",
-            componentId: "archive2",
-            isHovered: false,
-            nestedMenuVisible: false,
-          },     
-        ]
-      },
-      
-      {
         title: "Formatting options",
         icon: "pi pi-home",
         route: "/field_formats",
@@ -143,7 +111,7 @@ export const useSettingItems = () => {
         subitems: [
           {
             title: "Time & Date",
-            icon: "pi pi-list",
+            icon: "pi pi-clock",
             componentId: "date-formats",
             route: "/field_formats",
             isHovered: false,
@@ -152,7 +120,7 @@ export const useSettingItems = () => {
           },
           {
             title: "Checkboxes ",
-            icon: "pi pi-list",
+            icon: "pi pi-check-square",
             route: "/field_formats",
             componentId: "checkbox-formats",
             isHovered: false,
@@ -160,6 +128,37 @@ export const useSettingItems = () => {
             subitems:[]
           },
         ]
+      },
+      {
+        title: "User management",
+        icon: "pi pi-users",
+        route: "/user_management",
+        isHovered: false,
+        subitems: [
+          {
+            title: "User groups",
+            icon: "pi pi-users",
+            route: "/user_management",
+            isHovered: false,
+            componentId: "user-groups",
+            nestedMenuVisible: false,
+          },
+          {
+            title: "User roles",
+            icon: "pi pi-user",
+            route: "/user_management",
+            componentId: "archive2",
+            isHovered: false,
+            nestedMenuVisible: false,
+          },     
+        ]
+      },
+      {
+        title: "Billings",
+        icon: "pi pi-credit-card",
+        route: "/billings",
+        isHovered: false,
+        subitems:[]
       },
       {
         title: "Integrations",
