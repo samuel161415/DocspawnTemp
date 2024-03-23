@@ -1,6 +1,6 @@
 <template>
 
-      <div class="flex justify-between">
+      <div class="flex justify-between mt-5">
         <div class="text-left">
           <p class="text-lg md:text-xl font-medium text-left">
             {{ title }}
