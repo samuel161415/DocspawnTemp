@@ -1,4 +1,0 @@
-<template>
-    <!-- modal -->
-    
-</template>
