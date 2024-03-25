@@ -92,16 +92,6 @@
         emit('cancel');
     }
   };
-  
-  const handleCancel = () => {
-    visible.value = false;
-
-    listName.value = '';
-    listItem.value = '';
-    listItems.value = [];
-    
-    emit('cancel');
-  };
 
   const deleteItem = (data) => {
     listItems.value = listItems.value.filter(item => item.name !== data.name);

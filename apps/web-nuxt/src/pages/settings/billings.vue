@@ -45,40 +45,12 @@
                             icon="pi pi-plus"
                             severity="surface-100" 
                             class="bg-surface-50 text-surface-600 text-sm mt-7 p-button-label font-thin"
-                          />
+                            @click="visible = true" 
+                            />
                           
                     </div>
-
-                    <div class="flex flex-col gap-4">
-                        <div class="flex space-x-6">
-                            <div class="flex flex-col gap-1">
-                                <label for="fullname" class="text-sm">Name on your card</label>
-                                <InputText id="fullname" v-model="value" aria-describedby="username-help" class="text-surface-900 w-64 h-10 text-base" placeholder="Mayad Ahmed"/>
-                              
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="expiry" class="text-sm">Expiry</label>
-                                <InputText id="expiry" v-model="value" class="text-surface-700  h-10 text-base"  placeholder="02 / 2028" />
-                              
-                            </div>
-                        </div>
-                        <div class="flex space-x-6 mt-4">
-                            <div class="flex flex-col gap-1">
-                                <label for="cardnumber" class="text-sm">Card Number</label>
-                                
-                                <span class="relative flex">
-                                    <img src="../../assets/card.png" alt="" class="absolute top-2/4 -mt-2 pl-2 w-7 h-5">
-                                    <InputText id="cardnumber" v-model="value" class="text-surface-500 w-64 pl-10 h-10 text-base" placeholder="8269 9620 9292 2538"  aria-describedby="username-help" />
-                                
-                                </span>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                <label for="username" class="text-sm">cvv</label>
-                                <Password v-model="value" class="text-surface-700 h-10 " placeholder="..." :feedback="false" />
-                              
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Billings card form -->
+                    <BillingsForm />
                 </div>
 
                 <hr class="text-surface-100 mt-10"/>
@@ -112,19 +84,24 @@
                 <!--billings table -->
             </div>
        </div>
-       
+       <!-- billings card add modal modal -->
+       <AddCardModal v-model:visible="visible" />
    </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import AddCardModal from "~/components/settings/billings/AddCardModal.vue";
+import BillingsForm from "~/components/settings/billings/BillingsForm.vue";
 
 const router = useRouter();
 const home = ref({
   icon: "pi pi-home",
   route: "/",
 });
+
+const visible = ref(false);
 
 const items = ref([{label: "Settings", route: "/settings" }, {label: "Billings", route: "/settings/billings"}]);
 
