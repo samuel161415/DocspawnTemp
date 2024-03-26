@@ -3,7 +3,11 @@
 
     <div class="flex flex-col  gap-2 left-0 md:mb-14">
       <p class="text-surface-600 text-left text-lg mb-2">Select a template to display data.</p>
-      <TreeSelect v-model="selectedValue" :options="NodeData" placeholder="Select Template" class="md:w-[20rem] w-full" />
+      <TreeSelect 
+        v-model="selectedValue" 
+        :options="NodeData" 
+        placeholder="Select Template" 
+        class="md:w-[20rem] w-full" />
     </div>
     
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
@@ -126,6 +130,24 @@ import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
 import formatDate from '~/utils';
 import { NodeData } from '~/services/sampleData';
 
+const typefilter = ref('');
+
+const dataTableRef = ref()
+
+const currentImage = ref(null);
+
+const dialogVisible = ref(false);
+
+const selectedRowData = ref(null);
+
+const emit = defineEmits();
+
+const selectedValue = ref()
+
+const templatefiltered = ref([])
+
+const filteredData = ref(templatefiltered)
+
 const props = defineProps({
   data: {
     type: Array,
@@ -169,7 +191,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits();
+const filters = ref(props.filters)
 
 const selectedColumns = ref(props.columns);
 
@@ -177,38 +199,14 @@ const onToggle = (val) => {
   selectedColumns.value = props.columns.filter((col) => val.includes(col));
 };
 
-const filters = ref(props.filters)
-
-const selectedValue = ref()
-
-const templatefiltered = ref([])
-
 watch(selectedValue, (selectedValue) => {
 
-
   templatefiltered.value = props.data.filter(item => {
-    const type = item.type;
     const templateName = item.templateName;
-
-    return selectedValue[type] || selectedValue[templateName];
+    return selectedValue[templateName];
   });
 
 });
-
-
-const filteredData = ref(templatefiltered)
-
-
-
-const typefilter = ref('');
-
-const dataTableRef = ref()
-
-const currentImage = ref(null);
-
-const dialogVisible = ref(false);
-
-const selectedRowData = ref(null);
 
 const toggleDialog = (data, img) => {
 
@@ -236,7 +234,6 @@ function exportCSVHandler() {
 }
 
 const clearFilter = () => {
-
   Object.keys(filters.value).forEach((key) => {
     filters.value[key] = '';
   });
