@@ -1,12 +1,11 @@
 <template>
-      <div class="w-3 h-3">
-
-        <Tag  value="Business" :style="{height: '17px', fontWeight:'500',   boxShadow: '5px'}"> 
-            <template #value>
-                <span class="font-thin">{{ props.value }}</span>
-            </template>
-            </Tag>
-    </div>
+  <div class="w-3 h-3">
+    <Tag :style="{ height: '17px', fontWeight: '500', boxShadow: '5px' }">
+      <template #default>
+        <span class="font-thin">{{ props.value }}</span>
+      </template>
+    </Tag>
+  </div>
 </template>
 
 <script setup>
@@ -18,5 +17,6 @@ const props = defineProps({
     type: String,
     required: true,
   },
-})
+});
+
 </script>
