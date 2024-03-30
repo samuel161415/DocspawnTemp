@@ -58,7 +58,7 @@
 import { ref } from "vue";
 import GeneralInfo from "../../components/createTemplate/GeneralInfo.vue";
 import DeliveryOptions from "~/components/createTemplate/DeliveryOptions.vue";
-import FormEditor from "~/components/createTemplate/FormEditor.vue";
+import FormEditor from "~/components/createTemplate/formEditor/FormEditor.vue";
 import TemplateEditor from "~/components/createTemplate/TemplateEditor.vue";
 import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
 import { home } from '~/composables/useBreadcrumb.js'

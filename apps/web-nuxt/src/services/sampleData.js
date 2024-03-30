@@ -293,6 +293,7 @@ export const dataLibraryData = [
 ];
 
 
+
 export const NodeData = [
   {
       key: 'Form to Doc',
@@ -1528,7 +1529,7 @@ export const NodeData = [
     },
 
     getProductsMini() {
-        return Promise.resolve(this.getProductsData().slice(0, 22));
+        return Promise.resolve(this.getProductsData().slice(0, 7));
     },
 
     getProductsSmall() {
@@ -1547,4 +1548,90 @@ export const NodeData = [
         return Promise.resolve(this.getProductsWithOrdersData());
     }
 };
+
+export const FormFieldsData  = [
+    {
+        id: '1',
+        name: 'Full Name',
+        type: 'text', 
+        mandatory: false,
+        description: 'This is where you put your full name',
+        fieldFormat: ''
+    },
+    {
+        id: '2',
+        name: 'Birth Date',
+        type: 'date', 
+        mandatory: true,
+        description: 'This is where you put your birth date',
+        fieldFormat: 'MM/DD/YY'
+    },
+    {
+        id: '3',
+        name: 'Phone Number',
+        type: 'number', 
+        mandatory: true,
+        description: 'This is where you put your phone number',
+        fieldFormat: ''
+    },
+    {
+        id: '4',
+        name: 'Address',
+        type: 'multiline-text', 
+        mandatory: false,
+        description: 'This is where you put your address',
+        fieldFormat: ''
+    },
+    {
+        id: '5',
+        name: 'Email Address',
+        type: 'email', 
+        mandatory: true,
+        description: 'This is where you put your email address',
+        fieldFormat: ''
+    },
+    {
+        id: '6',
+        name: 'Profile Picture',
+        type: 'image', 
+        mandatory: false,
+        description: 'This is where you put your profile picture',
+        fieldFormat: ''
+    },
+    {
+        id: '7',
+        name: 'Gender',
+        type: 'list', 
+        mandatory: true,
+        description: 'This is where you select your gender',
+        fieldFormat: ''
+    },
+    {
+        id: '8',
+        name: 'Signature',
+        type: 'signature', 
+        mandatory: false,
+        description: 'This is where you put your signature',
+        fieldFormat: ''
+    },
+    {
+        id: '9',
+        name: 'Agree to Terms',
+        type: 'checkbox', 
+        mandatory: true,
+        description: 'Check to agree to terms',
+        fieldFormat: ''
+    },
+    {
+        id: '10',
+        name: 'Appointment Time',
+        type: 'time', 
+        mandatory: false,
+        description: 'This is where you select your appointment time',
+        fieldFormat: 'HH:MM'
+    }
+];
+
+
+
 
