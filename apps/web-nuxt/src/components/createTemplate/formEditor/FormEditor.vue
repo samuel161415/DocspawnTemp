@@ -10,7 +10,7 @@
       </div>
       <div class="ml-14 flex flex-col gap-2">
         <label for="username">Form Description</label>
-        <InputText class="w-96" id="formTitle" v-model="formTitleValue" aria-describedby="FormTitle-help" />
+        <InputText class="w-96" id="formTitle" v-model="formTitleDescription" aria-describedby="FormTitle-help" />
       </div>
     </div>
     <div class="grow"></div>
@@ -42,45 +42,62 @@
           <InputText v-model="data[field]" />
         </template>
       </Column>
-
+      <!-- 
       <Column field="type" header="Type" style="width: 7%">
         <template #editor="{ data, field }">
-          <InputText v-model="data[field]" />
+          <InputText class="max-w-32" v-model="data[field]" />
+        </template>
+      </Column> -->
+
+      <Column field="type" header="Type" style="width: 9%">
+        <template #editor="{ data, field }">
+          <Dropdown class="max-w-44" v-model="data[field]" :options="fieldTypes" optionLabel="label" optionValue="value"
+            placeholder="Select data type">
+            <template #option="slotProps">
+              <p>{{ slotProps.option.label }}</p>
+              <!-- <Tag :value="slotProps.option.label" /> -->
+            </template>
+          </Dropdown>
+        </template>
+        <template #body="slotProps">
+          <p>{{ slotProps.data.type }}</p>
         </template>
       </Column>
 
 
       <Column field="mandatory" header="Mandatory?" style="width: 1%">
         <template #editor="{ data, field }">
-          <Dropdown v-model="data[field]" :options="requiredOptions" optionLabel="label" optionValue="value"
-            placeholder='Select necessity'>
+          <Dropdown class="max-w-28" v-model="data[field]" :options="requiredOptions" optionLabel="label"
+            optionValue="value" placeholder='Select necessity'>
             <template #option="slotProps">
-              <Tag :value="slotProps.option.label" :severity="slotProps.option.label === 'Yes'? 'success' : 'warning'"/>
+              <p>{{ slotProps.option.label }}</p>
             </template>
           </Dropdown>
         </template>
         <template #body="slotProps">
-          <Tag :value="slotProps.data.mandatory ? 'Yes' : 'No'" :severity="slotProps.data.mandatory ? 'success' : 'warning'"/>
+          <p>{{ slotProps.data.mandatory ? 'Yes' : 'No' }}</p>
         </template>
       </Column>
 
-      <Column field="fieldFormat" header="Field Format" style="width: 7%">
+      <Column field="fieldFormat" header="Field Format" class="min-w-40" style="width: 7%">
         <template #editor="{ data, field }">
-          
-          <Dropdown v-if="data.type === 'date' || data.type === 'time'"  v-model="data[field]" :options="data['type'] === 'date' ? dateFormats : timeFormats"
-            optionLabel="label" optionValue="value" placehlder="Select Format">
+
+          <Dropdown v-if="data.type === 'date' || data.type === 'time'" v-model="data[field]" class="max-w-48"
+            :options="data['type'] === 'date' ? dateFormats : timeFormats" optionLabel="label" optionValue="value"
+            placehlder="Select Format">
             <template #option="slotProps">
-              <Tag :value="slotProps.option.value" />
+              <p>{{ slotProps.option.value }}</p>
             </template>
           </Dropdown>
           <p v-else>N/A</p>
         </template>
 
-        <template  #body="slotProps">
-          <Tag v-if="slotProps.data.type === 'date' || slotProps.data.type === 'time'" :value="slotProps.data.fieldFormat" />
+        <template #body="slotProps">
+          <p v-if="slotProps.data.type === 'date' || slotProps.data.type === 'time'">{{ slotProps.data.fieldFormat }}
+          </p>
           <p v-else>N/A</p>
         </template>
-        
+
       </Column>
 
       <Column field="description" header="Description" style="width: 30%">
@@ -89,7 +106,13 @@
         </template>
       </Column>
 
-      <Column :rowEditor="true" style="width: 4%; min-width: 5rem" bodyStyle="text-align:center" header="Edit"></Column>
+
+
+      <Column :rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center" header="Edit">
+        <template #roweditoriniticon>
+          <i class="pi pi-pencil" style="color: rgb(0 158 226);"></i>
+        </template>
+      </Column>
       <Column header="Delete" style="width: 4%;" bodyStyle="text-align:center" header-style="text-center">
         <template #body>
           <i class="pi pi-trash text-primaryBlue text-lg custom-icon" @click="handleClick"></i>
@@ -113,6 +136,10 @@ const requiredOptions = ref([
     { label: 'No', value: false },
 ]);
 
+
+const formTitleValue = ref('');
+const formTitleDescription = ref('');
+
 const dateFormats = ref([
     { label: 'MM/DD/YY', value: 'MM/DD/YY' },
     { label: 'DD/MM/YY', value: 'DD/MM/YY' },
@@ -124,6 +151,22 @@ const timeFormats = ref([
     { label: 'HH:MM:SS XM', value: 'HH:MM:SS XM' },
     { label:  'HH:MM', value:  'HH:MM' },
 ]);
+
+
+const fieldTypes = [
+    { label: 'Text', value: 'text' },
+    { label: 'Multiline Text', value: 'multiline-text' },
+    { label: 'Number', value: 'number' },
+    { label: 'Date', value: 'date' },
+    { label: 'Time', value: 'time' },
+    { label: 'Email', value: 'email' },
+    { label: 'Image', value: 'image' },
+    { label: 'List', value: 'list' },
+    { label: 'Signature', value: 'signature' },
+    { label: 'Checkbox', value: 'checkbox' }
+];
+
+
 
 onMounted(() => {
     // ProductService.getProductsMini().then((data) => (products.value = data));
