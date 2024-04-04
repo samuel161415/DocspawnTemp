@@ -1,10 +1,4 @@
 <template>
-  <div class="w-full pt-4">
-    <p class="mb-1">
-      Field name
-    </p>
-    <InputText v-model="fieldName" class="h-11 w-full" type="text" />
-  </div>
   <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">
     <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full p-1" />
   </div>
@@ -26,9 +20,7 @@
 
 <script setup>
 import ImageOptions from '../../../../components/createTemplate/templateEditor/options/ImageOptions.vue'
-import { templateEditorStore } from '../store/templateEditorStore.js'
-
-const fieldName = ref(null)
+import { templateEditorStore } from '../store/templateEditorStore.ts'
 
 const selectedTimeFormat = ref()
 const timeFormats = ref([

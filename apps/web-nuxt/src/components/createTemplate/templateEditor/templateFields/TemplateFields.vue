@@ -1,9 +1,25 @@
 <template>
   <div class="flex h-full min-h-screen w-52  space-x-6 relative mb-12">
     <div class="w-full">
+      <Button v-if="showAddedFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="showAddedFields = false">
+        <i class="pi pi-plus"></i>
+        Add new field
+      </Button>
+      <Button v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="showAddedFields = true">
+        <i class="pi pi-angle-left"></i>
+        Fields list
+      </Button>
+
       <div class="flex w-full mb-0">
       </div>
-      <div class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
+
+      <template v-for="(field, index) in templateEditorStore.addedFields">
+        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 hover:bg-blue-200" @click="console.log('hurrah', templateEditorStore.selectedAddedField, templateEditorStore.showOptionsBar);templateEditorStore.selectedAddedField = field;templateEditorStore.showOptionsBar = true">
+          {{ field.name }}
+        </div>
+      </template>
+
+      <div v-if="showAddedFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showFormFields ? showFormFields = false : showFormFields = true">
           <!-- <i class="pi pi-user mr-1 text-primaryBlue "></i> -->
           <img :src="FormFieldIcon" class="h-6" />
@@ -11,31 +27,31 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showFormFields }"></i>
         </div>
         <div v-if="showFormFields" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'text'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'text')">
             Text
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'multiline-text'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'multiline-text')">
             Multiline-text
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'number'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'number')">
             Number
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'signature'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'signature')">
             Signature
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'checkbox'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'checkbox')">
             Checkbox
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'date'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'date')">
             Date
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'time'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'time')">
             Time
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'image'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'image')">
             Image
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'form-field';templateEditorStore.activeFormField = 'list'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'list')">
             List
           </div>
         </div>
@@ -46,13 +62,13 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showDataFieldOptions }"></i>
         </div>
         <div v-if="showDataFieldOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'data-fields';templateEditorStore.activeDataField = 'name'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'name')">
             Name
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'data-fields';templateEditorStore.activeDataField = 'email'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'email')">
             Email
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'data-fields';templateEditorStore.activeDataField = 'age'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'age')">
             Age
           </div>
         </div>
@@ -64,14 +80,14 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
         </div>
         <div v-if="showImageOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'image';templateEditorStore.activeImageOption = 'fixed-image'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('image', 'fixed-image')">
             Fixed image
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'image';templateEditorStore.activeImageOption = 'dataset-image'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('image', 'dataset-image')">
             Dataset image
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="templateEditorStore.activeTemplateField = 'text'">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('text')">
           <!-- <i class="pi pi-pencil mr-1 text-primaryBlue"></i> -->
           <img :src="textIcon" class="h-6" />
           Text
@@ -83,35 +99,35 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showTimestamp }"></i>
         </div>
         <div v-if="showTimestamp" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'timestamp';templateEditorStore.activeTimestampField = 'date'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('timestamp', 'date')">
             Date
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="templateEditorStore.activeTemplateField = 'timestamp';templateEditorStore.activeTimestampField = 'time'">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('timestamp', 'time')">
             Time
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click=";templateEditorStore.activeTemplateField = 'checkbox'">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('checkbox')">
           <!-- <i
             class="pi pi-check-square mr-1 text-primaryBlue"
           ></i> -->
           <img :src="checkboxIcon" class="h-6" />
           Checkbox
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="templateEditorStore.activeTemplateField = 'radio'">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('radio')">
           <!-- <i
             class="pi pi-circle mr-1 text-primaryBlue"
           ></i> -->
           <img :src="radioIcon" class="h-6" />
           Radio
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="templateEditorStore.activeTemplateField = 'dropdown'">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('dropdown')">
           <!-- <i
             class="pi pi-caret-down  mr-1 text-primaryBlue"
           ></i> -->
           <img :src="dropdownIcon" class="h-6" />
           Dropdown
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="templateEditorStore.activeTemplateField = 'signature'">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('signature')">
           <!-- <i
             class="pi pi-caret-down  mr-1 text-primaryBlue"
           ></i> -->
@@ -124,7 +140,7 @@
 </template>
 
 <script setup>
-import { templateEditorStore } from '../store/templateEditorStore.js'
+import { templateEditorStore } from '../store/templateEditorStore.ts'
 import FormFieldIcon from '../../../../assets/icons/template-editor/template-editor-form-field-icon.svg'
 import imageIcon from '../../../../assets/icons/template-editor/template-editor-image-icon.svg'
 import dropdownIcon from '../../../../assets/icons/template-editor/template-editor-dropdown-icon-2.svg'
@@ -135,10 +151,27 @@ import checkboxIcon from '../../../../assets/icons/template-editor/template-edit
 import radioIcon from '../../../../assets/icons/template-editor/template-editor-radio-icon-2.svg'
 import dataFieldIcon from '../../../../assets/icons/template-editor/template-editor-data-fields-icon.svg'
 
+const showAddedFields = ref(true)
 const showFormFields = ref(false)
 const showTimestamp = ref(false)
 const showImageOptions = ref(false)
 const showDataFieldOptions = ref(false)
+
+watch(showAddedFields, () => templateEditorStore.showOptionsBar = false)
+
+function selectField(field, subField) {
+  templateEditorStore.activeTemplateField = field
+  if (field === 'form-field')
+    templateEditorStore.activeFormField = subField
+  else if (field === 'data-fields')
+    templateEditorStore.activeDataField = subField
+  else if (field === 'timestamp')
+    templateEditorStore.activeTimestampField = subField
+  else if (field === 'image')
+    templateEditorStore.activeImageOption = subField
+
+  templateEditorStore.showOptionsBar = true
+}
 </script>
 
-  <style lang="scss" scoped></style>
+<style lang="scss" scoped></style>
