@@ -15,8 +15,8 @@
     </div>
     <div class="grow"></div>
     <div class="flex flex-col items-center place-self-end">
-      <i class="pi pi-eye justify-self-center text-2xl custom-icon" @click="handleClick"></i>
-      <p class="text-justify text-lg">See preview</p>
+      <i class="pi pi-eye justify-self-center text-2xl custom-icon" @click="showPreview = true"></i>
+      <p class="text-justify text-lg">Mobile preview</p>
     </div>
   </div>
   <!-- <P class="ml-10 mb-6 mt-8 font-semibold text-lg">Form fields</P> -->
@@ -25,29 +25,37 @@
     <DataTable striped-rows celll-edit-complete="onCellEditComplete" :reorderableColumns="true"
       @columnReorder="onColReorder" show-gridlines @rowReorder="onRowReorder" v-model:editingRows="editingRows"
       :value="products" editMode="row" dataKey="id" class="mx-3 px-6 mb-8" style="width: 100%"
-      @row-edit-save="onRowEditSave" :pt="{
+      @row-edit-init="onRowEditInit" @row-edit-cancel="onRowEditCancel" @row-edit-save="onRowEditSave" :pt="{
           table: { style: 'min-width: 50rem' }
         }">
       <template #header>
-        <div class="">
+        <div class="flex flex-row">
           <p class="font-semibold text-lg">
             Form Fields
           </p>
+          <div class="ms-auto">
+            <!-- <SearchField /> -->
+          </div>
         </div>
       </template>
-      <Column rowReorder :reorderableColumn="false" style="width: 3%" />
-      <Column :body-style="{ height: '5.5rem', }" field="name" header="Name" style="width: 10%"
-        :headerStyle="{ height: '4.5rem' }">
+      <Column :body-style="{ margin: '0rem', padding: '0rem' }" rowReorder :reorderableColumn="false"
+        style="width: 3%" :pt="{
+          bodyCell: ({context}) => ({
+            // id: () => {console.log(context.id)},
+            // class: { 'bg-black': isDraggedOver[data.id] },
+          })
+        }">
+        <template #rowreordericon>
+          <i class="pi pi-align-justify cursor-move p-8" data-pc-section="rowreordericon"
+            @dragover="handleDragOver(id)" @drop="handleDragLeave(id)" @dragend="handleDragLeave(id)" @dragleave="handleDragLeave(id)"></i>
+        </template>
+      </Column>
+      <!-- :body-style="{ height: '5.5rem', } -->
+      <Column field="name" header="Name" style="width: 10%" :headerStyle="{ height: '4.5rem' }">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" />
         </template>
       </Column>
-      <!-- 
-      <Column field="type" header="Type" style="width: 7%">
-        <template #editor="{ data, field }">
-          <InputText class="max-w-32" v-model="data[field]" />
-        </template>
-      </Column> -->
 
       <Column field="type" header="Type" style="width: 9%">
         <template #editor="{ data, field }">
@@ -55,6 +63,7 @@
             placeholder="Select data type">
             <template #option="slotProps">
               <p>{{ slotProps.option.label }}</p>
+
               <!-- <Tag :value="slotProps.option.label" /> -->
             </template>
           </Dropdown>
@@ -108,29 +117,66 @@
 
 
 
-      <Column :rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center" header="Edit">
+      <Column field="id" rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center"
+        header="Edit" :pt="{
+          rowEditorInitButton: ({state}) => ({
+            id: true
+          })
+        }">
         <template #roweditoriniticon>
-          <i class="pi pi-pencil" style="color: rgb(0 158 226);"></i>
+          <i disabled class="pi pi-pencil" style="color: rgb(0 158 226);"></i>
         </template>
       </Column>
       <Column header="Delete" style="width: 4%;" bodyStyle="text-align:center" header-style="text-center">
         <template #body>
-          <i class="pi pi-trash text-primaryBlue text-lg custom-icon" @click="handleClick"></i>
+          <i class="pi pi-trash text-red-700 text-lg custom-icon" @click="handleDelete()"></i>
         </template>
       </Column>
 
+
+
+      <Toast />
+      <ConfirmDialog></ConfirmDialog>
+      <Dialog v-model:visible="showPreview" modal header="Header" :style="{ width: '25rem' }">
+        <template #header>
+          <div class="inline-flex items-center justify-center gap-2">
+            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+            <span class="font-bold whitespace-nowrap	">Amy Elsner</span>
+          </div>
+        </template>
+        <p class="m-0">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna
+          aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat.
+          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur
+          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </p>
+        <template #footer>
+          <Button label="Ok" icon="pi pi-check" @click="showPreview = false" autofocus />
+        </template>
+      </Dialog>
     </DataTable>
+    
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
 import { FormFieldsData } from "../../../services/sampleData";
-// import { ProductService } from '../../../services/sampleData';
-import toast from '~/presets/lara/toast';
+import SearchField from "../../shared/searchField.vue";
 
+const confirm = useConfirm();
+const toast = useToast();
+const showPreview = ref(false);
 const products = ref();
 const editingRows = ref([]);
+const currentRow = ref(null);
+const isDraggedOver = ref({});
+const id_for_row = ref(0);
 const requiredOptions = ref([
     { label: 'Yes', value: true },
     { label: 'No', value: false },
@@ -167,17 +213,71 @@ const fieldTypes = [
 ];
 
 
+const handleDelete = () => {
+    confirm.require({
+        message: 'Do you want to delete this record?',
+        header: 'Delete Confirmation',
+        rejectClass: 'p-button-text p-button-text',
+        acceptClass: 'p-button-danger p-button-text',
+        accept: () => {
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
+};
+
+
+const getRowId = (notSame) => {
+  if (notSame) {
+    id_for_row.value += 1
+    return id_for_row.value - 1
+  }
+  return id_for_row.value
+}
+
+const handleDragOver = (id) => {
+      // Do something when element is dragged over
+    console.log('Element dragged over!');
+    isDraggedOver.value[id] = true;
+    console.log("dragged over" + isDraggedOver.value[id] + "itemId:" + id)
+};
+
+const handleDragLeave = (id) => {
+  isDraggedOver.value[id] = false;
+  console.log("left" + isDraggedOver.value[id] + "itemId:" + id)
+
+}
 
 onMounted(() => {
     // ProductService.getProductsMini().then((data) => (products.value = data));
   products.value = FormFieldsData;
+  for (let i = 0; i < products.value.length; i++) {
+  isDraggedOver[i] = false
+  console.log(isDraggedOver)
+}
 });
 
 const onRowEditSave = (event) => {
     let { newData, index } = event;
-
     products.value[index] = newData;
+    currentRow.value = null;
 };
+
+const onRowEditCancel = () => {
+  currentRow.value = null;
+}
+
+const onRowEditInit = (event) => {
+  // Disable row editing for other rows if another row is already being edited
+  if (currentRow.value !== null && currentRow.value !== event.index) {
+    toast.add({ severity: 'warn', summary: 'Edit in Progress', detail: 'Please save or cancel the current edit before editing another row.', life: 3000 });
+    console.log(event.index)
+  } else {
+    currentRow.value = event.index;
+  }
+}
 
 const onColReorder = () => {
   toast.add({severity: 'success', summary: 'Column Reordered', life: 3000});
@@ -193,6 +293,15 @@ const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
 }
 
+
+
+
+
+// Track the currently edited row
+ // Store the index of the currently edited row as a reactive ref
+
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -200,5 +309,9 @@ const formatCurrency = (value) => {
   /* Add your custom styles here */
   cursor: pointer;
   /* Change cursor to pointer to indicate clickable */
+}
+
+.dragged-over {
+  background-color: #080808;
 }
 </style>
