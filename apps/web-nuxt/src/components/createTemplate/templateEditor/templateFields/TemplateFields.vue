@@ -10,9 +10,6 @@
         Fields list
       </Button>
 
-      <div class="flex w-full mb-0">
-      </div>
-
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 hover:bg-blue-200" @click="console.log('hurrah', templateEditorStore.selectedAddedField, templateEditorStore.showOptionsBar);templateEditorStore.selectedAddedField = field;templateEditorStore.showOptionsBar = true">
           {{ field.name }}
@@ -21,8 +18,7 @@
 
       <div v-if="showAddedFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showFormFields ? showFormFields = false : showFormFields = true">
-          <!-- <i class="pi pi-user mr-1 text-primaryBlue "></i> -->
-          <img :src="FormFieldIcon" class="h-6" />
+          <i class="pi pi-user mr-1 text-primaryBlue "></i>
           Form Fields
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showFormFields }"></i>
         </div>
@@ -56,8 +52,7 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showDataFieldOptions ? showDataFieldOptions = false : showDataFieldOptions = true">
-          <!-- <i class="pi pi-image mr-1 font-semibold text-primaryBlue"></i> -->
-          <img :src="dataFieldIcon" class="h-6" />
+          <i class="pi pi-database mr-1 font-semibold text-primaryBlue"></i>
           Data fields
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showDataFieldOptions }"></i>
         </div>
@@ -74,8 +69,8 @@
         </div>
 
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
-          <!-- <i class="pi pi-image mr-1 font-semibold text-primaryBlue"></i> -->
-          <img :src="imageIcon" class="h-6" />
+          <i class="pi pi-image mr-1 font-semibold text-primaryBlue"></i>
+
           Image
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
         </div>
@@ -88,13 +83,11 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('text')">
-          <!-- <i class="pi pi-pencil mr-1 text-primaryBlue"></i> -->
-          <img :src="textIcon" class="h-6" />
+          <i class="pi pi-pencil mr-1 text-primaryBlue"></i>
           Text
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
-          <!-- <i class="pi pi-clock  mr-1 text-primaryBlue"></i> -->
-          <img :src="timestampicon" class="h-6" />
+          <i class="pi pi-clock  mr-1 text-primaryBlue"></i>
           Timestamp
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showTimestamp }"></i>
         </div>
@@ -107,31 +100,27 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('checkbox')">
-          <!-- <i
+          <i
             class="pi pi-check-square mr-1 text-primaryBlue"
-          ></i> -->
-          <img :src="checkboxIcon" class="h-6" />
+          ></i>
           Checkbox
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('radio')">
-          <!-- <i
+          <i
             class="pi pi-circle mr-1 text-primaryBlue"
-          ></i> -->
-          <img :src="radioIcon" class="h-6" />
+          ></i>
           Radio
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('dropdown')">
-          <!-- <i
+          <i
             class="pi pi-caret-down  mr-1 text-primaryBlue"
-          ></i> -->
-          <img :src="dropdownIcon" class="h-6" />
+          ></i>
           Dropdown
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('signature')">
-          <!-- <i
+          <i
             class="pi pi-caret-down  mr-1 text-primaryBlue"
-          ></i> -->
-          <img :src="signatureIcon" class="h-6" />
+          ></i>
           Signature
         </div>
       </div>
@@ -141,15 +130,6 @@
 
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
-import FormFieldIcon from '../../../../assets/icons/template-editor/template-editor-form-field-icon.svg'
-import imageIcon from '../../../../assets/icons/template-editor/template-editor-image-icon.svg'
-import dropdownIcon from '../../../../assets/icons/template-editor/template-editor-dropdown-icon-2.svg'
-import timestampicon from '../../../../assets/icons/template-editor/template-editor-timestamp-icon-2.svg'
-import textIcon from '../../../../assets/icons/template-editor/template-editor-text-icon.svg'
-import signatureIcon from '../../../../assets/icons/template-editor/template-editor-signature-icon.svg'
-import checkboxIcon from '../../../../assets/icons/template-editor/template-editor-checkbox-icon.svg'
-import radioIcon from '../../../../assets/icons/template-editor/template-editor-radio-icon-2.svg'
-import dataFieldIcon from '../../../../assets/icons/template-editor/template-editor-data-fields-icon.svg'
 
 const showAddedFields = ref(true)
 const showFormFields = ref(false)

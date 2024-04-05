@@ -94,31 +94,22 @@
 
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
+import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import ImageOptions from './ImageOptions.vue'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
+
+const { timeFormats, dateFormats } = useTimestampFormats()
 
 const fieldName = ref(null)
 
 watch(templateEditorStore, () => {
   if (templateEditorStore.selectedAddedField)
     fieldName.value = templateEditorStore.selectedAddedField.name
-  // templateEditorStore.activeTemplateField = templateEditorStore.selectedAddedField.type
-  // templateEditorStore.selectedAddedField = {}
 })
 const selectedTimeFormat = ref()
-const timeFormats = ref([
-  { name: 'HH:MM:SS' },
-  { name: 'HH:SS' },
-  { name: 'MM:SS' },
-])
 const selectedDateFormat = ref()
-const dateFormats = ref([
-  { name: 'MM/DD/YYYY' },
-  { name: 'MM-DD-YYYY' },
-  { name: 'MM-DD-YY' },
-  { name: 'DD-MM-YY' },
-])
+
 const constant_text_value = ref(null)
 
 function saveField() {
@@ -141,5 +132,3 @@ function saveField() {
   templateEditorStore.showOptionsBar = false
 }
 </script>
-
-  <style lang="scss" scoped></style>
