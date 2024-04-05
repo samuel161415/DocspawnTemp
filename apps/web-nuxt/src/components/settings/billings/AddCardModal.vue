@@ -1,6 +1,6 @@
 <template>
     <!-- modal -->
-        <Dialog v-model:visible="visible" modal header="Add card " :style="{ width: '40rem' }">
+        <Dialog v-model:visible="visible" modal header="Add card " draggable="false" :style="{ width: '40rem' }">
             <div class="ml-5 mb-10">
 
                 <BillingsForm />
