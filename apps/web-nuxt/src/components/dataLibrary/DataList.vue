@@ -7,7 +7,8 @@
         v-model="selectedValue" 
         :options="NodeData" 
         placeholder="Select Template" 
-        class="md:w-[20rem] w-full" />
+        class="md:w-[20rem] w-full"
+        selectionMode="single" />
     </div>
     
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
@@ -128,7 +129,7 @@ import { ref } from 'vue';
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue';
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
 import formatDate from '~/utils';
-import { NodeData } from '~/services/sampleData';
+
 
 const typefilter = ref('');
 
@@ -189,7 +190,39 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
-})
+});
+
+const NodeData = [
+  {
+      key: 'Form to Doc',
+      label: 'Form to Doc',
+      data: 'Form to Doc',
+      icon: 'pi pi-fw pi-inbox',
+      selectable: false,
+      children: [
+          {
+              key: 'FORM',
+              label: 'FORM',
+              data: 'FORM',
+          },
+          {
+              key: 'APPLICATION FORM',
+              label: 'APPLICATION FORM',
+              data: 'APPLICATION FORM',
+          }
+      ]
+  },
+  {
+      key: 'Table to doc',
+      label: 'Table to doc',
+      data: 'Table to doc',
+      icon: 'pi pi-fw pi-calendar',
+      selectable: false,
+      children: [
+          { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },
+          { key: 'PDF FORM', label: 'PDF FORM',  data: 'PDF FORM' },
+         ]
+  },];
 
 const filters = ref(props.filters)
 
@@ -239,4 +272,5 @@ const clearFilter = () => {
   });
 
 };
+
 </script>
