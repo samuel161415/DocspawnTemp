@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full bg-stone-100 overflow-scroll">
+  <div class="h-full w-full bg-secondary overflow-scroll">
     <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
       <template #item="{ item, props }">
         <router-link

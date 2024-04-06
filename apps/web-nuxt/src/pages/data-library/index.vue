@@ -1,6 +1,6 @@
 <template>
   
-  <div class="h-full w-full bg-stone-100 overflow-scroll ">
+  <div class="h-full w-full bg-secondary overflow-scroll ">
  
       <div class="mx-4 mt-4 px-8 py-5  rounded-md bg-white ">
         <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
@@ -27,7 +27,8 @@
         </Breadcrumb>
   
         <div  class="flex flex-col justify-center text-center space-y-2 ">
-          <div class=" p-2 mt-5">
+          <div class="p-2 mt-5">
+
             <DataList  
                 :data="dataLibraryData"
                 :filters="filters"
