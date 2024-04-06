@@ -1,7 +1,7 @@
 <template>
     <div class="h-full w-full flex overflow-scroll">
        
-       <div class="mx-2 mt-4 px-8 py-5  rounded-md bg-white  w-full">
+       <div class=" mt-4 px-8 py-5  rounded-md bg-white  w-full">
            
             <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
                 <template #item="{ item, props }">
@@ -34,7 +34,7 @@
                 </div>
                 <hr class="text-surface-400 mt-5"/>
 
-                <div class="mt-8 flex justify-between">
+                <div class="mt-8 flex flex-col lg:flex-row justify-between">
                     <div class="">
                         <p class="font-semibold text-surface-700 text-base">Card Details</p>
                         <p class="text-surface-500 text-sm mt-2">Update your billing details and address</p>
@@ -44,7 +44,7 @@
                             label="Add another card"
                             icon="pi pi-plus"
                             severity="surface-100" 
-                            class="bg-surface-50 text-surface-600 text-sm mt-7 p-button-label font-thin"
+                            class="bg-surface-50 text-surface-600 text-sm mt-7 mb-5 p-button-label font-thin"
                             @click="visible = true" 
                             />
                           
@@ -55,8 +55,8 @@
 
                 <hr class="text-surface-100 mt-10"/>
 
-                <div class="mt-8 flex justify-between">
-                    <div class="space-y-2 ">
+                <div class="mt-8 flex flex-col md:flex-row  justify-between">
+                    <div class="space-y-2 mb-2">
                         <p class="font-semibold text-surface-700 text-base">Contact email</p>
                         <p class="text-surface-500 text-sm">Where should invoices be sent?</p>
                     </div>
