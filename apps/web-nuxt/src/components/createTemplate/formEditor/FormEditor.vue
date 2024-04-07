@@ -5,52 +5,58 @@
     <!-- <P class="font-semibold text-xl">Form Editor</P> -->
     <div class="flex flex-row font-semibold items-center">
       <div class="flex flex-col gap-2">
-        <label for="username">Form Title</label>
-        <InputText class="w-80" id="formTitle" v-model="formTitleValue" aria-describedby="FormTitle-help" />
+        <label for="username">Form Title *</label>
+        <InputText class="w-80" id="formTitle" v-model="formTitle" aria-describedby="FormTitle-help" />
       </div>
       <div class="ml-14 flex flex-col gap-2">
         <label for="username">Form Description</label>
-        <InputText class="w-96" id="formTitle" v-model="formTitleDescription" aria-describedby="FormTitle-help" />
+        <InputText class="w-96" id="formTitle" v-model="formDescription" aria-describedby="FormTitle-help" />
       </div>
     </div>
     <div class="grow"></div>
     <div class="flex flex-col items-center place-self-end">
-      <i class="pi pi-eye justify-self-center text-2xl custom-icon" @click="showPreview = true"></i>
+      <i v-tooltip.top="formTitle.trim().length === 0 ? {
+          value: 'Please fill in the Form title',
+          showDelay: 700,
+          hideDelay: 300,
+        } : null" class="pi pi-eye justify-self-center text-2xl custom-icon" :disabled="formTitle.trim().length === 0"
+        @click="handlePreview()"></i>
       <p class="text-justify text-lg">Mobile preview</p>
     </div>
   </div>
   <!-- <P class="ml-10 mb-6 mt-8 font-semibold text-lg">Form fields</P> -->
 
   <div class="box overflow-hidden p-5 table-container">
-    <DataTable striped-rows celll-edit-complete="onCellEditComplete" :reorderableColumns="true"
-      @columnReorder="onColReorder" show-gridlines @rowReorder="onRowReorder" v-model:editingRows="editingRows"
-      :value="products" editMode="row" dataKey="id" class="mx-3 px-6 mb-8" style="width: 100%"
-      @row-edit-init="onRowEditInit" @row-edit-cancel="onRowEditCancel" @row-edit-save="onRowEditSave" :pt="{
+    <DataTable striped-rows celll-edit-complete="onCellEditComplete" :reorderableColumns="false" show-gridlines
+      v-model:filters="filters" :global-filter-fields="['type', 'name', 'description']" @rowReorder="onRowReorder"
+      v-model:editingRows="editingRows" :value="formFields" editMode="row" dataKey="id" class="mx-3 px-6 mb-8"
+      style="width: 100%" @row-edit-init="onRowEditInit" @row-edit-cancel="onRowEditCancel"
+      @row-edit-save="onRowEditSave" :pt="{
           table: { style: 'min-width: 50rem' }
         }">
       <template #header>
         <div class="flex flex-row">
-          <p class="font-semibold text-lg">
+          <p class="font-semibold text-lg self-center">
             Form Fields
           </p>
           <div class="ms-auto">
-            <!-- <SearchField /> -->
+            <SearchField v-model:filters="filters" />
           </div>
         </div>
       </template>
-      <Column :body-style="{ margin: '0rem', padding: '0rem' }" rowReorder :reorderableColumn="false"
-        style="width: 3%" :pt="{
-          bodyCell: ({context}) => ({
+      <Column :body-style="{ margin: '0rem', padding: '0rem' }" rowReorder :reorderableColumn="false" style="width: 3%"
+        :pt="{
+          bodyCell: ({ context }) => ({
             // id: () => {console.log(context.id)},
             // class: { 'bg-black': isDraggedOver[data.id] },
           })
         }">
         <template #rowreordericon>
-          <i class="pi pi-align-justify cursor-move p-8" data-pc-section="rowreordericon"
-            @dragover="handleDragOver(id)" @drop="handleDragLeave(id)" @dragend="handleDragLeave(id)" @dragleave="handleDragLeave(id)"></i>
+          <i class="pi pi-align-justify cursor-move p-8" data-pc-section="rowreordericon" @dragover="handleDragOver(id)"
+            @drop="handleDragLeave(id)" @dragend="handleDragLeave(id)" @dragleave="handleDragLeave(id)"></i>
         </template>
       </Column>
-      <!-- :body-style="{ height: '5.5rem', } -->
+
       <Column field="name" header="Name" style="width: 10%" :headerStyle="{ height: '4.5rem' }">
         <template #editor="{ data, field }">
           <InputText v-model="data[field]" />
@@ -88,7 +94,7 @@
         </template>
       </Column>
 
-      <Column field="fieldFormat" header="Field Format" class="min-w-40" style="width: 7%">
+      <Column field="fieldFormat" header="Field Format" class="min-w-40 w-" style="width: 7%">
         <template #editor="{ data, field }">
 
           <Dropdown v-if="data.type === 'date' || data.type === 'time'" v-model="data[field]" class="max-w-48"
@@ -117,9 +123,9 @@
 
 
 
-      <Column field="id" rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center"
-        header="Edit" :pt="{
-          rowEditorInitButton: ({state}) => ({
+      <Column field="id" rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center" header="Edit"
+        :pt="{
+          rowEditorInitButton: ({ state }) => ({
             id: true
           })
         }">
@@ -128,42 +134,167 @@
         </template>
       </Column>
       <Column header="Delete" style="width: 4%;" bodyStyle="text-align:center" header-style="text-center">
-        <template #body>
-          <i class="pi pi-trash text-red-700 text-lg custom-icon" @click="handleDelete()"></i>
+        <template #body="{ data }">
+          <i class="pi pi-trash text-red-700 text-lg custom-icon" @click="handleDelete($event, data)"></i>
         </template>
       </Column>
 
 
 
       <Toast />
-      <ConfirmDialog></ConfirmDialog>
-      <Dialog v-model:visible="showPreview" modal header="Header" :style="{ width: '25rem' }">
+      <ConfirmDialog :draggable="false" :pt="{
+          root: { class: 'w-auto' },
+        }"></ConfirmDialog>
+
+
+      <Dialog v-model:visible="showPreview" modal header="Header" :draggable="false" :style="{ width: '25rem' }" :pt="{
+          header: {
+            class: ['flex items-center justify-between',
+              'shrink-0', 'p-6', 'pb-0', 'border-t-0', 'rounded-tl-lg', 'rounded-tr-lg', 'bg-surface-0 dark:bg-surface-800',
+              'text-surface-700 dark:text-surface-0/80']
+          }
+        }">
         <template #header>
-          <div class="inline-flex items-center justify-center gap-2">
-            <Avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-            <span class="font-bold whitespace-nowrap	">Amy Elsner</span>
+          <div></div>
+        </template>
+        <template #default>
+          <div class="flex flex-col gap-4">
+            <p class="place-self-center text-xl font-semibold">{{ formTitle }}</p>
+            <div class="w-80 place-self-center text-justify mb-4">
+              {{ formDescription }}
+            </div>
+
+            <div class="w-80 place-self-center flex flex-col gap-5">
+              <div v-for="(formField, index) in formFields" :key="formField.id">
+
+
+                <div v-if="formField.type === 'text'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                </div>
+
+                <div v-else-if="formField.type === 'multiline-text'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <Textarea :id="`${formField.name}-${index}`" v-model="multilineValue" rows="4" cols="30" />
+                </div>
+
+                <div v-else-if="formField.type === 'number'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputNumber incrementButtonClass="bg-none" v-model="numberValue"
+                    :input-id="`${formField.name}-${index}`" mode="decimal" showButtons />
+                </div>
+
+                <div v-else-if="formField.type === 'date'" class="flex flex-col gap-2">
+
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <Calendar v-model="dateValue" showIcon iconDisplay="input" :inputId="`${formField.name}-${index}`" />
+                </div>
+
+                <div v-else-if="formField.type === 'time'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <Calendar :id="`${formField.name}-${index}`" timeOnly hourFormat="12" showIcon iconDisplay="input"
+                    icon="pi pi-clock" />
+                </div>
+
+                <div v-else-if="formField.type === 'email'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                </div>
+
+                <div v-else-if="formField.type === 'image'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <FileUpload mode="basic" name="demo[]" accept="image/*" @upload="onUpload"
+                    :id="`${formField.name}-${index}`" />
+                </div>
+
+
+                <div v-else-if="formField.type === 'list'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                </div>
+
+                <div v-else-if="formField.type === 'checkbox'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                </div>
+
+                <div v-else-if="formField.type === 'signature'" class="flex flex-col gap-2">
+                  <label :for="`${formField.name}-${index}`">
+                    <div class="flex flex-row gap-2">
+                      <div>{{ formField.name }}</div>
+                      <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    </div>
+                  </label>
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                </div>
+
+
+              </div>
+            </div>
+
           </div>
         </template>
-        <p class="m-0">
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna
-          aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat.
-          Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur
-          sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </p>
         <template #footer>
-          <Button label="Ok" icon="pi pi-check" @click="showPreview = false" autofocus />
+          <div class="w-full flex justify-center mt-5"><Button label="Close Preview" @click="showPreview = false"
+              autofocus /></div>
         </template>
       </Dialog>
+      <Dialog :draggable="false" v-model:visible="showFormTitleDialog" modal :style="{ width: '25rem' }">
+        <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-red-500 mr-4"></i>Please fill in a Form title</span>
+      </Dialog>
     </DataTable>
-    
+
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { FilterMatchMode } from 'primevue/api'
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import { FormFieldsData } from "../../../services/sampleData";
@@ -172,10 +303,11 @@ import SearchField from "../../shared/searchField.vue";
 const confirm = useConfirm();
 const toast = useToast();
 const showPreview = ref(false);
-const products = ref();
+const formFields = ref();
 const editingRows = ref([]);
 const currentRow = ref(null);
 const isDraggedOver = ref({});
+const showFormTitleDialog = ref(false)
 const id_for_row = ref(0);
 const requiredOptions = ref([
     { label: 'Yes', value: true },
@@ -183,8 +315,12 @@ const requiredOptions = ref([
 ]);
 
 
-const formTitleValue = ref('');
-const formTitleDescription = ref('');
+const formTitle = ref('');
+const formDescription = ref('');
+
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+},)
 
 const dateFormats = ref([
     { label: 'MM/DD/YY', value: 'MM/DD/YY' },
@@ -213,19 +349,39 @@ const fieldTypes = [
 ];
 
 
-const handleDelete = () => {
+const onUpload = () => {
+    toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
+};
+
+
+
+const handlePreview = () => {
+  if (formTitle.value.trim().length > 0 ) {
+    showPreview.value = true;
+  } else {
+    showFormTitleDialog.value = true;
+  }
+}
+
+
+const handleDelete = (event, data) => {
     confirm.require({
-        message: 'Do you want to delete this record?',
+        message: `Do you want to delete the form field "${data.name}"?`,
         header: 'Delete Confirmation',
-        rejectClass: 'p-button-text p-button-text',
-        acceptClass: 'p-button-danger p-button-text',
+        acceptLabel: 'Delete',
+        rejectLabel: 'Cancel',
+        icon: 'pi pi-exclamation-triangle text-red-500 w-8',
+        rejectClass: 'p-button-text p-button-danger text-slate-400 bg-slate-400 hover:bg-slate-400',
+        acceptClass: 'p-button-danger p-button-text bg-red-500 hover:bg-red-500',
         accept: () => {
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 });
+          formFields.value = formFields.value.filter(item => item.id !== data.id);
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: `Form field "${data.name}" deleted`, life: 3000 });
         },
         reject: () => {
             toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
         }
     });
+    
 };
 
 
@@ -251,17 +407,16 @@ const handleDragLeave = (id) => {
 }
 
 onMounted(() => {
-    // ProductService.getProductsMini().then((data) => (products.value = data));
-  products.value = FormFieldsData;
-  for (let i = 0; i < products.value.length; i++) {
+    // formFieldservice.getformFieldsMini().then((data) => (formFields.value = data));
+  formFields.value = FormFieldsData;
+  for (let i = 0; i < formFields.value.length; i++) {
   isDraggedOver[i] = false
-  console.log(isDraggedOver)
 }
 });
 
 const onRowEditSave = (event) => {
     let { newData, index } = event;
-    products.value[index] = newData;
+    formFields.value[index] = newData;
     currentRow.value = null;
 };
 
@@ -279,30 +434,16 @@ const onRowEditInit = (event) => {
   }
 }
 
-const onColReorder = () => {
-  toast.add({severity: 'success', summary: 'Column Reordered', life: 3000});
-};
-
 const onRowReorder = (event) => {
-    products.value = event.value;
+    formFields.value = event.value;
     toast.add({severity:'success', summary: 'Rows Reordered', life: 3000});
 };
 
 
-const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
-}
-
-
-
-
-
-// Track the currently edited row
- // Store the index of the currently edited row as a reactive ref
-
-
 
 </script>
+
+
 
 <style lang="scss" scoped>
 .custom-icon {
