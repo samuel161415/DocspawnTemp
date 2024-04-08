@@ -63,7 +63,6 @@ const items = ref([
 
 // set selected language
 const setLanguage = (language) => {
-  console.log(language);
   selectedLanguage.value = language.toLowerCase();
 };
 
