@@ -152,7 +152,7 @@
           }
         }">
         <template #header>
-          <div class="flex flex-row gap-3 w-full">
+          <div :class="`${mobile ? '' : 'pl-16'}`" class="flex flex-row gap-3 w-full">
             <div class="flex flex-col">
               <i class="pi pi-mobile"></i>
               <RadioButton class="pl-0.5" v-model="mobile" inputId="mobile1" name="pizza" :value="true" />
@@ -161,9 +161,10 @@
               <i class="pi pi-desktop"></i>
               <RadioButton class="pl-0.5" v-model="mobile" inputId="desktop1" name="pizza" :value="false" />
             </div>
-            <!-- <div class="mx-auto place-self-center">
-              Docspawn
-            </div> -->
+            <div class="mx-auto place-self-center flex flex-row">
+              <img  src="../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
+              <img v-if="!isCollapsed" src="../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
+            </div>
           </div>
         </template>
         <template #default>
