@@ -1570,7 +1570,7 @@ export const FormFieldsData  = [
         id: '3',
         name: 'Phone Number',
         type: 'number', 
-        mandatory: true,
+        mandatory: false,
         description: 'This is where you put your phone number',
         fieldFormat: ''
     },

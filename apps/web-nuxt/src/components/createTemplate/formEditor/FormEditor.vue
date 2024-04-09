@@ -5,7 +5,7 @@
     <!-- <P class="font-semibold text-xl">Form Editor</P> -->
     <div class="flex flex-row font-semibold items-center">
       <div class="flex flex-col gap-2">
-        <label for="username">Form Title *</label>
+        <label for="username">Form Title <span class="text-red-500">*</span></label>
         <InputText class="w-80" id="formTitle" v-model="formTitle" aria-describedby="FormTitle-help" />
       </div>
       <div class="ml-14 flex flex-col gap-2">
@@ -15,13 +15,9 @@
     </div>
     <div class="grow"></div>
     <div class="flex flex-col items-center place-self-end">
-      <i v-tooltip.top="formTitle.trim().length === 0 ? {
-          value: 'Please fill in the Form title',
-          showDelay: 700,
-          hideDelay: 300,
-        } : null" class="pi pi-eye justify-self-center text-2xl custom-icon" :disabled="formTitle.trim().length === 0"
+      <i class="pi pi-eye justify-self-center text-2xl custom-icon" :disabled="formTitle.trim().length === 0"
         @click="handlePreview()"></i>
-      <p class="text-justify text-lg">Mobile preview</p>
+      <p class="text-justify text-lg">See preview</p>
     </div>
   </div>
   <!-- <P class="ml-10 mb-6 mt-8 font-semibold text-lg">Form fields</P> -->
@@ -147,24 +143,38 @@
         }"></ConfirmDialog>
 
 
-      <Dialog v-model:visible="showPreview" modal header="Header" :draggable="false" :style="{ width: '25rem' }" :pt="{
+      <Dialog v-model:visible="showPreview" modal :draggable="false"
+        :style="mobile ? { width: '25rem' } : { width: '100rem' }" :pt="{
           header: {
             class: ['flex items-center justify-between',
-              'shrink-0', 'p-6', 'pb-0', 'border-t-0', 'rounded-tl-lg', 'rounded-tr-lg', 'bg-surface-0 dark:bg-surface-800',
+              'shrink-0', 'p-6', `pb-${mobile ? '0' : ''}`, 'border-t-0', 'rounded-tl-lg', 'rounded-tr-lg', 'bg-surface-0 dark:bg-surface-800',
               'text-surface-700 dark:text-surface-0/80']
           }
         }">
         <template #header>
-          <div></div>
+          <div class="flex flex-row gap-3 w-full">
+            <div class="flex flex-col">
+              <i class="pi pi-mobile"></i>
+              <RadioButton class="pl-0.5" v-model="mobile" inputId="mobile1" name="pizza" :value="true" />
+            </div>
+            <div class="flex flex-col">
+              <i class="pi pi-desktop"></i>
+              <RadioButton class="pl-0.5" v-model="mobile" inputId="desktop1" name="pizza" :value="false" />
+            </div>
+            <!-- <div class="mx-auto place-self-center">
+              Docspawn
+            </div> -->
+          </div>
         </template>
         <template #default>
-          <div class="flex flex-col gap-4">
-            <p class="place-self-center text-xl font-semibold">{{ formTitle }}</p>
+          <div :class="`flex flex-col gap-4 ${mobile ? '' : 'pl-16'}`">
+            <p :class="` place-self-${mobile ? 'center' : 'start'} text-xl font-semibold form-title-preview`">{{
+          formTitle }}</p>
             <div class="w-80 place-self-center text-justify mb-4">
               {{ formDescription }}
             </div>
 
-            <div class="w-80 place-self-center flex flex-col gap-5">
+            <div :class="`${mobile ? 'w-80' : 'w-full pr-96'} place-self-start flex flex-col gap-5`">
               <div v-for="(formField, index) in formFields" :key="formField.id">
 
 
@@ -175,7 +185,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                  <InputText
+                    :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                    v-model="formField.state" :id="`${formField.name}-${index}`" />
+                  <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
+                    Field is required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'multiline-text'" class="flex flex-col gap-2">
@@ -185,7 +199,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <Textarea :id="`${formField.name}-${index}`" v-model="multilineValue" rows="4" cols="30" />
+                  <Textarea
+                    :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                    :id="`${formField.name}-${index}`" v-model="formField.state" rows="4" cols="30" />
+                  <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
+                    Field is required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'number'" class="flex flex-col gap-2">
@@ -195,8 +213,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputNumber incrementButtonClass="bg-none" v-model="numberValue"
+                  <!-- :class="`${formField.mandatory && formField.state === 0 ? 'border-red-700' : ''}`" -->
+                  <InputNumber incrementButtonClass="bg-none" v-model="formField.state"
                     :input-id="`${formField.name}-${index}`" mode="decimal" showButtons />
+                  <small v-if="formField.mandatory && formField.state === 0" class="text-red-600">This Field is
+                    required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'date'" class="flex flex-col gap-2">
@@ -207,7 +228,8 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <Calendar v-model="dateValue" showIcon iconDisplay="input" :inputId="`${formField.name}-${index}`" />
+                  <Calendar v-model="formField.state" showIcon iconDisplay="input"
+                    :inputId="`${formField.name}-${index}`" />
                 </div>
 
                 <div v-else-if="formField.type === 'time'" class="flex flex-col gap-2">
@@ -218,7 +240,7 @@
                     </div>
                   </label>
                   <Calendar :id="`${formField.name}-${index}`" timeOnly hourFormat="12" showIcon iconDisplay="input"
-                    icon="pi pi-clock" />
+                    v-model="formField.state" icon="pi pi-clock" />
                 </div>
 
                 <div v-else-if="formField.type === 'email'" class="flex flex-col gap-2">
@@ -228,7 +250,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                  <InputText
+                    :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                    v-model="formField.state" :id="`${formField.name}-${index}`" class="border-red-500" />
+                  <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
+                    Field is required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'image'" class="flex flex-col gap-2">
@@ -239,7 +265,7 @@
                     </div>
                   </label>
                   <FileUpload mode="basic" name="demo[]" accept="image/*" @upload="onUpload"
-                    :id="`${formField.name}-${index}`" />
+                    :id="`${formField.name}-${index}`" v-model="formField.state" />
                 </div>
 
 
@@ -250,7 +276,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                  <InputText
+                    :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                    :id="`${formField.name}-${index}`" class="border-red-500" v-model="formField.state" />
+                  <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
+                    Field is required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'checkbox'" class="flex flex-col gap-2">
@@ -260,7 +290,11 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                  <InputText
+                    :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                    :id="`${formField.name}-${index}`" class="border-red-500" v-model="formField.state" />
+                  <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
+                    Field is required</small>
                 </div>
 
                 <div v-else-if="formField.type === 'signature'" class="flex flex-col gap-2">
@@ -270,7 +304,7 @@
                       <div v-if="formField.mandatory" class="text-red-500">*</div>
                     </div>
                   </label>
-                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" :pt="{}" />
+                  <InputText :id="`${formField.name}-${index}`" class="border-red-500" v-model="formField.state" />
                 </div>
 
 
@@ -280,39 +314,47 @@
           </div>
         </template>
         <template #footer>
-          <div class="w-full flex justify-center mt-5"><Button label="Close Preview" @click="showPreview = false"
-              autofocus /></div>
+          <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`"><Button label="Save"
+              @click="" autofocus /></div>
         </template>
       </Dialog>
-      <Dialog :draggable="false" v-model:visible="showFormTitleDialog" modal :style="{ width: '25rem' }">
-        <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-red-500 mr-4"></i>Please fill in a Form title</span>
-      </Dialog>
+      <!-- <MobilePreviewDialog :showPreview="showPreview" :formFields="formFields" :formTitle="formTitle" :formDescription="formDescription"/> -->
+      
+      <!-- <Dialog :draggable="false" v-model:visible="showFormTitleDialog" modal :style="{ width: '25rem' }">
+        <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-red-500 mr-4"></i>Please
+          fill in a
+          Form title</span>
+      </Dialog> -->
     </DataTable>
+    <div class="w-full flex justify-center mt-5"><Button label="Save & Continue" @click="" autofocus /></div>
 
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { FilterMatchMode } from 'primevue/api'
+import { FilterMatchMode } from 'primevue/api';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
+import MobilePreviewDialog from "./MobilePreviewDialog.vue";
 import { FormFieldsData } from "../../../services/sampleData";
 import SearchField from "../../shared/searchField.vue";
 
 const confirm = useConfirm();
+const mobile = ref(true);
 const toast = useToast();
 const showPreview = ref(false);
 const formFields = ref();
 const editingRows = ref([]);
 const currentRow = ref(null);
 const isDraggedOver = ref({});
-const showFormTitleDialog = ref(false)
+// const showFormTitleDialog = ref(false)
 const id_for_row = ref(0);
 const requiredOptions = ref([
     { label: 'Yes', value: true },
     { label: 'No', value: false },
 ]);
+
 
 
 const formTitle = ref('');
@@ -356,11 +398,11 @@ const onUpload = () => {
 
 
 const handlePreview = () => {
-  if (formTitle.value.trim().length > 0 ) {
+  // if (formTitle.value.trim().length > 0 ) {
     showPreview.value = true;
-  } else {
-    showFormTitleDialog.value = true;
-  }
+  // } else {
+  //   showFormTitleDialog.value = true;
+  // }
 }
 
 
@@ -410,8 +452,32 @@ onMounted(() => {
     // formFieldservice.getformFieldsMini().then((data) => (formFields.value = data));
   formFields.value = FormFieldsData;
   for (let i = 0; i < formFields.value.length; i++) {
-  isDraggedOver[i] = false
-}
+    isDraggedOver.value[i] = false
+  }
+
+  formFields.value.forEach(field => {
+    if (field.type === 'text') {
+     field.state = ref('')
+    } else if (field.type === 'multiline-text') {
+      field.state = ref('');
+    } else if (field.type === 'number') {
+      field.state = ref(0);
+    } else if (field.type === 'date') {
+      field.state = ref(new Date());
+    } else if (field.type === 'time') {
+      field.state = ref(new Date());
+    } else if (field.type === 'email') {
+      field.state = ref('');
+    } else if (field.type === 'image') {
+      field.state = ref('');
+    } else if (field.type === 'list') {
+      field.state = ref('');
+    } else if (field.type === 'checkbox') {
+      field.state = ref('');
+    } else if (field.type === 'signature') {
+      field.state = ref('');
+    }
+  });
 });
 
 const onRowEditSave = (event) => {
@@ -450,6 +516,10 @@ const onRowReorder = (event) => {
   /* Add your custom styles here */
   cursor: pointer;
   /* Change cursor to pointer to indicate clickable */
+}
+
+.form-title-preview {
+  position: sticky;
 }
 
 .dragged-over {
