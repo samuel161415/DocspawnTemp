@@ -1,11 +1,11 @@
 <template>
-    <div class=" bg-white mb-0 border-l border-r border-surface-100">
-        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 py-5 no-scrollbar">
+    <div class=" bg-white mb-0 border-l border-r border-surface-200">
+        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-60 py-5 no-scrollbar">
             <ul class=" mb-14">   
                 <li 
                     v-for="items in settingItems" :key="items.title" 
                     class="cursor-pointer flex flex-col mt-2  w-full mr-4 ">
-                    <div :key="items.title" class="flex px-2 py-3  ml-1 hover:bg-surface-100 "
+                    <div :key="items.title" class="flex px-1 py-3  ml-1 hover:bg-surface-100 "
                         :class="{ 'bg-primaryBlue': baseRoute === items.route }" 
                         @click="navigate('settings' + items.route)">
 
