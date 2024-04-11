@@ -299,6 +299,7 @@ export const NodeData = [
       label: 'Form to Doc',
       data: 'Form to Doc',
       icon: 'pi pi-fw pi-inbox',
+      selectable: false,
       children: [
           {
               key: 'FORM',
@@ -317,6 +318,7 @@ export const NodeData = [
       label: 'Table to doc',
       data: 'Table to doc',
       icon: 'pi pi-fw pi-calendar',
+      selectable: false,
       children: [
           { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },
           { key: 'PDF FORM', label: 'PDF FORM',  data: 'PDF FORM' },

@@ -3,7 +3,12 @@
 
     <div class="flex flex-col  gap-2 left-0 md:mb-14">
       <p class="text-surface-600 text-left text-lg mb-2">Select a template to display data.</p>
-      <TreeSelect v-model="selectedValue" :options="NodeData" placeholder="Select Template" class="md:w-[20rem] w-full" />
+      <TreeSelect 
+        v-model="selectedValue" 
+        :options="NodeData" 
+        placeholder="Select Template" 
+        class="md:w-[20rem] w-full"
+        selectionMode="single" />
     </div>
     
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
@@ -124,7 +129,25 @@ import { ref } from 'vue';
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue';
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
 import formatDate from '~/utils';
-import { NodeData } from '~/services/sampleData';
+
+
+const typefilter = ref('');
+
+const dataTableRef = ref()
+
+const currentImage = ref(null);
+
+const dialogVisible = ref(false);
+
+const selectedRowData = ref(null);
+
+const emit = defineEmits();
+
+const selectedValue = ref()
+
+const templatefiltered = ref([])
+
+const filteredData = ref(templatefiltered)
 
 const props = defineProps({
   data: {
@@ -167,9 +190,41 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
-})
+});
 
-const emit = defineEmits();
+const NodeData = [
+  {
+      key: 'Form to Doc',
+      label: 'Form to Doc',
+      data: 'Form to Doc',
+      icon: 'pi pi-fw pi-inbox',
+      selectable: false,
+      children: [
+          {
+              key: 'FORM',
+              label: 'FORM',
+              data: 'FORM',
+          },
+          {
+              key: 'APPLICATION FORM',
+              label: 'APPLICATION FORM',
+              data: 'APPLICATION FORM',
+          }
+      ]
+  },
+  {
+      key: 'Table to doc',
+      label: 'Table to doc',
+      data: 'Table to doc',
+      icon: 'pi pi-fw pi-calendar',
+      selectable: false,
+      children: [
+          { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },
+          { key: 'PDF FORM', label: 'PDF FORM',  data: 'PDF FORM' },
+         ]
+  },];
+
+const filters = ref(props.filters)
 
 const selectedColumns = ref(props.columns);
 
@@ -177,38 +232,14 @@ const onToggle = (val) => {
   selectedColumns.value = props.columns.filter((col) => val.includes(col));
 };
 
-const filters = ref(props.filters)
-
-const selectedValue = ref()
-
-const templatefiltered = ref([])
-
 watch(selectedValue, (selectedValue) => {
 
-
   templatefiltered.value = props.data.filter(item => {
-    const type = item.type;
     const templateName = item.templateName;
-
-    return selectedValue[type] || selectedValue[templateName];
+    return selectedValue[templateName];
   });
 
 });
-
-
-const filteredData = ref(templatefiltered)
-
-
-
-const typefilter = ref('');
-
-const dataTableRef = ref()
-
-const currentImage = ref(null);
-
-const dialogVisible = ref(false);
-
-const selectedRowData = ref(null);
 
 const toggleDialog = (data, img) => {
 
@@ -236,10 +267,10 @@ function exportCSVHandler() {
 }
 
 const clearFilter = () => {
-
   Object.keys(filters.value).forEach((key) => {
     filters.value[key] = '';
   });
 
 };
+
 </script>

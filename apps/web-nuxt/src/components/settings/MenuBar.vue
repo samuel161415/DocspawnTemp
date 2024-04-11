@@ -5,7 +5,7 @@
                 <li 
                     v-for="items in settingItems" :key="items.title" 
                     class="cursor-pointer flex flex-col mt-2  w-full mr-4 ">
-                    <div :key="items.title" class="flex px-2 py-3  ml-1 hover:bg-surface-100 "
+                    <div :key="items.title" class="flex px-1 py-3  ml-1 hover:bg-surface-100 "
                         :class="{ 'bg-primaryBlue': baseRoute === items.route }" 
                         @click="navigate('settings' + items.route)">
 
