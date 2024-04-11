@@ -167,6 +167,22 @@ export const useSettingItems = () => {
         isHovered: false,
         subitems:[]
       },
+      {
+        title:"Meta Admin",
+        icon:"",
+        route:'/meta_admin',
+        isHovered:false,
+        subitems:[
+          {
+            title: "Microservice",
+            icon: "pi pi-compass",
+            route: "/meta_admin",
+            isHovered: false,
+            componentId: "micro-services",
+            nestedMenuVisible: false,
+          },
+        ]
+      }
      
     ]);
   

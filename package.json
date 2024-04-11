@@ -26,6 +26,7 @@
     "turbo": "latest"
   },
   "dependencies": {
-    "@fortawesome/vue-fontawesome": "^3.0.6"
+    "@fortawesome/vue-fontawesome": "^3.0.6",
+    "prismjs": "^1.29.0"
   }
 }
