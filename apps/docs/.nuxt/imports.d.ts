@@ -27,6 +27,7 @@ export { useDocSearch } from '../../../node_modules/.pnpm/@nuxt-themes+docus@1.1
 export { useDocus } from '../../../node_modules/.pnpm/@nuxt-themes+docus@1.15.0_nuxt@3.9.2_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/docus/composables/useDocus';
 export { useMenu } from '../../../node_modules/.pnpm/@nuxt-themes+docus@1.15.0_nuxt@3.9.2_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/docus/composables/useMenu';
 export { useScrollspy } from '../../../node_modules/.pnpm/@nuxt-themes+docus@1.15.0_nuxt@3.9.2_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/docus/composables/useScrollspy';
+export { __getComponentMeta, useComponentMeta } from '../../../node_modules/.pnpm/nuxt-component-meta@0.6.3_rollup@3.29.4/node_modules/nuxt-component-meta/dist/runtime/composables/useComponentMeta';
 export { useColorMode } from '../../../node_modules/.pnpm/@nuxtjs+color-mode@3.3.2_rollup@3.29.4/node_modules/@nuxtjs/color-mode/dist/runtime/composables';
 export { queryContent } from '../../../node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/dist/runtime/legacy/composables/query';
 export { useContentHelpers } from '../../../node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/dist/runtime/composables/helpers';
@@ -38,5 +39,4 @@ export { fetchContentNavigation } from '../../../node_modules/.pnpm/@nuxt+conten
 export { useContentState, useContent } from '../../../node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/dist/runtime/composables/content';
 export { flatUnwrap as unwrapSlot } from '../../../node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/dist/runtime/utils/node';
 export { parseMarkdown } from '../../../node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/dist/runtime/parser';
-export { useNuxtDevTools } from '../../../node_modules/.pnpm/@nuxt+devtools@1.0.8_nuxt@3.9.2_rollup@3.29.4_vite@5.0.11/node_modules/@nuxt/devtools/dist/runtime/use-nuxt-devtools';
 export { definePageMeta } from '../../../node_modules/.pnpm/nuxt@3.9.2_@types+node@20.11.4_eslint@8.56.0_rollup@3.29.4_typescript@5.3.3_vite@5.0.11/node_modules/nuxt/dist/pages/runtime/composables';

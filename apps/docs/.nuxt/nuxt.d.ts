@@ -20,6 +20,7 @@
 /// <reference types="vite/client" />
 /// <reference path="pinceau" />
 /// <reference path="pinceau/runtime" />
+/// <reference path="component-meta.d.ts" />
 /// <reference path="types/content.d.ts" />
 /// <reference types="vue-router" />
 /// <reference path="types/middleware.d.ts" />

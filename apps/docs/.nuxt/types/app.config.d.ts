@@ -8,7 +8,7 @@ import cfg3 from "/Users/new/Desktop/TecTeccompany/DocSpawnRecent/DocSpawn/node_
 
 declare const inlineConfig = {
   "nuxt": {
-    "buildId": "dev"
+    "buildId": "b3646f4c-b37e-4e59-bcb5-7f44aea698f7"
   }
 }
 type ResolvedAppConfig = Defu<typeof inlineConfig, [typeof cfg0, typeof cfg1, typeof cfg2, typeof cfg3]>

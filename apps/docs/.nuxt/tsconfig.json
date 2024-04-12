@@ -65,14 +65,20 @@
       "#color-mode-options": [
         "./color-mode-options.mjs"
       ],
+      "#nuxt-component-meta": [
+        "./component-meta.mjs"
+      ],
+      "#nuxt-component-meta/types": [
+        "./component-meta.d.ts"
+      ],
       "#mdc-configs": [
-        "./mdc-configs"
+        "./mdc-configs.mjs"
       ],
       "#mdc-highlighter": [
-        "./mdc-highlighter"
+        "./mdc-highlighter.mjs"
       ],
       "#mdc-imports": [
-        "./mdc-imports"
+        "./mdc-imports.mjs"
       ],
       "#vue-router": [
         "./vue-router-stub"
@@ -116,6 +122,7 @@
     "../../../node_modules/.pnpm/@nuxtjs+color-mode@3.3.2_rollup@3.29.4/node_modules/@nuxtjs/color-mode/runtime",
     "../../../../../../../runtime",
     "../../../node_modules/.pnpm/@nuxt-themes+tokens@1.9.1_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/tokens/runtime",
+    "../../../node_modules/.pnpm/nuxt-component-meta@0.6.3_rollup@3.29.4/node_modules/nuxt-component-meta/runtime",
     "../../../node_modules/.pnpm/@nuxthq+studio@1.0.11_rollup@3.29.4/node_modules/@nuxthq/studio/runtime",
     "../../../node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/runtime",
     "../../../node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/runtime",
@@ -136,6 +143,7 @@
     "../../../node_modules/.pnpm/@nuxtjs+color-mode@3.3.2_rollup@3.29.4/node_modules/@nuxtjs/color-mode/runtime/server",
     "../../../../../../../runtime/server",
     "../../../node_modules/.pnpm/@nuxt-themes+tokens@1.9.1_postcss@8.4.33_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt-themes/tokens/runtime/server",
+    "../../../node_modules/.pnpm/nuxt-component-meta@0.6.3_rollup@3.29.4/node_modules/nuxt-component-meta/runtime/server",
     "../../../node_modules/.pnpm/@nuxthq+studio@1.0.11_rollup@3.29.4/node_modules/@nuxthq/studio/runtime/server",
     "../../../node_modules/.pnpm/@nuxtjs+mdc@0.5.0_rollup@3.29.4/node_modules/@nuxtjs/mdc/runtime/server",
     "../../../node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/runtime/server",
