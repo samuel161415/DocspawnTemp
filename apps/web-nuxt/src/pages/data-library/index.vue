@@ -12,7 +12,7 @@
               custom
             >
               <a :href="href" v-bind="props.action" @click="navigate">
-                <font-awesome-icon :icon="[item.icon]" />
+                <font-awesome-icon :icon="item.icon" />
                 <span
                   class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
                 >{{ item.label }}</span>
