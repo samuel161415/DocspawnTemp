@@ -12,7 +12,7 @@
               custom
             >
               <a :href="href" v-bind="props.action" @click="navigate">
-                <span class="text-color" :class="[item.icon]" />
+                <font-awesome-icon :icon="[item.icon]" />
                 <span
                   class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
                 >{{ item.label }}</span>
@@ -52,7 +52,7 @@ import { dataLibraryData }  from '../../services/sampleData'
 import DataList from '~/components/dataLibrary/DataList.vue';
 
 const home = ref({
-  icon: 'pi pi-home',
+  icon: 'fa-duotone fa-house',
   route: '/',
 })
 
