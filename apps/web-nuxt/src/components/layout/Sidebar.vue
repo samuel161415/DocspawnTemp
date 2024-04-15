@@ -1,6 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div class="z-40  bg-white mb-0 h-full  overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
+  <div class="z-40  bg-white mb-0 h-full border-r border-surface-100 overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div class="z-50 fixed mt-12" :class="{ 'w-20': isCollapsed, 'xs:w-44 sm:w-48 md:w-56 lg:w-60 sm:ml-6 md:ml-2 ': !isCollapsed }">
 
@@ -16,7 +16,7 @@
 
     </div>
 
-    <div class="flex flex-col justify-between overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
+    <div class="flex flex-col justify-between  overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
       :class="{ 'w-18 justify-center ': isCollapsed, 'w-64': !isCollapsed, 'py-5': true }">
 
       <ul class="mt-0">
