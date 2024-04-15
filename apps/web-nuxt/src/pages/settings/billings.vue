@@ -63,12 +63,12 @@
                     <div class="flex flex-col">
                         <div class="flex text-sm">
                             <RadioButton v-model="checked"  :value="checked" />
-                            <p class="text-base text-surface-700 font-medium">Send to the existing email</p>
+                            <p class="text-sm ml-1 text-surface-700 font-medium">Send to the existing email</p>
                         </div>
                         <p class="text-xs font-extralight ml-7">mayaahmed@ofspace.com</p>
                         <div class="flex text-sm mt-5">
                             <RadioButton v-model="checked" disabled :value="checked" />
-                            <p class="text-base text-surface-700 font-medium">Add another email address</p>
+                            <p class="text-sm text-surface-700 font-medium">Add another email address</p>
                         </div>
                     </div>
                 </div>
@@ -109,4 +109,6 @@ const checked = ref(true);
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap')
+
 </style>
