@@ -12,9 +12,9 @@
             </div>
            
             <div class="text-lg text-surface-500" id="checkbox-formats">
-                <P>
+                <p>
                     Checkbox Formats
-                </P>
+                </p>
                 <CheckboxFormats />
             </div>
         </div>
