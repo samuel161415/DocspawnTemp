@@ -2,7 +2,7 @@
   <div class="box overflow-hidden z-1 p-5 table-container">
     <DataTableHeader :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
     
-    <div class="mt-10">
+    <div class="">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"

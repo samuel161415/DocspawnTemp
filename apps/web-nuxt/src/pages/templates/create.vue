@@ -1,28 +1,6 @@
 <template>
   <div class="h-full w-full overflow-scroll bg-secondary">
-    <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-      <template #item="{ item, props }">
-        <router-link
-          v-if="item.route"
-          v-slot="{ href, navigate }"
-          :to="item.route"
-          custom
-        >
-          <a :href="href" v-bind="props.action" @click="navigate">
-            <span :class="[item.icon, 'text-color']" />
-            <span
-              class="text-primary-500 dark:text-primary-400 font-semibold"
-              >{{ item.label }}</span
-            >
-          </a>
-        </router-link>
-        <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-          <span class="text-surface-700 dark:text-surface-0/80">{{
-            item.label
-          }}</span>
-        </a>
-      </template>
-    </Breadcrumb>
+    <BreadcrumbComponent :home="home" :items="items" />
     <div class="py-5 px-8 flex flex-col gap-2">
       <h1 class="text-3xl font-bold">Generate PDF Documents in minutes</h1>
       <div
@@ -82,11 +60,11 @@ import GeneralInfo from "../../components/createTemplate/GeneralInfo.vue";
 import DeliveryOptions from "~/components/createTemplate/DeliveryOptions.vue";
 import FormEditor from "~/components/createTemplate/FormEditor.vue";
 import TemplateEditor from "~/components/createTemplate/TemplateEditor.vue";
+import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
+import { home } from '~/composables/useBreadcrumb.js'
+
 const active = ref(0);
-const home = ref({
-  icon: "pi pi-home",
-  route: "/",
-});
+
 const items = ref([
   { label: "Templates", route: "/templates" },
   { label: "Create New Template", route: "/templates/create" },

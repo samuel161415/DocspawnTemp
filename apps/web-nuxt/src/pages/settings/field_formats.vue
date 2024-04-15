@@ -1,31 +1,8 @@
 <template>
     <div class="h-full w-full overflow-scroll">
            
-        <div class="mx-2  px-8 py-5  rounded-md bg-white  w-full">
-            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-                <template #item="{ item, props }">
-                    <router-link
-                    v-if="item.route"
-                    v-slot="{ href, navigate }"
-                    :to="item.route"
-                    custom
-                    >
-                    <a :href="href" v-bind="props.action" @click="navigate">
-                        <span class="text-color" :class="[item.icon]" />
-                        
-                        <span
-                        class="text-lg text-primary-500 dark:text-primary-400 font-normal"
-                        >{{ item.label }}</span>
-                    </a>
-                    </router-link>
-                    <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-                    <span class="text-surface-700 dark:text-surface-0/80">{{
-                        item.label
-                    }}</span>
-                    </a>
-                </template>
-            </Breadcrumb>
-
+        <div class="px-8 py-5 rounded-r-md bg-white h-full w-full">
+            <BreadcrumbComponent :home="home" :items="items" />
 
             <div class="text-lg text-surface-500 " id="date-formats">
                 <p>
@@ -49,12 +26,10 @@
   import { useRouter } from "vue-router";
   import DateFormats from "~/components/settings/fieldFormats/DateFormats.vue";
   import CheckboxFormats from "~/components/settings/fieldFormats/CheckboxFormats.vue";
+  import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
+  import { home } from '~/composables/useBreadcrumb.js'
 
   const router = useRouter();
-  const home = ref({
-    icon: "pi pi-home",
-    route: "/",
-  });
   
   const items = ref([{ label: "Settings", route: "/settings" }, {label: "Formatting options", route: "/settings/field-formats"}]);
   </script>

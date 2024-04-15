@@ -1,6 +1,6 @@
 <template>
-    <div class=" bg-white mb-0 border-r border-surface-100">
-        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 py-5 no-scrollbar">
+    <div class="rounded-md bg-white mb-0 border-r border-surface-100">
+        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 pb-5 no-scrollbar">
             <ul class="mb-24">   
                 <li 
                     v-for="items in settingItems" :key="items.title" 

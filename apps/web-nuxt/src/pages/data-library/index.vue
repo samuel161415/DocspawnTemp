@@ -1,33 +1,12 @@
 <template>
   
-  <div class="h-full w-full bg-white overflow-scroll ">
+  <div class="h-full w-full bg-secondary overflow-scroll">
  
-      <div class="mx-4 mt-2 px-2 pt-1 pb-5 rounded-md bg-white ">
-        <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-          <template #item="{ item, props }">
-            <router-link
-              v-if="item.route"
-              v-slot="{ href, navigate }"
-              :to="item.route"
-              custom
-            >
-              <a :href="href" v-bind="props.action" @click="navigate">
-                <font-awesome-icon :icon="item.icon" />
-                <span
-                  class="text-lg text-primary-500 dark:text-primary-400 font-normal"
-                >{{ item.label }}</span>
-              </a>
-            </router-link>
-            <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-              <span class="text-surface-700 dark:text-surface-0/80">{{
-                item.label
-              }}</span>
-            </a>
-          </template>
-        </Breadcrumb>
-  
+      <div class="px-8 py-5 rounded-md bg-white h-full">
+        <BreadcrumbComponent :home="home" :items="items" />
+    
         <div  class="flex flex-col justify-center text-center space-y-2 ">
-          <div class="p-2 mt-5">
+          <div class="mt-5">
 
             <DataList  
                 :data="dataLibraryData"
@@ -50,11 +29,8 @@ import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { dataLibraryData }  from '../../services/sampleData'
 import DataList from '~/components/dataLibrary/DataList.vue';
-
-const home = ref({
-  icon: 'fa-duotone fa-house',
-  route: '/',
-})
+import BreadcrumbComponent from '~/components/shared/BreadcrumbComponent.vue';
+import { home } from '~/composables/useBreadcrumb.js'
 
 const items = ref([{ label: 'Data Library', route: '/data-library' }]);
 

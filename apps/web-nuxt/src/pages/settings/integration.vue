@@ -1,26 +1,10 @@
 <template>
     <div class="h-full w-full flex overflow-scroll">
 
-        <div class="mx-2 mt-4 px-8 py-5  mb-10 rounded-md bg-white h-full w-full">
-            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-                <template #item="{ item, props }">
-                    <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                        <a :href="href" v-bind="props.action" @click="navigate">
-                            <span class="text-color" :class="[item.icon]" />
+        <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll">
+            <BreadcrumbComponent :home="home" :items="items" />
 
-                            <span class="text-lg text-primary-500 dark:text-primary-400 font-normal">{{ item.label
-                                }}</span>
-                        </a>
-                    </router-link>
-                    <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-                        <span class="text-surface-700 dark:text-surface-0/80">{{
-                item.label
-            }}</span>
-                    </a>
-                </template>
-            </Breadcrumb>
-
-            <div class="mt-5 ml-4 mb-24 overflow-y-scroll">
+            <div class="mt-5  mb-24">
 
                 <div class="flex justify-between mx-5 mt-5">
                     <span class="relative flex">
@@ -57,12 +41,10 @@
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
+import { home } from '~/composables/useBreadcrumb.js'
 
 const router = useRouter();
-const home = ref({
-    icon: "pi pi-home",
-    route: "/",
-});
 
 const items = ref([{ label: "Settings", route: "/settings" }, { label: "Integrations", route: "/settings/integration" }]);
 
