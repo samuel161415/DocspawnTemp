@@ -50,9 +50,9 @@
                 }]">
             </i>
 
-            <span v-if="!isCollapsed" class="text-lg font-medium text-gray-500 ml-6" :class="{
+            <span v-if="!isCollapsed" class="text-lg font-normal text-gray-500 ml-6" :class="{
                 'text-white': item.isHovered,
-                'text-primaryBlue text-base': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
+                'text-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                 'text-gray-500': !item.isHovered}">
               {{ item.title }}
             </span>
@@ -74,7 +74,7 @@
                 <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
               </span>
     
-              <p v-if="!isCollapsed" class="text-gray-500 text-base pt-1 ml-7">
+              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7">
                 John Doe
               </p>
               
@@ -141,10 +141,6 @@ const handleResize = () => {
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
-});
-// watch for the window resize event if the size is less than 650 iscollabsed had to be always true
-watch(() => window.innerWidth, (newValue, oldValue) => {
-  
 });
 
 // toggle the side bar

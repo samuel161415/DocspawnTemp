@@ -9,7 +9,7 @@
                         :class="{ 'bg-primaryBlue': baseRoute === items.route }" 
                         @click="navigate('settings' + items.route)">
 
-                        <span class=" text-lg font-normal ml-2 "
+                        <span class="text-lg font-normal ml-2 "
                             :class="{ 'text-surface-600': items.isHovered || baseRoute === items.route, 'text-gray-500': !items.isHovered }">{{
                             items.title }}
                         </span>
