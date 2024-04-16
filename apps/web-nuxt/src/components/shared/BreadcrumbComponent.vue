@@ -9,9 +9,8 @@
         >
           <a :href="href" v-bind="props.action" @click="navigate">
             <font-awesome-icon :icon="item.icon" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
-            <!-- <font-awesome-icon :icon="item.icon" /> -->
             <span
-              class=" text-lg text-primary-500 dark:text-primary-400 font-semibold"
+              class="text-lg text-primary-500 dark:text-primary-400 font-semibold"
             >{{ item.label }}</span>
           </a>
         </router-link>

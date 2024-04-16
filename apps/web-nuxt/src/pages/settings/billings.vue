@@ -2,9 +2,9 @@
     <div class="h-full w-full flex overflow-scroll ">
        
        <div class="px-8 py-5 rounded-r-md bg-white  w-full">
-        <BreadcrumbComponent :home="home" :items="items" />
 
         <div class="mt-5 mr-12 ml-3">
+            <p class="font-semibold text-surface-700 text-xl mb-5">Billing</p>
             <div class="space-y-2 mb-4">
                 <p class="font-semibold text-surface-700 text-base">Payment Method</p>
                 <p class="text-surface-500 text-sm">Update your billing details and address</p>
@@ -72,19 +72,12 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import AddCardModal from "~/components/settings/billings/AddCardModal.vue";
 import BillingsForm from "~/components/settings/billings/BillingsForm.vue";
-import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
-import { home } from '~/composables/useBreadcrumb.js'
 
 const router = useRouter();
 
 const visible = ref(false);
 
-const items = ref([{label: "Settings", route: "/settings" }, {label: "Billings", route: "/settings/billings"}]);
-
 const checked = ref(true);
+
 </script>
 
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap')
-
-</style>

@@ -1,7 +1,7 @@
 <template>
   <div class="h-full w-full bg-secondary overflow-scroll">
     
-    <div class="px-8 py-5 shadow rounded-md bg-white h-full">
+    <div class="px-8 py-7 shadow rounded-md bg-white h-full">
       <BreadcrumbComponent :home="home" :items="items" />
     
       <DataTableComponent
@@ -59,5 +59,5 @@ const colomnData = ref([
 const hasActionsColumn = ref(true)
 const hasFilterActions = ref(true);
 
-const items = ref([{ label: 'Document Library', route: '/document-library' }])
+const items = ref([{ label: 'Document library', route: '/document-library' }])
 </script>

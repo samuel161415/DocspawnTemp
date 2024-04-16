@@ -2,7 +2,7 @@
   
   <div class="h-full w-full bg-secondary overflow-scroll">
  
-      <div class="px-8 py-5 rounded-md bg-white h-full">
+      <div class="px-8 py-7 rounded-md bg-white h-full">
         <BreadcrumbComponent :home="home" :items="items" />
     
         <div  class="flex flex-col justify-center text-center space-y-2 ">
@@ -32,7 +32,7 @@ import DataList from '~/components/dataLibrary/DataList.vue';
 import BreadcrumbComponent from '~/components/shared/BreadcrumbComponent.vue';
 import { home } from '~/composables/useBreadcrumb.js'
 
-const items = ref([{ label: 'Data Library', route: '/data-library' }]);
+const items = ref([{ label: 'Data library', route: '/data-library' }]);
 
 const title = ref('All data related to form.')
 

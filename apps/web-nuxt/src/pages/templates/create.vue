@@ -1,7 +1,7 @@
 <template>
   <div class="h-full w-full overflow-scroll bg-secondary">
-    <BreadcrumbComponent :home="home" :items="items" />
-    <div class="py-5 px-8 flex flex-col gap-2">
+    <div class="px-8 py-7 flex flex-col gap-2">
+      <BreadcrumbComponent :home="home" :items="items" />
       <h1 class="text-3xl font-bold">Generate PDF Documents in minutes</h1>
       <div
         class="w-full mt-5 flex items-center justify-between bg-white rounded-lg border-none"

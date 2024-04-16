@@ -3,7 +3,7 @@ import { ref } from 'vue';
 export const useSettingItems = () => {
     const settingItems = ref([
       {
-        title:'Settings',
+        title:'General',
         icon:'pi pi-user',
         route:'/',
         isHovered:false,
@@ -168,7 +168,7 @@ export const useSettingItems = () => {
         subitems:[]
       },
       {
-        title:"Meta Admin",
+        title:"Meta admin",
         icon:"",
         route:'/meta_admin',
         isHovered:false,

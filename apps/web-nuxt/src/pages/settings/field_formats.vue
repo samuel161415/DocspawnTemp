@@ -2,20 +2,22 @@
     <div class="h-full w-full overflow-scroll">
            
         <div class="px-8 py-5 rounded-r-md bg-white h-full w-full">
-            <BreadcrumbComponent :home="home" :items="items" />
-
-            <div class="text-lg text-surface-500 " id="date-formats">
-                <p>
-                    Date Formats
-                </p>
-                <DateFormats />
-            </div>
-           
-            <div class="text-lg text-surface-500" id="checkbox-formats">
-                <p>
-                    Checkbox Formats
-                </p>
-                <CheckboxFormats />
+       
+            <div class="mt-5 mr-12 ml-3">
+                <p class="font-semibold text-surface-700 text-xl mb-5">Formatting option</p>
+                <div class="text-lg text-surface-500 " id="date-formats">
+                    <p>
+                        Date Formats
+                    </p>
+                    <DateFormats />
+                </div>
+               
+                <div class="text-lg text-surface-500" id="checkbox-formats">
+                    <p>
+                        Checkbox Formats
+                    </p>
+                    <CheckboxFormats />
+                </div>
             </div>
         </div>
     </div>
@@ -26,14 +28,8 @@
   import { useRouter } from "vue-router";
   import DateFormats from "~/components/settings/fieldFormats/DateFormats.vue";
   import CheckboxFormats from "~/components/settings/fieldFormats/CheckboxFormats.vue";
-  import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
-  import { home } from '~/composables/useBreadcrumb.js'
 
-  const router = useRouter();
-  
-  const items = ref([{ label: "Settings", route: "/settings" }, {label: "Formatting options", route: "/settings/field-formats"}]);
+
   </script>
-  <style>
-  /* Your CSS here */
-  </style>
+
   

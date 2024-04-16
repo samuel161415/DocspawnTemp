@@ -1,6 +1,6 @@
 <template>
   <div class="h-full w-full bg-secondary overflow-scroll">
-    <div class="py-5 px-8 flex flex-col gap-2 bg-white">
+    <div class="px-8 py-7 flex flex-col gap-2 bg-white">
       <BreadcrumbComponent :home="home" :items="items" />
       <div >
         <div class="px-5 mt-5">
