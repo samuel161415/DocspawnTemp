@@ -2,7 +2,7 @@ export default {
     root: ({ props, context, parent }) => ({
         class: [
             // Font
-            'font-sans leading-6',
+            'leading-6',
 
             // Spacing
             'm-0',
@@ -13,7 +13,7 @@ export default {
             },
 
             // Colors
-            'text-surface-900 dark:text-surface-0',
+            'text-surface-500 dark:text-surface-0',
             'placeholder:text-surface-400 dark:placeholder:text-surface-500',
             'bg-surface-0 dark:bg-surface-900',
             'shadow-sm',
