@@ -1,28 +1,12 @@
 <template>
     <div class="h-full w-full flex overflow-scroll">
 
-        <div class="mx-2 mt-4 px-8 py-5  mb-10 rounded-md bg-white h-full w-full">
-            <Breadcrumb class="border-none rounded-none" :home="home" :model="items">
-                <template #item="{ item, props }">
-                    <router-link v-if="item.route" v-slot="{ href, navigate }" :to="item.route" custom>
-                        <a :href="href" v-bind="props.action" @click="navigate">
-                            <span class="text-color" :class="[item.icon]" />
+        <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll">
 
-                            <span class="text-lg text-primary-500 dark:text-primary-400 font-normal">{{ item.label
-                                }}</span>
-                        </a>
-                    </router-link>
-                    <a v-else :href="item.url" :target="item.target" v-bind="props.action">
-                        <span class="text-surface-700 dark:text-surface-0/80">{{
-                item.label
-            }}</span>
-                    </a>
-                </template>
-            </Breadcrumb>
+            <div class="mt-5 mr-12 ml-3">
+                <p class="font-semibold text-surface-700 text-xl mb-5">Integration</p>
 
-            <div class="mt-5 ml-4 mb-24 overflow-y-scroll">
-
-                <div class="flex justify-between mx-5 mt-5">
+                <div class="flex justify-between mt-5">
                     <span class="relative flex">
                         <i class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
                             style="color: rgb(117, 119, 120);"></i>
@@ -34,10 +18,10 @@
                 </div>
 
                 <div class="mt-5 mb-10">
-                    <p class="text-lg font-semibold my-8 ml-5">All Integrations</p>
+                    <p class="text-lg font-semibold my-8">All Integrations</p>
                     <div class="flex flex-wrap mb-10">
                         <div v-for="integration in filteredIntegrations"
-                            class="card w-72 h-44 shadow-sm space-y-6 ml-3">
+                            class="card w-72 h-44 shadow-sm space-y-6 ml-2">
                             <div class="flex space-x-3">
                                 <img :src="integration.img" alt="integration" class="w-10 h-10 rounded-md" />
                                 <p class="text-lg font-semibold pt-2">{{ integration.title }}</p>
@@ -59,12 +43,6 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const home = ref({
-    icon: "pi pi-home",
-    route: "/",
-});
-
-const items = ref([{ label: "Settings", route: "/settings" }, { label: "Integrations", route: "/settings/integration" }]);
 
 const searchQuery = ref('');
 

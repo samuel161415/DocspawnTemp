@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full bg-stone-100">
+  <div class="h-full w-full bg-secondary">
     <div class="m-5 flex gap-3">
       <NuxtLink
         to="/datatable"

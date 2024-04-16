@@ -1,6 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div class="z-40  bg-white mb-0 h-full  overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
+  <div class="z-40  bg-white mb-0 h-full border-r border-surface-100 overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
 
     <div class="z-50 fixed mt-12" :class="{ 'w-20': isCollapsed, 'xs:w-44 sm:w-48 md:w-56 lg:w-60 sm:ml-6 md:ml-2 ': !isCollapsed }">
 
@@ -16,7 +16,7 @@
 
     </div>
 
-    <div class="flex flex-col justify-between overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
+    <div class="flex flex-col justify-between  overflow-y-scroll overflow-x-hidden no-scrollbar h-full "
       :class="{ 'w-18 justify-center ': isCollapsed, 'w-64': !isCollapsed, 'py-5': true }">
 
       <ul class="mt-0">
@@ -50,9 +50,9 @@
                 }]">
             </i>
 
-            <span v-if="!isCollapsed" class="text-lg font-medium text-gray-500 ml-6" :class="{
+            <span v-if="!isCollapsed" class="text-lg font-normal text-gray-500 ml-6" :class="{
                 'text-white': item.isHovered,
-                'text-primaryBlue text-base': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
+                'text-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                 'text-gray-500': !item.isHovered}">
               {{ item.title }}
             </span>
@@ -74,7 +74,7 @@
                 <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
               </span>
     
-              <p v-if="!isCollapsed" class="text-gray-500 text-base pt-1 ml-7">
+              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7">
                 John Doe
               </p>
               
@@ -141,10 +141,6 @@ const handleResize = () => {
 onMounted(() => {
   handleResize();
   window.addEventListener("resize", handleResize);
-});
-// watch for the window resize event if the size is less than 650 iscollabsed had to be always true
-watch(() => window.innerWidth, (newValue, oldValue) => {
-  
 });
 
 // toggle the side bar

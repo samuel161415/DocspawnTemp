@@ -1,6 +1,6 @@
 <template>
-    <div class=" bg-white mb-0 border-l border-r border-surface-100">
-        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 py-5 no-scrollbar">
+    <div class="rounded-md bg-white mb-0 border-r border-surface-100">
+        <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 pb-5 no-scrollbar">
             <ul class="mb-24">   
                 <li 
                     v-for="items in settingItems" :key="items.title" 
@@ -9,7 +9,7 @@
                         :class="{ 'bg-primaryBlue': baseRoute === items.route }" 
                         @click="navigate('settings' + items.route)">
 
-                        <span class=" text-lg font-medium ml-2 "
+                        <span class="text-lg font-normal ml-2 "
                             :class="{ 'text-surface-600': items.isHovered || baseRoute === items.route, 'text-gray-500': !items.isHovered }">{{
                             items.title }}
                         </span>
