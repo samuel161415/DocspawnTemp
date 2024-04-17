@@ -16,13 +16,13 @@ export const useMenuItems = () => {
         isHovered: false
       },
       {
-        title: "Documents Library",
+        title: "Documents library",
         icon: "pi pi-server",
         route: "/document-library",
         isHovered: false
       },
       {
-        title: "Data Library",
+        title: "Data library",
         icon: "pi pi-chart-bar",
         route: "/data-library",
         isHovered: false
