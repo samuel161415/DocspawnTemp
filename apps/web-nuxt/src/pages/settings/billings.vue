@@ -6,14 +6,14 @@
            <div class="mt-5 mr-12 ml-3">
             <p class="font-semibold text-surface-700 text-xl mb-5">Billing</p>
                 <div class="space-y-2 mb-4">
-                    <p class="font-semibold text-surface-700 text-base">Payment method</p>
+                    <p class="font-semibold text-surface-700 text-lg">Payment method</p>
                     <p class="text-base text-surface-500 font-poppins">Update your billing details and address</p>
                 </div>
                 <hr class="text-surface-400 mt-5"/>
 
                 <div class="mt-8 flex flex-col lg:flex-row justify-between">
                     <div class="">
-                        <p class="font-semibold text-surface-700 text-base">Card details</p>
+                        <p class="font-semibold text-surface-700 text-lg">Card details</p>
                         <p class="text-base text-surface-500 font-poppins mt-2">Update your billing details and address</p>
 
                         <Button 
@@ -34,7 +34,7 @@
 
                 <div class="mt-8 flex flex-col md:flex-row  justify-between">
                     <div class="space-y-2 mb-2">
-                        <p class="font-semibold text-surface-700 text-base">Contact email</p>
+                        <p class="font-semibold text-surface-700 text-lg">Contact email</p>
                         <p class="text-base text-surface-500 font-poppins">Where should invoices be sent?</p>
                     </div>
                     <div class="flex flex-col">
@@ -55,7 +55,7 @@
 
                 <div class="mt-7 flex ">
                     <div class="space-y-2 ">
-                        <p class="font-semibold text-surface-700 text-base">Billing history</p>
+                        <p class="font-semibold text-surface-700 text-lg">Billing history</p>
                         <p class="text-surface-500 text-base font-poppins">See the transaction you made</p>
                     </div>
                 </div>

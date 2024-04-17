@@ -31,12 +31,14 @@
         </div>
 
         <!-- menu Items -->
-        <li  v-for="item in menuItems" :key="item.title" class="w-full cursor-pointer ml-1"
-        v-tooltip.right="isCollapsed ? `${item.title}` : ''"
+        <li  v-for="item in menuItems" 
+          :key="item.title" 
+          class="w-full cursor-pointer ml-1 font-poppins"
+          v-tooltip.right="isCollapsed ? `${item.title}` : ''"
           :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }">
 
           <div :key="item.title"
-            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 py-1 px-5"
+            class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 py-1 px-5 font-poppins"
             @click="navigate(item.route)" @mouseenter="setIsHovered(item, true)"
             @mouseleave="setIsHovered(item, false)">
 
@@ -74,7 +76,7 @@
                 <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white" />
               </span>
     
-              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7">
+              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7 font-poppins">
                 John Doe
               </p>
               

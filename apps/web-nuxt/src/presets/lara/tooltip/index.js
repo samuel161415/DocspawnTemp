@@ -44,6 +44,6 @@ export default {
         ]
     }),
     text: {
-        class: ['p-3', 'bg-surface-50 dark:bg-white', 'text-gray-500', 'text-base', 'leading-none', 'rounded-md', '', 'break-words']
+        class: ['p-3', 'bg-surface-50 dark:bg-surface-600', 'text-gray-500 dark:text-surface-200', 'text-base', 'leading-none', 'rounded-md', 'font-poppins', 'break-words']
     }
 };
