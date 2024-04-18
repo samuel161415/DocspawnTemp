@@ -3,63 +3,65 @@
        
        <div class="px-8 py-5 rounded-r-md bg-white  w-full">
 
-        <div class="mt-5 mr-12 ml-3">
+           <div class="mt-5 mr-12 ml-3">
             <p class="font-semibold text-surface-700 text-xl mb-5">Billing</p>
-            <div class="space-y-2 mb-4">
-                <p class="font-semibold text-surface-700 text-base">Payment Method</p>
-                <p class="text-surface-500 text-sm">Update your billing details and address</p>
-            </div>
-            <hr class="text-surface-400 mt-5"/>
+                <div class="space-y-2 mb-4">
+                    <p class="font-semibold text-surface-700 text-lg">Payment method</p>
+                    <p class="text-base text-surface-500 font-poppins">Update your billing details and address</p>
+                </div>
+                <hr class="text-surface-400 mt-5"/>
 
-            <div class="mt-8 flex flex-col lg:flex-row justify-between">
-                <div class="">
-                    <p class="font-semibold text-surface-700 text-base">Card Details</p>
-                    <p class="text-surface-500 text-sm mt-2">Update your billing details and address</p>
+                <div class="mt-8 flex flex-col lg:flex-row justify-between">
+                    <div class="">
+                        <p class="font-semibold text-surface-700 text-lg">Card details</p>
+                        <p class="text-base text-surface-500 font-poppins mt-2">Update your billing details and address</p>
 
-                    <Button 
-                        type="button"
-                        label="Add another card"
-                        icon="pi pi-plus"
-                        severity="surface-100" 
-                        class="bg-surface-50 text-surface-600 text-sm mt-7 mb-5 p-button-label font-thin"
-                        @click="visible = true" 
+                        <Button 
+                            type="button"
+                            label="Add another card"
+                            icon="pi pi-plus"
+                            severity="surface-100" 
+                            class="bg-surface-50 text-surface-500 text-base mt-7 mb-5 font-poppins"
+                            @click="visible = true" 
                         />
-                        
-                </div>
-                <!-- Billings card form -->
-                <BillingsForm />
-            </div>
-
-            <hr class="text-surface-100 mt-10"/>
-
-            <div class="mt-8 flex flex-col md:flex-row  justify-between">
-                <div class="space-y-2 mb-2">
-                    <p class="font-semibold text-surface-700 text-base">Contact email</p>
-                    <p class="text-surface-500 text-sm">Where should invoices be sent?</p>
-                </div>
-                <div class="flex flex-col">
-                    <div class="flex text-sm">
-                        <RadioButton v-model="checked"  :value="checked" />
-                        <p class="text-sm ml-1 text-surface-700 font-medium">Send to the existing email</p>
+                            
                     </div>
-                    <p class="text-xs font-extralight ml-7">mayaahmed@ofspace.com</p>
-                    <div class="flex text-sm mt-5">
-                        <RadioButton v-model="checked" disabled :value="checked" />
-                        <p class="text-sm text-surface-700 font-medium">Add another email address</p>
+                    <!-- Billings card form -->
+                    <BillingsForm />
+                </div>
+
+                <hr class="text-surface-100 mt-10"/>
+
+                <div class="mt-8 flex flex-col md:flex-row  justify-between">
+                    <div class="space-y-2 mb-2">
+                        <p class="font-semibold text-surface-700 text-lg">Contact email</p>
+                        <p class="text-base text-surface-500 font-poppins">Where should invoices be sent?</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex text-base">
+                            <RadioButton v-model="checked"  :value="checked" />
+                            <p class="text-base text-surface-500 font-poppins ml-1">Send to the existing email</p>
+                        </div>
+                        <p class="text-sm text-surface-500 font-poppins ml-8">mayaahmed@ofspace.com</p>
+                        <div class="flex text-base mt-5">
+                            <RadioButton v-model="checked" disabled :value="checked" />
+                            <p class="text-base text-surface-500 font-poppins ml-1">Add another email address</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+           
 
-            <hr class="text-surface-100 bg-surface-100 mt-10"/>
+                <hr class="text-surface-100 bg-surface-100 mt-10"/>
 
-            <div class="mt-7 flex ">
-                <div class="space-y-2 ">
-                    <p class="font-semibold text-surface-700 text-base">Billing History</p>
-                    <p class="text-surface-500 text-sm">See the transaction you made</p>
+                <div class="mt-7 flex ">
+                    <div class="space-y-2 ">
+                        <p class="font-semibold text-surface-700 text-lg">Billing history</p>
+                        <p class="text-surface-500 text-base font-poppins">See the transaction you made</p>
+                    </div>
                 </div>
-            </div>
+         
             <!--billings table -->
-        </div>
+            </div>
        </div>
 
        <!-- billings card add modal modal -->
@@ -80,4 +82,10 @@ const visible = ref(false);
 const checked = ref(true);
 
 </script>
+
+<style scoped>
+.custom-button-label .p-button-label {
+    font-weight: 100!important;
+}
+</style>
 
