@@ -122,29 +122,19 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue';
-import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
-import formatDate from '~/utils';
 
 
-const typefilter = ref('');
 
-const dataTableRef = ref()
 
-const currentImage = ref(null);
 
-const dialogVisible = ref(false);
 
-const selectedRowData = ref(null);
 
-const emit = defineEmits();
 
-const selectedValue = ref()
 
-const templatefiltered = ref([])
 
-const filteredData = ref(templatefiltered)
+
+
+
 import { ref } from 'vue'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
@@ -194,39 +184,9 @@ const props = defineProps({
   },
 });
 
-const NodeData = [
-  {
-      key: 'Form to Doc',
-      label: 'Form to Doc',
-      data: 'Form to Doc',
-      icon: 'pi pi-fw pi-inbox',
-      selectable: false,
-      children: [
-          {
-              key: 'FORM',
-              label: 'FORM',
-              data: 'FORM',
-          },
-          {
-              key: 'APPLICATION FORM',
-              label: 'APPLICATION FORM',
-              data: 'APPLICATION FORM',
-          }
-      ]
-  },
-  {
-      key: 'Table to doc',
-      label: 'Table to doc',
-      data: 'Table to doc',
-      icon: 'pi pi-fw pi-calendar',
-      selectable: false,
-      children: [
-          { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },
-          { key: 'PDF FORM', label: 'PDF FORM',  data: 'PDF FORM' },
-         ]
-  },];
 
-const filters = ref(props.filters)
+
+
 const emit = defineEmits()
 
 const selectedColumns = ref(props.columns)
