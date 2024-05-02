@@ -153,7 +153,6 @@ function deleteFieldFromCanvas() {
 watch(activeDataField, () => {
   if (templateEditorStore.canvas) {
     templateEditorStore.activeDataField = activeDataField.value
-    /** */
 
     templateEditorStore.addedFields = templateEditorStore.addedFields.map((field) => {
       if (field.name === templateEditorStore.selectedAddedField.name)
@@ -162,7 +161,6 @@ watch(activeDataField, () => {
         return JSON.parse(JSON.stringify(field))
     })
 
-    /** */
     templateEditorStore.selectedAddedField.name = activeDataField.value
     const activeObject = templateEditorStore.canvas.getActiveObject()
 
@@ -183,7 +181,7 @@ watch(activeDataField, () => {
 
 watch(
   () => templateEditorStore.selectedAddedField,
-  (newVal, prevVal) => {
+  (newVal) => {
     if (newVal)
       fieldName.value = newVal.name
   },
@@ -191,7 +189,7 @@ watch(
 
 watch(
   () => templateEditorStore.activeDataField,
-  (newVal, prevVal) => {
+  (newVal) => {
     if (newVal)
       activeDataField.value = newVal
   },

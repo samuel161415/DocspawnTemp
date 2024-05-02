@@ -9,7 +9,7 @@
         <i class="pi pi-angle-left"></i>
         Fields list
       </Button>
-      <!-- @click="templateEditorStore.selectedAddedField = field;templateEditorStore.showOptionsBar = true;updateActiveTextStyles(field.styles)" -->
+
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 ">
           {{ field.name }}
@@ -116,21 +116,8 @@ const showAddedFields = ref(true)
 const showFormFields = ref(false)
 const showTimestamp = ref(false)
 const showImageOptions = ref(false)
-const showDataFieldOptions = ref(false)
 
 watch(showAddedFields, () => templateEditorStore.showOptionsBar = false)
-
-function updateActiveTextStyles(styles) {
-  templateEditorStore.canvas.discardActiveObject().renderAll()
-
-  activeTextStyles.fontFamily = styles.fontFamily
-  activeTextStyles.fontSize = styles.fontSize
-  activeTextStyles.textAlign = styles.textAlign
-  activeTextStyles.fill = `#${styles.fill}`
-  activeTextStyles.fontStyle = styles.fontStyle
-  activeTextStyles.fontWeight = styles.fontWeight
-  activeTextStyles.underline = styles.underline
-}
 
 function selectField(field, subField) {
   templateEditorStore.activeTemplateField = field

@@ -44,10 +44,6 @@ onMounted(() => {
       templateEditorStore.datasetData = { keys: Object.keys(formattedData[0]), allEntries: formattedData }
     })
 })
-
-watch(() => templateEditorStore.addedFields, (newVal) => {
-  console.log('added fields in store', newVal)
-})
 </script>
 
 <style lang="scss" scoped></style>

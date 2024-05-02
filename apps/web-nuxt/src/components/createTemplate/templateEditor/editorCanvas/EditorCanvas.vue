@@ -170,7 +170,7 @@ async function createCanvas() {
 
   addEventsToCanvas()
   showThumbnail()
-  templateEditorStore.canvas.on('mouse:down', (event) => {
+  templateEditorStore.canvas.on('mouse:down', () => {
     // get active object
     const activeObject = templateEditorStore.canvas?.getActiveObject()
 
@@ -272,8 +272,6 @@ function addEventsToCanvas() {
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y,
-          // hasControls: false,
-          // ...templateEditorStore.activeTextStyles,
           fill: activeTextStyles.fill,
           fontFamily: activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
@@ -287,13 +285,10 @@ function addEventsToCanvas() {
           PageNo: templateEditorStore.activePageForCanvas,
         },
       )
-      /** ** saving to field */
 
       const fieldToAdd = { fieldType: templateEditorStore.selectedAddedField.type, name: templateEditorStore.selectedAddedField.name,
       }
-
       const allFields = []
-
       templateEditorStore.addedFields.forEach((f) => {
         allFields.push(JSON.parse(JSON.stringify(f)))
       })
@@ -301,18 +296,17 @@ function addEventsToCanvas() {
       templateEditorStore.addedFields = allFields
 
       templateEditorStore.canvas.renderAll()
-      /** */
+
       templateEditorStore.selectedAddedField = {}
       textEle.on('mouseover', (e) => {
         if (!templateEditorStore.activeAdvancedPointer)
           return
         templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
           left: e.target.left,
-          top: 0, // event.absolutePointer.y,
+          top: 0,
           stroke: '#3978eb',
           id: e.target.id,
         }))
-        // x axis
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0, // event.absolutePointer.x,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
@@ -336,14 +330,11 @@ function addEventsToCanvas() {
         templateEditorStore.canvas.renderAll()
       })
       templateEditorStore.canvas.add(textEle)
-      // y axis
 
       templateEditorStore.canvas.renderAll()
       /** remove field */
       const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.selectedAddedField?.name)
       templateEditorStore.addedFields = remainingFields
-
-      /** */
     }
     if (templateEditorStore.selectedAddedField.type === 'image') {
       fabric.Image.fromURL(
