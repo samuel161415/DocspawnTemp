@@ -10,8 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "fabric": "^5.3.0",
+    "pdfjs-dist": "^4.0.379",
     "primeicons": "^6.0.1",
-    "primevue": "^3.48.1"
+    "primevue": "^3.48.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nuxt": "^3.9.1",

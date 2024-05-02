@@ -1,7 +1,8 @@
 <template>
-  <div class="flex-initial w-60">
+  <div class="flex-initial w-60 ">
     <div
       v-if="templateEditorStore.showOptionsBar === true"
+
       class="transition-all duration-200 ease-linear rounded-md min-h-full   bg-blue-50 p-3  overflow-hidden"
     >
       <p v-if="templateEditorStore.activeTemplateField === ''" class="text-md text-gray-400 text-primaryBlue font-thin">
@@ -10,38 +11,55 @@
       <p v-if="templateEditorStore.activeTemplateField !== ''" class="text-md text-gray-400 text-primaryBlue font-thin">
         Field options
       </p>
-      <div v-if="!templateEditorStore.selectedAddedField.name" class="mt-1 mb-0">
-        <p v-if="templateEditorStore.activeTemplateField === 'form-field' " class="text-lg text-gray-900   w-full  capitalize">
-          {{ templateEditorStore.activeFormField }}
-        </p>
-        <p v-if="templateEditorStore.activeTemplateField === 'timestamp' " class="text-lg text-gray-900   w-full  capitalize">
-          {{ templateEditorStore.activeTimestampField }}
-        </p>
-        <p v-if="templateEditorStore.activeTemplateField === 'data-fields' " class="text-lg text-gray-900   w-full  capitalize">
-          {{ templateEditorStore.activeDataField }}
-        </p>
-        <p v-if="templateEditorStore.activeTemplateField === 'image' " class="text-lg text-gray-900   w-full  capitalize">
-          {{ templateEditorStore.activeImageOption }}
-        </p>
-      </div>
-      <div v-else class="mt-1 mb-0">
-        <p v-if="templateEditorStore.selectedAddedField.type === 'form-field' " class="text-lg text-gray-900   w-full  capitalize">
-          {{ templateEditorStore.selectedAddedField.subType }}
-        </p>
-      </div>
-      <p v-if="!templateEditorStore.selectedAddedField.name" class="text-lg text-gray-900 w-full mb-2 capitalize">
-        ({{ templateEditorStore.activeTemplateField }})
-      </p>
-      <p v-else class="text-lg text-gray-900 w-full mb-2 capitalize">
-        ({{ templateEditorStore.selectedAddedField.type }})
-      </p>
 
+      <p v-if="templateEditorStore.selectedAddedField.name">
+        {{ templateEditorStore.selectedAddedField.name }}
+      </p>
+      <p v-if="templateEditorStore.selectedAddedField.fieldType">
+        ({{ templateEditorStore.selectedAddedField.fieldType }})
+      </p>
+      <div class="flex gap-2   text-gray-400 items-center">
+        <p>Remove field</p>
+        <div class="cursor-pointer">
+          <Button text @click="deleteFieldFromCanvas">
+            <font-awesome-icon icon="fa-duotone fa-minus-circle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
+          </Button>
+        </div>
+      </div>
       <hr />
-      <div class="w-full pt-4">
+
+      <div v-if="templateEditorStore.activeTemplateField === 'data-fields'" class="w-full pt-4">
+        <p class="mb-1">
+          Datafield key
+        </p>
+        <div v-if="!activeDataField" class="my-3 flex text-red gap-2">
+          <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
+          <p>Select a field</p>
+        </div>
+        <!-- <InputText v-model="fieldName" disabled="" :value="templateEditorStore.activeDataField" class="h-11 w-full" type="text" /> -->
+        <div class="p-0 flex justify-content-center">
+          <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.keys" filter placeholder="Select data field" class="w-full md:w-14rem">
+            <template #value="slotProps">
+              <div v-if="slotProps.value" class="flex align-items-center">
+                <div>{{ slotProps.value }}</div>
+              </div>
+              <span v-else>
+                {{ slotProps.placeholder }}
+              </span>
+            </template>
+            <template #option="slotProps">
+              <div class="flex align-items-center">
+                <div>{{ slotProps.option }}</div>
+              </div>
+            </template>
+          </Dropdown>
+        </div>
+      </div>
+      <div v-else class="w-full pt-4">
         <p class="mb-1">
           Field name
         </p>
-        <InputText v-model="fieldName" class="h-11 w-full" type="text" />
+        <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
       </div>
 
       <!-- specific options -->
@@ -51,7 +69,16 @@
       <div v-if="templateEditorStore.activeTemplateField === 'data-fields'" class="">
       </div>
       <div v-if="templateEditorStore.activeTemplateField === 'image'" class="">
-        <ImageOptions />
+        <!-- <ImageOptions /> -->
+        <div class="mt-4 ">
+          <h1>Upload image</h1>
+          <input
+            class="border border-gray-300 p-1 mt-2 w-full text-sm"
+            type="file"
+            @change="getFile"
+          />
+          <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
+        </div>
       </div>
       <div v-if="templateEditorStore.activeTemplateField === 'text'" class="">
         <div class="flex flex-col gap-2 mt-4">
@@ -83,11 +110,6 @@
         </div>
       </div>
       <TextFormatting v-if="(templateEditorStore.activeTemplateField === 'form-field' && (templateEditorStore.activeFormField === 'text' || templateEditorStore.activeFormField === 'multiline-text' || templateEditorStore.activeFormField === 'date' || templateEditorStore.activeFormField === 'time')) || templateEditorStore.activeTemplateField === 'text' || templateEditorStore.activeTemplateField === 'data-fields'" />
-
-      <!-- saving field details -->
-      <Button class="mt-12 w-full" @click="saveField">
-        Save field
-      </Button>
     </div>
   </div>
 </template>
@@ -95,40 +117,83 @@
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
+import { activeTextStyles } from '../store/activeTextStyles'
 import ImageOptions from './ImageOptions.vue'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
 
-const { timeFormats, dateFormats } = useTimestampFormats()
-
-const fieldName = ref(null)
-
-watch(templateEditorStore, () => {
-  if (templateEditorStore.selectedAddedField)
-    fieldName.value = templateEditorStore.selectedAddedField.name
-})
+const activeDataField = ref()
 const selectedTimeFormat = ref()
 const selectedDateFormat = ref()
-
 const constant_text_value = ref(null)
+const fileUrl = ref()
+const { timeFormats, dateFormats } = useTimestampFormats()
+const fieldName = ref(null)
 
-function saveField() {
-  const type = templateEditorStore.activeTemplateField
-  let subType = ''
+function getFile(e) {
+  const file = e.target.files[0]
+  fileUrl.value = URL.createObjectURL(file)
+}
 
-  if (type === 'form-field')
-    subType = templateEditorStore.activeFormField
-  else if (type === 'data-fields')
-    subType = templateEditorStore.activeDataField
-  else if (type === 'timestamp')
-    subType = templateEditorStore.activeTimestampField
-  else if (type === 'image')
-    subType = templateEditorStore.activeImageOption
+function deleteFieldFromCanvas() {
+  const fieldId = templateEditorStore.activeDataField
+  const object = templateEditorStore.canvas.getActiveObject()
+  if (object?.id)
+    templateEditorStore.canvas.remove(object)
+  else
+    templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter(obj => obj?.id !== fieldId)
 
-  const fieldToAdd = { name: fieldName.value, type, subType }
-  templateEditorStore.addedFields = [...templateEditorStore.addedFields, fieldToAdd]
+  const fieldsS = templateEditorStore.addedFields.filter(f => f?.name !== fieldId)
+  templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
 
-  fieldName.value = ''
+  templateEditorStore.canvas.renderAll()
   templateEditorStore.showOptionsBar = false
 }
+
+watch(activeDataField, () => {
+  if (templateEditorStore.canvas) {
+    templateEditorStore.activeDataField = activeDataField.value
+    /** */
+
+    templateEditorStore.addedFields = templateEditorStore.addedFields.map((field) => {
+      if (field.name === templateEditorStore.selectedAddedField.name)
+        return JSON.parse(JSON.stringify({ ...field, name: activeDataField.value }))
+      else
+        return JSON.parse(JSON.stringify(field))
+    })
+
+    /** */
+    templateEditorStore.selectedAddedField.name = activeDataField.value
+    const activeObject = templateEditorStore.canvas.getActiveObject()
+
+    const objs = templateEditorStore.canvas._objects
+    templateEditorStore.canvas._objects = objs.map((obj) => {
+      if (obj === activeObject) {
+        obj.set({ text: activeDataField.value, id: activeDataField.value })
+        return obj
+      }
+      else {
+        return obj
+      }
+    })
+
+    templateEditorStore.canvas.renderAll()
+  }
+})
+
+watch(
+  () => templateEditorStore.selectedAddedField,
+  (newVal, prevVal) => {
+    if (newVal)
+      fieldName.value = newVal.name
+  },
+)
+
+watch(
+  () => templateEditorStore.activeDataField,
+  (newVal, prevVal) => {
+    if (newVal)
+      activeDataField.value = newVal
+  },
+)
 </script>

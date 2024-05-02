@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full min-h-screen w-52  space-x-6 relative mb-12">
+  <div class="flex h-full min-h-screen w-52  space-x-6 relative mb-12 ">
     <div class="w-full">
       <Button v-if="showAddedFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="showAddedFields = false">
         <i class="pi pi-plus"></i>
@@ -9,19 +9,19 @@
         <i class="pi pi-angle-left"></i>
         Fields list
       </Button>
-
+      <!-- @click="templateEditorStore.selectedAddedField = field;templateEditorStore.showOptionsBar = true;updateActiveTextStyles(field.styles)" -->
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 hover:bg-blue-200" @click="console.log('hurrah', templateEditorStore.selectedAddedField, templateEditorStore.showOptionsBar);templateEditorStore.selectedAddedField = field;templateEditorStore.showOptionsBar = true">
+        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 ">
           {{ field.name }}
         </div>
       </template>
 
       <div v-if="showAddedFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showFormFields ? showFormFields = false : showFormFields = true">
+        <!-- <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showFormFields ? showFormFields = false : showFormFields = true">
           <i class="pi pi-user mr-1 text-primaryBlue "></i>
           Form Fields
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showFormFields }"></i>
-        </div>
+        </div> -->
         <div v-if="showFormFields" class="flex flex-col gap-2">
           <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'text')">
             Text
@@ -51,25 +51,13 @@
             List
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showDataFieldOptions ? showDataFieldOptions = false : showDataFieldOptions = true">
-          <i class="pi pi-database mr-1 font-semibold text-primaryBlue"></i>
-          Data fields
-          <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showDataFieldOptions }"></i>
-        </div>
-        <div v-if="showDataFieldOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'name')">
-            Name
-          </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'email')">
-            Email
-          </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('data-fields', 'age')">
-            Age
-          </div>
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('data-fields')">
+          <font-awesome-icon icon="fa-duotone fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          Data field
         </div>
 
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
-          <i class="pi pi-image mr-1 font-semibold text-primaryBlue"></i>
+          <font-awesome-icon icon="fa-duotone fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
 
           Image
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
@@ -83,11 +71,11 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('text')">
-          <i class="pi pi-pencil mr-1 text-primaryBlue"></i>
+          <font-awesome-icon icon="fa-duotone   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
           Text
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
-          <i class="pi pi-clock  mr-1 text-primaryBlue"></i>
+          <font-awesome-icon icon="fa-duotone fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Timestamp
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showTimestamp }"></i>
         </div>
@@ -100,27 +88,19 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('checkbox')">
-          <i
-            class="pi pi-check-square mr-1 text-primaryBlue"
-          ></i>
+          <font-awesome-icon icon="fa-duotone fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Checkbox
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('radio')">
-          <i
-            class="pi pi-circle mr-1 text-primaryBlue"
-          ></i>
+          <font-awesome-icon icon="fa-duotone fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Radio
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('dropdown')">
-          <i
-            class="pi pi-caret-down  mr-1 text-primaryBlue"
-          ></i>
+          <font-awesome-icon icon="fa-duotone fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Dropdown
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('signature')">
-          <i
-            class="pi pi-caret-down  mr-1 text-primaryBlue"
-          ></i>
+          <font-awesome-icon icon="fa-duotone fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Signature
         </div>
       </div>
@@ -130,6 +110,7 @@
 
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
+import { activeTextStyles } from '../store/activeTextStyles'
 
 const showAddedFields = ref(true)
 const showFormFields = ref(false)
@@ -139,8 +120,21 @@ const showDataFieldOptions = ref(false)
 
 watch(showAddedFields, () => templateEditorStore.showOptionsBar = false)
 
+function updateActiveTextStyles(styles) {
+  templateEditorStore.canvas.discardActiveObject().renderAll()
+
+  activeTextStyles.fontFamily = styles.fontFamily
+  activeTextStyles.fontSize = styles.fontSize
+  activeTextStyles.textAlign = styles.textAlign
+  activeTextStyles.fill = `#${styles.fill}`
+  activeTextStyles.fontStyle = styles.fontStyle
+  activeTextStyles.fontWeight = styles.fontWeight
+  activeTextStyles.underline = styles.underline
+}
+
 function selectField(field, subField) {
   templateEditorStore.activeTemplateField = field
+  templateEditorStore.selectedAddedField = { name: 'Lorem ipsum', type: field }
   if (field === 'form-field')
     templateEditorStore.activeFormField = subField
   else if (field === 'data-fields')

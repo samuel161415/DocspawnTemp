@@ -16,6 +16,16 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
+  "dependencies": {
+    "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-regular-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.5.2",
+    "@fortawesome/pro-duotone-svg-icons": "^6.5.2",
+    "@fortawesome/pro-light-svg-icons": "^6.5.2",
+    "@fortawesome/pro-thin-svg-icons": "^6.5.2",
+    "@fortawesome/vue-fontawesome": "^3.0.6",
+    "prismjs": "^1.29.0"
+  },
   "devDependencies": {
     "@antfu/eslint-config": "^2.6.2",
     "@commitlint/cli": "^18.4.4",
@@ -24,13 +34,5 @@
     "eslint": "^8.56.0",
     "husky": "^8.0.3",
     "turbo": "latest"
-  },
-  "dependencies": {
-    "@fortawesome/vue-fontawesome": "^3.0.6",
-    "prismjs": "^1.29.0",
-    "@fortawesome/free-brands-svg-icons": "^6.5.2",
-    "@fortawesome/free-regular-svg-icons": "^6.5.2",
-    "@fortawesome/free-solid-svg-icons": "^6.5.2",
-    "@fortawesome/pro-duotone-svg-icons": "^6.5.2"
   }
 }

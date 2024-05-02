@@ -12,13 +12,13 @@ export function useTextFormattingOptions() {
 
   ])
   const fontSizes = ref([
-    { label: '8', value: '8' },
-    { label: '12', value: '12' },
-    { label: '16', value: '16' },
-    { label: '20', value: '20' },
-    { label: '24', value: '24' },
-    { label: '28', value: '28' },
-    { label: '32', value: '32' },
+    { label: '8', value: 8 },
+    { label: '12', value: 12 },
+    { label: '16', value: 16 },
+    { label: '20', value: 20 },
+    { label: '24', value: 24 },
+    { label: '28', value: 28 },
+    { label: '32', value: 32 },
 
   ])
 

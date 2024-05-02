@@ -1,52 +1,71 @@
 <template>
   <div class="mt-8 bg-white p-2 ">
     <div class="flex flex-wrap items-center gap-1">
-      <Button text class="h-8 w-8 text-2xl ">
-        <img :src="fontIcon" class="h-5" />
-      </Button>
-      <Button text class="h-8 w-8 text-2xl">
-        <img :src="fontSizeIcon" class="h-5" />
-      </Button>
-      <Button text class="h-8 w-8 text-2xl">
-        <img :src="underlineIcon" class="h-5" />
-      </Button>
-      <Button text :icon="boldIcon" class="h-8 w-8 text-2xl ">
-        <img :src="boldIcon" class="h-5" />
-      </Button>
-      <Button text :icon="italicIcon" class="h-8 w-8 text-2xl">
-        <img :src="italicIcon" class="h-5" />
-      </Button>
-      <Button text class="h-8 w-8 text-2xl">
-        <img :src="alignLeftIcon" class="h-5" />
-      </Button>
-      <Button text class="h-8 w-8 text-2xl">
-        <img :src="alignCenterIcon" class="h-5" />
-      </Button>
-      <Button text class="h-8 w-8 text-2xl">
-        <img :src="alignRightIcon" class="h-5" />
-      </Button>
-      <ColorPicker v-model="selectedColor" ml-1 />
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2 " @click="showFontOptions = true;showFontSizesOptions = false">
+        <font-awesome-icon icon="fa-light fa-font" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" @click="showFontSizesOptions = true;showFontOptions = false">
+        <font-awesome-icon icon="fa-light fa-text-size" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300': activeTextStyles.underline }" @click="activeTextStyles.underline = activeTextStyles.underline ? false : true">
+        <font-awesome-icon icon="fa-light fa-underline" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300 ': activeTextStyles.fontWeight === 700 }" @click="activeTextStyles.fontWeight = activeTextStyles.fontWeight === 700 ? 300 : 700">
+        <font-awesome-icon icon="fa-light fa-bold" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl  flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300': activeTextStyles.fontStyle === 'italic' }" @click="activeTextStyles.fontStyle = activeTextStyles.fontStyle === 'italic' ? 'normal' : 'italic'">
+        <font-awesome-icon icon="fa-light fa-italic" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300': activeTextStyles.textAlign === 'left' }" @click=" activeTextStyles.textAlign = 'left'">
+        <font-awesome-icon icon="fa-light fa-align-left" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300': activeTextStyles.textAlign === 'center' }" @click=" activeTextStyles.textAlign = 'center'">
+        <font-awesome-icon icon="fa-light fa-align-center" size="xs" />
+      </div>
+      <div class="h-8 w-8 text-2xl flex items-center justify-center rounded-md cursor-pointer p-2" :class="{ 'bg-blue-300': activeTextStyles.textAlign === 'right' }" @click=" activeTextStyles.textAlign = 'right'">
+        <font-awesome-icon icon="fa-light fa-align-right" size="xs" />
+      </div>
+      <ColorPicker v-model="selectedColor" ml-1 @change="changeColor" />
 
-      <Dropdown v-model="selectedFont" :options="fonts" option-label="label" option-value="value" placeholder="Select font " class="w-12 md:w-44 m-1" />
-      <Dropdown v-model="selectedFontSize" :options="fontSizes" option-label="label" option-value="value" placeholder="Select font size" class="w-12 md:w-32 m-1" />
+      <Dropdown v-if="showFontOptions" v-model="selectedFont" :options="fonts" option-label="label" option-value="value" placeholder="Select font " class="w-12 md:w-44  mt-3" @change="changeFont" />
+      <Dropdown v-if="showFontSizesOptions" v-model="selectedFontSize" :options="fontSizes" option-label="label" option-value="value" placeholder="Select font size" class="w-12 md:w-32  mt-3" @change="changeSize" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { useTextFormattingOptions } from '../../../../composables/useTextFormattingOptions'
-import alignCenterIcon from '@/assets/icons/text-formatting/text-format-align-center-icon.svg'
-import alignLeftIcon from '@/assets/icons/text-formatting/text-format-align-left-icon.svg'
-import alignRightIcon from '@/assets/icons/text-formatting/text-format-align-right-icon.svg'
-import underlineIcon from '@/assets/icons/text-formatting/text-format-underline-icon.svg'
-import fontIcon from '@/assets/icons/text-formatting/text-format-font-icon.svg'
-import fontSizeIcon from '@/assets/icons/text-formatting/text-format-font-size-icon.svg'
-import boldIcon from '@/assets/icons/text-formatting/text-format-bold-icon.svg'
-import italicIcon from '@/assets/icons/text-formatting/text-format-italic-icon.svg'
+import { activeTextStyles } from '../store/activeTextStyles'
 
 const { fonts, fontSizes } = useTextFormattingOptions()
+
+const showFontOptions = ref()
+const showFontSizesOptions = ref()
 
 const selectedFont = ref()
 const selectedFontSize = ref()
 const selectedColor = ref()
+
+function changeColor(e) {
+  activeTextStyles.fill = e.value
+}
+
+function changeFont(e) {
+  activeTextStyles.fontFamily = e.value
+}
+function changeSize(e) {
+  activeTextStyles.fontSize = e.value
+}
+
+watch(activeTextStyles, () => {
+  selectedFont.value = activeTextStyles.fontFamily
+  selectedFontSize.value = activeTextStyles.fontSize
+  selectedColor.value = activeTextStyles.fill
+})
+
+onMounted(() => {
+  selectedFont.value = activeTextStyles.fontFamily
+  selectedFontSize.value = activeTextStyles.fontSize
+  selectedColor.value = activeTextStyles.fill
+})
 </script>
