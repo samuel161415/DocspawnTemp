@@ -62,6 +62,7 @@ import { templateEditorStore } from '../store/templateEditorStore'
 function showMargins() {
   const objs = templateEditorStore.canvas._objects
   objs.forEach((obj) => {
+    console.log('obj>>>>>', obj)
     if (obj.PageNo === templateEditorStore.activePageForCanvas) {
       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
         left: obj.left,
@@ -71,13 +72,24 @@ function showMargins() {
         selection: false,
       }))
       // x axis
-      templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-        left: 0, // event.absolutePointer.x,
-        top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-        stroke: '#3978eb',
-        id: obj.id,
-        selection: false,
-      }))
+      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
+          stroke: '#3978eb',
+          id: obj.id,
+          selection: false,
+        }))
+      }
+      else {
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+          stroke: '#3978eb',
+          id: obj.id,
+          selection: false,
+        }))
+      }
     }
   })
   templateEditorStore.canvas.renderAll()
@@ -105,13 +117,24 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         stroke: '#3978eb',
         id: e.target.id,
       }))
-      // x axis
-      templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-        left: 0, // event.absolutePointer.x,
-        top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
-        stroke: '#3978eb',
-        id: e.target.id,
-      }))
+      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+        // x axis
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+          stroke: '#3978eb',
+          id: e.target.id,
+        }))
+      }
+      else {
+        // x axis
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
+          stroke: '#3978eb',
+          id: e.target.id,
+        }))
+      }
     })
     obj.on('mouseout', (e) => {
       if (!templateEditorStore.activeAdvancedPointer)

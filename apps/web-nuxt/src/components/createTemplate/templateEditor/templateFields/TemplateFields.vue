@@ -63,10 +63,10 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
         </div>
         <div v-if="showImageOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('image', 'fixed-image')">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('fixed-image')">
             Fixed image
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('image', 'dataset-image')">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('dataset-image')">
             Dataset image
           </div>
         </div>

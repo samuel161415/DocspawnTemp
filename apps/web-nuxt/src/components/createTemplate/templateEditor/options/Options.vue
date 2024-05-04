@@ -28,7 +28,7 @@
       </div>
       <hr />
 
-      <div v-if="templateEditorStore.activeTemplateField === 'data-fields'" class="w-full pt-4">
+      <div v-if="templateEditorStore.activeTemplateField === 'data-fields' || templateEditorStore.activeTemplateField === 'dataset-image'" class="w-full pt-4">
         <p class="mb-1">
           Datafield key
         </p>
@@ -190,7 +190,7 @@ watch(
 watch(
   () => templateEditorStore.activeDataField,
   (newVal) => {
-    if (newVal)
+    if (newVal && newVal)
       activeDataField.value = newVal
   },
 )

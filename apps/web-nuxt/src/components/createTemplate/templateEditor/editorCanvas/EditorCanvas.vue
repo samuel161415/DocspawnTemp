@@ -177,13 +177,13 @@ async function createCanvas() {
     if (activeObject) {
       activeElement.value = activeObject
 
-      activeTextStyles.fill = activeObject.fill
-      activeTextStyles.fontFamily = activeObject.fontFamily
-      activeTextStyles.fontSize = activeObject.fontSize
-      activeTextStyles.underline = activeObject.underline
-      activeTextStyles.textAlign = activeObject.textAlign
-      activeTextStyles.fontStyle = activeObject.fontStyle
-      activeTextStyles.fontWeight = activeObject.fontWeight
+      activeTextStyles.fill = activeObject.fill ? activeObject.fill : '#000000'
+      activeTextStyles.fontFamily = activeObject.fontFamily ? activeObject.fontFamily : 'Arial'
+      activeTextStyles.fontSize = activeObject.fontSize ? activeObject.fontSize : 32
+      activeTextStyles.underline = activeObject.underline ? activeObject.underline : false
+      activeTextStyles.textAlign = activeObject.textAlign ? activeObject.textAlign : 'center'
+      activeTextStyles.fontStyle = activeObject.fontStyle ? activeObject.fontStyle : 'normal'
+      activeTextStyles.fontWeight = activeObject.fontWeight ? activeObject.fontWeight : 300
 
       templateEditorStore.addedFields.forEach((f) => {
         if (f.name === activeObject.text) {
@@ -205,9 +205,12 @@ function addEventsToCanvas() {
       if (obj.id === e.target.id && obj.stroke) {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
-        if (obj.left === 0)
-
-          obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+        if (obj.left === 0) {
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'dataset-image')
+            obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+          else
+            obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+        }
       }
     })
 
@@ -239,12 +242,12 @@ function addEventsToCanvas() {
       templateEditorStore.canvas.add(hoveredElement.value)
       templateEditorStore.canvas.renderAll()
     }
-    if (templateEditorStore.selectedAddedField.type === 'image') {
+    if (templateEditorStore.selectedAddedField.type === 'dataset-image' || templateEditorStore.selectedAddedField.type === 'fixed-image') {
       fabric.Image.fromURL(
-        // 'https://placehold.co/400x200'
-        templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
+        'https://placehold.co/400x200'
+        // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
-          if (hoveredElement)
+          if (hoveredElement.value)
             templateEditorStore.canvas.remove(hoveredElement.value)
 
           myImg.set({
@@ -266,6 +269,7 @@ function addEventsToCanvas() {
     if (templateEditorStore.selectedAddedField.type === 'text' || templateEditorStore.selectedAddedField.subType === 'text' || templateEditorStore.selectedAddedField.type === 'data-fields') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
+
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.selectedAddedField.name}`,
 
@@ -336,10 +340,10 @@ function addEventsToCanvas() {
       const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.selectedAddedField?.name)
       templateEditorStore.addedFields = remainingFields
     }
-    if (templateEditorStore.selectedAddedField.type === 'image') {
+    if (templateEditorStore.selectedAddedField.type === 'dataset-image' || templateEditorStore.selectedAddedField.type === 'fixed-image') {
       fabric.Image.fromURL(
-        // 'https://placehold.co/400x200'
-        templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
+        'https://placehold.co/400x200'
+        // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
           if (hoveredElement.value)
             templateEditorStore.canvas.remove(hoveredElement.value)
@@ -349,10 +353,52 @@ function addEventsToCanvas() {
             scaleX: 400 / myImg.width,
             scaleY: 200 / myImg.height,
             id: templateEditorStore.selectedAddedField.name,
+            fieldType: templateEditorStore.selectedAddedField.type,
+            PageNo: templateEditorStore.activePageForCanvas,
           })
-          myImg.id = templateEditorStore.selectedAddedField.name
+
+          const fieldToAdd = { fieldType: templateEditorStore.selectedAddedField.type, name: templateEditorStore.selectedAddedField.name,
+          }
+          const allFields = []
+          templateEditorStore.addedFields.forEach((f) => {
+            allFields.push(JSON.parse(JSON.stringify(f)))
+          })
+          allFields.push(fieldToAdd)
+          templateEditorStore.addedFields = allFields
+
           templateEditorStore.selectedAddedField = {}
-          hoveredElement.value = myImg
+          myImg.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.id,
+            }))
+            templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+
+              stroke: '#3978eb',
+              id: e.target.id,
+            }))
+          })
+          myImg.on('mouseout', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+
+            const objs = templateEditorStore.canvas._objects
+            templateEditorStore.canvas._objects = objs.filter((obj) => {
+              if (obj.stroke === '#3978eb' && obj.id === e.target.id)
+                return false
+              else
+                return true
+            })
+
+            templateEditorStore.canvas.renderAll()
+          })
+          // hoveredElement.value = myImg
           templateEditorStore.canvas.add(myImg)
           templateEditorStore.canvas.renderAll()
         },
@@ -360,6 +406,7 @@ function addEventsToCanvas() {
     }
     // for showing options while click
     const activeObj = templateEditorStore.canvas.getActiveObject()
+
     if (activeObj) {
       templateEditorStore.showOptionsBar = true
       templateEditorStore.selectedAddedField = { name: activeObj.id ? activeObj.id : '', fieldType: activeObj.fieldType ? activeObj.fieldType : '', obj: activeObj }
@@ -394,6 +441,13 @@ watch(activeTextStyles, () => {
     })
     templateEditorStore.canvas.renderAll()
   }
+})
+
+watch(() => templateEditorStore.selectedAddedField, (newVal, prevVal) => {
+  console.log('template editor store selcted added fields', newVal)
+})
+watch(() => templateEditorStore.canvas, (newVal) => {
+  console.log('template store canvas', templateEditorStore.canvas, newVal)
 })
 </script>
 
