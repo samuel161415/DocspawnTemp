@@ -19,7 +19,7 @@
         <Button
           type="button"
           label="Table to doc"
-          class="px-4 rounded-xl text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:text-white"
+          class="px-4 rounded-xl text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:border-primaryPink hover:text-white"
           :class="[typefilter === 'Table to doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
           :icon="dataToDoc"
           :outlined="typefilter !== 'Table to doc'"
