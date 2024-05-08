@@ -62,8 +62,10 @@ export default
                 // Spacing
                 'ml-2',
                 // Text
-                context.active ? 'text-primary-500 dark:text-surface-0' : 'text-surface-700 dark:text-surface-0/80',
-                'font-bold',
+                context.active ? 'text-primary-500 dark:text-surface-0' : 'text-surface-600 dark:text-surface-0/80',
+                'font-medium',
+                'font-poppins',
+                ' text-lg leading-8',
                 // Transitions
                 'transition',
                 'transition-colors',
