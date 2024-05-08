@@ -5,8 +5,20 @@
 
           <div class="w-full mt-5 flex items-center justify-between  rounded-lg border-none ml-2 ">
 
-              <Stepper>
-                  <StepperPanel header="General information">
+              <Stepper v-model:activeStep="active">
+                  <StepperPanel>
+                    <template #header="{ index, clickCallback }">
+                      <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+
+                        <span v-if="index === active" :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2', { 'bg-primaryBlue border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon  :icon="['fad', 'square-info']" class="w-6 h-6" style="--fa-primary-color: #f1f5f9; --fa-secondary-color: #fff;" />
+                        </span>
+                        <span v-else :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2 border-primaryBlue', { ' border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon  :icon="['fad', 'square-info']" class="w-6 h-6" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        </span>
+                        
+                      </button>
+                    </template>
                       <template #content="{ nextCallback }">
                           <div class="flex justify-center mt-6">
                               <GeneralInfo />
@@ -17,6 +29,18 @@
                       </template>
                   </StepperPanel>
                   <StepperPanel header="Template editor">
+                    <template #header="{ index, clickCallback }">
+                      <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+
+                        <span v-if="index === active" :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2', { 'bg-primaryBlue border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon  :icon="['fad', 'file-invoice']" class="w-6 h-6" style="--fa-primary-color: #f1f5f9; --fa-secondary-color: #fff;" />
+                        </span>
+                        <span v-else :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2 border-primaryBlue', { ' border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon :icon="['fad', 'file-invoice']" class="w-6 h-6" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        </span>
+                         
+                      </button>
+                    </template>
                       <template #content="{ prevCallback, nextCallback }">
                           <div class="flex mx-6 mt-5">
                               <TemplateEditor />
@@ -29,6 +53,18 @@
                       </template>
                   </StepperPanel>
                   <StepperPanel header="Form editor">
+                    <template #header="{ index, clickCallback }">
+                      <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+
+                        <span v-if="index === active" :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2', { 'bg-primaryBlue border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon  :icon="['fad', 'file-signature']" class="w-6 h-6" style="--fa-primary-color: #f1f5f9; --fa-secondary-color: #fff;" />
+                        </span>
+                        <span v-else :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2 border-primaryBlue', { ' border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon :icon="['fad', 'file-signature']" class="w-6 h-6" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        </span>
+
+                      </button>
+                    </template>
                       <template #content="{ prevCallback, nextCallback }">
                           <div class="mx-10 mt-5">
                               <FormEditor />
@@ -41,15 +77,27 @@
                       </template>
                   </StepperPanel>
                   <StepperPanel header="Delivery options">
-                      <template #content="{ prevCallback }">
-                          <div class="flex mx-10 mt-7">
-                              <DeliveryOptions />
-                          </div>
-                          <div class="flex pt-4 justify-content-start mb-5 mx-10">
-                              <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"
-                                  @click="prevCallback" />
-                          </div>
-                      </template>
+                    <template #header="{ index, clickCallback }">
+                      <button class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+
+                        <span v-if="index === active" :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2', { 'bg-primaryBlue border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon  :icon="['fad', 'sliders']" class=" w-6 h-6" style="--fa-primary-color: #f1f5f9; --fa-secondary-color: #fff;" />
+                        </span>
+                        <span v-else :class="['border-round border-2 w-3rem h-3rem inline-flex align-center justify-center rounded-lg p-2 border-primaryBlue', { ' border-primaryBlue': index <= active, 'surface-border': index > active }]">
+                          <font-awesome-icon :icon="['fad', 'sliders']" class=" w-6 h-6" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        </span>
+                        
+                      </button>
+                    </template>
+                    <template #content="{ prevCallback }">
+                        <div class="flex mx-7 mt-7">
+                            <DeliveryOptions />
+                        </div>
+                        <div class="flex pt-4 justify-content-start mb-5 mx-7">
+                            <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"
+                                @click="prevCallback" />
+                        </div>
+                    </template>
                   </StepperPanel>
               </Stepper>
           </div>
