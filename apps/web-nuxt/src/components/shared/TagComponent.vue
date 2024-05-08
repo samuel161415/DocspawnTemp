@@ -1,8 +1,8 @@
 <template>
-  <div class="w-3 h-3">
-    <Tag :style="{ height: '17px', fontWeight: '500', boxShadow: '5px' }">
+  <div class="w-3 h-3 ml-2">
+    <Tag :style="{ height: '20px', fontWeight: '500', boxShadow: '5px' }">
       <template #default>
-        <span class="font-thin">{{ props.value }}</span>
+        <span class="font-normal text-base font-poppins">{{ props.value }}</span>
       </template>
     </Tag>
   </div>

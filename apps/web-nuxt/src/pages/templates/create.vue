@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full w-full overflow-scroll bg-secondary">
-    <div class="px-8 py-7 flex flex-col gap-2">
+  <div class="h-full w-full bg-secondary overflow-y-scroll no-scrollbar">
+    <div class="px-8 py-7 flex flex-col gap-2 bg-white">
       <BreadcrumbComponent :home="home" :items="items" />
-      <h1 class="text-3xl font-bold">Generate PDF Documents in minutes</h1>
+   
       <div
-        class="w-full mt-5 flex items-center justify-between bg-white rounded-lg border-none"
+        class="w-full mt-2 flex items-center justify-between bg-white rounded-lg border-none pl-4"
       >
         <TabMenu
           class="w-full border-none"
@@ -42,8 +42,8 @@
           />
         </div>
       </div>
-      <div class="bg-white mt-5 w-full min-h-20 rounded-lg">
-        <div class="w-full h-full p-5">
+      <div class="mt-5 w-full rounded-lg">
+        <div class="w-full pl-4">
           <GeneralInfo v-if="active === 0" />
           <TemplateEditor v-if="active === 1" />
           <FormEditor v-if="active === 2" />
