@@ -337,7 +337,6 @@ const formFields = ref();
 const editingRows = ref([]);
 const currentRow = ref(null);
 const isDraggedOver = ref({});
-
 const id_for_row = ref(0);
 const requiredOptions = ref([
     { label: 'Yes', value: true },
