@@ -2,7 +2,7 @@
 
 <template>
   <div class="flex flex-row mr-10 ml-14 my-2 items-center">
-    <!-- <P class="font-semibold text-xl">Form Editor</P> -->
+   
     <div class="flex flex-row font-semibold items-center">
       <div class="flex flex-col gap-2">
         <label for="username">Form Title <span class="text-red-500">*</span></label>
@@ -20,8 +20,7 @@
       <p class="text-justify text-lg">See preview</p>
     </div>
   </div>
-  <!-- <P class="ml-10 mb-6 mt-8 font-semibold text-lg">Form fields</P> -->
-
+ 
   <div class="box overflow-hidden p-5 table-container">
     <DataTable striped-rows celll-edit-complete="onCellEditComplete" :reorderableColumns="false" show-gridlines
       v-model:filters="filters" :global-filter-fields="['type', 'name', 'description']" @rowReorder="onRowReorder"
@@ -41,12 +40,7 @@
         </div>
       </template>
       <Column :body-style="{ margin: '0rem', padding: '0rem' }" rowReorder :reorderableColumn="false" style="width: 3%"
-        :pt="{
-          bodyCell: ({ context }) => ({
-            // id: () => {console.log(context.id)},
-            // class: { 'bg-black': isDraggedOver[data.id] },
-          })
-        }">
+       >
         <template #rowreordericon>
           <i class="pi pi-align-justify cursor-move p-8" data-pc-section="rowreordericon" @dragover="handleDragOver(id)"
             @drop="handleDragLeave(id)" @dragend="handleDragLeave(id)" @dragleave="handleDragLeave(id)"></i>
@@ -66,7 +60,7 @@
             <template #option="slotProps">
               <p>{{ slotProps.option.label }}</p>
 
-              <!-- <Tag :value="slotProps.option.label" /> -->
+              
             </template>
           </Dropdown>
         </template>
@@ -319,13 +313,7 @@
               @click="" autofocus /></div>
         </template>
       </Dialog>
-      <!-- <MobilePreviewDialog :showPreview="showPreview" :formFields="formFields" :formTitle="formTitle" :formDescription="formDescription"/> -->
-      
-      <!-- <Dialog :draggable="false" v-model:visible="showFormTitleDialog" modal :style="{ width: '25rem' }">
-        <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-red-500 mr-4"></i>Please
-          fill in a
-          Form title</span>
-      </Dialog> -->
+     
     </DataTable>
     <div class="w-full flex justify-center mt-5"><Button label="Save & Continue" @click="" autofocus /></div>
 
@@ -349,7 +337,7 @@ const formFields = ref();
 const editingRows = ref([]);
 const currentRow = ref(null);
 const isDraggedOver = ref({});
-// const showFormTitleDialog = ref(false)
+
 const id_for_row = ref(0);
 const requiredOptions = ref([
     { label: 'Yes', value: true },
@@ -399,11 +387,8 @@ const onUpload = () => {
 
 
 const handlePreview = () => {
-  // if (formTitle.value.trim().length > 0 ) {
     showPreview.value = true;
-  // } else {
-  //   showFormTitleDialog.value = true;
-  // }
+  
 }
 
 
