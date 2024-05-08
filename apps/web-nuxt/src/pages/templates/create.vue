@@ -3,7 +3,7 @@
       <div class="px-8 py-7 flex flex-col gap-2 bg-white ">
           <BreadcrumbComponent :home="home" :items="items" />
 
-          <div class="w-full mt-5 flex items-center justify-between  rounded-lg border-none pl-4 ">
+          <div class="w-full mt-5 flex items-center justify-between  rounded-lg border-none ml-2 ">
 
               <Stepper>
                   <StepperPanel header="General information">
@@ -18,7 +18,7 @@
                   </StepperPanel>
                   <StepperPanel header="Template editor">
                       <template #content="{ prevCallback, nextCallback }">
-                          <div class="flex mx-6">
+                          <div class="flex mx-6 mt-5">
                               <TemplateEditor />
                           </div>
                           <div class="flex pt-4 justify-between mt-24 mx-6">
@@ -30,7 +30,7 @@
                   </StepperPanel>
                   <StepperPanel header="Form editor">
                       <template #content="{ prevCallback, nextCallback }">
-                          <div class="mx-10">
+                          <div class="mx-10 mt-5">
                               <FormEditor />
                           </div>
                           <div class="flex pt-4 justify-between mb-14 mx-10">
@@ -42,7 +42,7 @@
                   </StepperPanel>
                   <StepperPanel header="Delivery options">
                       <template #content="{ prevCallback }">
-                          <div class="flex mx-10">
+                          <div class="flex mx-10 mt-7">
                               <DeliveryOptions />
                           </div>
                           <div class="flex pt-4 justify-content-start mb-5 mx-10">
@@ -70,7 +70,7 @@ const active = ref(0);
 
 const items = ref([
 { label: "Templates", route: "/templates" },
-{ label: "Create New Template", route: "/templates/create" },
+{ label: "Create new template", route: "/templates/create" },
 ]);
 </script>
 

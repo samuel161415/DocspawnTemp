@@ -5,11 +5,11 @@
    
     <div class="flex flex-row font-semibold items-center">
       <div class="flex flex-col gap-2">
-        <label for="username">Form Title <span class="text-red-500">*</span></label>
+        <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Form title <span class="text-red-500">*</span></label>
         <InputText class="w-80" id="formTitle" v-model="formTitle" aria-describedby="FormTitle-help" />
       </div>
       <div class="ml-14 flex flex-col gap-2">
-        <label for="username">Form Description</label>
+        <label for="username" class="text-surface-600 font-poppins font-medium text-lg">Form description</label>
         <InputText class="w-96" id="formTitle" v-model="formDescription" aria-describedby="FormTitle-help" />
       </div>
     </div>
@@ -32,7 +32,7 @@
       <template #header>
         <div class="flex flex-row">
           <p class="font-semibold text-lg self-center">
-            Form Fields
+            Form fields
           </p>
           <div class="ms-auto">
             <SearchField v-model:filters="filters" />
@@ -84,7 +84,7 @@
         </template>
       </Column>
 
-      <Column field="fieldFormat" header="Field Format" class="min-w-40 w-" style="width: 7%">
+      <Column field="fieldFormat" header="Field format" class="min-w-40 " style="width: 7%">
         <template #editor="{ data, field }">
 
           <Dropdown v-if="data.type === 'date' || data.type === 'time'" v-model="data[field]" class="max-w-48"
@@ -113,7 +113,7 @@
 
 
 
-      <Column field="id" rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center" header="Edit"
+      <Column field="id" :rowEditor="true" style="width: 5%; min-width: 6rem" bodyStyle="text-align:center" header="Edit"
         :pt="{
           rowEditorInitButton: ({ state }) => ({
             id: true
