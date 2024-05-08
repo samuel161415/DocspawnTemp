@@ -60,6 +60,7 @@ import slider from './slider';
 import speeddial from './speeddial';
 import splitbutton from './splitbutton';
 import steps from './steps';
+import stepper from './stepper';
 import tabmenu from './tabmenu';
 import tabview from './tabview';
 import tag from './tag';
@@ -140,6 +141,7 @@ export default {
     menu,
     menubar,
     steps,
+    stepper,
     tieredmenu,
     breadcrumb,
     panelmenu,
