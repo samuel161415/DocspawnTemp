@@ -1,82 +1,81 @@
 <template>
-  <div class="h-full w-full bg-secondary overflow-y-scroll no-scrollbar">
-    <div class="px-8 py-7 flex flex-col gap-2 bg-white">
-      <BreadcrumbComponent :home="home" :items="items" />
-   
-      <div
-        class="w-full mt-2 flex items-center justify-between bg-white rounded-lg border-none pl-4"
-      >
-        <TabMenu
-          class="w-full border-none"
-          v-model:activeIndex="active"
-          :model="mainSteps"
-        />
-        <div class="flex items-center border-b-2 p-[2.5px] pr-3 gap-2">
-          <Button
-            @click="active = 0"
-            rounded
-            label="1"
-            class="w-[43px]"
-            :outlined="active !== 0"
-          />
-          <Button
-            @click="active = 1"
-            rounded
-            label="2"
-            class="w-[43px]"
-            :outlined="active !== 1"
-          />
-          <Button
-            @click="active = 2"
-            rounded
-            label="3"
-            class="w-[43px]"
-            :outlined="active !== 2"
-          />
-          <Button
-            @click="active = 3"
-            rounded
-            label="4"
-            class="w-[43px]"
-            :outlined="active !== 3"
-          />
-        </div>
+  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar">
+      <div class="px-8 py-7 flex flex-col gap-2 bg-white ">
+          <BreadcrumbComponent :home="home" :items="items" />
+
+          <div class="w-full mt-5 flex items-center justify-between  rounded-lg border-none pl-4 ">
+
+              <Stepper>
+                  <StepperPanel header="General information">
+                      <template #content="{ nextCallback }">
+                          <div class="flex justify-center mt-6">
+                              <GeneralInfo />
+                          </div>
+                          <div class="flex pt-4 justify-end mt-24">
+                            <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" class="bg-primaryBlue px-5"/>
+                          </div>
+                      </template>
+                  </StepperPanel>
+                  <StepperPanel header="Template editor">
+                      <template #content="{ prevCallback, nextCallback }">
+                          <div class="flex mx-6">
+                              <TemplateEditor />
+                          </div>
+                          <div class="flex pt-4 justify-between mt-24 mx-6">
+                              <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
+                                  @click="prevCallback" />
+                              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" class="bg-primaryBlue px-5"/>
+                          </div>
+                      </template>
+                  </StepperPanel>
+                  <StepperPanel header="Form editor">
+                      <template #content="{ prevCallback, nextCallback }">
+                          <div class="mx-10">
+                              <FormEditor />
+                          </div>
+                          <div class="flex pt-4 justify-between mb-14 mx-10">
+                              <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
+                                  @click="prevCallback" />
+                              <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" class="bg-primaryBlue px-5"/>
+                          </div>
+                      </template>
+                  </StepperPanel>
+                  <StepperPanel header="Delivery options">
+                      <template #content="{ prevCallback }">
+                          <div class="flex mx-10">
+                              <DeliveryOptions />
+                          </div>
+                          <div class="flex pt-4 justify-content-start mb-5 mx-10">
+                              <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"
+                                  @click="prevCallback" />
+                          </div>
+                      </template>
+                  </StepperPanel>
+              </Stepper>
+          </div>
       </div>
-      <div class="mt-5 w-full rounded-lg">
-        <div class="w-full pl-4">
-          <GeneralInfo v-if="active === 0" />
-          <TemplateEditor v-if="active === 1" />
-          <FormEditor v-if="active === 2" />
-          <DeliveryOptions v-if="active === 3" />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import GeneralInfo from "../../components/createTemplate/GeneralInfo.vue";
 import DeliveryOptions from "~/components/createTemplate/DeliveryOptions.vue";
 import FormEditor from "~/components/createTemplate/formEditor/FormEditor.vue";
 import TemplateEditor from "~/components/createTemplate/TemplateEditor.vue";
 import BreadcrumbComponent from "~/components/shared/BreadcrumbComponent.vue";
-import { home } from '~/composables/useBreadcrumb.js'
+import { home } from '~/composables/useBreadcrumb.js';
 
 const active = ref(0);
 
 const items = ref([
-  { label: "Templates", route: "/templates" },
-  { label: "Create New Template", route: "/templates/create" },
-]);
-
-const mainSteps = ref([
-  { label: "General Information", icon: "pi pi-info-circle" },
-  { label: "Template Editor", icon: "pi pi-id-card" },
-  { label: "Form Editor", icon: "pi pi-file-edit" },
-  { label: "Delivery Options", icon: "pi pi-inbox" },
+{ label: "Templates", route: "/templates" },
+{ label: "Create New Template", route: "/templates/create" },
 ]);
 </script>
+
 <style scoped>
-/* Your CSS here */
+.p-stepper {
+  flex-basis: 50rem;
+}
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class=" mb-14">
-    <p class="font-semibold text-surface-600 text-2xl mb-5">Delivery Options</p>
+    <!-- <p class="font-semibold text-surface-600 text-2xl mb-5">Delivery Options</p> -->
 
     <div class="flex flex-col">
       <!-- section 1  -->
@@ -196,8 +196,5 @@ const showToast = () => {
   }
 };
 
-const handleClick = () => {
-  pdfxml.value = false;
-}
 </script>
 

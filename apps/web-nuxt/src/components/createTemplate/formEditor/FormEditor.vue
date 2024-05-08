@@ -1,7 +1,7 @@
 <!-- This is the Form Editor compenent-->
 
 <template>
-  <div class="flex flex-row mr-10 ml-14 my-2 items-center">
+  <div class="flex flex-row  my-2 items-center">
    
     <div class="flex flex-row font-semibold items-center">
       <div class="flex flex-col gap-2">
@@ -21,10 +21,10 @@
     </div>
   </div>
  
-  <div class="box overflow-hidden p-5 table-container">
+  <div class="box overflow-hidden py-5 table-container">
     <DataTable striped-rows celll-edit-complete="onCellEditComplete" :reorderableColumns="false" show-gridlines
       v-model:filters="filters" :global-filter-fields="['type', 'name', 'description']" @rowReorder="onRowReorder"
-      v-model:editingRows="editingRows" :value="formFields" editMode="row" dataKey="id" class="mx-3 px-6 mb-8"
+      v-model:editingRows="editingRows" :value="formFields" editMode="row" dataKey="id" class="mb-8"
       style="width: 100%" @row-edit-init="onRowEditInit" @row-edit-cancel="onRowEditCancel"
       @row-edit-save="onRowEditSave" :pt="{
           table: { style: 'min-width: 50rem' }
