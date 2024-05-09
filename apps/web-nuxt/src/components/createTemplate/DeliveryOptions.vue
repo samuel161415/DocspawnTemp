@@ -1,5 +1,5 @@
 <template>
-  <div class=" mb-14">
+  <div class=" mb-10">
     <!-- <p class="font-semibold text-surface-600 text-2xl mb-5">Delivery Options</p> -->
 
     <div class="flex flex-col">
@@ -110,10 +110,12 @@
           </div>
 
           <div class="flex items-center ">
-            <Checkbox v-model="sendtoMultiple" inputId="sendtoMultiple" name="sendtoMultiple" value="sendtoMultiple" />
+            <Checkbox v-model="sendtoMultiple" inputId="sendtoMultiple" name="sendtoMultiple" value="sendtoMultiple" :binary="true" />
             <label for="sendtoMultiple" class="ml-2 text-base text-surface-500 flex font-poppins"> Send to multiple <TagComponent value="Business"/> </label>
           </div>
-    
+          <div v-if="sendtoMultiple" class="mt-3">
+              <Chips v-model="selectedEmails" />
+          </div>
         </div>
 
         <!-- col 3 -->
@@ -185,6 +187,20 @@ const sendtoMultiple = ref(false)
 const extranetaccount = ref(false)
 const emailPersonalization = ref(false)
 
+const selectedEmails = ref([]);
+
+// watch changes in sendtoMultiple
+watch(() => sendtoMultiple, (value) => {
+  if (!value) {
+    selectedEmails.value = [];
+  }
+  console.log(selectedEmails.value);
+});
+
+// watch changes in selectedEmails
+watch(() => selectedEmails, (value) => {
+  console.log(selectedEmails.value);
+});
 // for fourth section
 const recipentExtranetAccount = ref(false)
 
