@@ -64,15 +64,12 @@
             <Checkbox v-model="forceverfiction" inputId="forceverfiction" name="forceverfiction" value="forceverfiction" />
             <label for="forceverfiction" class="ml-2 text-base text-surface-500 font-poppins">
              Force entries verification upon form filling
-                <!-- <Badge value="?" class="ml-1" v-tooltip="'explanation'" ></Badge> -->
                 <span class="inline-flex items-center gap-x-1 rounded-full bg-gray-200 px-1.5 py-0 text-sm font-medium text-gray-600 font-sans cursor-pointer" v-tooltip="'Explanation'" >
-                  
                   ?
                 </span>
                 <TagComponent value="Business"/>
            
             </label>
-            
           </div>
     
         </div>
@@ -104,16 +101,20 @@
         <!-- col 2 -->
         <div class="w-1/3">
           <p class="text-lg text-surface-500 font-poppins mb-2">Email Delivery</p>
-          <div class="flex items-center mb-3">
-            <Checkbox v-model="tolinkedData" inputId="tolinkedData" name="tolinkedData" value="tolinkedData" />
-            <label for="tolinkedData" class="ml-2 text-base text-surface-500 font-poppins"> Send to linked data </label>
+          <div class="flex">
+
+            <div class="flex items-center mb-3">
+              <Checkbox v-model="tolinkedData" inputId="tolinkedData" name="tolinkedData" value="tolinkedData" :binary="true"/>
+              <label for="tolinkedData" class="ml-2 text-base text-surface-500 font-poppins"> Send to linked data  </label>
+            </div>
+            <Button v-if="tolinkedData" text label="Edit email template" class="-mt-3" @click="handleOpenEditModal"/>
           </div>
 
           <div class="flex items-center ">
             <Checkbox v-model="sendtoMultiple" inputId="sendtoMultiple" name="sendtoMultiple" value="sendtoMultiple" :binary="true" />
             <label for="sendtoMultiple" class="ml-2 text-base text-surface-500 flex font-poppins"> Send to multiple <TagComponent value="Business"/> </label>
           </div>
-          <div v-if="sendtoMultiple" class="mt-3">
+          <div v-if="sendtoMultiple" class="mt-3 ml-8 w-2/3">
               <Chips v-model="selectedEmails" />
           </div>
         </div>
@@ -160,6 +161,7 @@
 
       </div>
     </div>
+    <EditEmailTemplateModal v-model:visible="openEditModal" />
     <Toast />
   </div>
 </template>
@@ -168,6 +170,7 @@
 import { ref } from "vue";
 import { useToast } from "primevue/usetoast";
 import TagComponent from "../shared/TagComponent.vue";
+import EditEmailTemplateModal from "./EditEmailTemplateModal.vue";
 
 // for first section
 const pdf = ref(true);
@@ -186,21 +189,9 @@ const tolinkedData = ref(false);
 const sendtoMultiple = ref(false)
 const extranetaccount = ref(false)
 const emailPersonalization = ref(false)
+const selectedEmails = ref();
+const openEditModal = ref(false);
 
-const selectedEmails = ref([]);
-
-// watch changes in sendtoMultiple
-watch(() => sendtoMultiple, (value) => {
-  if (!value) {
-    selectedEmails.value = [];
-  }
-  console.log(selectedEmails.value);
-});
-
-// watch changes in selectedEmails
-watch(() => selectedEmails, (value) => {
-  console.log(selectedEmails.value);
-});
 // for fourth section
 const recipentExtranetAccount = ref(false)
 
@@ -212,5 +203,8 @@ const showToast = () => {
   }
 };
 
+const handleOpenEditModal = ()=> {
+  openEditModal.value = true;
+}
 </script>
 

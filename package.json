@@ -32,6 +32,7 @@
     "@fortawesome/pro-duotone-svg-icons": "^6.5.2",
     "@fortawesome/pro-thin-svg-icons": "^6.5.2",
     "@fortawesome/vue-fontawesome": "^3.0.6",
-    "prismjs": "^1.29.0"
+    "prismjs": "^1.29.0",
+    "quill": "^2.0.1"
   }
 }

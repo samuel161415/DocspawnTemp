@@ -421,15 +421,12 @@ const getRowId = (notSame) => {
 }
 
 const handleDragOver = (id) => {
-      // Do something when element is dragged over
-    console.log('Element dragged over!');
+    // Do something when element is dragged over
     isDraggedOver.value[id] = true;
-    console.log("dragged over" + isDraggedOver.value[id] + "itemId:" + id)
 };
 
 const handleDragLeave = (id) => {
   isDraggedOver.value[id] = false;
-  console.log("left" + isDraggedOver.value[id] + "itemId:" + id)
 
 }
 
@@ -479,7 +476,7 @@ const onRowEditInit = (event) => {
   // Disable row editing for other rows if another row is already being edited
   if (currentRow.value !== null && currentRow.value !== event.index) {
     toast.add({ severity: 'warn', summary: 'Edit in Progress', detail: 'Please save or cancel the current edit before editing another row.', life: 3000 });
-    console.log(event.index)
+
   } else {
     currentRow.value = event.index;
   }
