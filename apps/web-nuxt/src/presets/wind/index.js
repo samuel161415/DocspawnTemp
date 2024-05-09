@@ -24,6 +24,7 @@ import divider from './divider';
 import dock from './dock';
 import dropdown from './dropdown';
 import fieldset from './fieldset';
+import fileupload from './fileupload';
 import global from './global';
 import inlinemessage from './inlinemessage';
 import inputgroup from './inputgroup';
@@ -130,6 +131,7 @@ export default {
     accordion,
     panel,
     fieldset,
+    fileupload,
     card,
     tabview,
     divider,
