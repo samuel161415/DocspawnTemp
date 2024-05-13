@@ -29,10 +29,10 @@ export default {
             'border-transparent',
             'border-solid',
             {
-                'border-y-[0.25rem] border-r-[0.25rem] border-l-0 border-r-surface-50': context?.right || (!context?.right && !context?.left && !context?.top && !context?.bottom),
-                'border-y-[0.25rem] border-l-[0.25rem] border-r-0 border-l-surface-50': context?.left,
-                'border-x-[0.25rem] border-t-[0.25rem] border-b-0 border-t-surface-50': context?.top,
-                'border-x-[0.25rem] border-b-[0.25rem] border-t-0 border-b-surface-50': context?.bottom
+                'border-y-[0.25rem] border-r-[0.25rem] border-l-0 border-r-surface-500': context?.right || (!context?.right && !context?.left && !context?.top && !context?.bottom),
+                'border-y-[0.25rem] border-l-[0.25rem] border-r-0 border-l-surface-500': context?.left,
+                'border-x-[0.25rem] border-t-[0.25rem] border-b-0 border-t-surface-500': context?.top,
+                'border-x-[0.25rem] border-b-[0.25rem] border-t-0 border-b-surface-500': context?.bottom
             },
 
             // Spacing
@@ -44,6 +44,6 @@ export default {
         ]
     }),
     text: {
-        class: ['p-3', 'bg-surface-50 dark:bg-surface-600', 'text-gray-500 dark:text-surface-200', 'text-base', 'leading-none', 'rounded-md', 'font-poppins', 'break-words']
+        class: ['p-3', 'bg-surface-500 dark:bg-surface-200', 'text-white dark:text-surface-200', 'text-base', 'leading-none', 'rounded-md', 'font-poppins font-normal', 'break-words']
     }
 };

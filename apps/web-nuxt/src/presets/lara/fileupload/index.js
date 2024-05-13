@@ -3,7 +3,7 @@ export default {
         class: 'hidden'
     },
     buttonbar: {
-        class: ['flex', 'flex-wrap', 'bg-surface-200', 'dark:bg-surface-800', 'text-surface-700', 'dark:text-white/80', 'p-5', 'gap-2', 'border', 'border-solid', 'border-surface-200', 'dark:border-surface-700', 'border-b-0', 'rounded-tr-lg', 'rounded-tl-lg']
+        class: ['flex', 'flex-wrap', 'justify-center', 'bg-surface-50', 'dark:bg-surface-800', 'text-surface-700', 'dark:text-white/80', 'p-5', 'gap-2', 'border', 'border-solid', 'border-surface-200', 'dark:border-surface-700', 'border-b-0', 'rounded-tr-lg', 'rounded-tl-lg']
     },
     chooseButton: {
         class: ['relative', 'items-center inline-flex text-center align-bottom justify-center', 'px-4 py-3', 'rounded-md', 'leading-[normal]', 'font-bold', 'text-primary-inverse', 'bg-surface-100', 'border-surface-100', 'hover:bg-primary-hover', 'overflow-hidden', 'cursor-pointer']
