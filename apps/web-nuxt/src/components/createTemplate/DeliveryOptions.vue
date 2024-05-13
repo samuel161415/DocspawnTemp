@@ -1,6 +1,7 @@
 <template>
   <div class=" mb-10">
-    <!-- <p class="font-semibold text-surface-600 text-2xl mb-5">Delivery Options</p> -->
+  
+    <p class="font-semibold text-surface-600 text-2xl mb-5 flex text-center justify-center">Delivery options</p>
 
     <div class="flex flex-col">
       <!-- section 1  -->
