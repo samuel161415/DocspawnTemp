@@ -13,12 +13,15 @@
                       </button>
                     </template>
                       <template #content="{ nextCallback }">
+                        <div class="mb-32">
+
                           <div class="flex justify-center mt-6">
-                              <GeneralInfo @update:enableNext="isFirstNextEnabled = $event"/>
+                              <GeneralInfo />
                           </div>
-                          <div class="flex pt-4 justify-end mt-4 mx-52">
-                            <Button v-if="isFirstNextEnabled" label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" class="bg-primaryBlue px-5"/>
+                          <div class="flex justify-end mb-6 mx-52 -mt-11">
+                            <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="nextCallback" class="bg-primaryBlue px-5"/>
                           </div>
+                        </div>
                       </template>
                   </StepperPanel>
                   <StepperPanel header="Template editor">
@@ -80,7 +83,7 @@
 
 <script setup>
 import { ref, watch } from "vue";
-import GeneralInfo from "../../components/createTemplate/GeneralInfo.vue";
+import GeneralInfo from "../../components/createTemplate/generalInfo/GeneralInfo.vue";
 import DeliveryOptions from "~/components/createTemplate/DeliveryOptions.vue";
 import FormEditor from "~/components/createTemplate/formEditor/FormEditor.vue";
 import TemplateEditor from "~/components/createTemplate/TemplateEditor.vue";
