@@ -18,21 +18,14 @@
       <p v-if="templateEditorStore.selectedAddedField.fieldType">
         ({{ templateEditorStore.selectedAddedField.fieldType }})
       </p>
-      <div class="flex gap-2   text-gray-400 items-center">
-        <p>Remove field</p>
-        <div class="cursor-pointer">
-          <Button text @click="deleteFieldFromCanvas">
-            <font-awesome-icon icon="fa-duotone fa-minus-circle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
-          </Button>
-        </div>
-      </div>
+
       <hr />
 
       <div v-if="templateEditorStore.activeTemplateField === 'data-fields' || templateEditorStore.activeTemplateField === 'dataset-image'" class="w-full pt-4">
         <p class="mb-1">
           Datafield key
         </p>
-        <div v-if="!activeDataField" class="my-3 flex text-red gap-2">
+        <div v-if="!activeDataField || activeDataField === 'Lorem ipsum'" class="my-3 flex text-red gap-2">
           <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
           <p>Select a field</p>
         </div>
@@ -109,7 +102,16 @@
           </Button>
         </div>
       </div>
-      <TextFormatting v-if="(templateEditorStore.activeTemplateField === 'form-field' && (templateEditorStore.activeFormField === 'text' || templateEditorStore.activeFormField === 'multiline-text' || templateEditorStore.activeFormField === 'date' || templateEditorStore.activeFormField === 'time')) || templateEditorStore.activeTemplateField === 'text' || templateEditorStore.activeTemplateField === 'data-fields'" />
+      <TextFormatting v-if="templateEditorStore.selectedAddedField.fieldType === 'data-fields'" />
+      <!-- <div class="flex gap-2   text-gray-400 items-center"> -->
+      <!-- <p>Remove field</p> -->
+      <!-- <div class="cursor-pointer"> -->
+      <Button outlined severity="danger" class="px-3 w-full mt-6" @click="deleteFieldFromCanvas">
+        Delete field
+        <!-- <font-awesome-icon icon="fa-duotone fa-minus-circle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" /> -->
+      </Button>
+      <!-- </div> -->
+      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -165,7 +167,13 @@ watch(activeDataField, () => {
     const activeObject = templateEditorStore.canvas.getActiveObject()
 
     const objs = templateEditorStore.canvas._objects
-    templateEditorStore.canvas._objects = objs.map((obj) => {
+    templateEditorStore.canvas._objects = objs.filter((obj) => {
+      if (obj.id === activeObject.hash && obj.isAlertIcon && activeDataField.value !== 'Lorem ipsum')
+        return false
+      else
+        return true
+    },
+    ).map((obj) => {
       if (obj === activeObject) {
         obj.set({ text: activeDataField.value, id: activeDataField.value })
         return obj
@@ -182,16 +190,10 @@ watch(activeDataField, () => {
 watch(
   () => templateEditorStore.selectedAddedField,
   (newVal) => {
-    if (newVal)
-      fieldName.value = newVal.name
-  },
-)
+    fieldName.value = newVal.name
 
-watch(
-  () => templateEditorStore.activeDataField,
-  (newVal) => {
-    if (newVal && newVal)
-      activeDataField.value = newVal
+    if (newVal.fieldType === 'data-fields' || newVal.fieldType === 'dataset-image')
+      activeDataField.value = newVal.name
   },
 )
 </script>

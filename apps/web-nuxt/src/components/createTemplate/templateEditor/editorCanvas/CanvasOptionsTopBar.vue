@@ -3,7 +3,7 @@
     <div class=" flex justify-content-center  gap-6 ml-8 ">
       <div
         v-tooltip.top="{
-          value: 'Display guides',
+          value: 'Display guide',
           pt: {
             arrow: {
               style: {
@@ -14,10 +14,10 @@
           },
         }"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = true;showMargins()">
+        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
           <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
         </div>
-        <div v-else class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = false;removeMargins()">
+        <div v-else class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
           <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
         </div>
       </div>
@@ -59,52 +59,126 @@
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore'
 
-function showMargins() {
-  const objs = templateEditorStore.canvas._objects
-  objs.forEach((obj) => {
-    console.log('obj>>>>>', obj)
-    if (obj.PageNo === templateEditorStore.activePageForCanvas) {
-      templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-        left: obj.left,
-        top: 0, // event.absolutePointer.y,
-        stroke: '#3978eb',
-        id: obj.id,
-        selection: false,
-      }))
-      // x axis
-      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
-          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
-          stroke: '#3978eb',
-          id: obj.id,
-          selection: false,
-        }))
-      }
-      else {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
-          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-          stroke: '#3978eb',
-          id: obj.id,
-          selection: false,
-        }))
-      }
-    }
-  })
-  templateEditorStore.canvas.renderAll()
-}
-function removeMargins() {
-  const objs = templateEditorStore.canvas._objects
-  templateEditorStore.canvas._objects = objs.filter((obj) => {
-    if (obj.stroke === '#3978eb')
-      return false
-    else
-      return true
-  })
+function toggleMargins() {
+  const activeObject = templateEditorStore.canvas.getActiveObject()
 
-  templateEditorStore.canvas.renderAll()
+  if (activeObject) {
+    if (templateEditorStore.activeDisplayGuide) {
+      const objs = templateEditorStore.canvas._objects
+      objs.forEach((obj) => {
+        if (obj === activeObject) {
+          templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+            left: obj.left,
+            top: 0, // event.absolutePointer.y,
+            stroke: '#3978eb',
+            id: obj.hash,
+            selection: false,
+            fieldType: obj.fieldType,
+            PageNo: templateEditorStore.activePageForCanvas,
+          }))
+          // x axis
+          if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+            templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
+              stroke: '#3978eb',
+              id: obj.hash,
+              selection: false,
+              fieldType: obj.fieldType,
+              PageNo: templateEditorStore.activePageForCanvas,
+            }))
+          }
+          else {
+            templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+              stroke: '#3978eb',
+              id: obj.hash,
+              selection: false,
+              fieldType: obj.fieldType,
+              PageNo: templateEditorStore.activePageForCanvas,
+            }))
+          }
+        }
+      })
+      templateEditorStore.canvas.renderAll()
+    }
+    else {
+      const objs = templateEditorStore.canvas._objects
+      templateEditorStore.canvas._objects = objs.filter((obj) => {
+        if (obj.stroke === '#3978eb' && obj.id === activeObject.hash)
+          return false
+        else
+          return true
+      })
+
+      templateEditorStore.canvas.renderAll()
+    }
+  }
 }
+// function showMargins() {
+//   const objs = templateEditorStore.canvas._objects
+//   objs.forEach((obj) => {
+//     if (obj.PageNo === templateEditorStore.activePageForCanvas) {
+//       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+//         left: obj.left,
+//         top: 0, // event.absolutePointer.y,
+//         stroke: '#3978eb',
+//         id: obj.id,
+//         selection: false,
+//         fieldType: obj.fieldType,
+//       }))
+//       // x axis
+//       if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+//         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+//           left: 0, // event.absolutePointer.x,
+//           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
+//           stroke: '#3978eb',
+//           id: obj.id,
+//           selection: false,
+//           fieldType: obj.fieldType,
+//         }))
+//       }
+//       else {
+//         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+//           left: 0, // event.absolutePointer.x,
+//           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+//           stroke: '#3978eb',
+//           id: obj.id,
+//           selection: false,
+//           fieldType: obj.fieldType,
+//         }))
+//       }
+//     }
+//   })
+//   templateEditorStore.canvas.renderAll()
+// }
+// function removeMargins() {
+//   const objs = templateEditorStore.canvas._objects
+//   templateEditorStore.canvas._objects = objs.filter((obj) => {
+//     if (obj.stroke === '#3978eb')
+//       return false
+//     else
+//       return true
+//   })
+
+//   templateEditorStore.canvas.renderAll()
+// }
+
+watch(() => templateEditorStore.activeDisplayGuide, () => {
+  const activeObject = templateEditorStore.canvas.getActiveObject()
+  if (activeObject) {
+    if (templateEditorStore.activeDisplayGuide) {
+      activeObject.set({ displayGuide: true })
+      templateEditorStore.canvas.renderAll()
+    }
+
+    else {
+      activeObject.set({ displayGuide: false })
+      templateEditorStore.canvas.renderAll()
+    }
+  }
+})
 
 watch(templateEditorStore.activeAdvancedPointer, () => {
   templateEditorStore.canvas._objects.forEach((obj) => {
@@ -115,7 +189,8 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         left: e.target.left,
         top: 0, // event.absolutePointer.y,
         stroke: '#3978eb',
-        id: e.target.id,
+        id: e.target.hash,
+        fieldType: obj.fieldType,
       }))
       if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
         // x axis
@@ -123,7 +198,8 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           left: 0, // event.absolutePointer.x,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
           stroke: '#3978eb',
-          id: e.target.id,
+          id: e.target.hash,
+          fieldType: obj.fieldType,
         }))
       }
       else {
@@ -132,7 +208,8 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           left: 0, // event.absolutePointer.x,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
           stroke: '#3978eb',
-          id: e.target.id,
+          id: e.target.hash,
+          fieldType: obj.fieldType,
         }))
       }
     })
@@ -142,7 +219,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
 
       const objs = templateEditorStore.canvas._objects
       templateEditorStore.canvas._objects = objs.filter((obj) => {
-        if (obj.stroke === '#3978eb' && obj.id === e.target.id)
+        if (obj.stroke === '#3978eb' && obj.id === e.target.hash)
           return false
         else
           return true

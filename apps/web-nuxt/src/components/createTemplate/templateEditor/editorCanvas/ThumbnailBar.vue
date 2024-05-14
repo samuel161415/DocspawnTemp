@@ -1,13 +1,16 @@
 <template>
-  <div class="h-max p-6  flex items-center justify-between px-3  mb-6 rounded-md bg-blue-50 mt-4 ">
-    <div class="w-full  h-max p-4">
-      <div v-if="templateEditorStore.activePageForCanvas !== 0" class="flex gap-6 w-full overflow-x-scroll overflow-y-hidden">
-        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-32 h-max  " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="changeCurrentPageOnCanvas(item)">
-          <canvas :id="`template-thumbnail-${item}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer">
+  <div class="h-max p-2  flex items-center justify-between px-3  mb-6 rounded-md bg-blue-50 mt-4 ">
+    <div class="w-full  h-max p-2">
+      <p class="px-2 mb-1 ">
+        Current page: <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> out of <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
+      </p>
+      <div v-if="templateEditorStore.activePageForCanvas !== 0" class="flex gap-4 w-full overflow-x-auto overflow-y-hidden p-3">
+        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="changeCurrentPageOnCanvas(item)">
+          <canvas :id="`template-thumbnail-${item}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer ">
           </canvas>
-          <p class="align-center  items-center justify-center p-2 text-center text-gray-500 font-bold">
+          <!-- <p class="align-center  items-center justify-center p-2 text-center text-black ">
             {{ item }}
-          </p>
+          </p> -->
         </div>
       </div>
     </div>
@@ -21,6 +24,8 @@ import { templateEditorStore } from '../store/templateEditorStore'
 import { activeTextStyles } from '../store/activeTextStyles'
 
 async function changeCurrentPageOnCanvas(pageNo) {
+  templateEditorStore.canvas.discardActiveObject()
+  templateEditorStore.canvas.renderAll()
   templateEditorStore.activePageForCanvas = pageNo
   const response = await fetch(templateEditorStore.templateBackgroundUrl)
   const pdfData = await response.arrayBuffer()
@@ -81,6 +86,7 @@ async function changeCurrentPageOnCanvas(pageNo) {
 
 watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
   const objs = templateEditorStore.canvas._objects
+
   templateEditorStore.canvas._objects = objs.map((obj) => {
     if (obj.PageNo === newVal)
       obj.set({ visible: true, opacity: 1 })

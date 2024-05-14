@@ -11,6 +11,7 @@ export const templateEditorStore = reactive({
   activeDataField: '',
   addedFields: [],
   selectedAddedField: {},
+  fieldToAdd: {},
   fabric: {},
   templateCanvas: {},
   datasetData: { keys: {}, allEntries: [] },
@@ -18,6 +19,7 @@ export const templateEditorStore = reactive({
   totalPagesArray: [],
   activeAdvancedPointer: false,
   activeDisplayGuide: false,
+  anyObjectSelected: false,
 
 })
 

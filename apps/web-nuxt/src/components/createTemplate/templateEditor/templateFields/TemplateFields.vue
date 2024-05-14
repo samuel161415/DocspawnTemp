@@ -119,17 +119,18 @@ const showImageOptions = ref(false)
 
 watch(showAddedFields, () => templateEditorStore.showOptionsBar = false)
 
-function selectField(field, subField) {
+function selectField(field) {
   templateEditorStore.activeTemplateField = field
-  templateEditorStore.selectedAddedField = { name: 'Lorem ipsum', type: field }
-  if (field === 'form-field')
-    templateEditorStore.activeFormField = subField
-  else if (field === 'data-fields')
-    templateEditorStore.activeDataField = subField
-  else if (field === 'timestamp')
-    templateEditorStore.activeTimestampField = subField
-  else if (field === 'image')
-    templateEditorStore.activeImageOption = subField
+  // templateEditorStore.selectedAddedField = { name: 'Lorem ipsum', type: field }
+  templateEditorStore.fieldToAdd = { name: 'Lorem ipsum', type: field }
+  // if (field === 'form-field')
+  //   templateEditorStore.activeFormField = subField
+  // else if (field === 'data-fields')
+  //   templateEditorStore.activeDataField = subField
+  // else if (field === 'timestamp')
+  //   templateEditorStore.activeTimestampField = subField
+  // else if (field === 'image')
+  //   templateEditorStore.activeImageOption = subField
 
   templateEditorStore.showOptionsBar = true
 }
