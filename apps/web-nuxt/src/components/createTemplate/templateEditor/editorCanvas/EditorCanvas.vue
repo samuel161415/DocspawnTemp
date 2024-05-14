@@ -456,7 +456,7 @@ function addEventsToCanvas() {
                 return true
             })
           }
-          templateEditorStore.canvas.renderAll()
+          // templateEditorStore.canvas.renderAll()
 
           //////////////
 
@@ -467,11 +467,11 @@ function addEventsToCanvas() {
             scaleY: 200 / myImg.height,
             id: ftoadd.name,
             hash: uuid.v1(),
-
             fieldType: ftoadd.type,
             PageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
           })
+
           /// ////////////adding icon//////////////////////////////
           fabric.Image.fromURL(
             alertIconUrl

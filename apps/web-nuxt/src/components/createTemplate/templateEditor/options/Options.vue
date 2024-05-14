@@ -140,15 +140,21 @@ function getFile(e) {
 function deleteFieldFromCanvas() {
   const fieldId = templateEditorStore.activeDataField
   const object = templateEditorStore.canvas.getActiveObject()
-  if (object?.id)
-    templateEditorStore.canvas.remove(object)
-  else
-    templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter(obj => obj?.id !== fieldId)
+  // if (object?.id)
+  //   templateEditorStore.canvas.remove(object)
+  // else
+  templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
+    if (obj?.id === object?.id || obj.id === object?.hash)
+      return false
+    else
+      return true
+  })
 
   const fieldsS = templateEditorStore.addedFields.filter(f => f?.name !== fieldId)
   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
-
+  templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
+
   templateEditorStore.showOptionsBar = false
 }
 
