@@ -101,7 +101,7 @@
 
         <!-- col 2 -->
         <div class="w-1/3">
-          <p class="text-lg text-surface-500 font-poppins mb-2">Email Delivery</p>
+          <p class="text-lg text-surface-500 font-poppins mb-2">Email delivery</p>
           <div class="flex">
 
             <div class="flex items-center mb-3">

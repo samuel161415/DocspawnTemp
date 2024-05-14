@@ -4,7 +4,7 @@ export default
         class: ['flex-1', props.orientation === 'vertical' ? 'flex-col' : 'flex-row']
     }),
     nav:({ props }) => ( {
-        class: ['flex', 'justify-between', 'items-center', 'relative', 'list-none', 'overflow-x-auto', props.orientation === 'vertical' ? 'p-0':'px-52']
+        class: ['flex', 'justify-between', 'items-center', 'relative', 'list-none', 'overflow-x-auto', props.orientation === 'vertical' ? 'p-0':'pl-72 w-4/5']
     }),
     stepperpanel: {
         panel: ({ context, parent }) => ({
