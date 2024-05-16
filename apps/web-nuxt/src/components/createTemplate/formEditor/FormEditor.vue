@@ -5,19 +5,19 @@
     <p class="font-semibold text-surface-600 text-2xl mb-5 flex text-center justify-center">Form editor</p>
     <div class="flex flex-row  my-2 items-center">
      
-      <div class="flex flex-row font-semibold items-center">
+      <div class="flex flex-row items-center">
         <div class="flex flex-col gap-2">
-          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Form title <span class="text-red-500">*</span></label>
-          <InputText class="w-80" id="formTitle" v-model="formTitle" aria-describedby="FormTitle-help" />
+          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Template title <span class="text-red-500">*</span></label>
+          <InputText class="w-80 font-poppins text-surface-600 text-lg pl-5" id="formTitle" v-model="templateTitle" aria-describedby="FormTitle-help" />
         </div>
         <div class="ml-14 flex flex-col gap-2">
-          <label for="username" class="text-surface-600 font-poppins font-medium text-lg">Form description</label>
-          <InputText class="w-96" id="formTitle" v-model="formDescription" aria-describedby="FormTitle-help" />
+          <label for="username" class="text-surface-600 font-poppins font-medium text-lg">Template description</label>
+          <InputText class="w-80 font-poppins text-surface-600 text-lg pl-5" id="formTitle" v-model="templateDescription" aria-describedby="FormTitle-help" />
         </div>
       </div>
       <div class="grow"></div>
       <div class="flex flex-col items-center place-self-end">
-        <i class="pi pi-eye justify-self-center text-2xl custom-icon" :disabled="formTitle.trim().length === 0"
+        <i class="pi pi-eye justify-self-center text-2xl custom-icon" :disabled="templateTitle.trim().length === 0"
           @click="handlePreview()"></i>
         <p class="text-justify text-lg">See preview</p>
       </div>
@@ -332,6 +332,8 @@ import MobilePreviewDialog from "./MobilePreviewDialog.vue";
 import { FormFieldsData } from "../../../services/sampleData";
 import SearchField from "../../shared/searchField.vue";
 
+const emit = defineEmits();
+
 const confirm = useConfirm();
 const mobile = ref(true);
 const toast = useToast();
@@ -346,10 +348,13 @@ const requiredOptions = ref([
     { label: 'No', value: false },
 ]);
 
+const templateTitle = ref('');
+const templateDescription = ref('');
 
-
-const formTitle = ref('');
-const formDescription = ref('');
+watch([templateTitle, templateDescription], () =>{
+  const isValid = templateTitle.value !== '' && templateDescription.value !== '';
+  emit('updateData', {isValid, step: 3})
+})
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -367,7 +372,6 @@ const timeFormats = ref([
     { label:  'HH:MM', value:  'HH:MM' },
 ]);
 
-
 const fieldTypes = [
     { label: 'Text', value: 'text' },
     { label: 'Multiline Text', value: 'multiline-text' },
@@ -381,18 +385,13 @@ const fieldTypes = [
     { label: 'Checkbox', value: 'checkbox' }
 ];
 
-
 const onUpload = () => {
     toast.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });
 };
 
-
-
 const handlePreview = () => {
-    showPreview.value = true;
-  
+    showPreview.value = true; 
 }
-
 
 const handleDelete = (event, data) => {
     confirm.require({
@@ -413,7 +412,6 @@ const handleDelete = (event, data) => {
     });
     
 };
-
 
 const getRowId = (notSame) => {
   if (notSame) {
