@@ -41,6 +41,26 @@
           <font-awesome-icon icon="fa-duotone fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
         </div>
       </div>
+      <div
+        v-tooltip.bottom="{
+          value: 'Display all guides',
+          pt: {
+            arrow: {
+              style: {
+                borderBottomColor: '#009ee2',
+              },
+            },
+            text: 'bg-primary font-medium',
+          },
+        }"
+      >
+        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
+          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        </div>
+        <div v-else class="cursor-pointer" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
+          <font-awesome-icon icon="fa-duotone fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        </div>
+      </div>
     </div>
 
     <div class="flex flex-row-reverse ">
@@ -116,54 +136,58 @@ function toggleMargins() {
     }
   }
 }
-// function showMargins() {
-//   const objs = templateEditorStore.canvas._objects
-//   objs.forEach((obj) => {
-//     if (obj.PageNo === templateEditorStore.activePageForCanvas) {
-//       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-//         left: obj.left,
-//         top: 0, // event.absolutePointer.y,
-//         stroke: '#3978eb',
-//         id: obj.id,
-//         selection: false,
-//         fieldType: obj.fieldType,
-//       }))
-//       // x axis
-//       if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
-//         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-//           left: 0, // event.absolutePointer.x,
-//           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
-//           stroke: '#3978eb',
-//           id: obj.id,
-//           selection: false,
-//           fieldType: obj.fieldType,
-//         }))
-//       }
-//       else {
-//         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-//           left: 0, // event.absolutePointer.x,
-//           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-//           stroke: '#3978eb',
-//           id: obj.id,
-//           selection: false,
-//           fieldType: obj.fieldType,
-//         }))
-//       }
-//     }
-//   })
-//   templateEditorStore.canvas.renderAll()
-// }
-// function removeMargins() {
-//   const objs = templateEditorStore.canvas._objects
-//   templateEditorStore.canvas._objects = objs.filter((obj) => {
-//     if (obj.stroke === '#3978eb')
-//       return false
-//     else
-//       return true
-//   })
+function showMargins() {
+  const objs = templateEditorStore.canvas._objects
 
-//   templateEditorStore.canvas.renderAll()
-// }
+  objs.forEach((obj) => {
+    if (obj.PageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon) {
+      templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+        left: obj.left,
+        top: 0, // event.absolutePointer.y,
+        stroke: '#3978eb',
+        id: obj.hash,
+        selection: false,
+        fieldType: obj.fieldType,
+        pageNo: templateEditorStore.activePageForCanvas,
+      }))
+      // x axis
+      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
+          stroke: '#3978eb',
+          id: obj.hash,
+          selection: false,
+          fieldType: obj.fieldType,
+          pageNo: templateEditorStore.activePageForCanvas,
+        }))
+      }
+      else {
+        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          left: 0, // event.absolutePointer.x,
+          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+          stroke: '#3978eb',
+          id: obj.hash,
+          selection: false,
+          fieldType: obj.fieldType,
+          pageNo: templateEditorStore.activePageForCanvas,
+        }))
+      }
+    }
+  })
+  templateEditorStore.canvas.renderAll()
+}
+function removeMargins() {
+  const objs = templateEditorStore.canvas._objects
+  templateEditorStore.canvas._objects = objs.filter((obj) => {
+    if (obj.stroke === '#3978eb' && !obj.displayGuide && obj.pageNo === templateEditorStore.activePageForCanvas)
+      return false
+    else
+      return true
+  })
+
+  templateEditorStore.canvas.renderAll()
+}
 
 watch(() => templateEditorStore.activeDisplayGuide, () => {
   const activeObject = templateEditorStore.canvas.getActiveObject()
@@ -230,6 +254,11 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
   })
 
   templateEditorStore.canvas.renderAll()
+})
+
+watch(() => templateEditorStore.activePageForCanvas, () => {
+  templateEditorStore.activeDisplayGuideForAll = false
+  templateEditorStore.activeDisplayGuide = false
 })
 </script>
 

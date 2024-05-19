@@ -19,6 +19,7 @@ export const templateEditorStore = reactive({
   totalPagesArray: [],
   activeAdvancedPointer: false,
   activeDisplayGuide: false,
+  activeDisplayGuideForAll: false,
   anyObjectSelected: false,
 
 })

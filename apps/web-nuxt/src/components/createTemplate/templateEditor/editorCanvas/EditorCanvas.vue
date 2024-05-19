@@ -201,6 +201,7 @@ async function createCanvas() {
     else {
       activeElement.value = {}
       templateEditorStore.anyObjectSelected = false
+      templateEditorStore.activeDisplayGuide = false
     }
   })
 }
@@ -219,7 +220,7 @@ function addEventsToCanvas() {
         }
       }
       if (obj.isAlertIcon && obj.id === e.target.hash)
-        obj.set({ top: e.target.top, left: e.target.left + e.target.width })
+        obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
     })
 
     templateEditorStore.canvas.renderAll()
@@ -233,7 +234,6 @@ function addEventsToCanvas() {
 
       hoveredElement.value = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
-
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (1 * (Number.parseFloat(activeTextStyles.fontSize) / 5)),
@@ -247,31 +247,51 @@ function addEventsToCanvas() {
           hasBorders: true,
           zIndex: 1,
           PageNo: templateEditorStore.activePageForCanvas,
-
         },
       )
-      if (templateEditorStore.activeAdvancedPointer) {
-        if (tempXMargin)
-          templateEditorStore.canvas.remove(tempXMargin)
-        if (tempYMargin)
-          templateEditorStore.canvas.remove(tempYMargin)
-
-        tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
-          left: event.absolutePointer.x,
-          top: 0,
-          stroke: '#3978eb',
-
-        })
-        templateEditorStore.canvas.add(tempXMargin)
-        tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
-          top: event.absolutePointer.y,
-          stroke: '#3978eb',
-
-        })
-        templateEditorStore.canvas.add(tempYMargin)
-      }
       templateEditorStore.canvas.add(hoveredElement.value)
+
+      if (templateEditorStore.activeAdvancedPointer) {
+        if (tempXMargin && tempYMargin) {
+          tempXMargin.set({ left: event.absolutePointer.x })
+          tempYMargin.set({ top: event.absolutePointer.y })
+        }
+        else {
+          tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+            left: event.absolutePointer.x,
+            top: 0,
+            stroke: '#3978eb',
+
+          })
+          templateEditorStore.canvas.add(tempXMargin)
+          tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+            left: 0, // event.absolutePointer.x,
+            top: event.absolutePointer.y,
+            stroke: '#3978eb',
+
+          })
+          templateEditorStore.canvas.add(tempYMargin)
+        }
+        // if (tempXMargin)
+        //   templateEditorStore.canvas.remove(tempXMargin)
+        // if (tempYMargin)
+        //   templateEditorStore.canvas.remove(tempYMargin)
+
+        // tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+        //   left: event.absolutePointer.x,
+        //   top: 0,
+        //   stroke: '#3978eb',
+
+        // })
+        // templateEditorStore.canvas.add(tempXMargin)
+        // tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+        //   left: 0, // event.absolutePointer.x,
+        //   top: event.absolutePointer.y,
+        //   stroke: '#3978eb',
+
+        // })
+        // templateEditorStore.canvas.add(tempYMargin)
+      }
 
       templateEditorStore.canvas.renderAll()
     }
@@ -292,26 +312,47 @@ function addEventsToCanvas() {
 
           hoveredElement.value = myImg
           if (templateEditorStore.activeAdvancedPointer) {
-            if (tempXMargin)
-              templateEditorStore.canvas.remove(tempXMargin)
-            if (tempYMargin)
-              templateEditorStore.canvas.remove(tempYMargin)
+            if (tempXMargin && tempYMargin) {
+              tempXMargin.set({ left: event.absolutePointer.x })
+              tempYMargin.set({ top: event.absolutePointer.y })
+            }
+            else {
+              tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+                left: event.absolutePointer.x,
+                top: 0,
+                stroke: '#3978eb',
 
-            tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
-              left: event.absolutePointer.x,
-              top: 0,
-              stroke: '#3978eb',
+              })
 
-            })
+              templateEditorStore.canvas.add(tempXMargin)
+              tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+                left: 0, // event.absolutePointer.x,
+                top: event.absolutePointer.y,
+                stroke: '#3978eb',
 
-            templateEditorStore.canvas.add(tempXMargin)
-            tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
-              left: 0, // event.absolutePointer.x,
-              top: event.absolutePointer.y,
-              stroke: '#3978eb',
+              })
+              templateEditorStore.canvas.add(tempYMargin)
+            }
+            // if (tempXMargin)
+            //   templateEditorStore.canvas.remove(tempXMargin)
+            // if (tempYMargin)
+            //   templateEditorStore.canvas.remove(tempYMargin)
 
-            })
-            templateEditorStore.canvas.add(tempYMargin)
+            // tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+            //   left: event.absolutePointer.x,
+            //   top: 0,
+            //   stroke: '#3978eb',
+
+            // })
+
+            // templateEditorStore.canvas.add(tempXMargin)
+            // tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+            //   left: 0, // event.absolutePointer.x,
+            //   top: event.absolutePointer.y,
+            //   stroke: '#3978eb',
+
+            // })
+            // templateEditorStore.canvas.add(tempYMargin)
           }
           templateEditorStore.canvas.add(myImg)
           templateEditorStore.canvas.renderAll()
@@ -367,7 +408,7 @@ function addEventsToCanvas() {
         alertIconUrl
         , (myImg) => {
           myImg.set({
-            left: textEle.left + textEle.width,
+            left: textEle.left + (textEle.width * textEle.scaleX),
             top: textEle.top,
             scaleX: 0.1,
             scaleY: 0.1,
@@ -456,7 +497,7 @@ function addEventsToCanvas() {
                 return true
             })
           }
-          // templateEditorStore.canvas.renderAll()
+          templateEditorStore.canvas.renderAll()
 
           //////////////
 
