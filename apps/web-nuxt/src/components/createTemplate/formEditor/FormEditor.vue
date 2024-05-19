@@ -7,12 +7,12 @@
      
       <div class="flex flex-row items-center">
         <div class="flex flex-col gap-2">
-          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Template title <span class="text-red-500">*</span></label>
+          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Template name <span class="text-red-500">*</span></label>
           <InputText class="w-80 font-poppins text-surface-600 text-lg pl-5" id="formTitle" v-model="templateTitle" aria-describedby="FormTitle-help" />
         </div>
         <div class="ml-14 flex flex-col gap-2">
           <label for="username" class="text-surface-600 font-poppins font-medium text-lg">Template description</label>
-          <InputText class="w-80 font-poppins text-surface-600 text-lg pl-5" id="formTitle" v-model="templateDescription" aria-describedby="FormTitle-help" />
+          <Textarea v-model="templateDescription" class="w-96 h-[47px] font-poppins text-surface-600 text-lg pl-5" cols="30" />
         </div>
       </div>
       <div class="grow"></div>
