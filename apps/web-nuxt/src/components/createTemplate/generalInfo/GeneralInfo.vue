@@ -1,13 +1,12 @@
 <template>
-
   <div class="w-full h-full items-center mx-8">
     <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">General information</p>
    
-    <div class="flex mx-8 mt-8">
-      <div class="rounded-lg flex-auto flex py-4 ">
+    <div class="flex mx-8 mt-4">
+      <div class="flex-auto flex py-2">
         <div class="w-full space-y-4">
           <p class="font-medium text-surface-600 text-lg font-poppins">Template name <span class="text-error">*</span></p>
-          <InputText type="text" v-model="templateName" class="w-80 font-poppins text-surface-600 text-lg pl-5" placeholder="Template name"/>
+          <InputText type="text" v-model="templateName" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name"/>
         </div>
       </div>
     </div>
@@ -35,7 +34,7 @@
 
     <!-- uploads -->
     <div :class="selectedTemplate === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
-      <UploadSection v-if="selectedTemplate !== ''" title="Upload your template" />
+      <UploadSection v-if="selectedTemplate !== ''" title="Upload your template"  @upload="handleTemplateUpload"/>
       <UploadSection v-if="selectedTemplate !== '' && isTableToDoc" title="Upload your data source" />
     </div>
   
@@ -52,8 +51,8 @@ const currentData = ref("Content I");
 const selectedTemplate = ref('');
 const templateName = ref('');
 const useCase = ref('');
-const templateFileUploaded = ref(false);
-const dataSourceFileUploaded = ref(false);
+const templateFile= ref();
+const dataSourceFile = ref();
 
 const emit = defineEmits();
 
@@ -68,7 +67,15 @@ const setIsHovered = (label, hovered) => {
 };
 
 const handleSelectTemplate = (label) => {
-  selectedTemplate.value = label;
+  if (label === selectedTemplate.value) {
+    selectedTemplate.value = ''; 
+  } else {
+    selectedTemplate.value = label;
+  }
+};
+
+const handleTemplateUpload = (event) => {
+  templateFile.value = event;
 };
 
 // Watch for changes in variables and emit data

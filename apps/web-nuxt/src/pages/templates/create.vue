@@ -3,9 +3,9 @@
       <div class="px-8 py-7 flex flex-col gap-2 bg-white ">
           <BreadcrumbComponent :home="home" :items="items" />
 
-          <div class="mt-5 flex items-center justify-center rounded-lg border-none">
+          <div class="flex items-center justify-center -mt-2 rounded-lg border-none">
 
-              <Stepper v-model:activeStep="active"  linear>
+              <Stepper v-model:activeStep="active" >
                   <StepperPanel>
                     <template #header="{ index, clickCallback }">
                       <button class="bg-transparent border-none inline-flex flex-column gap-2 " v-tooltip.top="'General information'" @click="clickCallback">
@@ -16,7 +16,7 @@
                       <template #content="{ nextCallback }">
                         <div class="mb-32">
 
-                          <div class="flex justify-center mt-2 mx-24">
+                          <div class="flex justify-center mx-24">
                               <GeneralInfo  @updateData="handleUpdateData"/>
                           </div>
                           <div class="flex justify-center mb-6 space-x-8 mt-4">
@@ -29,13 +29,13 @@
 
                   <StepperPanel header="Template editor">
                     <template #header="{ index, clickCallback }">
-                      <button class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Template editor'" @click="clickCallback">
+                      <button :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Template editor'" @click="clickCallback">
                         <font-awesome-icon  v-if="active === index"  :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                         <font-awesome-icon  v-else  :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
                       </button>
                     </template>
                     <template #content="{ prevCallback, nextCallback }">
-                        <div class=" mx-6 mt-5">
+                        <div class=" mx-6">
                             <TemplateEditor />
                         </div>
                         <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
@@ -48,14 +48,13 @@
 
                   <StepperPanel header="Form editor">
                     <template #header="{ index, clickCallback }">
-                      <button class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Form editor'" @click="clickCallback">
+                      <button :disabled="!isStep2Valid"  class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Form editor'" @click="clickCallback">
                           <font-awesome-icon v-if="active === index"  :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                           <font-awesome-icon v-else  :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
-
                         </button>
                     </template>
                     <template #content="{ prevCallback, nextCallback }">
-                        <div class="mx-10 mt-5">
+                        <div class="mx-10">
                             <FormEditor  @updateData="handleUpdateData"/>
                         </div>
                         <div class="flex pt-4 justify-center mb-14 mx-52">
@@ -68,37 +67,37 @@
 
                   <StepperPanel header="Delivery options">
                     <template #header="{ index, clickCallback }">
-                      <button class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Delivery options'" @click="clickCallback">
-                       <font-awesome-icon v-if="active === index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                       <font-awesome-icon v-else :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
+                      <button :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Delivery options'" @click="clickCallback">
+                        <font-awesome-icon v-if="active === index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        <font-awesome-icon v-else :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
                       </button>
                     </template>
                     <template #content="{ prevCallback }">
-                        <div class="flex mx-7 mt-7">
+                        <div class="flex mx-7">
                             <DeliveryOptions />
                         </div>
                         <div class="flex pt-4 justify-content-start mb-5 mx-52">
-                            <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"
-                                @click="prevCallback" />
+                            <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
                         </div>
                     </template>
                   </StepperPanel>
               </Stepper>
           </div>
       </div>
-        <!-- buttons -->
-    <ConfirmPopup group="headless">
-        <template #container="{ message, acceptCallback, rejectCallback }">
-            <div class="rounded-full p-3">
-                <i class="pi pi-exclamation-triangle text-error mr-2"></i>
-                <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
-                <div class="flex justify-end gap-2 mt-3">
-                    <Button label="Yes" @click="acceptCallback" text size="small" class="text-error"></Button>
-                    <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
-                </div>
-            </div>
-        </template>
-    </ConfirmPopup>
+      
+      <!-- buttons -->
+      <ConfirmPopup group="headless">
+          <template #container="{ message, acceptCallback, rejectCallback }">
+              <div class="rounded-full p-3">
+                  <i class="pi pi-exclamation-triangle text-error mr-2"></i>
+                  <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
+                  <div class="flex justify-end gap-2 mt-3">
+                      <Button label="Yes" @click="acceptCallback" text size="small" class="text-error"></Button>
+                      <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
+                  </div>
+              </div>
+          </template>
+      </ConfirmPopup>
   </div>
 </template>
 
