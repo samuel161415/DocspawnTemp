@@ -4,34 +4,32 @@
           <BreadcrumbComponent :home="home" :items="items" />
 
           <div class="flex items-center justify-center -mt-2 rounded-lg border-none">
-
               <Stepper v-model:activeStep="active" >
                   <StepperPanel>
                     <template #header="{ index, clickCallback }">
                       <button class="bg-transparent border-none inline-flex flex-column gap-2 " v-tooltip.top="'General information'" @click="clickCallback">
-                        <font-awesome-icon v-if="active === index" :icon="['fad', 'square-info']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                        <font-awesome-icon v-else  :icon="['fad', 'square-info']"  class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;"   />
+                        <font-awesome-icon v-if="active >= index" :icon="['fad', 'square-info']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        <font-awesome-icon v-else-if="index > active"  :icon="['fad', 'square-info']"  class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;"   />
                       </button>
                     </template>
-                      <template #content="{ nextCallback }">
-                        <div class="mb-32">
-
-                          <div class="flex justify-center mx-24">
-                              <GeneralInfo  @updateData="handleUpdateData"/>
-                          </div>
-                          <div class="flex justify-center mb-6 space-x-8 mt-4">
-                            <Button label="Cancel" outlined icon="pi pi-times" class="bg-primaryBlue" @click="requireConfirmation($event)"/>
-                            <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
-                          </div>
+                    <template #content="{ nextCallback }">
+                      <div class="mb-32">
+                        <div class="flex justify-center mx-24">
+                          <GeneralInfo  @updateData="handleUpdateData"/>
                         </div>
-                      </template>
+                        <div class="flex justify-center mb-6 space-x-8 mt-4">
+                          <Button label="Cancel"  icon="pi pi-times" class="bg-error hover:bg-error border-error hover:border-error" @click="requireConfirmation($event)"/>
+                          <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
+                        </div>
+                      </div>
+                    </template>
                   </StepperPanel>
 
                   <StepperPanel header="Template editor">
                     <template #header="{ index, clickCallback }">
                       <button :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Template editor'" @click="clickCallback">
-                        <font-awesome-icon  v-if="active === index"  :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                        <font-awesome-icon  v-else  :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
+                        <font-awesome-icon  v-if="active >= index"  :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        <font-awesome-icon v-else-if="index > active" :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                       </button>
                     </template>
                     <template #content="{ prevCallback, nextCallback }">
@@ -49,9 +47,9 @@
                   <StepperPanel header="Form editor">
                     <template #header="{ index, clickCallback }">
                       <button :disabled="!isStep2Valid"  class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Form editor'" @click="clickCallback">
-                          <font-awesome-icon v-if="active === index"  :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                          <font-awesome-icon v-else  :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
-                        </button>
+                        <font-awesome-icon v-if="active >= index"  :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        <font-awesome-icon v-else-if="index > active" :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                      </button>
                     </template>
                     <template #content="{ prevCallback, nextCallback }">
                         <div class="mx-10">
@@ -69,16 +67,16 @@
                     <template #header="{ index, clickCallback }">
                       <button :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Delivery options'" @click="clickCallback">
                         <font-awesome-icon v-if="active === index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                        <font-awesome-icon v-else :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #dbdbdb;" />
+                        <font-awesome-icon v-else :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                       </button>
                     </template>
                     <template #content="{ prevCallback }">
-                        <div class="flex mx-7">
-                            <DeliveryOptions />
-                        </div>
-                        <div class="flex pt-4 justify-content-start mb-5 mx-52">
-                            <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
-                        </div>
+                      <div class="flex mx-7">
+                          <DeliveryOptions />
+                      </div>
+                      <div class="flex pt-4 justify-content-start mb-5 mx-52">
+                          <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
+                      </div>
                     </template>
                   </StepperPanel>
               </Stepper>
@@ -92,7 +90,7 @@
                   <i class="pi pi-exclamation-triangle text-error mr-2"></i>
                   <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
                   <div class="flex justify-end gap-2 mt-3">
-                      <Button label="Yes" @click="acceptCallback" text size="small" class="text-error"></Button>
+                      <Button label="Yes" @click="acceptCallback" text severity="error"size="small" class="text-error"></Button>
                       <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
                   </div>
               </div>
@@ -117,7 +115,6 @@ const toast = useToast();
 
 const active = ref(0);
 
-
 // step 1 - general info
 const templateName = ref('');
 const useCase = ref('');
@@ -130,7 +127,6 @@ const formEditor = ref(true);
 // step 3 - template editor
 const templateTitle = ref('');
 const templateDescription = ref('');
-
 
 const items = ref([
 { label: "Templates", route: "/templates" },
@@ -156,7 +152,6 @@ const requireConfirmation = (event) => {
 };
 
 const handleUpdateData = ({isValid, step}) => {
-
   if(step === 1) {
     isStep1Valid.value = isValid;
   } else if(step === 2) {
@@ -172,5 +167,4 @@ const handleUpdateData = ({isValid, step}) => {
 .p-stepper {
   flex-basis: 50rem;
 }
-
 </style>
