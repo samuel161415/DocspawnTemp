@@ -66,8 +66,8 @@
                   <StepperPanel header="Delivery options">
                     <template #header="{ index, clickCallback }">
                       <button :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" v-tooltip.top="'Delivery options'" @click="clickCallback">
-                        <font-awesome-icon v-if="active === index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                        <font-awesome-icon v-else :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                        <font-awesome-icon v-if="active >= index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                        <font-awesome-icon v-else-if="index > active" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                       </button>
                     </template>
                     <template #content="{ prevCallback }">
