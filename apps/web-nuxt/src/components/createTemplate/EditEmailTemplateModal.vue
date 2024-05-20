@@ -21,8 +21,8 @@
         </div>
 
         <template #footer>
-            <div class="flex justify-end mt-5">
-                <Button label="Cancel" outlined class="border-primaryBlue mr-4 px-4" @click="visible = false" />
+            <div class="flex justify-end mt-5 space-x-8">
+                <Button label="Cancel" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error"  @click="visible = false" />
                 <Button label="Save" class="bg-primaryBlue px-6" @click="visible = false" />
             </div>
         </template>

@@ -73,7 +73,7 @@
                       <div class="flex mx-7">
                         <DeliveryOptions />
                       </div>
-                      <div class="flex pt-4 justify-content-start mb-5 mx-52">
+                      <div class="flex pt-4 justify-center mb-5 mx-52">
                         <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
                       </div>
                     </template>
