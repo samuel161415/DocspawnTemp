@@ -18,7 +18,7 @@
                           <GeneralInfo  @updateData="handleUpdateData"/>
                         </div>
                         <div class="flex justify-center mb-6 space-x-8 mt-4">
-                          <Button label="Cancel" icon="pi pi-times" severity="error" class="bg-error hover:bg-error border-error hover:border-error text-white" @click="requireConfirmation($event)"/>
+                          <Button label="Cancel" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)"/>
                           <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
                         </div>
                       </div>
@@ -34,12 +34,11 @@
                     </template>
                     <template #content="{ prevCallback, nextCallback }">
                         <div class=" mx-6">
-                            <TemplateEditor />
+                          <TemplateEditor />
                         </div>
                         <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
-                            <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"
-                                @click="prevCallback" />
-                            <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
+                          <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                          <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
                         </div>
                     </template>
                   </StepperPanel>
@@ -72,10 +71,10 @@
                     </template>
                     <template #content="{ prevCallback }">
                       <div class="flex mx-7">
-                          <DeliveryOptions />
+                        <DeliveryOptions />
                       </div>
                       <div class="flex pt-4 justify-content-start mb-5 mx-52">
-                          <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
+                        <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5"  @click="prevCallback" />
                       </div>
                     </template>
                   </StepperPanel>
@@ -85,16 +84,16 @@
       
       <!-- buttons -->
       <ConfirmPopup group="headless">
-          <template #container="{ message, acceptCallback, rejectCallback }">
-              <div class="rounded-full p-3">
-                  <i class="pi pi-exclamation-triangle text-error mr-2"></i>
-                  <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
-                  <div class="flex justify-end gap-2 mt-3">
-                      <Button label="Yes" @click="acceptCallback" text severity="error"size="small" class="text-error"></Button>
-                      <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
-                  </div>
-              </div>
-          </template>
+        <template #container="{ message, acceptCallback, rejectCallback }">
+          <div class="rounded-full p-3">
+            <i class="pi pi-exclamation-triangle text-error mr-2"></i>
+            <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
+            <div class="flex justify-end gap-2 mt-3">
+              <Button label="Yes" @click="acceptCallback" text severity="error"size="small" class="text-error"></Button>
+              <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
+            </div>
+          </div>
+        </template>
       </ConfirmPopup>
   </div>
 </template>
