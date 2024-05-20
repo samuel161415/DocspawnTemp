@@ -48,9 +48,9 @@ const filters = ref({
 });
 
 const columns = ref([
-  {field: 'filled_on', header: 'Filled On', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem',  filterMenuStyle: { width: '14rem' } },
+  {field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem',  filterMenuStyle: { width: '14rem' } },
   {field: 'image', header: 'Image', data_type: 'text'},
-  {field: 'text_filled', header: 'Text Filled', filterField: 'text_filled', data_type: 'text', style: 'min-width: 10rem', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' } },
+  {field: 'text_filled', header: 'Text filled', filterField: 'text_filled', data_type: 'text', style: 'min-width: 10rem', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' } },
 ])
 
 const hasActionsColumn = ref(false)

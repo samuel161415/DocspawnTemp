@@ -82,7 +82,7 @@
                   <Button icon="pi pi-eye" outlined text  @click="toggleDialog(index, data[column.field])"/>       
               </div>
             </div>
-            <div v-else-if="column.header === 'Filled On'">
+            <div v-else-if="column.field === 'filled_on'">
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDate(data[column.field]) }}
             </div>
@@ -130,6 +130,7 @@ import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.v
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue';
 import formatDate from '~/utils';
 
+const emit = defineEmits();
 
 const typefilter = ref('');
 
@@ -140,8 +141,6 @@ const currentImage = ref(null);
 const dialogVisible = ref(false);
 
 const selectedRowData = ref(null);
-
-const emit = defineEmits();
 
 const selectedValue = ref()
 
@@ -194,9 +193,9 @@ const props = defineProps({
 
 const NodeData = [
   {
-      key: 'Form to Doc',
-      label: 'Form to Doc',
-      data: 'Form to Doc',
+      key: 'Form to doc',
+      label: 'Form to doc',
+      data: 'Form to doc',
       icon: 'pi pi-fw pi-inbox',
       selectable: false,
       children: [

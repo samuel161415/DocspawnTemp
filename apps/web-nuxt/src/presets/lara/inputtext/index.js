@@ -27,11 +27,13 @@ export default {
       },
 
       // Colors
-      "text-surface-500 dark:text-surface-200",
-      "placeholder:text-surface-400 dark:placeholder:text-surface-500",
-      "bg-surface-0 dark:bg-surface-900",
-      "border border-surface-300 dark:border-surface-600",
-
+      'text-surface-600 dark:text-surface-200',
+        'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+        'bg-surface-0 dark:bg-surface-900',
+        'border',
+        { 'border-surface-300 dark:border-surface-600': !props.invalid },
+       // Invalid State
+       { 'border-red-500 dark:border-red-400': props.invalid },
       // States
       {
         "hover:border-primary-500 dark:hover:border-primary-400":

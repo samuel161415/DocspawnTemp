@@ -3,7 +3,7 @@
 
         <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll">
 
-            <div class="mt-5 mr-12 ml-3">
+            <div class="mt-5  ml-3">
                 <p class="font-semibold text-surface-700 text-xl mb-5">Integration</p>
 
                 <div class="flex justify-between mt-5">

@@ -4,7 +4,7 @@
         <div v-if="hasFilterActions" class="space-y-2 md:space-y-0">
           <Button 
             type="button"
-            label="Form to Doc" 
+            label="Form to doc" 
             class="px-4  flex rounded-xl border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
             :class="[typefilter === 'Form to Doc' ? 'bg-primaryBlue border-primaryBlue text-white' : 'bg-white text-primaryBlue']"
             :outlined="typefilter !== 'Form to Doc'"

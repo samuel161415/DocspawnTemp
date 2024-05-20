@@ -19,6 +19,7 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
@@ -50,9 +51,9 @@ const filters = ref({
 )
 
 const colomnData = ref([
-  { field: 'created_by', header: 'Created By', filterField: 'created_by', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
-  { field: 'template_name', header: 'Template Name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
-  { field: 'no_documents', header: 'No. of Documents', filterField: 'no_documents', data_type: 'numeric' },
+  { field: 'created_by', header: 'Created by', filterField: 'created_by', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
+  { field: 'template_name', header: 'Template name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
+  { field: 'no_documents', header: 'No. of documents', filterField: 'no_documents', data_type: 'numeric' },
   { field: 'date', header: 'Date', filterField: 'date', data_type: 'date', filterMenuStyle: { width: '14rem' } },
 ])
 
