@@ -141,12 +141,6 @@ const requireConfirmation = (event) => {
         target: event.currentTarget,
         group: 'headless',
         message: 'Your modifications will be lost. Are you sure?',
-        accept: () => {
-            toast.add({severity:'info', summary:'Confirmed', detail:'You have accepted', life: 3000});
-        },
-        reject: () => {
-            toast.add({severity:'error', summary:'Rejected', detail:'You have rejected', life: 3000});
-        }
     });
 };
 
