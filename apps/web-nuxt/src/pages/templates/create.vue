@@ -18,7 +18,7 @@
                           <GeneralInfo  @updateData="handleUpdateData"/>
                         </div>
                         <div class="flex justify-center mb-6 space-x-8 mt-4">
-                          <Button label="Cancel"  icon="pi pi-times" class="bg-error hover:bg-error border-error hover:border-error" @click="requireConfirmation($event)"/>
+                          <Button label="Cancel" icon="pi pi-times" severity="error" class="bg-error hover:bg-error border-error hover:border-error text-white" @click="requireConfirmation($event)"/>
                           <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" iconPos="right" @click="nextCallback" class="bg-primaryBlue border-primaryBlue px-5"/>
                         </div>
                       </div>
