@@ -21,6 +21,7 @@ export const templateEditorStore = reactive({
   activeDisplayGuide: false,
   activeDisplayGuideForAll: false,
   anyObjectSelected: false,
+  showPreview: false,
 
 })
 

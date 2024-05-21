@@ -144,7 +144,7 @@ function deleteFieldFromCanvas() {
   //   templateEditorStore.canvas.remove(object)
   // else
   templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
-    if (obj?.id === object?.id || obj.id === object?.hash)
+    if (obj?.hash === object?.hash || obj.id === object?.hash)
       return false
     else
       return true
@@ -154,7 +154,6 @@ function deleteFieldFromCanvas() {
   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
-
   templateEditorStore.showOptionsBar = false
 }
 

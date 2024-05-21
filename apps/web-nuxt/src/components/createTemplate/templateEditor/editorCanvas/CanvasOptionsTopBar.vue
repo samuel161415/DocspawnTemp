@@ -43,7 +43,7 @@
       </div>
       <div
         v-tooltip.bottom="{
-          value: 'Display all guides',
+          value: templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides',
           pt: {
             arrow: {
               style: {
@@ -94,7 +94,7 @@ function toggleMargins() {
             id: obj.hash,
             selection: false,
             fieldType: obj.fieldType,
-            PageNo: templateEditorStore.activePageForCanvas,
+            pageNo: templateEditorStore.activePageForCanvas,
           }))
           // x axis
           if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
@@ -105,7 +105,7 @@ function toggleMargins() {
               id: obj.hash,
               selection: false,
               fieldType: obj.fieldType,
-              PageNo: templateEditorStore.activePageForCanvas,
+              pageNo: templateEditorStore.activePageForCanvas,
             }))
           }
           else {
@@ -116,7 +116,7 @@ function toggleMargins() {
               id: obj.hash,
               selection: false,
               fieldType: obj.fieldType,
-              PageNo: templateEditorStore.activePageForCanvas,
+              pageNo: templateEditorStore.activePageForCanvas,
             }))
           }
         }
@@ -140,7 +140,8 @@ function showMargins() {
   const objs = templateEditorStore.canvas._objects
 
   objs.forEach((obj) => {
-    if (obj.PageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon) {
+    if (obj.pageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon) {
+      obj.displayGuide = true
       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
         left: obj.left,
         top: 0, // event.absolutePointer.y,
@@ -179,13 +180,17 @@ function showMargins() {
 }
 function removeMargins() {
   const objs = templateEditorStore.canvas._objects
+
   templateEditorStore.canvas._objects = objs.filter((obj) => {
-    if (obj.stroke === '#3978eb' && !obj.displayGuide && obj.pageNo === templateEditorStore.activePageForCanvas)
+    if (obj.displayGuide)
+      obj.displayGuide = false
+    if (obj.stroke === '#3978eb'
+    // && !obj.displayGuide
+      && obj.pageNo === templateEditorStore.activePageForCanvas)
       return false
     else
       return true
   })
-
   templateEditorStore.canvas.renderAll()
 }
 

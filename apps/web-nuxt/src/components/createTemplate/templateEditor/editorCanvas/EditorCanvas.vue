@@ -246,7 +246,7 @@ function addEventsToCanvas() {
           fontWeight: activeTextStyles.fontWeight,
           hasBorders: true,
           zIndex: 1,
-          PageNo: templateEditorStore.activePageForCanvas,
+          pageNo: templateEditorStore.activePageForCanvas,
         },
       )
       templateEditorStore.canvas.add(hoveredElement.value)
@@ -399,7 +399,7 @@ function addEventsToCanvas() {
           id: templateEditorStore.fieldToAdd.name,
           hash: uuid.v1(),
 
-          PageNo: templateEditorStore.activePageForCanvas,
+          pageNo: templateEditorStore.activePageForCanvas,
           displayGuide: false,
         },
       )
@@ -410,11 +410,11 @@ function addEventsToCanvas() {
           myImg.set({
             left: textEle.left + (textEle.width * textEle.scaleX),
             top: textEle.top,
-            scaleX: 0.1,
-            scaleY: 0.1,
+            scaleX: 0.05,
+            scaleY: 0.05,
             isAlertIcon: true,
             id: textEle.hash,
-            PageNo: templateEditorStore.activePageForCanvas,
+            pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
             selectable: false,
           })
@@ -509,7 +509,7 @@ function addEventsToCanvas() {
             id: ftoadd.name,
             hash: uuid.v1(),
             fieldType: ftoadd.type,
-            PageNo: templateEditorStore.activePageForCanvas,
+            pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
           })
 
@@ -520,11 +520,11 @@ function addEventsToCanvas() {
               imgia.set({
                 left: myImg.left + myImg.width,
                 top: myImg.top,
-                scaleX: 0.1,
-                scaleY: 0.1,
+                scaleX: 0.05,
+                scaleY: 0.05,
                 isAlertIcon: true,
                 id: myImg.hash,
-                PageNo: templateEditorStore.activePageForCanvas,
+                pageNo: templateEditorStore.activePageForCanvas,
                 displayGuide: false,
                 selectable: false,
               })
@@ -601,6 +601,14 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:out', () => {
+    if (tempXMargin) {
+      templateEditorStore.canvas.remove(tempXMargin)
+      tempXMargin = null
+    }
+    if (tempYMargin) {
+      templateEditorStore.canvas.remove(tempYMargin)
+      tempYMargin = null
+    }
     if (hoveredElement && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'data-fields' || templateEditorStore.fieldToAdd.type === 'dataset-image'))
       templateEditorStore.canvas.remove(hoveredElement.value)
   })
