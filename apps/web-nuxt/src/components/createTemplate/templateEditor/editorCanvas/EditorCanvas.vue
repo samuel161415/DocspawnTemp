@@ -236,7 +236,7 @@ function addEventsToCanvas() {
         `${templateEditorStore.fieldToAdd.name}`,
         {
           left: event.absolutePointer.x,
-          top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (1 * (Number.parseFloat(activeTextStyles.fontSize) / 5)),
+          top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (Number.parseFloat(activeTextStyles.fontSize) / 5),
           fill: activeTextStyles.fill,
           fontFamily: activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
@@ -254,7 +254,7 @@ function addEventsToCanvas() {
       if (templateEditorStore.activeAdvancedPointer) {
         if (tempXMargin && tempYMargin) {
           tempXMargin.set({ left: event.absolutePointer.x })
-          tempYMargin.set({ top: event.absolutePointer.y })
+          tempYMargin.set({ top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10) })
         }
         else {
           tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
@@ -266,7 +266,7 @@ function addEventsToCanvas() {
           templateEditorStore.canvas.add(tempXMargin)
           tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
             left: 0, // event.absolutePointer.x,
-            top: event.absolutePointer.y,
+            top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10),
             stroke: '#3978eb',
 
           })
@@ -410,8 +410,8 @@ function addEventsToCanvas() {
           myImg.set({
             left: textEle.left + (textEle.width * textEle.scaleX),
             top: textEle.top,
-            scaleX: 0.05,
-            scaleY: 0.05,
+            scaleX: 0.07,
+            scaleY: 0.07,
             isAlertIcon: true,
             id: textEle.hash,
             pageNo: templateEditorStore.activePageForCanvas,
@@ -520,8 +520,8 @@ function addEventsToCanvas() {
               imgia.set({
                 left: myImg.left + myImg.width,
                 top: myImg.top,
-                scaleX: 0.05,
-                scaleY: 0.05,
+                scaleX: 0.07,
+                scaleY: 0.07,
                 isAlertIcon: true,
                 id: myImg.hash,
                 pageNo: templateEditorStore.activePageForCanvas,
@@ -598,6 +598,7 @@ function addEventsToCanvas() {
       templateEditorStore.showOptionsBar = false
       templateEditorStore.selectedAddedField = {}
     }
+    templateEditorStore.activeTemplateField = false
   })
 
   templateEditorStore.canvas.on('mouse:out', () => {

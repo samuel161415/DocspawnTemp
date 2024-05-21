@@ -51,7 +51,7 @@
             List
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('data-fields')">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" :class="{ 'bg-white text-primaryBlue': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
           <font-awesome-icon icon="fa-duotone fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Data field
         </div>
@@ -63,10 +63,10 @@
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
         </div>
         <div v-if="showImageOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('fixed-image')">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white': templateEditorStore.activeTemplateField === 'fixed-image' }" @click="selectField('fixed-image')">
             Fixed image
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('dataset-image')">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white': templateEditorStore.activeTemplateField === 'dataset-image' }" @click="selectField('dataset-image')">
             Dataset image
           </div>
         </div>
