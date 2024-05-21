@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full min-h-screen w-52  space-x-6 relative mb-12 ">
+  <div class="flex h-full  w-52  space-x-6 relative mb-12 overflow-auto pr-2 ">
     <div class="w-full">
       <Button v-if="showAddedFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="showAddedFields = false">
         <i class="pi pi-plus"></i>

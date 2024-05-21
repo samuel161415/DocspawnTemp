@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-full flex-1 w-max  ">
+  <div class="h-full flex-1 w-max overflow-auto  ">
     <CanvasOptionsTopBar />
     <div id="canvas-wrapper" ref="canvasWrapper" class="  rounded-md min-h-full  flex flex-col w-[900px]  relative  ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  ">

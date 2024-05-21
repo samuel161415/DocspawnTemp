@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full min-h-screen w-full  space-x-6 relative mb-12 ">
+  <div class="flex h-full  w-full  space-x-6 relative mb-12  h-[80vh] overflow-hidden ">
     <TemplateFields />
     <EditorCanvas />
     <Options />
@@ -46,4 +46,26 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+    /* width */
+    ::-webkit-scrollbar {
+    width: 10px;
+    height:10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #009ee233;
+    border-radius: 8px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #009ee288;
+    }
+</style>
