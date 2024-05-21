@@ -64,13 +64,17 @@
     </div>
 
     <div class="flex flex-row-reverse ">
-      <Button class="w-max px-3">
+      <Button v-if="!templateEditorStore.showPreview" outlined class="w-max px-3" @click="templateEditorStore.showPreview = true">
         Show Preview
       </Button>
-      <div class="flex items-center">
-        <Button text icon="pi pi-chevron-left " />
-        <p>3/100</p>
-        <Button text icon="pi pi-chevron-right" />
+      <Button v-else outlined class="w-max px-3" @click="templateEditorStore.showPreview = false">
+        End Preview
+      </Button>
+
+      <div v-if="templateEditorStore.showPreview" class="flex items-center">
+        <Button text icon="pi pi-chevron-left " @click="changePreviewNo('prev')" />
+        <p>{{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}</p>
+        <Button text icon="pi pi-chevron-right" @click="changePreviewNo('next')" />
       </div>
     </div>
   </div>
@@ -78,6 +82,34 @@
 
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore'
+
+const currentPreviewNo = ref(1)
+
+function changePreviewNo(dir) {
+  if (dir === 'prev') {
+    if (currentPreviewNo.value > 1)
+      currentPreviewNo.value = currentPreviewNo.value - 1
+  }
+  if (dir === 'next') {
+    if (currentPreviewNo.value < templateEditorStore?.datasetData?.allEntries?.length)
+      currentPreviewNo.value = currentPreviewNo.value + 1
+  }
+}
+watch(currentPreviewNo, (newVal) => {
+  if (templateEditorStore.showPreview) {
+    const data = templateEditorStore?.datasetData?.allEntries
+    const objs = templateEditorStore.canvas._objects
+    templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj.text && obj.id !== 'Lorem ipsum') {
+        const correspondingData = data[newVal - 1][obj?.id]
+        if (correspondingData)
+          obj.set({ text: correspondingData })
+      }
+      return obj
+    })
+    templateEditorStore.canvas.renderAll()
+  }
+})
 
 function toggleMargins() {
   const activeObject = templateEditorStore.canvas.getActiveObject()
@@ -264,6 +296,35 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
 watch(() => templateEditorStore.activePageForCanvas, () => {
   templateEditorStore.activeDisplayGuideForAll = false
   templateEditorStore.activeDisplayGuide = false
+})
+
+watch(() => templateEditorStore.showPreview, (newVal) => {
+  if (newVal) {
+    const data = templateEditorStore?.datasetData?.allEntries
+    const objs = templateEditorStore.canvas._objects
+
+    templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj.text && obj.id !== 'Lorem ipsum') {
+        const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+        if (correspondingData)
+          obj.set({ text: correspondingData })
+      }
+      return obj
+    })
+    templateEditorStore.canvas.renderAll()
+  }
+  else {
+    const objs = templateEditorStore.canvas._objects
+    templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj.text && obj.id !== 'Lorem ipsum')
+
+        obj.set({ text: obj?.id })
+
+      return obj
+    })
+    templateEditorStore.canvas.renderAll()
+    currentPreviewNo.value = 1
+  }
 })
 </script>
 
