@@ -297,7 +297,7 @@ function addEventsToCanvas() {
     }
     if (templateEditorStore.fieldToAdd.type === 'dataset-image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
       fabric.Image.fromURL(
-        'https://placehold.co/400x200'
+        'https://placehold.co/300x200?text=DocSpawn'
         // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
           if (hoveredElement.value)
@@ -480,7 +480,7 @@ function addEventsToCanvas() {
       const ftoadd = templateEditorStore.fieldToAdd
       templateEditorStore.fieldToAdd = {}
       fabric.Image.fromURL(
-        'https://placehold.co/400x200'
+        'https://placehold.co/300x200?text=DocSpawn'
         // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
           if (hoveredElement.value)

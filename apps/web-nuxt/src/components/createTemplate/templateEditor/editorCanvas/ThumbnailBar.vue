@@ -88,7 +88,7 @@ watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
   const objs = templateEditorStore.canvas._objects
 
   templateEditorStore.canvas._objects = objs.map((obj) => {
-    if (obj.PageNo === newVal)
+    if (obj.pageNo === newVal)
       obj.set({ visible: true, opacity: 1 })
     else obj.set({ visible: false, opacity: 0 })
     return obj

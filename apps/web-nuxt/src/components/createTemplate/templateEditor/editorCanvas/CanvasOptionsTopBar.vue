@@ -95,21 +95,6 @@ function changePreviewNo(dir) {
       currentPreviewNo.value = currentPreviewNo.value + 1
   }
 }
-watch(currentPreviewNo, (newVal) => {
-  if (templateEditorStore.showPreview) {
-    const data = templateEditorStore?.datasetData?.allEntries
-    const objs = templateEditorStore.canvas._objects
-    templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj.text && obj.id !== 'Lorem ipsum') {
-        const correspondingData = data[newVal - 1][obj?.id]
-        if (correspondingData)
-          obj.set({ text: correspondingData })
-      }
-      return obj
-    })
-    templateEditorStore.canvas.renderAll()
-  }
-})
 
 function toggleMargins() {
   const activeObject = templateEditorStore.canvas.getActiveObject()
@@ -297,18 +282,94 @@ watch(() => templateEditorStore.activePageForCanvas, () => {
   templateEditorStore.activeDisplayGuideForAll = false
   templateEditorStore.activeDisplayGuide = false
 })
+watch(currentPreviewNo, (newVal) => {
+  if (templateEditorStore.showPreview) {
+    const data = templateEditorStore?.datasetData?.allEntries
+    const objs = templateEditorStore.canvas._objects
 
+    templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj.stroke || obj.isAlertIcon)
+        return obj
+      if (!obj._element && obj.id !== 'Lorem ipsum') {
+        const correspondingData = data[newVal - 1][obj?.id]
+        if (correspondingData)
+          obj.set({ text: correspondingData })
+      }
+      else if (obj._element && obj.id !== 'Lorem ipsum') {
+        const correspondingData = data[newVal - 1][obj?.id]
+        // 'https://images.pexels.com/photos/381739/pexels-photo-381739.jpeg?cs=srgb&dl=pexels-sevenstormphotography-381739.jpg&fm=jpg'
+        // data[newVal - 1][obj?.id]
+        if (correspondingData) {
+          // fabric.Image.fromURL(correspondingData, (img) => {
+          const originalHeight = obj.height * obj.scaleY
+          const originalWidth = obj.width * obj.scaleX
+          // obj.set({ height: img.height, width: img.width })
+
+          // const imgElement = obj._element
+          // imgElement.src = correspondingData // set image source
+          // imgElement.onload = () => {
+          //   obj.scaleToWidth(originalWidth)
+          //   obj.scaleToHeight(originalHeight)
+          //   templateEditorStore.canvas.renderAll()
+          // }
+          obj.setSrc(correspondingData, () => {
+            obj.scaleToWidth(originalWidth)
+            obj.scaleToHeight(originalHeight)
+            templateEditorStore.canvas.renderAll()
+          })
+          // })
+        }
+      }
+      return obj
+    })
+    templateEditorStore.canvas.renderAll()
+  }
+})
 watch(() => templateEditorStore.showPreview, (newVal) => {
   if (newVal) {
     const data = templateEditorStore?.datasetData?.allEntries
     const objs = templateEditorStore.canvas._objects
 
     templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj.text && obj.id !== 'Lorem ipsum') {
+      if (obj.stroke || obj.isAlertIcon)
+        return obj
+
+      if (!obj._element && obj?.id !== 'Lorem ipsum') {
         const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
         if (correspondingData)
           obj.set({ text: correspondingData })
       }
+      else if (obj?.id !== 'Lorem ipsum') {
+        const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+        //  'https://images.pexels.com/photos/381739/pexels-photo-381739.jpeg?cs=srgb&dl=pexels-sevenstormphotography-381739.jpg&fm=jpg'
+
+        // data[currentPreviewNo.value - 1][obj?.id]
+        if (correspondingData) {
+          // fabric.Image.fromURL(correspondingData, (img) => {
+          const originalHeight = obj.height * obj.scaleY
+          const originalWidth = obj.width * obj.scaleX
+          // obj.set({ height: img.height, width: img.width })
+
+          // const imgElement = obj._element
+          // imgElement.src = correspondingData // set image source
+          // imgElement.onload = () => {
+          //   obj.scaleToWidth(originalWidth)
+          //   obj.scaleToHeight(originalHeight)
+          //   templateEditorStore.canvas.renderAll()
+          // }
+          obj.setSrc(correspondingData, () => {
+            obj.scaleToWidth(originalWidth)
+            obj.scaleToHeight(originalHeight)
+            templateEditorStore.canvas.renderAll()
+          })
+          // })
+
+          // const imgElement = obj._element
+          // imgElement.src = correspondingData // set image source
+          // imgElement.onload = () => templateEditorStore.canvas.renderAll()
+        }
+      }
+
       return obj
     })
     templateEditorStore.canvas.renderAll()
@@ -316,10 +377,35 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
   else {
     const objs = templateEditorStore.canvas._objects
     templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj.text && obj.id !== 'Lorem ipsum')
-
+      if (obj.stroke || obj.isAlertIcon)
+        return obj
+      if (!obj._element && obj.id !== 'Lorem ipsum') {
         obj.set({ text: obj?.id })
+      }
+      else if (obj._element && obj.id !== 'Lorem ipsum') {
+        // const imgElement = obj._element
+        // imgElement.src = 'https://placehold.co/300x200?text=DocSpawn' // set image source
+        // imgElement.onload = () => templateEditorStore.canvas.renderAll()
+        const correspondingData = 'https://placehold.co/300x200?text=DocSpawn'
+        // fabric.Image.fromURL(correspondingData, (img) => {
+        const originalHeight = obj.height * obj.scaleY
+        const originalWidth = obj.width * obj.scaleX
+        // obj.set({ height: img.height, width: img.width })
 
+        // const imgElement = obj._element
+        // imgElement.src = correspondingData // set image source
+        // imgElement.onload = () => {
+        //   obj.scaleToWidth(originalWidth)
+        //   obj.scaleToHeight(originalHeight)
+        //   templateEditorStore.canvas.renderAll()
+        // }
+        obj.setSrc(correspondingData, () => {
+          obj.scaleToWidth(originalWidth)
+          obj.scaleToHeight(originalHeight)
+          templateEditorStore.canvas.renderAll()
+        })
+        // })
+      }
       return obj
     })
     templateEditorStore.canvas.renderAll()
