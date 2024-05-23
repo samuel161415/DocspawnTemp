@@ -11,7 +11,7 @@
       </Button>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore.selectedAddedField === field }" @click="selectAddedField(field)">
+        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore.selectedAddedField.hash === field.hash }" @click="selectAddedField(field)">
           {{ field.name }}
           <p class="text-xs">
             on page {{ field.page }}
@@ -143,11 +143,12 @@ function selectAddedField(field) {
     return
 
   templateEditorStore.canvas._objects.forEach((obj) => {
-    if (obj.hash === field.hash)
+    if (obj.hash === field.hash) {
       templateEditorStore.canvas.setActiveObject(obj)
-    templateEditorStore.selectedAddedField = field
-    templateEditorStore.showOptionsBar = true
-    templateEditorStore.canvas.renderAll()
+      templateEditorStore.selectedAddedField = field
+      templateEditorStore.showOptionsBar = true
+      templateEditorStore.canvas.renderAll()
+    }
   })
 }
 </script>
