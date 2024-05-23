@@ -161,7 +161,7 @@ watch(activeDataField, () => {
     templateEditorStore.activeDataField = activeDataField.value
 
     templateEditorStore.addedFields = templateEditorStore.addedFields.map((field) => {
-      if (field.name === templateEditorStore.selectedAddedField.name)
+      if (field.hash === templateEditorStore.selectedAddedField.hash)
         return JSON.parse(JSON.stringify({ ...field, name: activeDataField.value }))
       else
         return JSON.parse(JSON.stringify(field))
