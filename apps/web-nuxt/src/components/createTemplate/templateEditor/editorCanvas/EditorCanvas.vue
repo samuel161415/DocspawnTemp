@@ -425,7 +425,7 @@ function addEventsToCanvas() {
 
       /////////////////////////////////////////////////////
 
-      const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.name,
+      const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.name, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
       }
       const allFields = []
       templateEditorStore.addedFields.forEach((f) => {
@@ -534,7 +534,7 @@ function addEventsToCanvas() {
           )
 
           /////////////////////////////////////////////////////
-          const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.name,
+          const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.name, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
           }
           const allFields = []
           templateEditorStore.addedFields.forEach((f) => {
@@ -591,7 +591,7 @@ function addEventsToCanvas() {
 
     if (activeObj) {
       templateEditorStore.showOptionsBar = true
-      templateEditorStore.selectedAddedField = { name: activeObj.id ? activeObj.id : '', fieldType: activeObj.fieldType ? activeObj.fieldType : '', obj: activeObj }
+      templateEditorStore.selectedAddedField = templateEditorStore.addedFields.filter(f => f?.hash === activeObj?.hash)[0]
     }
 
     else {

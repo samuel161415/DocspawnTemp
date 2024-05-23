@@ -85,6 +85,8 @@ async function changeCurrentPageOnCanvas(pageNo) {
 }
 
 watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
+  templateEditorStore.selectedAddedField = null
+  templateEditorStore.showOptionsBar = false
   const objs = templateEditorStore.canvas._objects
 
   templateEditorStore.canvas._objects = objs.map((obj) => {

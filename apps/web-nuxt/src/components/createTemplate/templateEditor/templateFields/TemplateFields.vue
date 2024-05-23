@@ -11,8 +11,11 @@
       </Button>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 ">
+        <div v-if="showAddedFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore.selectedAddedField === field }" @click="selectAddedField(field)">
           {{ field.name }}
+          <p class="text-xs">
+            on page {{ field.page }}
+          </p>
         </div>
       </template>
 
@@ -51,7 +54,7 @@
             List
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" :class="{ 'bg-white text-primaryBlue': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
+        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" :class="{ 'bg-white text-primaryBlue border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
           <font-awesome-icon icon="fa-duotone fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Data field
         </div>
@@ -66,7 +69,7 @@
           <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white': templateEditorStore.activeTemplateField === 'fixed-image' }" @click="selectField('fixed-image')">
             Fixed image
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white': templateEditorStore.activeTemplateField === 'dataset-image' }" @click="selectField('dataset-image')">
+          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'dataset-image' }" @click="selectField('dataset-image')">
             Dataset image
           </div>
         </div>
@@ -133,6 +136,19 @@ function selectField(field) {
   //   templateEditorStore.activeImageOption = subField
 
   templateEditorStore.showOptionsBar = true
+}
+
+function selectAddedField(field) {
+  if (field.page !== templateEditorStore.activePageForCanvas)
+    return
+
+  templateEditorStore.canvas._objects.forEach((obj) => {
+    if (obj.hash === field.hash)
+      templateEditorStore.canvas.setActiveObject(obj)
+    templateEditorStore.selectedAddedField = field
+    templateEditorStore.showOptionsBar = true
+    templateEditorStore.canvas.renderAll()
+  })
 }
 </script>
 

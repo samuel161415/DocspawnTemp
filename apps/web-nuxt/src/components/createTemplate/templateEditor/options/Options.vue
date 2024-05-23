@@ -138,7 +138,6 @@ function getFile(e) {
 }
 
 function deleteFieldFromCanvas() {
-  const fieldId = templateEditorStore.activeDataField
   const object = templateEditorStore.canvas.getActiveObject()
   // if (object?.id)
   //   templateEditorStore.canvas.remove(object)
@@ -150,7 +149,7 @@ function deleteFieldFromCanvas() {
       return true
   })
 
-  const fieldsS = templateEditorStore.addedFields.filter(f => f?.name !== fieldId)
+  const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== templateEditorStore?.selectedAddedField?.hash)
   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
@@ -195,10 +194,12 @@ watch(activeDataField, () => {
 watch(
   () => templateEditorStore.selectedAddedField,
   (newVal) => {
-    fieldName.value = newVal.name
+    if (newVal) {
+      fieldName.value = newVal.name
 
-    if (newVal.fieldType === 'data-fields' || newVal.fieldType === 'dataset-image')
-      activeDataField.value = newVal.name
+      if (newVal.fieldType === 'data-fields' || newVal.fieldType === 'dataset-image')
+        activeDataField.value = newVal.name
+    }
   },
 )
 </script>
