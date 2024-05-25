@@ -12,8 +12,8 @@
         Field options
       </p>
 
-      <p v-if="templateEditorStore.selectedAddedField.name">
-        {{ templateEditorStore.selectedAddedField.name }}
+      <p v-if="templateEditorStore?.selectedAddedField?.name">
+        {{ templateEditorStore?.selectedAddedField?.name }}
       </p>
       <p v-if="templateEditorStore.selectedAddedField.fieldType">
         ({{ templateEditorStore.selectedAddedField.fieldType }})
@@ -106,10 +106,9 @@
       <!-- <div class="flex gap-2   text-gray-400 items-center"> -->
       <!-- <p>Remove field</p> -->
       <!-- <div class="cursor-pointer"> -->
-      <Button outlined severity="danger" class="px-3 w-full mt-6" @click="deleteFieldFromCanvas">
+      <!-- <Button outlined severity="danger" class="px-3 w-full mt-6" @click="deleteFieldFromCanvas">
         Delete field
-        <!-- <font-awesome-icon icon="fa-duotone fa-minus-circle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" /> -->
-      </Button>
+      </Button> -->
       <!-- </div> -->
       <!-- </div> -->
     </div>
@@ -137,24 +136,22 @@ function getFile(e) {
   fileUrl.value = URL.createObjectURL(file)
 }
 
-function deleteFieldFromCanvas() {
-  const object = templateEditorStore.canvas.getActiveObject()
-  // if (object?.id)
-  //   templateEditorStore.canvas.remove(object)
-  // else
-  templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
-    if (obj?.hash === object?.hash || obj.id === object?.hash)
-      return false
-    else
-      return true
-  })
+// function deleteFieldFromCanvas() {
+//   const object = templateEditorStore.canvas.getActiveObject()
 
-  const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== templateEditorStore?.selectedAddedField?.hash)
-  templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
-  templateEditorStore.canvas.discardActiveObject()
-  templateEditorStore.canvas.renderAll()
-  templateEditorStore.showOptionsBar = false
-}
+//   templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
+//     if (obj?.hash === object?.hash || obj.id === object?.hash)
+//       return false
+//     else
+//       return true
+//   })
+
+//   const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== templateEditorStore?.selectedAddedField?.hash)
+//   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
+//   templateEditorStore.canvas.discardActiveObject()
+//   templateEditorStore.canvas.renderAll()
+//   templateEditorStore.showOptionsBar = false
+// }
 
 watch(activeDataField, () => {
   if (templateEditorStore.canvas) {

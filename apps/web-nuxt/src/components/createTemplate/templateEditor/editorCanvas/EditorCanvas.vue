@@ -181,6 +181,7 @@ async function createCanvas() {
     if (activeObject) {
       templateEditorStore.anyObjectSelected = true
       templateEditorStore.activeDisplayGuide = activeObject.displayGuide
+      templateEditorStore.ShowAddedFieldsinTemplateFields = true
       activeElement.value = activeObject
 
       if (activeObject.text) {
@@ -427,6 +428,7 @@ function addEventsToCanvas() {
 
       const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.name, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
       }
+
       const allFields = []
       templateEditorStore.addedFields.forEach((f) => {
         allFields.push(JSON.parse(JSON.stringify(f)))
@@ -518,7 +520,7 @@ function addEventsToCanvas() {
             alertIconUrl
             , (imgia) => {
               imgia.set({
-                left: myImg.left + myImg.width,
+                left: myImg.left + (myImg.width * myImg.scaleX),
                 top: myImg.top,
                 scaleX: 0.07,
                 scaleY: 0.07,
@@ -591,7 +593,8 @@ function addEventsToCanvas() {
 
     if (activeObj) {
       templateEditorStore.showOptionsBar = true
-      templateEditorStore.selectedAddedField = templateEditorStore.addedFields.filter(f => f?.hash === activeObj?.hash)[0]
+      const field = templateEditorStore.addedFields.filter(f => f?.hash === activeObj?.hash)[0]
+      templateEditorStore.selectedAddedField = { ...field, obj: activeObj }
     }
 
     else {
@@ -599,6 +602,7 @@ function addEventsToCanvas() {
       templateEditorStore.selectedAddedField = {}
     }
     templateEditorStore.activeTemplateField = false
+    templateEditorStore.ShowAddedFieldsinTemplateFields = true
   })
 
   templateEditorStore.canvas.on('mouse:out', () => {
