@@ -11,20 +11,25 @@
       </Button>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 mb-3 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore?.selectedAddedField?.hash === field?.hash }" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
-          {{ field.name }}
-          <p class="text-xs">
-            on page {{ field.page }}
-          </p>
+        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="bg-blue-50 px-3  rounded-md text-lg text-gray-600 mb-3 flex items-center justify-between gap-1 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore?.selectedAddedField?.hash === field?.hash }">
+          <div class=" h-full w-full py-2 cursor-pointer" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
+            {{ field.name }}
+            <p class="text-xs">
+              {{ field?.fieldType }}. on page {{ field.page }}
+            </p>
+          </div>
+
           <div
-            v-if="templateEditorStore.selectedAddedField.hash === field.hash" class="flex gap-3 mt-2"
+            class="flex flex-col   "
           >
-            <!-- <Button text class="text-xs border border-black"> -->
-            <font-awesome-icon icon="fa-duotone fa-clone" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" @click="duplicateField(field)" />
-            <!-- </Button> -->
-            <!-- <Button text class="text-xs border border-black"> -->
-            <font-awesome-icon icon="fa-duotone fa-trash" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" @click="showDeleteConfirmation = true;fieldToDelete = field" />
-            <!-- </Button> -->
+            <Button text class="text-lg  w-max h-max" @click="fieldToDelete = field;confirm1($event)">
+              <font-awesome-icon
+                icon="fa-light fa-clone" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;"
+              />
+            </Button>
+            <Button text class="text-lg  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
+              <font-awesome-icon icon="fa-light fa-trash" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+            </Button>
           </div>
         </div>
       </template>
@@ -65,12 +70,12 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" :class="{ 'bg-white text-primaryBlue border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
-          <font-awesome-icon icon="fa-duotone fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Data field
         </div>
 
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
-          <font-awesome-icon icon="fa-duotone fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
 
           Image
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
@@ -84,11 +89,11 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('text')">
-          <font-awesome-icon icon="fa-duotone   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
           Text
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
-          <font-awesome-icon icon="fa-duotone fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Timestamp
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showTimestamp }"></i>
         </div>
@@ -101,39 +106,27 @@
           </div>
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('checkbox')">
-          <font-awesome-icon icon="fa-duotone fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Checkbox
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('radio')">
-          <font-awesome-icon icon="fa-duotone fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Radio
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('dropdown')">
-          <font-awesome-icon icon="fa-duotone fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Dropdown
         </div>
         <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('signature')">
-          <font-awesome-icon icon="fa-duotone fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+          <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Signature
         </div>
       </div>
     </div>
   </div>
-  <Dialog v-model:visible="showDeleteConfirmation" modal header="Field Deletion" :style="{ width: '25rem' }">
-    <span class="p-text-secondary block mb-2">Field to delete: {{ fieldToDelete?.name }}</span>
-    <span class="p-text-primary block mb-5">Write "{{ fieldToDelete?.name }}" in the field to confirm</span>
-    <div class="flex align-items-center gap-3 mb-3">
-      <InputText
-        id="username" class="flex-auto" autocomplete="off" :value="deleteText"
-        @input="event => deleteText = event.target.value"
-      />
-    </div>
 
-    <div class="flex justify-content-end gap-2 mt-1 justify-center">
-      <Button type="button" label="Cancel" outlined @click="showDeleteConfirmation = false;deleteText = ''" />
-      <Button :disabled="fieldToDelete.name !== deleteText" type="button" label="Save" @click="deleteField" />
-    </div>
-  </Dialog>
+  <Toast />
+  <ConfirmPopup />
 </template>
 
 <script setup>
@@ -146,7 +139,6 @@ const showFormFields = ref(false)
 const showTimestamp = ref(false)
 const showImageOptions = ref(false)
 const fieldToDelete = ref(false)
-const showDeleteConfirmation = ref(false)
 const deleteText = ref('')
 
 function duplicateField(field) {
@@ -345,19 +337,14 @@ function duplicateField(field) {
 }
 
 function deleteField() {
-  showDeleteConfirmation.value = false
-  const object = templateEditorStore.canvas.getActiveObject()
-  // if (object?.id)
-  //   templateEditorStore.canvas.remove(object)
-  // else
   templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
-    if (obj?.hash === object?.hash || obj.id === object?.hash)
+    if (obj?.hash === fieldToDelete?.value?.hash || obj.id === fieldToDelete?.value?.hash)
       return false
     else
       return true
   })
 
-  const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== templateEditorStore?.selectedAddedField?.hash)
+  const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== fieldToDelete?.value?.hash)
   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
@@ -386,13 +373,11 @@ function selectField(field) {
 }
 
 function selectAddedField(field) {
-  console.log('running select added field', field)
   if (field.page !== templateEditorStore.activePageForCanvas)
     return
 
   templateEditorStore.canvas._objects.forEach((obj) => {
     if (obj.hash === field.hash) {
-      console.log('matced obj')
       templateEditorStore.canvas.setActiveObject(obj)
       templateEditorStore.selectedAddedField = { ...field, obj }
       templateEditorStore.showOptionsBar = true
@@ -409,9 +394,47 @@ function selectAddedField(field) {
     }
   })
 }
-watch(() => templateEditorStore.selectedAddedField, (newVal) => {
-  console.log('selected added field', newVal)
-})
+
+const confirm = useConfirm()
+const toast = useToast()
+
+function confirm1(event) {
+  confirm.require({
+    target: event.currentTarget,
+    message: 'Are you sure you want to duplicate this field?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+    acceptClass: 'p-button-sm',
+    rejectLabel: 'Cancel',
+    acceptLabel: 'Yes',
+    accept: () => {
+      duplicateField(fieldToDelete.value)
+      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field duplicated', life: 3000 })
+    },
+    reject: () => {
+      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 })
+    },
+  })
+}
+
+function confirm2(event) {
+  confirm.require({
+    target: event.currentTarget,
+    message: 'Do you want to delete this field?',
+    icon: 'pi pi-info-circle',
+    rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
+    acceptClass: 'p-button-danger p-button-sm',
+    rejectLabel: 'Cancel',
+    acceptLabel: 'Delete',
+    accept: () => {
+      deleteField()
+      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field deleted', life: 3000 })
+    },
+    reject: () => {
+      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 })
+    },
+  })
+}
 </script>
 
 <style lang="scss" scoped></style>

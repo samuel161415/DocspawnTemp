@@ -64,11 +64,37 @@
     </div>
 
     <div class="flex flex-row-reverse ">
-      <Button v-if="!templateEditorStore.showPreview" outlined class="w-max px-3" @click="templateEditorStore.showPreview = true">
-        Show Preview
+      <Button
+        v-if="!templateEditorStore.showPreview" v-tooltip.top="{
+          value: 'Show preview',
+          pt: {
+            arrow: {
+              style: {
+                borderBottomColor: 'var(--primary-color)',
+              },
+            },
+            text: 'bg-primary font-medium',
+          },
+        }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = true"
+      >
+        <!-- Show Preview -->
+        <font-awesome-icon icon=" fa-solid fa-eye" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
       </Button>
-      <Button v-else outlined class="w-max px-3" @click="templateEditorStore.showPreview = false">
-        End Preview
+      <Button
+        v-else v-tooltip.top="{
+          value: 'End preview',
+          pt: {
+            arrow: {
+              style: {
+                borderBottomColor: 'var(--primary-color)',
+              },
+            },
+            text: 'bg-primary font-medium',
+          },
+        }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = false"
+      >
+        <!-- End Preview -->
+        <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
       </Button>
 
       <div v-if="templateEditorStore.showPreview" class="flex items-center">
