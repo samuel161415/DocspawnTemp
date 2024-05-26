@@ -11,10 +11,6 @@
         class="md:w-[20rem] w-full"
         selection-mode="single"
       />
-      <p class="text-surface-600 text-left text-lg mb-2">
-        Select a template to display data.
-      </p>
-      <TreeSelect v-model="selectedValue" :options="NodeData" placeholder="Select Template" class="md:w-[20rem] w-full" />
     </div>
 
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :export-file="props.exportFile" @export-c-s-v="exportCSVHandler" />
@@ -226,30 +222,18 @@ const NodeData = [
 
 const filters = ref(props.filters)
 
-const selectedValue = ref()
+const selectedColumns = ref(props.columns)
 
-const templatefiltered = ref([])
+function onToggle(val) {
+  selectedColumns.value = props.columns.filter(col => val.includes(col))
+}
 
 watch(selectedValue, (selectedValue) => {
   templatefiltered.value = props.data.filter((item) => {
-    const type = item.type
     const templateName = item.templateName
-
-    return selectedValue[type] || selectedValue[templateName]
+    return selectedValue[templateName]
   })
 })
-
-const filteredData = ref(templatefiltered)
-
-const typefilter = ref('')
-
-const dataTableRef = ref()
-
-const currentImage = ref(null)
-
-const dialogVisible = ref(false)
-
-const selectedRowData = ref(null)
 
 function toggleDialog(data, img) {
   currentImage.value = img
