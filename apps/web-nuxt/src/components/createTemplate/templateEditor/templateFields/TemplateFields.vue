@@ -35,11 +35,6 @@
       </template>
 
       <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
-        <!-- <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showFormFields ? showFormFields = false : showFormFields = true">
-          <i class="pi pi-user mr-1 text-primaryBlue "></i>
-          Form Fields
-          <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showFormFields }"></i>
-        </div> -->
         <div v-if="showFormFields" class="flex flex-col gap-2">
           <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('form-field', 'text')">
             Text
@@ -134,7 +129,6 @@ import { uuid } from 'vue-uuid'
 import { templateEditorStore } from '../store/templateEditorStore.ts'
 import { activeTextStyles } from '../store/activeTextStyles'
 
-// const showAddedFields = ref(true)
 const showFormFields = ref(false)
 const showTimestamp = ref(false)
 const showImageOptions = ref(false)
@@ -144,15 +138,12 @@ const deleteText = ref('')
 function duplicateField(field) {
   const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
 
-  // console.log('making duplicate of field', field)
   const objs = templateEditorStore.canvas._objects
-  // console.log('objs', objs)
   objs.forEach((obj) => {
     if (obj.hash === field.hash) {
       if (obj?._element && !obj.stroke && !obj.isAlertIcon) {
         fabric.Image.fromURL(
           'https://placehold.co/300x200?text=DocSpawn'
-          // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
           , (myImg) => {
             myImg.set({
               left: 20,
@@ -189,7 +180,6 @@ function duplicateField(field) {
               )
             }
 
-            /////////////////////////////////////////////////////
             const fieldToAdd = { fieldType: myImg.fieldType, name: myImg.id, hash: myImg.hash, page: myImg.pageNo,
             }
             const allFields = []
@@ -236,7 +226,6 @@ function duplicateField(field) {
               templateEditorStore.canvas.renderAll()
             })
 
-            // hoveredElement.value = null
             templateEditorStore.canvas.add(myImg)
             templateEditorStore.canvas.renderAll()
             setTimeout(() => selectAddedField({ ...fieldToAdd, obj: myImg }), 50)
@@ -247,7 +236,7 @@ function duplicateField(field) {
         const ele = new templateEditorStore.fabric.Text(
         `${obj.text}`,
         {
-          // ...obj,
+
           top: 20,
           left: 20,
           fill: obj.fill,
@@ -292,7 +281,6 @@ function duplicateField(field) {
         })
         allFields.push(fieldToAdd)
         templateEditorStore.addedFields = allFields
-        // templateEditorStore.selectedAddedField = fieldToAdd
 
         ele.on('mouseover', (e) => {
           if (!templateEditorStore.activeAdvancedPointer)
@@ -305,7 +293,7 @@ function duplicateField(field) {
             fieldType: ele.fieldType,
           }))
           templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-            left: 0, // event.absolutePointer.x,
+            left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
             stroke: '#3978eb',
             id: e.target.hash,
@@ -327,7 +315,6 @@ function duplicateField(field) {
           templateEditorStore.canvas.renderAll()
         })
 
-        // templateEditorStore.canvas.renderAll()
         templateEditorStore.canvas.setActiveObject(ele)
         templateEditorStore.canvas.renderAll()
         setTimeout(() => selectAddedField(fieldToAdd), 50)
@@ -352,23 +339,11 @@ function deleteField() {
   deleteText.value = ''
 }
 
-// watch(showAddedFields, () => templateEditorStore.showOptionsBar = false)
-
 function selectField(field) {
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
   templateEditorStore.activeTemplateField = field
-  // templateEditorStore.selectedAddedField = { name: 'Lorem ipsum', type: field }
   templateEditorStore.fieldToAdd = { name: 'Lorem ipsum', type: field }
-  // if (field === 'form-field')
-  //   templateEditorStore.activeFormField = subField
-  // else if (field === 'data-fields')
-  //   templateEditorStore.activeDataField = subField
-  // else if (field === 'timestamp')
-  //   templateEditorStore.activeTimestampField = subField
-  // else if (field === 'image')
-  //   templateEditorStore.activeImageOption = subField
-
   templateEditorStore.showOptionsBar = true
 }
 
@@ -436,5 +411,3 @@ function confirm2(event) {
   })
 }
 </script>
-
-<style lang="scss" scoped></style>

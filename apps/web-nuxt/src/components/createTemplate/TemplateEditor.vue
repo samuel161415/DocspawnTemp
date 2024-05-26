@@ -8,8 +8,6 @@
 
 <script setup>
 import * as XLSX from 'xlsx'
-
-// Excel parsing library
 import TemplateFields from './templateEditor/templateFields/TemplateFields.vue'
 import Options from './templateEditor/options/Options.vue'
 import EditorCanvas from './templateEditor/editorCanvas/EditorCanvas.vue'

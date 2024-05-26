@@ -8,9 +8,6 @@
         <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="changeCurrentPageOnCanvas(item)">
           <canvas :id="`template-thumbnail-${item}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer ">
           </canvas>
-          <!-- <p class="align-center  items-center justify-center p-2 text-center text-black ">
-            {{ item }}
-          </p> -->
         </div>
       </div>
     </div>
@@ -21,7 +18,6 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { templateEditorStore } from '../store/templateEditorStore'
-import { activeTextStyles } from '../store/activeTextStyles'
 
 async function changeCurrentPageOnCanvas(pageNo) {
   templateEditorStore.canvas.discardActiveObject()
@@ -44,7 +40,6 @@ async function changeCurrentPageOnCanvas(pageNo) {
   const canvasWidth = viewport.width * scale
   const canvasHeight = viewport.height * scale
 
-  // Set the canvas dimensions
   templateEditorStore.canvas.width = canvasWidth
   templateEditorStore.canvas.height = canvasHeight
 
@@ -65,7 +60,6 @@ async function changeCurrentPageOnCanvas(pageNo) {
 
   await page.render(renderContext).promise
   const bg = canvas2.toDataURL('image/png')
-  // setImageURL(bg)
 
   fabric.Image.fromURL(bg, (img) => {
     if (img) {
@@ -75,7 +69,6 @@ async function changeCurrentPageOnCanvas(pageNo) {
           templateEditorStore.canvas.renderAll()
         },
         {
-          // Set the background image to cover the canvas without cropping
           scaleX: canvasWidth / img.width,
           scaleY: canvasHeight / img.height,
         },

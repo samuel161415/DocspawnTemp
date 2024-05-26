@@ -77,7 +77,6 @@
           },
         }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = true"
       >
-        <!-- Show Preview -->
         <font-awesome-icon icon=" fa-solid fa-eye" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
       </Button>
       <Button
@@ -93,7 +92,6 @@
           },
         }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = false"
       >
-        <!-- End Preview -->
         <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
       </Button>
 
@@ -132,17 +130,17 @@ function toggleMargins() {
         if (obj === activeObject) {
           templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
             left: obj.left,
-            top: 0, // event.absolutePointer.y,
+            top: 0,
             stroke: '#3978eb',
             id: obj.hash,
             selection: false,
             fieldType: obj.fieldType,
             pageNo: templateEditorStore.activePageForCanvas,
           }))
-          // x axis
+
           if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-              left: 0, // event.absolutePointer.x,
+              left: 0,
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
               stroke: '#3978eb',
               id: obj.hash,
@@ -153,7 +151,7 @@ function toggleMargins() {
           }
           else {
             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-              left: 0, // event.absolutePointer.x,
+              left: 0,
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
               stroke: '#3978eb',
               id: obj.hash,
@@ -187,17 +185,17 @@ function showMargins() {
       obj.displayGuide = true
       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
         left: obj.left,
-        top: 0, // event.absolutePointer.y,
+        top: 0,
         stroke: '#3978eb',
         id: obj.hash,
         selection: false,
         fieldType: obj.fieldType,
         pageNo: templateEditorStore.activePageForCanvas,
       }))
-      // x axis
+
       if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
+          left: 0,
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
           stroke: '#3978eb',
           id: obj.hash,
@@ -208,7 +206,7 @@ function showMargins() {
       }
       else {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
+          left: 0,
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
           stroke: '#3978eb',
           id: obj.hash,
@@ -228,7 +226,6 @@ function removeMargins() {
     if (obj.displayGuide)
       obj.displayGuide = false
     if (obj.stroke === '#3978eb'
-    // && !obj.displayGuide
       && obj.pageNo === templateEditorStore.activePageForCanvas)
       return false
     else
@@ -259,15 +256,14 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         return
       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
         left: e.target.left,
-        top: 0, // event.absolutePointer.y,
+        top: 0,
         stroke: '#3978eb',
         id: e.target.hash,
         fieldType: obj.fieldType,
       }))
       if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
-        // x axis
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
+          left: 0,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
           stroke: '#3978eb',
           id: e.target.hash,
@@ -275,9 +271,8 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         }))
       }
       else {
-        // x axis
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0, // event.absolutePointer.x,
+          left: 0,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
           stroke: '#3978eb',
           id: e.target.hash,
@@ -323,27 +318,15 @@ watch(currentPreviewNo, (newVal) => {
       }
       else if (obj._element && obj.id !== 'Lorem ipsum') {
         const correspondingData = data[newVal - 1][obj?.id]
-        // 'https://images.pexels.com/photos/381739/pexels-photo-381739.jpeg?cs=srgb&dl=pexels-sevenstormphotography-381739.jpg&fm=jpg'
-        // data[newVal - 1][obj?.id]
         if (correspondingData) {
-          // fabric.Image.fromURL(correspondingData, (img) => {
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
-          // obj.set({ height: img.height, width: img.width })
 
-          // const imgElement = obj._element
-          // imgElement.src = correspondingData // set image source
-          // imgElement.onload = () => {
-          //   obj.scaleToWidth(originalWidth)
-          //   obj.scaleToHeight(originalHeight)
-          //   templateEditorStore.canvas.renderAll()
-          // }
           obj.setSrc(correspondingData, () => {
             obj.scaleToWidth(originalWidth)
             obj.scaleToHeight(originalHeight)
             templateEditorStore.canvas.renderAll()
           })
-          // })
         }
       }
       return obj
@@ -367,32 +350,16 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
       }
       else if (obj?.id !== 'Lorem ipsum') {
         const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-        //  'https://images.pexels.com/photos/381739/pexels-photo-381739.jpeg?cs=srgb&dl=pexels-sevenstormphotography-381739.jpg&fm=jpg'
 
-        // data[currentPreviewNo.value - 1][obj?.id]
         if (correspondingData) {
-          // fabric.Image.fromURL(correspondingData, (img) => {
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
-          // obj.set({ height: img.height, width: img.width })
 
-          // const imgElement = obj._element
-          // imgElement.src = correspondingData // set image source
-          // imgElement.onload = () => {
-          //   obj.scaleToWidth(originalWidth)
-          //   obj.scaleToHeight(originalHeight)
-          //   templateEditorStore.canvas.renderAll()
-          // }
           obj.setSrc(correspondingData, () => {
             obj.scaleToWidth(originalWidth)
             obj.scaleToHeight(originalHeight)
             templateEditorStore.canvas.renderAll()
           })
-          // })
-
-          // const imgElement = obj._element
-          // imgElement.src = correspondingData // set image source
-          // imgElement.onload = () => templateEditorStore.canvas.renderAll()
         }
       }
 
@@ -409,28 +376,15 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
         obj.set({ text: obj?.id })
       }
       else if (obj._element && obj.id !== 'Lorem ipsum') {
-        // const imgElement = obj._element
-        // imgElement.src = 'https://placehold.co/300x200?text=DocSpawn' // set image source
-        // imgElement.onload = () => templateEditorStore.canvas.renderAll()
         const correspondingData = 'https://placehold.co/300x200?text=DocSpawn'
-        // fabric.Image.fromURL(correspondingData, (img) => {
         const originalHeight = obj.height * obj.scaleY
         const originalWidth = obj.width * obj.scaleX
-        // obj.set({ height: img.height, width: img.width })
 
-        // const imgElement = obj._element
-        // imgElement.src = correspondingData // set image source
-        // imgElement.onload = () => {
-        //   obj.scaleToWidth(originalWidth)
-        //   obj.scaleToHeight(originalHeight)
-        //   templateEditorStore.canvas.renderAll()
-        // }
         obj.setSrc(correspondingData, () => {
           obj.scaleToWidth(originalWidth)
           obj.scaleToHeight(originalHeight)
           templateEditorStore.canvas.renderAll()
         })
-        // })
       }
       return obj
     })
@@ -439,7 +393,3 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
   }
 })
 </script>
-
-  <style  scoped>
-
-  </style>

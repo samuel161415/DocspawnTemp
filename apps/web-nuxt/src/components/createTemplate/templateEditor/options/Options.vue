@@ -29,7 +29,6 @@
           <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
           <p>Select a field</p>
         </div>
-        <!-- <InputText v-model="fieldName" disabled="" :value="templateEditorStore.activeDataField" class="h-11 w-full" type="text" /> -->
         <div class="p-0 flex justify-content-center">
           <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.keys" filter placeholder="Select data field" class="w-full md:w-14rem">
             <template #value="slotProps">
@@ -55,14 +54,12 @@
         <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
       </div>
 
-      <!-- specific options -->
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'form-field'" class="">
         <FormOptions />
       </div>
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'data-fields'" class="">
       </div>
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'image'" class="">
-        <!-- <ImageOptions /> -->
         <div class="mt-4 ">
           <h1>Upload image</h1>
           <input
@@ -103,14 +100,6 @@
         </div>
       </div>
       <TextFormatting v-if="templateEditorStore.selectedAddedField.fieldType === 'data-fields'" />
-      <!-- <div class="flex gap-2   text-gray-400 items-center"> -->
-      <!-- <p>Remove field</p> -->
-      <!-- <div class="cursor-pointer"> -->
-      <!-- <Button outlined severity="danger" class="px-3 w-full mt-6" @click="deleteFieldFromCanvas">
-        Delete field
-      </Button> -->
-      <!-- </div> -->
-      <!-- </div> -->
     </div>
   </div>
 </template>
@@ -118,8 +107,6 @@
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
-import { activeTextStyles } from '../store/activeTextStyles'
-import ImageOptions from './ImageOptions.vue'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
 
@@ -135,23 +122,6 @@ function getFile(e) {
   const file = e.target.files[0]
   fileUrl.value = URL.createObjectURL(file)
 }
-
-// function deleteFieldFromCanvas() {
-//   const object = templateEditorStore.canvas.getActiveObject()
-
-//   templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
-//     if (obj?.hash === object?.hash || obj.id === object?.hash)
-//       return false
-//     else
-//       return true
-//   })
-
-//   const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== templateEditorStore?.selectedAddedField?.hash)
-//   templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
-//   templateEditorStore.canvas.discardActiveObject()
-//   templateEditorStore.canvas.renderAll()
-//   templateEditorStore.showOptionsBar = false
-// }
 
 watch(activeDataField, () => {
   if (templateEditorStore.canvas) {

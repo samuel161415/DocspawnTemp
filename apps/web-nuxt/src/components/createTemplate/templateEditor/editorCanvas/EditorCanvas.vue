@@ -11,9 +11,7 @@
 </template>
 
 <script setup>
-// import { fabric } from 'fabric'
 import { uuid } from 'vue-uuid'
-
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { templateEditorStore } from '../store/templateEditorStore'
@@ -22,7 +20,6 @@ import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 
 const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
-
 const templateCanvas = ref()
 const hoveredElement = ref()
 const canvasWrapper = ref()
@@ -40,8 +37,6 @@ async function showThumbnail() {
     const canvas = new fabric.Canvas(`template-thumbnail-${i}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
     const response = await fetch(templateEditorStore.templateBackgroundUrl)
     const pdfData = await response.arrayBuffer()
-
-    // const pdfjs =await  import('pdfjs-dist/build/pdf')
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
 
@@ -109,8 +104,6 @@ async function createCanvas() {
   templateEditorStore.canvas = canvas
   const response = await fetch(templateEditorStore.templateBackgroundUrl)
   const pdfData = await response.arrayBuffer()
-
-  // const pdfjs =await  import('pdfjs-dist/build/pdf')
 
   pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
 
@@ -273,25 +266,6 @@ function addEventsToCanvas() {
           })
           templateEditorStore.canvas.add(tempYMargin)
         }
-        // if (tempXMargin)
-        //   templateEditorStore.canvas.remove(tempXMargin)
-        // if (tempYMargin)
-        //   templateEditorStore.canvas.remove(tempYMargin)
-
-        // tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
-        //   left: event.absolutePointer.x,
-        //   top: 0,
-        //   stroke: '#3978eb',
-
-        // })
-        // templateEditorStore.canvas.add(tempXMargin)
-        // tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
-        //   left: 0, // event.absolutePointer.x,
-        //   top: event.absolutePointer.y,
-        //   stroke: '#3978eb',
-
-        // })
-        // templateEditorStore.canvas.add(tempYMargin)
       }
 
       templateEditorStore.canvas.renderAll()
@@ -299,7 +273,6 @@ function addEventsToCanvas() {
     if (templateEditorStore.fieldToAdd.type === 'dataset-image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
       fabric.Image.fromURL(
         'https://placehold.co/300x200?text=DocSpawn'
-        // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
           if (hoveredElement.value)
             templateEditorStore.canvas.remove(hoveredElement.value)
@@ -327,33 +300,13 @@ function addEventsToCanvas() {
 
               templateEditorStore.canvas.add(tempXMargin)
               tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
-                left: 0, // event.absolutePointer.x,
+                left: 0,
                 top: event.absolutePointer.y,
                 stroke: '#3978eb',
 
               })
               templateEditorStore.canvas.add(tempYMargin)
             }
-            // if (tempXMargin)
-            //   templateEditorStore.canvas.remove(tempXMargin)
-            // if (tempYMargin)
-            //   templateEditorStore.canvas.remove(tempYMargin)
-
-            // tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
-            //   left: event.absolutePointer.x,
-            //   top: 0,
-            //   stroke: '#3978eb',
-
-            // })
-
-            // templateEditorStore.canvas.add(tempXMargin)
-            // tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
-            //   left: 0, // event.absolutePointer.x,
-            //   top: event.absolutePointer.y,
-            //   stroke: '#3978eb',
-
-            // })
-            // templateEditorStore.canvas.add(tempYMargin)
           }
           templateEditorStore.canvas.add(myImg)
           templateEditorStore.canvas.renderAll()
@@ -367,7 +320,6 @@ function addEventsToCanvas() {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
-      /////////////
       if (tempXMargin && tempYMargin) {
         const obs = templateEditorStore.canvas._objects
         templateEditorStore.canvas._objects = obs.filter((ob) => {
@@ -380,7 +332,6 @@ function addEventsToCanvas() {
         })
       }
       templateEditorStore.canvas.renderAll()
-      //////////////
 
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
@@ -404,7 +355,7 @@ function addEventsToCanvas() {
           displayGuide: false,
         },
       )
-      /// ////////////adding icon//////////////////////////////
+
       fabric.Image.fromURL(
         alertIconUrl
         , (myImg) => {
@@ -423,8 +374,6 @@ function addEventsToCanvas() {
           templateEditorStore.canvas.renderAll()
         },
       )
-
-      /////////////////////////////////////////////////////
 
       const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.name, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
       }
@@ -483,11 +432,10 @@ function addEventsToCanvas() {
       templateEditorStore.fieldToAdd = {}
       fabric.Image.fromURL(
         'https://placehold.co/300x200?text=DocSpawn'
-        // templateEditorStore.datasetData.allEntries[0]['Anomaly 1']
         , (myImg) => {
           if (hoveredElement.value)
             templateEditorStore.canvas.remove(hoveredElement.value)
-          /////////////
+
           if (tempXMargin && tempYMargin) {
             const obs = templateEditorStore.canvas._objects
             templateEditorStore.canvas._objects = obs.filter((ob) => {
@@ -501,8 +449,6 @@ function addEventsToCanvas() {
           }
           templateEditorStore.canvas.renderAll()
 
-          //////////////
-
           myImg.set({
             left: event.absolutePointer.x,
             top: event.absolutePointer.y - (myImg.height),
@@ -515,7 +461,6 @@ function addEventsToCanvas() {
             displayGuide: false,
           })
 
-          /// ////////////adding icon//////////////////////////////
           fabric.Image.fromURL(
             alertIconUrl
             , (imgia) => {
@@ -535,7 +480,6 @@ function addEventsToCanvas() {
             },
           )
 
-          /////////////////////////////////////////////////////
           const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.name, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
           }
           const allFields = []
@@ -582,13 +526,12 @@ function addEventsToCanvas() {
             templateEditorStore.canvas.renderAll()
           })
 
-          // hoveredElement.value = null
           templateEditorStore.canvas.add(myImg)
           templateEditorStore.canvas.renderAll()
         },
       )
     }
-    // for showing options while click
+    // for showing options when click
     const activeObj = templateEditorStore.canvas.getActiveObject()
 
     if (activeObj) {
@@ -643,7 +586,3 @@ watch(() => templateEditorStore.fieldToAdd, () => {
   addEventsToCanvas()
 })
 </script>
-
-<style  scoped>
-*{}
-</style>
