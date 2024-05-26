@@ -1,5 +1,9 @@
 <template>
-  <div class="flex h-full  w-52  space-x-6 relative mb-12 overflow-auto pr-2 ">
+  <Toast />
+  <!-- <ConfirmPopup /> -->
+  <div
+    class=" flex-1 h-full overflow-auto  pr-1 "
+  >
     <div class="w-full">
       <Button v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
         <i class="pi pi-plus"></i>
@@ -11,16 +15,16 @@
       </Button>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="bg-blue-50 px-3  rounded-md text-lg text-gray-600 mb-3 flex items-center justify-between gap-1 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore?.selectedAddedField?.hash === field?.hash }">
+        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="bg-blue-50 px-3 py-2  rounded-md text-lg text-gray-600 mb-3 flex items-center justify-between gap-1 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore?.selectedAddedField?.hash === field?.hash }">
           <div class=" h-full w-full py-2 cursor-pointer" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
             {{ field.name }}
-            <p class="text-xs">
+            <p class="text-sm">
               {{ field?.fieldType }}. on page {{ field.page }}
             </p>
           </div>
 
           <div
-            class="flex flex-col   "
+            class="flex flex-row gap-4   "
           >
             <Button text class="text-lg  w-max h-max" @click="fieldToDelete = field;confirm1($event)">
               <font-awesome-icon
@@ -119,13 +123,11 @@
       </div>
     </div>
   </div>
-
-  <Toast />
-  <ConfirmPopup />
 </template>
 
 <script setup>
 import { uuid } from 'vue-uuid'
+import { useConfirm } from 'primevue/useconfirm'
 import { templateEditorStore } from '../store/templateEditorStore.ts'
 import { activeTextStyles } from '../store/activeTextStyles'
 
@@ -134,6 +136,8 @@ const showTimestamp = ref(false)
 const showImageOptions = ref(false)
 const fieldToDelete = ref(false)
 const deleteText = ref('')
+const confirm = useConfirm()
+const toast = useToast()
 
 function duplicateField(field) {
   const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
@@ -370,13 +374,10 @@ function selectAddedField(field) {
   })
 }
 
-const confirm = useConfirm()
-const toast = useToast()
-
 function confirm1(event) {
   confirm.require({
     target: event.currentTarget,
-    message: 'Are you sure you want to duplicate this field?',
+    message: ' Are you sure you want to duplicate this field?',
     icon: 'pi pi-exclamation-triangle',
     rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
     acceptClass: 'p-button-sm',
@@ -395,7 +396,7 @@ function confirm1(event) {
 function confirm2(event) {
   confirm.require({
     target: event.currentTarget,
-    message: 'Do you want to delete this field?',
+    message: ' Do you want to delete this field?',
     icon: 'pi pi-info-circle',
     rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
     acceptClass: 'p-button-danger p-button-sm',
@@ -411,3 +412,27 @@ function confirm2(event) {
   })
 }
 </script>
+
+<style lang="scss" scoped>
+    /* width */
+    ::-webkit-scrollbar {
+    width: 10px;
+    height:10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #009ee233;
+    border-radius: 8px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #009ee277;
+    }
+  </style>

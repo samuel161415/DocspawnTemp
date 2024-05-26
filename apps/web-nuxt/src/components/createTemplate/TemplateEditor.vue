@@ -1,5 +1,5 @@
 <template>
-  <div class="flex   w-full  space-x-6 relative mb-12  h-[80vh] overflow-hidden  ">
+  <div class="flex  w-full space-x-6 relative mb-12  h-[80vh] overflow-hidden  ">
     <TemplateFields />
     <EditorCanvas />
     <Options />

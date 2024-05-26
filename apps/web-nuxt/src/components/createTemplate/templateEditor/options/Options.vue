@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-initial w-60 h-full overflow-auto ">
+  <div class="flex-1 h-full overflow-auto  ">
     <div
       v-if="templateEditorStore.showOptionsBar === true"
 
