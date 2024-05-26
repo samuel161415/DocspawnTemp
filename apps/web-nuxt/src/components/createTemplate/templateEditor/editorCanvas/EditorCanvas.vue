@@ -26,8 +26,17 @@ const canvasWrapper = ref()
 const activeElement = ref()
 
 onMounted(() => {
-  createCanvas()
+  callCreateCanvas()
 })
+
+function callCreateCanvas() {
+  // using this function to resolve error- canvas wrapper is loading later than createcanvas function
+  const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
+  if (parentWidth && parentWidth > 0)
+    createCanvas()
+  else
+    setTimeout(() => callCreateCanvas(), 1000)
+}
 
 async function showThumbnail() {
   const { fabric } = await import('fabric')
@@ -98,7 +107,8 @@ async function showThumbnail() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value.clientWidth
+  const canvasWrapperWidth = canvasWrapper.value.clientWidth > 0 ? canvasWrapper.value.clientWidth : 900
+
   templateEditorStore.fabric = fabric
   const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
   templateEditorStore.canvas = canvas

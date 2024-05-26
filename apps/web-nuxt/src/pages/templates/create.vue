@@ -101,6 +101,9 @@
 </template>
 
 <script setup>
+import Stepper from 'primevue/stepper'
+import StepperPanel from 'primevue/stepperpanel'
+
 import { ref, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'

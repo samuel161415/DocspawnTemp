@@ -36,6 +36,7 @@ onMounted(() => {
         headers.forEach((header, index) => {
           rowData[header] = row[index]
         })
+
         return rowData
       })
 
