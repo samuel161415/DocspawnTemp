@@ -24,6 +24,7 @@ import divider from './divider';
 import dock from './dock';
 import dropdown from './dropdown';
 import fieldset from './fieldset';
+import fileupload from './fileupload';
 import global from './global';
 import inlinemessage from './inlinemessage';
 import inputgroup from './inputgroup';
@@ -60,6 +61,7 @@ import slider from './slider';
 import speeddial from './speeddial';
 import splitbutton from './splitbutton';
 import steps from './steps';
+import stepper from './stepper';
 import tabmenu from './tabmenu';
 import tabview from './tabview';
 import tag from './tag';
@@ -129,6 +131,7 @@ export default {
     accordion,
     panel,
     fieldset,
+    fileupload,
     card,
     tabview,
     divider,
@@ -140,6 +143,7 @@ export default {
     menu,
     menubar,
     steps,
+    stepper,
     tieredmenu,
     breadcrumb,
     panelmenu,

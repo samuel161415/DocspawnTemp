@@ -26,8 +26,8 @@ export default defineNuxtConfig({
       unstyled: false,
     },
     importPT: {
-      // from: path.resolve(__dirname, './src/presets/lara/'),
-      from: '../src/presets/lara/',
+      from: path.resolve(__dirname, './src/presets/lara/'),
+
       as: 'TailwindLara',
     },
     components: {

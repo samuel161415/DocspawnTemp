@@ -13,7 +13,7 @@
     "fabric": "^5.3.0",
     "pdfjs-dist": "^4.0.379",
     "primeicons": "^6.0.1",
-    "primevue": "^3.48.1",
+    "primevue": "^3.49.0",
     "vue-uuid": "^3.0.0",
     "xlsx": "^0.18.5"
   },
@@ -21,6 +21,7 @@
     "nuxt": "^3.9.1",
     "nuxt-gtag": "^1.2.0",
     "nuxt-primevue": "^0.3.0",
+    "pathe": "^1.1.2",
     "sass": "^1.63.6",
     "tailwindcss": "^3.4.1",
     "typescript": "latest",

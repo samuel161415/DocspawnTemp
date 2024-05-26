@@ -73,35 +73,7 @@ export const useSettingItems = () => {
         icon: "pi pi-list",
         route: "/list",
         isHovered: false,
-        subitems: [
-          {
-            title: "Lists",
-            icon: "pi pi-list",
-            route: "/list",
-            isHovered: false,
-            nestedMenuVisible: false,
-            componentId: "lists",
-            subitems:[]
-          },
-          {
-            title: "Sublists",
-            icon: "pi pi-bars",
-            route: "/list",
-            isHovered: false,
-            nestedMenuVisible: false,
-            componentId: "sublists",
-            subitems:[]
-          },
-          {
-            title: "Associative lists",
-            icon: "pi pi-sort-amount-up-alt",
-            route: "/list",
-            isHovered: false,
-            nestedMenuVisible: false,
-            componentId: "associative-lists",
-            subitems:[]
-          }
-        ]
+        subitems: []
       },
       {
         title: "Formatting options",

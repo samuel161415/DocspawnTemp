@@ -1,13 +1,16 @@
 <template>
   <div class="box overflow-hidden z-1 p-5 table-container">
     <div class="flex flex-col  gap-2 left-0 md:mb-14">
-      <p class="text-surface-600 text-left text-lg mb-2">Select a template to display data.</p>
-      <TreeSelect 
-        v-model="selectedValue" 
-        :options="NodeData" 
-        placeholder="Select Template" 
+      <p class="text-surface-600 text-left text-lg mb-2">
+        Select a template to display data.
+      </p>
+      <TreeSelect
+        v-model="selectedValue"
+        :options="NodeData"
+        placeholder="Select Template"
         class="md:w-[20rem] w-full"
-        selectionMode="single" />
+        selection-mode="single"
+      />
       <p class="text-surface-600 text-left text-lg mb-2">
         Select a template to display data.
       </p>
@@ -82,7 +85,7 @@
                 <Button icon="pi pi-eye" outlined text @click="toggleDialog(index, data[column.field])" />
               </div>
             </div>
-            <div v-else-if="column.header === 'Filled On'">
+            <div v-else-if="column.field === 'filled_on'">
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDate(data[column.field]) }}
             </div>
@@ -122,24 +125,10 @@
 </template>
 
 <script setup>
-
-
-
-
-
-
-
-
-
-
-
-
-
 import { ref } from 'vue'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
-import { NodeData } from '~/services/sampleData'
 
 const props = defineProps({
   data: {
@@ -182,18 +171,58 @@ const props = defineProps({
     type: Boolean,
     required: false,
   },
-});
-
-
-
+})
 
 const emit = defineEmits()
 
-const selectedColumns = ref(props.columns)
+const typefilter = ref('')
 
-function onToggle(val) {
-  selectedColumns.value = props.columns.filter(col => val.includes(col))
-}
+const dataTableRef = ref()
+
+const currentImage = ref(null)
+
+const dialogVisible = ref(false)
+
+const selectedRowData = ref(null)
+
+const selectedValue = ref()
+
+const templatefiltered = ref([])
+
+const filteredData = ref(templatefiltered)
+
+const NodeData = [
+  {
+    key: 'Form to doc',
+    label: 'Form to doc',
+    data: 'Form to doc',
+    icon: 'pi pi-fw pi-inbox',
+    selectable: false,
+    children: [
+      {
+        key: 'FORM',
+        label: 'FORM',
+        data: 'FORM',
+      },
+      {
+        key: 'APPLICATION FORM',
+        label: 'APPLICATION FORM',
+        data: 'APPLICATION FORM',
+      },
+    ],
+  },
+  {
+    key: 'Table to doc',
+    label: 'Table to doc',
+    data: 'Table to doc',
+    icon: 'pi pi-fw pi-calendar',
+    selectable: false,
+    children: [
+      { key: 'INVOICE FORM', label: 'INVOICE FORM', data: 'INVOICE FORM' },
+      { key: 'PDF FORM', label: 'PDF FORM', data: 'PDF FORM' },
+    ],
+  },
+]
 
 const filters = ref(props.filters)
 

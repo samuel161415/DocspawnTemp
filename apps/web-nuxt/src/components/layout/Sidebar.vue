@@ -108,8 +108,6 @@ watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
 
 const isCollapsed = ref(false);
 
-// const windowWidth = ref(window.innerWidth);
-
 const isMinimizebtnHovered = ref(false);
 
 const hoverEffect = (val) =>{

@@ -7,18 +7,19 @@
           class="cursor-pointer flex flex-col mt-2  w-full mr-4 "
         >
           <div
-            :key="items.title" class="flex px-1 py-3  ml-1 hover:bg-surface-100 font-poppins"
-            :class="{ 'bg-primaryBlue': baseRoute === items.route }"
+            :key="items.title"
+            class="flex px-1 py-3 ml-1"
+            :class="{ 'hover:bg-surface-100 ': settingsBaseRoute !== `/settings${items.route}`, 'text-primaryBlue ': settingsBaseRoute === `/settings${items.route}` }"
             @click="navigate(`settings${items.route}`)"
           >
             <span
               class="text-lg font-normal ml-2 font-poppins"
-              :class="{ 'text-surface-600': items.isHovered || baseRoute === items.route, 'text-gray-500': !items.isHovered }"
+              :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': settingsBaseRoute === `/settings${items.route}`, 'text-gray-500': !items.isHovered }"
             >{{
               items.title }}
             </span>
           </div>
-          <ul>
+          <ul class="mt-1">
             <li v-for="subItem in items.subitems">
               <SubMenuItem :sub-item="subItem" />
             </li>
@@ -39,11 +40,11 @@ const { settingItems } = useSettingItems()
 
 const router = useRouter()
 
-const baseRoute = ref(router.currentRoute.value.path)
+const settingsBaseRoute = ref(router.currentRoute.value.path)
 
 onMounted(() => {
   router.afterEach((to, from) => {
-    baseRoute.value = to.path
+    settingsBaseRoute.value = to.path
   })
 })
 
@@ -51,6 +52,6 @@ function navigate(route) {
   router.currentRoute.value.path = '/'
 
   router.push(route)
-  baseRoute.value = route
+  settingsBaseRoute.value = route
 }
 </script>
