@@ -1,334 +1,551 @@
 export const sampleData = [
   {
     id: 1,
-    creationDate: '2024-01-01',
-    creationTime: '08:30',
-    templateName: 'Invoice Template',
+    creationDate: "2024-01-01",
+    creationTime: "08:30",
+    templateName: "Invoice Template",
     numberOfDocuments: 5,
-    creator: 'John Doe',
+    creator: "John Doe"
   },
   {
     id: 2,
-    creationDate: '2024-01-15',
-    creationTime: '09:45',
-    templateName: 'Report Template',
+    creationDate: "2024-01-15",
+    creationTime: "09:45",
+    templateName: "Report Template",
     numberOfDocuments: 3,
-    creator: 'Jane Smith',
+    creator: "Jane Smith"
   },
   {
     id: 3,
-    creationDate: '2024-02-20',
-    creationTime: '10:00',
-    templateName: 'Contract Template',
+    creationDate: "2024-02-20",
+    creationTime: "10:00",
+    templateName: "Contract Template",
     numberOfDocuments: 8,
-    creator: 'Carlos Rodriguez',
-  },
-]
+    creator: "Carlos Rodriguez"
+  }
+];
 
 export const CustomerService = [
   {
     id: 1000,
-    name: 'James Butt',
+    name: "James Butt",
     country: {
-      name: 'Algeria',
-      code: 'dz',
+      name: "Algeria",
+      code: "dz"
     },
-    company: 'Benton, John B Jr',
-    date: '2015-09-13',
-    status: 'unqualified',
+    company: "Benton, John B Jr",
+    date: "2015-09-13",
+    status: "unqualified",
     verified: true,
     activity: 17,
     representative: {
-      name: 'Ioni Bowcher',
-      image: 'ionibowcher.png',
+      name: "Ioni Bowcher",
+      image: "ionibowcher.png"
     },
-    balance: 70663,
+    balance: 70663
   },
   {
     id: 1002,
-    name: 'Jkames',
+    name: "Jkames",
     country: {
-      name: 'Algeria',
-      code: 'dz',
+      name: "Algeria",
+      code: "dz"
     },
-    company: 'Benton, John B Jr',
-    date: '2015-09-13',
-    status: 'unqualified',
+    company: "Benton, John B Jr",
+    date: "2015-09-13",
+    status: "unqualified",
     verified: true,
     activity: 17,
     representative: {
-      name: 'Ioni Bowcher',
-      image: 'ionibowcher.png',
+      name: "Ioni Bowcher",
+      image: "ionibowcher.png"
     },
-    balance: 70663,
+    balance: 70663
   },
   {
     id: 1003,
-    name: 'James',
+    name: "James",
     country: {
-      name: 'Algeria',
-      code: 'dz',
+      name: "Algeria",
+      code: "dz"
     },
-    company: 'Benton, John B Jr',
-    date: '2015-09-13',
-    status: 'unqualified',
+    company: "Benton, John B Jr",
+    date: "2015-09-13",
+    status: "unqualified",
     verified: true,
     activity: 17,
     representative: {
-      name: 'Ioni Bowcher',
-      image: 'ionibowcher.png',
+      name: "Ioni Bowcher",
+      image: "ionibowcher.png"
     },
-    balance: 70663,
-  },
-]
+    balance: 70663
+  }
+];
 export const step1Items = [
-  '1-10',
-  '11-25',
-  '26-250',
-  '26-250',
-  '256-500',
-  '500-2000',
-  '2001+',
-]
+  "1-10",
+  "11-25",
+  "26-250",
+  "26-250",
+  "256-500",
+  "500-2000",
+  "2001+"
+];
 
 export const step2Items = [
-  'Tik-tok',
-  'Linked in',
-  'Facebook',
-  'Instagram',
-  'Tweeter',
-  'Youtube',
-  'Friend',
-]
+  "Tik-tok",
+  "Linked in",
+  "Facebook",
+  "Instagram",
+  "Tweeter",
+  "Youtube",
+  "Friend"
+];
 export const step3Items = [
-  'Me only',
-  '2-10',
-  '11-25',
-  '26-250',
-  '26-250',
-  '256-500',
-  'More than 501',
-  'I don\'t know',
-]
+  "Me only",
+  "2-10",
+  "11-25",
+  "26-250",
+  "26-250",
+  "256-500",
+  "More than 501",
+  "I don't know"
+];
 export const documentLibraryData = [
   {
     id: 1,
-    type: 'Form to Doc',
-    template_name: 'INVOICE FORM',
+    type: "Form to Doc",
+    template_name: "INVOICE FORM",
     no_documents: 1,
-    date: new Date('2024-01-01'),
-    created_by: 'John Doe',
+    date: new Date("2024-01-01"),
+    created_by: "John Doe"
   },
   {
     id: 2,
-    type: 'Table to doc',
-    template_name: 'FORM',
+    type: "Table to doc",
+    template_name: "FORM",
     no_documents: 2,
-    date: new Date('2024-01-15'),
-    created_by: 'Emly Hall',
+    date: new Date("2024-01-15"),
+    created_by: "Emly Hall"
   },
   {
     id: 3,
-    type: 'Form to Doc',
-    template_name: 'FORM',
+    type: "Form to Doc",
+    template_name: "FORM",
     no_documents: 4,
-    date: new Date('2024-02-20'),
-    created_by: 'John Doe',
+    date: new Date("2024-02-20"),
+    created_by: "John Doe"
   },
   {
     id: 4,
-    type: 'Table to doc',
-    template_name: 'FORM',
+    type: "Table to doc",
+    template_name: "FORM",
     no_documents: 3,
-    date: new Date('2024-01-01'),
-    created_by: 'Robert Smith',
+    date: new Date("2024-01-01"),
+    created_by: "Robert Smith"
   },
   {
     id: 5,
-    type: 'Form to Doc',
-    template_name: 'INVOICE FORM',
+    type: "Form to Doc",
+    template_name: "INVOICE FORM",
     no_documents: 2,
-    date: new Date('2024-01-15'),
-    created_by: 'Sam Taylor',
+    date: new Date("2024-01-15"),
+    created_by: "Sam Taylor"
   },
   {
     id: 6,
-    type: 'Form to Doc',
-    template_name: 'RESUME FORM',
+    type: "Form to Doc",
+    template_name: "RESUME FORM",
     no_documents: 2,
-    date: new Date('2024-03-10'),
-    created_by: 'John Doe',
+    date: new Date("2024-03-10"),
+    created_by: "John Doe"
   },
   {
     id: 7,
-    type: 'Table to doc',
-    template_name: 'APPLICATION FORM',
+    type: "Table to doc",
+    template_name: "APPLICATION FORM",
     no_documents: 1,
-    date: new Date('2024-04-05'),
-    created_by: 'Emly Hall',
+    date: new Date("2024-04-05"),
+    created_by: "Emly Hall"
   },
   {
     id: 8,
-    type: 'Table to doc',
-    template_name: 'SURVEY FORM',
+    type: "Table to doc",
+    template_name: "SURVEY FORM",
     no_documents: 3,
-    date: new Date('2024-03-16'),
-    created_by: 'Sam Taylor',
+    date: new Date("2024-03-16"),
+    created_by: "Sam Taylor"
   },
   {
     id: 9,
-    type: 'Form to Doc',
-    template_name: 'FEEDBACK FORM',
+    type: "Form to Doc",
+    template_name: "FEEDBACK FORM",
     no_documents: 1,
-    date: new Date('2024-03-15'),
-    created_by: 'John Doe',
+    date: new Date("2024-03-15"),
+    created_by: "John Doe"
   },
   {
     id: 10,
-    type: 'Form to Doc',
-    template_name: 'REGISTRATION FORM',
+    type: "Form to Doc",
+    template_name: "REGISTRATION FORM",
     no_documents: 1,
-    date: new Date('2024-04-20'),
-    created_by: 'Sam Taylor',
+    date: new Date("2024-04-20"),
+    created_by: "Sam Taylor"
   },
   {
     id: 11,
-    type: 'Table to doc',
-    template_name: 'EMPLOYEE SURVEY',
+    type: "Table to doc",
+    template_name: "EMPLOYEE SURVEY",
     no_documents: 1,
-    date: new Date('2024-05-05'),
-    created_by: 'John Doe',
+    date: new Date("2024-05-05"),
+    created_by: "John Doe"
   },
   {
     id: 12,
-    type: 'Table to doc',
-    template_name: 'EVENT REGISTRATION',
+    type: "Table to doc",
+    template_name: "EVENT REGISTRATION",
     no_documents: 1,
-    date: new Date('2024-06-10'),
-    created_by: 'Robert Smith',
+    date: new Date("2024-06-10"),
+    created_by: "Robert Smith"
   },
   {
     id: 13,
-    type: 'Form to Doc',
-    template_name: 'PRODUCT FEEDBACK',
+    type: "Form to Doc",
+    template_name: "PRODUCT FEEDBACK",
     no_documents: 2,
-    date: new Date('2024-07-15'),
-    created_by: 'John Doe',
+    date: new Date("2024-07-15"),
+    created_by: "John Doe"
   },
   {
     id: 14,
-    type: 'Form to Doc',
-    template_name: 'CUSTOMER SURVEY',
+    type: "Form to Doc",
+    template_name: "CUSTOMER SURVEY",
     no_documents: 3,
-    date: new Date('2024-08-20'),
-    created_by: 'John Doe',
+    date: new Date("2024-08-20"),
+    created_by: "John Doe"
   },
   {
     id: 15,
-    type: 'Table to doc',
-    template_name: 'JOB APPLICATION',
+    type: "Table to doc",
+    template_name: "JOB APPLICATION",
     no_documents: 1,
-    date: new Date('2024-09-01'),
-    created_by: 'Robert Smith',
-  },
+    date: new Date("2024-09-01"),
+    created_by: "Robert Smith"
+  }
 ];
 
 export const dataLibraryData = [
   {
     id: 1,
-    filled_on: new Date('2024-01-01'),
-    image: 'https://img.freepik.com/free-vector/illustration-application-form_53876-18193.jpg',
-    text_filled: 'Lorem Ipsum',
-    type: 'Table to doc',
-    templateName: 'PDF FORM',
+    filled_on: new Date("2024-01-01"),
+    image:
+      "https://img.freepik.com/free-vector/illustration-application-form_53876-18193.jpg",
+    text_filled: "Lorem Ipsum",
+    type: "Table to doc",
+    templateName: "PDF FORM"
   },
   {
     id: 2,
-    filled_on: new Date('2024-02-15'),
-    image: 'https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg',
-    text_filled: 'Dolor Sit Amet',
-    type: 'Table to doc',
-    templateName: 'INVOICE FORM',
+    filled_on: new Date("2024-02-15"),
+    image:
+      "https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg",
+    text_filled: "Dolor Sit Amet",
+    type: "Table to doc",
+    templateName: "INVOICE FORM"
   },
   {
     id: 3,
-    filled_on: new Date('2024-01-01'),
-    image: 'https://assets-global.website-files.com/5ebb0930dd82631397ddca92/61b8ef1f82c1b3167fe39e0a_product-template-forms-finance.png',
-    text_filled: 'Lorem Ipsum',
-    type: 'Table to doc',
-    templateName: 'INVOICE FORM',
+    filled_on: new Date("2024-01-01"),
+    image:
+      "https://assets-global.website-files.com/5ebb0930dd82631397ddca92/61b8ef1f82c1b3167fe39e0a_product-template-forms-finance.png",
+    text_filled: "Lorem Ipsum",
+    type: "Table to doc",
+    templateName: "INVOICE FORM"
   },
   {
     id: 4,
-    filled_on: new Date('2024-02-15'),
-    image: 'https://eforms.com/images/2016/01/Simple-Rental-Application-550x712.png',
-    text_filled: 'Dolor Sit Amet',
-    type: 'Form to Doc',
-    templateName: 'APPLICATION FORM',
+    filled_on: new Date("2024-02-15"),
+    image:
+      "https://eforms.com/images/2016/01/Simple-Rental-Application-550x712.png",
+    text_filled: "Dolor Sit Amet",
+    type: "Form to Doc",
+    templateName: "APPLICATION FORM"
   },
   {
     id: 5,
-    filled_on: new Date('2024-03-10'),
-    image: 'https://cdn02.jotfor.ms/templates/screenshot/form-templates/computer-repair-work-order-form?w=310&v=2302290315&t=classic',
-    text_filled: 'Consectetur Adipiscing',
-    type: 'Form to Doc',
-    templateName: 'APPLICATION FORM',
+    filled_on: new Date("2024-03-10"),
+    image:
+      "https://cdn02.jotfor.ms/templates/screenshot/form-templates/computer-repair-work-order-form?w=310&v=2302290315&t=classic",
+    text_filled: "Consectetur Adipiscing",
+    type: "Form to Doc",
+    templateName: "APPLICATION FORM"
   },
   {
     id: 6,
-    filled_on: new Date('2024-04-22'),
-    image: 'https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg',
-    text_filled: 'Sed Do Eiusmod',
-    type: 'Form to Doc',
-    templateName: 'FORM',
+    filled_on: new Date("2024-04-22"),
+    image:
+      "https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg",
+    text_filled: "Sed Do Eiusmod",
+    type: "Form to Doc",
+    templateName: "FORM"
   },
   {
     id: 7,
-    filled_on: new Date('2024-05-05'),
-    image: 'https://eforms.com/images/2016/01/Simple-Rental-Application-550x712.png',
-    text_filled: 'Tempor Incididunt',
-    type: 'Form to Doc',
-    templateName: 'FORM',
-  },
+    filled_on: new Date("2024-05-05"),
+    image:
+      "https://eforms.com/images/2016/01/Simple-Rental-Application-550x712.png",
+    text_filled: "Tempor Incididunt",
+    type: "Form to Doc",
+    templateName: "FORM"
+  }
 ];
-
-
 
 export const NodeData = [
   {
-      key: 'Form to Doc',
-      label: 'Form to Doc',
-      data: 'Form to Doc',
-      icon: 'pi pi-fw pi-inbox',
-      selectable: false,
-      children: [
-          {
-              key: 'FORM',
-              label: 'FORM',
-              data: 'FORM',
-          },
-          {
-              key: 'APPLICATION FORM',
-              label: 'APPLICATION FORM',
-              data: 'APPLICATION FORM',
-          }
-      ]
+    key: "Form to Doc",
+    label: "Form to Doc",
+    data: "Form to Doc",
+    icon: "pi pi-fw pi-inbox",
+    selectable: false,
+    children: [
+      {
+        key: "FORM",
+        label: "FORM",
+        data: "FORM"
+      },
+      {
+        key: "APPLICATION FORM",
+        label: "APPLICATION FORM",
+        data: "APPLICATION FORM"
+      }
+    ]
   },
   {
-      key: 'Table to doc',
-      label: 'Table to doc',
-      data: 'Table to doc',
-      icon: 'pi pi-fw pi-calendar',
-      selectable: false,
-      children: [
-          { key: 'INVOICE FORM', label: 'INVOICE FORM',  data: 'INVOICE FORM' },
-          { key: 'PDF FORM', label: 'PDF FORM',  data: 'PDF FORM' },
-         ]
-  },];
+    key: "Table to doc",
+    label: "Table to doc",
+    data: "Table to doc",
+    icon: "pi pi-fw pi-calendar",
+    selectable: false,
+    children: [
+      { key: "INVOICE FORM", label: "INVOICE FORM", data: "INVOICE FORM" },
+      { key: "PDF FORM", label: "PDF FORM", data: "PDF FORM" }
+    ]
+  }
+];
 
+export const Users = [
+  {
+    id: 1,
+    firstName: "Alex",
+    lastName: "Johnson",
+    email: "alex.johnson@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 2,
+    firstName: "Maria",
+    lastName: "Rodriguez",
+    email: "maria.rodriguez@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+  },
+  {
+    id: 3,
+    firstName: "David",
+    lastName: "Smith",
+    email: "david.smith@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 4,
+    firstName: "Sophia",
+    lastName: "Brown",
+    email: "sophia.brown@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5"]
+  },
+  {
+    id: 5,
+    firstName: "Ethan",
+    lastName: "Taylor",
+    email: "ethan.taylor@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 6,
+    firstName: "Olivia",
+    lastName: "Martinez",
+    email: "olivia.martinez@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 7,
+    firstName: "James",
+    lastName: "Wilson",
+    email: "james.wilson@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 8,
+    firstName: "Isabella",
+    lastName: "Anderson",
+    email: "isabella.anderson@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+  },
+  {
+    id: 9,
+    firstName: "Logan",
+    lastName: "Thomas",
+    email: "logan.thomas@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 10,
+    firstName: "Ava",
+    lastName: "Jackson",
+    email: "ava.jackson@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 11,
+    firstName: "Lucas",
+    lastName: "White",
+    email: "lucas.white@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5"]
+  },
+  {
+    id: 12,
+    firstName: "Mia",
+    lastName: "Harris",
+    email: "mia.harris@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 13,
+    firstName: "Benjamin",
+    lastName: "Clark",
+    email: "benjamin.clark@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 14,
+    firstName: "Amelia",
+    lastName: "Lewis",
+    email: "amelia.lewis@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 15,
+    firstName: "Jacob",
+    lastName: "Robinson",
+    email: "jacob.robinson@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+  },
+  {
+    id: 16,
+    firstName: "Charlotte",
+    lastName: "Walker",
+    email: "charlotte.walker@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 17,
+    firstName: "Michael",
+    lastName: "Hall",
+    email: "michael.hall@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5"]
+  },
+  {
+    id: 18,
+    firstName: "Emily",
+    lastName: "Young",
+    email: "emily.young@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 19,
+    firstName: "Elijah",
+    lastName: "King",
+    email: "elijah.king@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 20,
+    firstName: "Avery",
+    lastName: "Wright",
+    email: "avery.wright@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 21,
+    firstName: "Evelyn",
+    lastName: "Scott",
+    email: "evelyn.scott@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+  },
+  {
+    id: 22,
+    firstName: "Matthew",
+    lastName: "Torres",
+    email: "matthew.torres@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 23,
+    firstName: "Abigail",
+    lastName: "Lopez",
+    email: "abigail.lopez@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 24,
+    firstName: "Daniel",
+    lastName: "Hill",
+    email: "daniel.hill@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5"]
+  },
+  {
+    id: 25,
+    firstName: "Chloe",
+    lastName: "Green",
+    email: "chloe.green@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 26,
+    firstName: "William",
+    lastName: "Adams",
+    email: "william.adams@example.com",
+    groups: ["Group 1"]
+  },
+  {
+    id: 27,
+    firstName: "Madison",
+    lastName: "Nelson",
+    email: "madison.nelson@example.com",
+    groups: ["Group 1", "Group 2", "Group 3"]
+  },
+  {
+    id: 28,
+    firstName: "Alexander",
+    lastName: "Baker",
+    email: "alexander.baker@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+  },
+  {
+    id: 29,
+    firstName: "Harper",
+    lastName: "Gonzalez",
+    email: "harper.gonzalez@example.com",
+    groups: ["Group 1", "Group 2"]
+  },
+  {
+    id: 30,
+    firstName: "Noah",
+    lastName: "Carter",
+    email: "noah.carter@example.com",
+    groups: ["Group 1", "Group 2", "Group 3", "Group 4", "Group 5"]
+  }
+];
 
-
-  export const ProductService = {
+export const ProductService = {
     getProductsData() {
         return [
             {
@@ -1633,5 +1850,625 @@ export const FormFieldsData  = [
 ];
 
 
+export const Groups = [
+  {
+    name: "Group 1",
+    users: [
+      {
+        id: 1,
+        firstName: "Alex",
+        lastName: "Johnson",
+        email: "alex.johnson@example.com",
+        groups: ["Group 1", "Group 2", "Group 3"]
+      },
+      {
+        id: 2,
+        firstName: "Maria",
+        lastName: "Rodriguez",
+        email: "maria.rodriguez@example.com",
+        groups: ["Group 1", "Group 2", "Group 3", "Group 4"]
+      },
+      {
+        id: 3,
+        firstName: "David",
+        lastName: "Smith",
+        email: "david.smith@example.com",
+        groups: ["Group 1", "Group 2"]
+      },
+    ],
+    template_fill: ["Invoice Form", "Registration Form", "Feedback Form"],
+    template_edit: ["Survey Form", "Application Form", "Event Registration"]
+  },
+  
+    {
+      "name": "Group 2",
+      "users": [
+        {
+          "id": 1,
+          "firstName": "Daniel",
+          "lastName": "Hill",
+          "email": "daniel.hill@example.com"
+        },
+        {
+          "id": 2,
+          "firstName": "Chloe",
+          "lastName": "Green",
+          "email": "chloe.green@example.com"
+        },
+        {
+          "id": 3,
+          "firstName": "Madison",
+          "lastName": "Nelson",
+          "email": "madison.nelson@example.com"
+        },
+        {
+          "id": 4,
+          "firstName": "Alexander",
+          "lastName": "Baker",
+          "email": "alexander.baker@example.com"
+        },
+        {
+          "id": 5,
+          "firstName": "Harper",
+          "lastName": "Gonzalez",
+          "email": "harper.gonzalez@example.com"
+        },
+        {
+          "id": 6,
+          "firstName": "Noah",
+          "lastName": "Carter",
+          "email": "noah.carter@example.com"
+        }
+      ],
+      "template_fill": ["Employee Survey", "Product Feedback", "Customer Survey"],
+      "template_edit": ["Job Application", "Event Feedback", "Service Request Form"]
+    },
+    {
+      "name": "Group 3",
+      "users": [
+        {
+          "id": 7,
+          "firstName": "Alex",
+          "lastName": "Johnson",
+          "email": "alex.johnson@example.com"
+        },
+        {
+          "id": 8,
+          "firstName": "Maria",
+          "lastName": "Rodriguez",
+          "email": "maria.rodriguez@example.com"
+        },
+        {
+          "id": 9,
+          "firstName": "Sophia",
+          "lastName": "Brown",
+          "email": "sophia.brown@example.com"
+        },
+        {
+          "id": 10,
+          "firstName": "Olivia",
+          "lastName": "Martinez",
+          "email": "olivia.martinez@example.com"
+        },
+        {
+          "id": 11,
+          "firstName": "Isabella",
+          "lastName": "Anderson",
+          "email": "isabella.anderson@example.com"
+        },
+        {
+          "id": 12,
+          "firstName": "Ava",
+          "lastName": "Jackson",
+          "email": "ava.jackson@example.com"
+        },
+        {
+          "id": 13,
+          "firstName": "Lucas",
+          "lastName": "White",
+          "email": "lucas.white@example.com"
+        },
+        {
+          "id": 14,
+          "firstName": "Amelia",
+          "lastName": "Lewis",
+          "email": "amelia.lewis@example.com"
+        },
+        {
+          "id": 15,
+          "firstName": "Jacob",
+          "lastName": "Robinson",
+          "email": "jacob.robinson@example.com"
+        },
+        {
+          "id": 16,
+          "firstName": "Michael",
+          "lastName": "Hall",
+          "email": "michael.hall@example.com"
+        },
+        {
+          "id": 17,
+          "firstName": "Elijah",
+          "lastName": "King",
+          "email": "elijah.king@example.com"
+        },
+        {
+          "id": 18,
+          "firstName": "Evelyn",
+          "lastName": "Scott",
+          "email": "evelyn.scott@example.com"
+        },
+        {
+          "id": 19,
+          "firstName": "Abigail",
+          "lastName": "Lopez",
+          "email": "abigail.lopez@example.com"
+        },
+        {
+          "id": 20,
+          "firstName": "Madison",
+          "lastName": "Nelson",
+          "email": "madison.nelson@example.com"
+        },
+        {
+          "id": 21,
+          "firstName": "Alexander",
+          "lastName": "Baker",
+          "email": "alexander.baker@example.com"
+        },
+        {
+          "id": 22,
+          "firstName": "Noah",
+          "lastName": "Carter",
+          "email": "noah.carter@example.com"
+        }
+      ],
+      "template_fill": ["Order Form", "Booking Form", "Contract Agreement"],
+      "template_edit": ["Project Proposal", "Budget Plan", "Performance Review"]
+    },
+    {
+      "name": "Group 4",
+      "users": [
+        {
+          "id": 8,
+          "firstName": "Maria",
+          "lastName": "Rodriguez",
+          "email": "maria.rodriguez@example.com"
+        },
+        {
+          "id": 9,
+          "firstName": "Sophia",
+          "lastName": "Brown",
+          "email": "sophia.brown@example.com"
+        },
+        {
+          "id": 11,
+          "firstName": "Isabella",
+          "lastName": "Anderson",
+          "email": "isabella.anderson@example.com"
+        },
+        {
+          "id": 13,
+          "firstName": "Lucas",
+          "lastName": "White",
+          "email": "lucas.white@example.com"
+        },
+        {
+          "id": 15,
+          "firstName": "Jacob",
+          "lastName": "Robinson",
+          "email": "jacob.robinson@example.com"
+        },
+        {
+          "id": 16,
+          "firstName": "Michael",
+          "lastName": "Hall",
+          "email": "michael.hall@example.com"
+        },
+        {
+          "id": 18,
+          "firstName": "Evelyn",
+          "lastName": "Scott",
+          "email": "evelyn.scott@example.com"
+        },
+        {
+          "id": 21,
+          "firstName": "Alexander",
+          "lastName": "Baker",
+          "email": "alexander.baker@example.com"
+        },
+        {
+          "id": 22,
+          "firstName": "Noah",
+          "lastName": "Carter",
+          "email": "noah.carter@example.com"
+        }
+      ],
+      "template_fill": ["Maintenance Request", "IT Support Ticket", "Travel Request"],
+      "template_edit": ["Expense Report", "Inventory List", "Training Schedule"]
+    },
+    {
+      "name": "Group 5",
+      "users": [
+        {
+          "id": 9,
+          "firstName": "Sophia",
+          "lastName": "Brown",
+          "email": "sophia.brown@example.com"
+        },
+        {
+          "id": 13,
+          "firstName": "Lucas",
+          "lastName": "White",
+          "email": "lucas.white@example.com"
+        },
+        {
+          "id": 16,
+          "firstName": "Michael",
+          "lastName": "Hall",
+          "email": "michael.hall@example.com"
+        },
+        {
+          "id": 22,
+          "firstName": "Noah",
+          "lastName": "Carter",
+          "email": "noah.carter@example.com"
+        }
+      ],
+      "template_fill": ["Research Proposal", "Grant Application", "Scholarship Application"],
+      "template_edit": ["Thesis Submission", "Course Outline", "Lecture Schedule"]
+    },
+    {
+      "name": "Group 6",
+      "users": [
+        {
+          "id": 23,
+          "firstName": "Ethan",
+          "lastName": "Taylor",
+          "email": "ethan.taylor@example.com"
+        },
+        {
+          "id": 24,
+          "firstName": "Logan",
+          "lastName": "Thomas",
+          "email": "logan.thomas@example.com"
+        },
+        {
+          "id": 25,
+          "firstName": "Benjamin",
+          "lastName": "Clark",
+          "email": "benjamin.clark@example.com"
+        },
+        {
+          "id": 26,
+          "firstName": "Emily",
+          "lastName": "Young",
+          "email": "emily.young@example.com"
+        },
+        {
+          "id": 27,
+          "firstName": "Matthew",
+          "lastName": "Torres",
+          "email": "matthew.torres@example.com"
+        },
+        {
+          "id": 28,
+          "firstName": "William",
+          "lastName": "Adams",
+          "email": "william.adams@example.com"
+        }
+      ],
+      "template_fill": ["Marketing Plan", "Sales Report", "Client Onboarding"],
+      "template_edit": ["Press Release", "Case Study", "Product Catalog"]
+    },
+    {
+      "name": "Group 7",
+      "users": [
+        {
+          "id": 29,
+          "firstName": "James",
+          "lastName": "Wilson",
+          "email": "james.wilson@example.com"
+        },
+        {
+          "id": 30,
+          "firstName": "Charlotte",
+          "lastName": "Walker",
+          "email": "charlotte.walker@example.com"
+        },
+        {
+          "id": 2,
+          "firstName": "Chloe",
+          "lastName": "Green",
+          "email": "chloe.green@example.com"
+        },
+        {
+          "id": 5,
+          "firstName": "Harper",
+          "lastName": "Gonzalez",
+          "email": "harper.gonzalez@example.com"
+        }
+      ],
+      "template_fill": ["Health and Safety Report", "Risk Assessment", "Emergency Plan"],
+      "template_edit": ["Compliance Checklist", "Audit Report", "Incident Report"]
+    },
+    {
+      "name": "Group 8",
+      "users": [
+        {
+          "id": 12,
+          "firstName": "Ava",
+          "lastName": "Jackson",
+          "email": "ava.jackson@example.com"
+        },
+        {
+          "id": 31,
+          "firstName": "Mia",
+          "lastName": "Harris",
+          "email": "mia.harris@example.com"
+        },
+        {
+          "id": 32,
+          "firstName": "Avery",
+          "lastName": "Wright",
+          "email": "avery.wright@example.com"
+        },
+        {
+          "id": 19,
+          "firstName": "Abigail",
+          "lastName": "Lopez",
+          "email": "abigail.lopez@example.com"
+        }
+      ],
+      "template_fill": ["User Guide", "FAQ Document", "Software Documentation"],
+      "template_edit": ["Technical Specification", "Release Notes", "API Documentation"]
+    },
+    {
+      "name": "Group 9",
+      "users": [
+        {
+          "id": 1,
+          "firstName": "Daniel",
+          "lastName": "Hill",
+          "email": "daniel.hill@example.com"
+        },
+        {
+          "id": 3,
+          "firstName": "Madison",
+          "lastName": "Nelson",
+          "email": "madison.nelson@example.com"
+        },
+        {
+          "id": 17,
+          "firstName": "Elijah",
+          "lastName": "King",
+          "email": "elijah.king@example.com"
+        },
+        {
+          "id": 18,
+          "firstName": "Evelyn",
+          "lastName": "Scott",
+          "email": "evelyn.scott@example.com"
+        }
+      ],
+      "template_fill": ["Business Plan", "Financial Forecast", "Investor Pitch"],
+      "template_edit": ["Market Analysis", "Competitor Analysis", "SWOT Analysis"]
+    },
+    {
+      "name": "Group 10",
+      "users": [
+        {
+          "id": 4,
+          "firstName": "Alexander",
+          "lastName": "Baker",
+          "email": "alexander.baker@example.com"
+        },
+        {
+          "id": 6,
+          "firstName": "Noah",
+          "lastName": "Carter",
+          "email": "noah.carter@example.com"
+        },
+        {
+          "id": 13,
+          "firstName": "Lucas",
+          "lastName": "White",
+          "email": "lucas.white@example.com"
+        },
+        {
+          "id": 16,
+          "firstName": "Michael",
+          "lastName": "Hall",
+          "email": "michael.hall@example.com"
+        }
+      ],
+      "template_fill": ["Policy Document", "Procedure Manual", "Training Manual"],
+      "template_edit": ["Operational Guidelines", "Quality Assurance Procedures", "Staff Handbook"]
+    },
+    {
+      "name": "Group 11",
+      "users": [
+        {
+          "id": 9,
+          "firstName": "Sophia",
+          "lastName": "Brown",
+          "email": "sophia.brown@example.com"
+        },
+        {
+          "id": 15,
+          "firstName": "Jacob",
+          "lastName": "Robinson",
+          "email": "jacob.robinson@example.com"
+        },
+        {
+          "id": 23,
+          "firstName": "Ethan",
+          "lastName": "Taylor",
+          "email": "ethan.taylor@example.com"
+        },
+        {
+          "id": 12,
+          "firstName": "Ava",
+          "lastName": "Jackson",
+          "email": "ava.jackson@example.com"
+        }
+      ],
+      "template_fill": ["Project Charter", "Scope Statement", "Work Breakdown Structure"],
+      "template_edit": ["Project Schedule", "Risk Management Plan", "Stakeholder Register"]
+    },
+    {
+      "name": "Group 12",
+      "users": [
+        {
+          "id": 8,
+          "firstName": "Maria",
+          "lastName": "Rodriguez",
+          "email": "maria.rodriguez@example.com"
+        },
+        {
+          "id": 33,
+          "firstName": "David",
+          "lastName": "Smith",
+          "email": "david.smith@example.com"
+        },
+        {
+          "id": 29,
+          "firstName": "James",
+          "lastName": "Wilson",
+          "email": "james.wilson@example.com"
+        },
+        {
+          "id": 30,
+          "firstName": "Charlotte",
+          "lastName": "Walker",
+          "email": "charlotte.walker@example.com"
+        }
+      ],
+      "template_fill": ["Content Calendar", "Editorial Guidelines", "Style Guide"],
+      "template_edit": ["Publishing Schedule", "Content Strategy", "Audience Analysis"]
+    }
+  ]
+  
 
-
+export const Templates = [
+  {
+    name: "Invoice Form",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Registration Form",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Feedback Form",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Survey Form",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Application Form",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Event Registration",
+    groups: ["Group 1"]
+  },
+  {
+    name: "Employee Survey",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Product Feedback",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Customer Survey",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Job Application",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Event Feedback",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Service Request Form",
+    groups: ["Group 2"]
+  },
+  {
+    name: "Order Form",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Booking Form",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Contract Agreement",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Project Proposal",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Budget Plan",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Performance Review",
+    groups: ["Group 3"]
+  },
+  {
+    name: "Maintenance Request",
+    groups: ["Group 4"]
+  },
+  {
+    name: "IT Support Ticket",
+    groups: ["Group 4"]
+  },
+  {
+    name: "Travel Request",
+    groups: ["Group 4"]
+  },
+  {
+    name: "Expense Report",
+    groups: ["Group 4"]
+  },
+  {
+    name: "Inventory List",
+    groups: ["Group 4"]
+  },
+  {
+    name: "Training Schedule",
+    groups: ["Group 4"]
+  },
+  {
+    name: "Research Proposal",
+    groups: ["Group 5"]
+  },
+  {
+    name: "Grant Application",
+    groups: ["Group 5"]
+  },
+  {
+    name: "Scholarship Application",
+    groups: ["Group 5"]
+  },
+  {
+    name: "Thesis Submission",
+    groups: ["Group 5"]
+  },
+  {
+    name: "Course Outline",
+    groups: ["Group 5"]
+  },
+  {
+    name: "Lecture Schedule",
+    groups: ["Group 5"]
+  }
+];

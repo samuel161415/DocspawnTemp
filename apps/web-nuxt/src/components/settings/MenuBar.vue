@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-md bg-white mb-0 border-r border-surface-100">
+    <div class="rounded-lg bg-white mb-0 border-r border-surface-100">
         <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 pb-5 no-scrollbar">
             <ul class="mb-24">   
                 <li 

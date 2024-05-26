@@ -1,7 +1,7 @@
 <template>
-    <div class="h-full w-full flex overflow-scroll">
+    <div class="h-full w-full flex">
 
-        <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll">
+        <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll no-scrollbar">
 
             <div class="mt-5  ml-3">
                 <p class="font-semibold text-surface-700 text-xl mb-5">Integration</p>

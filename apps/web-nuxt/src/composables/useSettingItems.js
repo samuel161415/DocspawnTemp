@@ -42,17 +42,17 @@ export const useSettingItems = () => {
             isHovered: false,
             subitems: [
               {
+                title: "Users",
+                icon: "pi pi-user",
+                route: "/workspace",
+                componentId: "user-roles",
+                isHovered: false
+              },
+              {
                 title: "User groups",
                 icon: "pi pi-user",
                 route: "/list",
                 componentId: "user-groups",
-                isHovered: false
-              },
-              {
-                title: "User roles",
-                icon: "pi pi-user",
-                route: "/workspace",
-                componentId: "user-roles",
                 isHovered: false
               },
             ],
@@ -108,6 +108,14 @@ export const useSettingItems = () => {
         isHovered: false,
         subitems: [
           {
+            title: "Users",
+            icon: "pi pi-user",
+            route: "/user_management",
+            componentId: "users",
+            isHovered: false,
+            nestedMenuVisible: false,
+          },
+          {
             title: "User groups",
             icon: "pi pi-users",
             route: "/user_management",
@@ -115,14 +123,7 @@ export const useSettingItems = () => {
             componentId: "user-groups",
             nestedMenuVisible: false,
           },
-          {
-            title: "User roles",
-            icon: "pi pi-user",
-            route: "/user_management",
-            componentId: "archive2",
-            isHovered: false,
-            nestedMenuVisible: false,
-          },     
+               
         ]
       },
       {
