@@ -142,7 +142,10 @@ function setIsHovered(item, val) {
 
 // check if the window is resized
 function handleResize() {
-  isCollapsed.value = window.innerWidth <= 990
+  if (baseRoute.value === '/templates/create')
+    isCollapsed.value = true
+  else
+    isCollapsed.value = window.innerWidth <= 990
 }
 
 onMounted(() => {
