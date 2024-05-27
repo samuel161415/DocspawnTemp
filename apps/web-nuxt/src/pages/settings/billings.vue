@@ -1,10 +1,10 @@
 <template>
-    <div class="h-full w-full flex overflow-scroll ">
+    <div class="h-full w-full ml-4 flex overflow-scroll no-scrollbar">
        
-       <div class="px-8 py-5 rounded-r-md bg-white  w-full">
+       <div class="px-8 py-8 rounded-lg bg-white  w-full">
 
-           <div class="mt-5 mr-12 ml-3">
-            <p class="font-semibold text-surface-700 text-xl mb-5">Billing</p>
+           <div class="py-2 mr-12 ml-3">
+            <p class="font-semibold text-surface-600 text-2xl mb-5">Billing</p>
                 <div class="space-y-2 mb-4">
                     <p class="font-semibold text-surface-700 text-lg">Payment method</p>
                     <p class="text-base text-surface-500 font-poppins">Update your billing details and address</p>

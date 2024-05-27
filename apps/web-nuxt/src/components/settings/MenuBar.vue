@@ -1,5 +1,7 @@
 <template>
     <div class="rounded-lg bg-white mb-0 border-r border-surface-100">
+        <h2 class="font-semibold text-surface-600 text-2xl pl-11 pt-10 pb-2">Settings</h2>
+          
         <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 pb-5 no-scrollbar">
             <ul class="mb-24">   
                 <li 

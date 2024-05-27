@@ -25,7 +25,9 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-
+  plugins: [
+    '~/plugins/fontawesome.js'
+  ],
   app: {
     layoutTransition: {
       name: 'slide-right',

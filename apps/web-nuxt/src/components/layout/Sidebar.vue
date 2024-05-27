@@ -106,7 +106,7 @@ watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
   baseRoute.value = newValue;
 });
 
-const isCollapsed = ref(false);
+const isCollapsed = ref(true);
 
 const isMinimizebtnHovered = ref(false);
 
@@ -135,13 +135,14 @@ const setIsHovered = (item, val) => {
 
 // check if the window is resized
 const handleResize = () => {
-  isCollapsed.value = window.innerWidth <= 990;
+  
+  isCollapsed.value =  window.innerWidth <= 990;
 };
 
-onMounted(() => {
-  handleResize();
-  window.addEventListener("resize", handleResize);
-});
+// onMounted(() => {
+//   handleResize();
+//   window.addEventListener("resize", handleResize);
+// });
 
 // toggle the side bar
 const toggleCollapse = () => {

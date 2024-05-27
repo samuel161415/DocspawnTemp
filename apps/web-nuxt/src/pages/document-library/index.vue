@@ -1,8 +1,9 @@
 <template>
   <div class="h-full w-full bg-secondary overflow-scroll">
     
-    <div class="px-8 py-7 shadow rounded-md bg-white h-full">
-      <BreadcrumbComponent :home="home" :items="items" />
+    <div class="px-8 py-8 shadow rounded-md bg-white h-full">
+
+      <h2 class="font-semibold text-surface-600 text-2xl px-3 py-2">Document Library</h2>
     
       <DataTableComponent
         :data="documentLibraryData"
@@ -24,8 +25,6 @@ import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
 import { documentLibraryData } from '../../services/sampleData'
-import BreadcrumbComponent from '~/components/shared/BreadcrumbComponent.vue';
-import { home } from '~/composables/useBreadcrumb.js'
 
 const exportFile = ref(false)
 

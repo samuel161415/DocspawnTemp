@@ -138,7 +138,7 @@
             root: { class: 'w-auto' },
           }"></ConfirmDialog>
   
-  
+
         <Dialog v-model:visible="showPreview" modal :draggable="false"
           :style="mobile ? { width: '25rem' } : { width: '100rem' }" :pt="{
             header: {
@@ -303,8 +303,7 @@
                     </label>
                     <InputText :id="`${formField.name}-${index}`" class="border-red-500" v-model="formField.state" />
                   </div>
-  
-  
+
                 </div>
               </div>
   
@@ -352,7 +351,7 @@ const templateTitle = ref('');
 const templateDescription = ref('');
 
 watch([templateTitle, templateDescription], () =>{
-  const isValid = templateTitle.value !== '' && templateDescription.value !== '';
+  const isValid = templateTitle.value !== '';
   emit('updateData', {isValid, step: 3})
 })
 
