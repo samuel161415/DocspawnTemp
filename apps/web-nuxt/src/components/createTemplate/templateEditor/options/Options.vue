@@ -109,8 +109,8 @@
         </div>
       </div>
       <TextFormatting v-if="templateEditorStore.selectedAddedField.fieldType === 'data-fields'" />
-      <p v-if="activeDataField === 'Lorem ipsum'" class="font-poppins text-sm text-red-500">
-        Styles will aplied once you select data field
+      <p v-if="activeDataField === 'Lorem ipsum'" class="font-poppins text-sm text-red-500 mt-1">
+        Styles will be applied once you select a data field
       </p>
     </div>
   </div>
