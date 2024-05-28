@@ -1,5 +1,5 @@
 <template>
-  <div class="h-20  flex items-center justify-between px-3   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
+  <div class="h-20  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
       <div
         v-tooltip.top="{

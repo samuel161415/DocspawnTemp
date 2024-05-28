@@ -181,6 +181,7 @@ async function createCanvas() {
   templateEditorStore.canvas.on('mouse:down', () => {
     // get active object
     const activeObject = templateEditorStore.canvas?.getActiveObject()
+    console.log('active object', activeObject)
     // templateEditorStore.activeDisplayGuide = !!activeObject.displayGuide
     if (activeObject) {
       templateEditorStore.anyObjectSelected = true
@@ -188,7 +189,7 @@ async function createCanvas() {
       templateEditorStore.ShowAddedFieldsinTemplateFields = true
       activeElement.value = activeObject
 
-      if (activeObject.text) {
+      if (activeObject.text && activeObject.id !== 'Lorem ipsum') {
         activeTextStyles.fill = activeObject.fill ? activeObject.fill : '#000000'
         activeTextStyles.fontFamily = activeObject.fontFamily ? activeObject.fontFamily : 'Arial'
         activeTextStyles.fontSize = activeObject.fontSize ? activeObject.fontSize : 32
@@ -242,7 +243,7 @@ function addEventsToCanvas() {
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (Number.parseFloat(activeTextStyles.fontSize) / 5),
-          fill: activeTextStyles.fill,
+          fill: '#ff0000', // activeTextStyles.fill,
           fontFamily: activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
           underline: activeTextStyles.underline,
@@ -349,7 +350,7 @@ function addEventsToCanvas() {
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (1 * (Number.parseFloat(activeTextStyles.fontSize) / 5)),
-          fill: activeTextStyles.fill,
+          fill: '#ff0000', // activeTextStyles.fill,
           fontFamily: activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
           underline: activeTextStyles.underline,
@@ -359,7 +360,7 @@ function addEventsToCanvas() {
           hasBorders: true,
           zIndex: 1,
           fieldType: templateEditorStore.fieldToAdd.type,
-          id: templateEditorStore.fieldToAdd.name,
+          id: templateEditorStore.fieldToAdd.id,
           hash: uuid.v1(),
 
           pageNo: templateEditorStore.activePageForCanvas,
@@ -367,26 +368,7 @@ function addEventsToCanvas() {
         },
       )
 
-      fabric.Image.fromURL(
-        alertIconUrl
-        , (myImg) => {
-          myImg.set({
-            left: textEle.left + (textEle.width * textEle.scaleX),
-            top: textEle.top,
-            scaleX: 0.07,
-            scaleY: 0.07,
-            isAlertIcon: true,
-            id: textEle.hash,
-            pageNo: templateEditorStore.activePageForCanvas,
-            displayGuide: false,
-            selectable: false,
-          })
-          templateEditorStore.canvas.add(myImg)
-          templateEditorStore.canvas.renderAll()
-        },
-      )
-
-      const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.name, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+      const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
       }
 
       const allFields = []
@@ -465,33 +447,14 @@ function addEventsToCanvas() {
             top: event.absolutePointer.y - (myImg.height),
             scaleX: 400 / myImg.width,
             scaleY: 200 / myImg.height,
-            id: ftoadd.name,
+            id: ftoadd.id,
             hash: uuid.v1(),
             fieldType: ftoadd.type,
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
           })
 
-          fabric.Image.fromURL(
-            alertIconUrl
-            , (imgia) => {
-              imgia.set({
-                left: myImg.left + (myImg.width * myImg.scaleX),
-                top: myImg.top,
-                scaleX: 0.07,
-                scaleY: 0.07,
-                isAlertIcon: true,
-                id: myImg.hash,
-                pageNo: templateEditorStore.activePageForCanvas,
-                displayGuide: false,
-                selectable: false,
-              })
-              templateEditorStore.canvas.add(imgia)
-              templateEditorStore.canvas.renderAll()
-            },
-          )
-
-          const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.name, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
+          const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
           }
           const allFields = []
           templateEditorStore.addedFields.forEach((f) => {
@@ -577,7 +540,7 @@ watch(activeTextStyles, () => {
   addEventsToCanvas()
   const activeObject = templateEditorStore.canvas?.getActiveObject()
 
-  if (activeObject) {
+  if (activeObject && activeObject?.id !== 'Lorem ipsum') {
     activeObject.set({
       ...activeObject.styles,
       fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`,

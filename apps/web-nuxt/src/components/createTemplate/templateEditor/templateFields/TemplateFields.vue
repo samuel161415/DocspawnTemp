@@ -382,7 +382,7 @@ function selectField(field) {
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
   templateEditorStore.activeTemplateField = field
-  templateEditorStore.fieldToAdd = { name: 'Lorem ipsum', type: field }
+  templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
   templateEditorStore.showOptionsBar = true
 }
 

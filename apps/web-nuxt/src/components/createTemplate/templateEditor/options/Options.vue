@@ -109,12 +109,16 @@
         </div>
       </div>
       <TextFormatting v-if="templateEditorStore.selectedAddedField.fieldType === 'data-fields'" />
+      <p v-if="activeDataField === 'Lorem ipsum'" class="font-poppins text-sm text-red-500">
+        Styles will aplied once you select data field
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
 import { templateEditorStore } from '../store/templateEditorStore.ts'
+import { activeTextStyles } from '../store/activeTextStyles'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
@@ -155,7 +159,10 @@ watch(activeDataField, () => {
     },
     ).map((obj) => {
       if (obj === activeObject) {
-        obj.set({ text: activeDataField.value, id: activeDataField.value })
+        if (activeDataField.value === 'Lorem ipsum')
+          obj.set({ text: activeDataField.value === 'Lorem ipsum' ? obj.text : activeDataField.value, id: activeDataField.value === 'Lorem ipsum' ? obj.id : activeDataField.value })
+        else
+          obj.set({ ...activeObject.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: activeDataField.value === 'Lorem ipsum' ? obj.text : activeDataField.value, id: activeDataField.value === 'Lorem ipsum' ? obj.id : activeDataField.value })
         return obj
       }
       else {
