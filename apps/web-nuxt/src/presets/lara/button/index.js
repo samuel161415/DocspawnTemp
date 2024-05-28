@@ -19,7 +19,7 @@ export default {
 
       // Shapes
       { "shadow-lg": props.raised },
-      { "rounded-md": !props.rounded, "rounded-full": props.rounded },
+      { "rounded-lg": !props.rounded, "rounded-full": props.rounded },
       {
         "rounded-none first:rounded-l-md last:rounded-r-md":
           parent.instance.$name == "InputGroup",
@@ -117,12 +117,12 @@ export default {
           !props.text &&
           !props.outlined &&
           !props.plain,
-        "bg-green-500 dark:bg-green-400":
+        "bg-[#43AF79] dark:bg-300/20":
           props.severity === "success" &&
           !props.text &&
           !props.outlined &&
           !props.plain,
-        "border border-green-500 dark:border-green-400":
+        "border border-[#43AF79] dark:border-green-400":
           props.severity === "success" &&
           !props.text &&
           !props.outlined &&
@@ -130,12 +130,12 @@ export default {
       },
       // Success Text Button
       {
-        "text-green-500 dark:text-green-400":
+        "text-[#43AF79] dark:text-green-400":
           props.text && props.severity === "success" && !props.plain,
       },
       // Success Outlined Button
       {
-        "text-green-500 border border-green-500 hover:bg-green-300/20":
+        "text-[#43AF79] border border-[#43AF79] hover:bg-green-200/20":
           props.outlined && props.severity === "success" && !props.plain,
       },
 
@@ -175,12 +175,12 @@ export default {
           !props.text &&
           !props.outlined &&
           !props.plain,
-        "bg-orange-500 dark:bg-orange-400":
+        "bg-[#FCB603] dark:bg-orange-400":
           props.severity === "warning" &&
           !props.text &&
           !props.outlined &&
           !props.plain,
-        "border border-orange-500 dark:border-orange-400":
+        "border border-[#FCB603] dark:border-orange-400":
           props.severity === "warning" &&
           !props.text &&
           !props.outlined &&
@@ -188,12 +188,12 @@ export default {
       },
       // Warning Text Button
       {
-        "text-orange-500 dark:text-orange-400":
+        "text-[#FCB603] dark:text-orange-400":
           props.text && props.severity === "warning" && !props.plain,
       },
       // Warning Outlined Button
       {
-        "text-orange-500 border border-orange-500 hover:bg-orange-300/20":
+        "text-[#FCB603] border border-[#FCB603] hover:bg-orange-200/20":
           props.outlined && props.severity === "warning" && !props.plain,
       },
 

@@ -1,8 +1,8 @@
 <template>
-  <div class="h-full w-full flex overflow-scroll">
-    <div class="px-8 py-5 rounded-r-md mb-10 bg-white h-full w-full overflow-scroll">
-      <div class="mt-5  ml-3">
-        <p class="font-semibold text-surface-700 text-xl mb-5">
+  <div class="h-full w-full flex bg-white overflow-scroll no-scrollbar ml-4">
+    <div class="px-8 py-8 mb-10">
+      <div class="py-2 ml-3">
+        <p class="font-semibold text-surface-600 text-2xl mb-5">
           Integration
         </p>
 

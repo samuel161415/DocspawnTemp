@@ -1,8 +1,8 @@
 <template>
-    <div class="w-full flex bg-white overflow-scroll no-scrollbar">
-        <div class="px-4 py-2 rounded-md bg-white w-full">
-            <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p>
-            <div class="flex w-full">
+    <div class="w-full h-full ml-4 bg-white overflow-scroll no-scrollbar">
+        <div class="px-8 py-8 rounded-lg">
+            <p class="font-semibold text-surface-600 text-2xl py-2">List</p>
+            <div class="flex">
                 <!-- left side menu -->
                 <div class="flex flex-col justify-between h-full overflow-y-scroll w-64 pt-5 no-scrollbar">
                     <div class="flex ml-1">
@@ -78,7 +78,7 @@
                 </div>
 
                 <!-- right section -->
-                <div class="w-full py-5 ml-2">
+                <div class="w-full py-5">
                     <div class="flex flex-col md:flex-row justify-end gap-2">
                         <Button icon="pi pi-plus" label="Add item(s)" outlined @click="openAddItems = true"
                             class="text-success border-success hover:bg-green-50" />
@@ -87,7 +87,7 @@
                     </div>
 
                     <!-- table -->
-                    <div class="mt-4 mb-12 ml-2">
+                    <div class="mt-4 mb-12 ml-2 ">
                         <DataTableComponent :tableData="tableData" :filters="filters" @row-reorder="onRowReorder"
                             @edit-item="handleEditItem" @open-delete="handleOpenDelete" />
                         <Toast />

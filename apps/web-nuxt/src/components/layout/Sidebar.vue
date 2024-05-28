@@ -148,10 +148,10 @@ function handleResize() {
     isCollapsed.value = window.innerWidth <= 990
 }
 
-onMounted(() => {
-  handleResize()
-  window.addEventListener('resize', handleResize)
-})
+// onMounted(() => {
+//   handleResize();
+//   window.addEventListener("resize", handleResize);
+// });
 
 // toggle the side bar
 function toggleCollapse() {

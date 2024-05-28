@@ -1,5 +1,5 @@
 <template>
-  <div class="box overflow-hidden z-1 p-5 table-container">
+  <div class="box overflow-hidden z-1 px-3 py-5 table-container">
     <div class="flex flex-col  gap-2 left-0 md:mb-14">
       <p class="text-surface-600 text-left text-lg mb-2">
         Select a template to display data.
