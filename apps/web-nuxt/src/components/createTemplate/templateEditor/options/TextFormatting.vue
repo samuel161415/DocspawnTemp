@@ -29,8 +29,8 @@
       </div>
       <ColorPicker v-model="selectedColor" ml-1 @change="changeColor" />
 
-      <Dropdown v-if="showFontOptions" v-model="selectedFont" :options="fonts" option-label="label" option-value="value" placeholder="Select font " class="w-12 md:w-44  mt-3" @change="changeFont" />
-      <Dropdown v-if="showFontSizesOptions" v-model="selectedFontSize" :options="fontSizes" option-label="label" option-value="value" placeholder="Select font size" class="w-12 md:w-32  mt-3" @change="changeSize" />
+      <Dropdown v-if="showFontOptions" v-model="selectedFont" :options="fonts" option-label="label" option-value="value" placeholder="Select font " class="w-12 md:w-44  mt-3 font-poppins" @change="changeFont" />
+      <Dropdown v-if="showFontSizesOptions" v-model="selectedFontSize" :options="fontSizes" option-label="label" option-value="value" placeholder="Select font size" class="w-12 md:w-32  mt-3 font-poppins" @change="changeSize" />
     </div>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar">
+  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar ">
     <div class="px-8 py-7 flex flex-col gap-2 bg-white ">
       <FirstStep v-if="!createNewTemplate" @update-create-new-template="createNewTemplate = $event" />
       <div v-if="createNewTemplate" class="">
@@ -36,7 +36,7 @@
                 </button>
               </template>
               <template #content="{ prevCallback, nextCallback }">
-                <div class=" mx-6">
+                <div class=" mx-0">
                   <TemplateEditor />
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">

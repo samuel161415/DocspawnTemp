@@ -1,24 +1,29 @@
 <template>
-  <Toast />
   <!-- <ConfirmPopup /> -->
   <div
     class=" flex-1 h-full overflow-auto  pr-1 "
   >
     <div class="w-full">
-      <Button v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
+      <Button v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-20" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
         <i class="pi pi-plus"></i>
-        Add new field
+        <p class="font-poppins text-white text-lg">
+          Add new field
+        </p>
       </Button>
-      <Button v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
+      <Button v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-20" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
         <i class="pi pi-angle-left"></i>
-        Fields list
+        <p class="font-poppins text-white text-lg">
+          Fields list
+        </p>
       </Button>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
-        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="bg-blue-50 px-3 py-2  rounded-md text-lg text-gray-600 mb-3 flex items-center justify-between gap-1 " :class="{ 'bg-white text-primaryBlue border  border-[#009ee2] border  border-[#009ee2]': templateEditorStore?.selectedAddedField?.hash === field?.hash }">
+        <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="px-5 py-1 flex items-center mb-3 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore?.selectedAddedField?.hash === field?.hash, 'border-surface-100 bg-surface-50': templateEditorStore?.selectedAddedField?.hash !== field?.hash }">
           <div class=" h-full w-full py-2 cursor-pointer" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
-            {{ field.name }}
-            <p class="text-sm">
+            <p class="font-poppins text-surface-600 text-lg">
+              {{ field.name }}
+            </p>
+            <p class="font-poppins text-surface-600 text-sm">
               {{ field?.fieldType }}. on page {{ field.page }}
             </p>
           </div>
@@ -26,13 +31,13 @@
           <div
             class="flex flex-row gap-4   "
           >
-            <Button text class="text-lg  w-max h-max" @click="fieldToDelete = field;confirm1($event)">
+            <Button text class="text-lg text-blue-500  w-max h-max " @click="duplicateField(field)">
               <font-awesome-icon
-                icon="fa-light fa-clone" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;"
+                icon="fa-duotone fa-clone" size="lg"
               />
             </Button>
-            <Button text class="text-lg  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
-              <font-awesome-icon icon="fa-light fa-trash" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+            <Button text class="text-lg text-red-500  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
+              <font-awesome-icon icon="fa-light fa-trash" size="lg" />
             </Button>
           </div>
         </div>
@@ -68,57 +73,88 @@
             List
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" :class="{ 'bg-white text-primaryBlue border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
+        <div
+          class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'data-fields', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'data-fields' }" @click="selectField('data-fields')"
+        >
+          <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+
+          <p class="font-poppins text-surface-600 text-lg">
+            Data field
+          </p>
+        </div>
+        <!-- <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" :class="{ 'bg-white text-primaryBlue border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'data-fields' }" @click="selectField('data-fields')">
           <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
           Data field
-        </div>
+        </div> -->
 
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
           <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-
-          Image
+          <p class="font-poppins text-surface-600 text-lg">
+            Image
+          </p>
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showImageOptions }"></i>
         </div>
         <div v-if="showImageOptions" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white': templateEditorStore.activeTemplateField === 'fixed-image' }" @click="selectField('fixed-image')">
-            Fixed image
+          <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-5/6 ml-auto border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'fixed-image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'fixed-image' }" @click="selectField('fixed-image')">
+            <p class="font-poppins text-surface-600 text-lg">
+              Fixed image
+            </p>
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" :class="{ 'text-primaryBlue bg-white border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'dataset-image' }" @click="selectField('dataset-image')">
-            Dataset image
+          <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-5/6 ml-auto border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'dataset-image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'dataset-image' }" @click="selectField('dataset-image')">
+            <p class="font-poppins text-surface-600 text-lg">
+              Dataset image
+            </p>
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('text')">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'text' }" @click="selectField('text')">
           <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
-          Text
+          <p class="font-poppins text-surface-600 text-lg">
+            Text
+          </p>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
           <font-awesome-icon icon="fa-light fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Timestamp
+          <p class="font-poppins text-surface-600 text-lg">
+            Timestamp
+          </p>
+
           <i class="pi pi-sort-down transition-all duration-300" :class="{ '-rotate-90': !showTimestamp }"></i>
         </div>
         <div v-if="showTimestamp" class="flex flex-col gap-2">
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('timestamp', 'date')">
-            Date
+          <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-5/6 ml-auto border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="selectField('timestamp', 'date')">
+            <p class="font-poppins text-surface-600 text-lg">
+              Date
+            </p>
           </div>
-          <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 ml-5" @click="selectField('timestamp', 'time')">
-            Time
+          <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-5/6 ml-auto border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="selectField('timestamp', 'time')">
+            <p class="font-poppins text-surface-600 text-lg">
+              Time
+            </p>
           </div>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('checkbox')">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'checkbox', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'checkbox' }" @click="selectField('checkbox')">
           <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Checkbox
+          <p class="font-poppins text-surface-600 text-lg">
+            Checkbox
+          </p>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2" @click="selectField('radio')">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'radio' }" @click="selectField('radio')">
           <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Radio
+          <p class="font-poppins text-surface-600 text-lg">
+            Radio
+          </p>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('dropdown')">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'dropdown', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'dropdown' }" @click="selectField('dropdown')">
           <font-awesome-icon icon="fa-light fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Dropdown
+          <p class="font-poppins text-surface-600 text-lg">
+            Dropdown
+          </p>
         </div>
-        <div class="bg-blue-50 p-3 cursor-pointer rounded-md text-lg text-gray-600 flex items-center gap-2 " @click="selectField('signature')">
+        <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'signature' }" @click="selectField('signature')">
           <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Signature
+          <p class="font-poppins text-surface-600 text-lg">
+            Signature
+          </p>
         </div>
       </div>
     </div>
@@ -137,7 +173,6 @@ const showImageOptions = ref(false)
 const fieldToDelete = ref(false)
 const deleteText = ref('')
 const confirm = useConfirm()
-const toast = useToast()
 
 function duplicateField(field) {
   const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
@@ -374,25 +409,6 @@ function selectAddedField(field) {
   })
 }
 
-function confirm1(event) {
-  confirm.require({
-    target: event.currentTarget,
-    message: ' Are you sure you want to duplicate this field?',
-    icon: 'pi pi-exclamation-triangle',
-    rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
-    acceptClass: 'p-button-sm',
-    rejectLabel: 'Cancel',
-    acceptLabel: 'Yes',
-    accept: () => {
-      duplicateField(fieldToDelete.value)
-      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field duplicated', life: 3000 })
-    },
-    reject: () => {
-      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 })
-    },
-  })
-}
-
 function confirm2(event) {
   confirm.require({
     target: event.currentTarget,
@@ -404,10 +420,10 @@ function confirm2(event) {
     acceptLabel: 'Delete',
     accept: () => {
       deleteField()
-      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field deleted', life: 3000 })
+      // toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field deleted', life: 3000 })
     },
     reject: () => {
-      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 })
+
     },
   })
 }

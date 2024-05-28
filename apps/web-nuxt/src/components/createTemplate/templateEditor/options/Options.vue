@@ -3,52 +3,59 @@
     <div
       v-if="templateEditorStore.showOptionsBar === true"
 
-      class="transition-all duration-200 ease-linear rounded-md min-h-full   bg-blue-50 p-3  overflow-hidden"
+      class="transition-all duration-200 ease-linear rounded-md min-h-full   bg-surface-50 px-5 py-2  overflow-hidden"
     >
-      <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin">
+      <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
         No template field is selected
       </p>
-      <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class="text-md text-gray-400 text-primaryBlue font-thin">
+      <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-md text-gray-400 text-primaryBlue font-thin">
         Field options
       </p>
 
-      <p v-if="templateEditorStore?.selectedAddedField?.name">
+      <p v-if="templateEditorStore?.selectedAddedField?.name" class="font-poppins">
         {{ templateEditorStore?.selectedAddedField?.name }}
       </p>
-      <p v-if="templateEditorStore.selectedAddedField.fieldType">
+      <p v-if="templateEditorStore.selectedAddedField.fieldType" class="font-poppins">
         ({{ templateEditorStore.selectedAddedField.fieldType }})
       </p>
 
       <hr />
 
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'data-fields' || templateEditorStore.selectedAddedField?.fieldType === 'dataset-image'" class="w-full pt-4">
-        <p class="mb-1">
+        <p class="mb-1 font-poppins">
           Datafield key
         </p>
         <div v-if="!activeDataField || activeDataField === 'Lorem ipsum'" class="my-3 flex text-red gap-2">
           <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
-          <p>Select a field</p>
+          <p class="font-poppins">
+            Select a field
+          </p>
         </div>
         <div class="p-0 flex justify-content-center">
           <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.keys" filter placeholder="Select data field" class="w-full md:w-14rem">
             <template #value="slotProps">
               <div v-if="slotProps.value" class="flex align-items-center">
-                <div>{{ slotProps.value }}</div>
+                <p class="font-poppins">
+                  {{ slotProps.value }}
+                </p>
               </div>
               <span v-else>
-                {{ slotProps.placeholder }}
+                <p class="font-poppins">{{ slotProps.placeholder }}</p>
+
               </span>
             </template>
             <template #option="slotProps">
               <div class="flex align-items-center">
-                <div>{{ slotProps.option }}</div>
+                <p class="font-poppins">
+                  {{ slotProps.option }}
+                </p>
               </div>
             </template>
           </Dropdown>
         </div>
       </div>
       <div v-else class="w-full pt-4">
-        <p class="mb-1">
+        <p class="mb-1 font-poppins">
           Field name
         </p>
         <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
@@ -61,7 +68,9 @@
       </div>
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'image'" class="">
         <div class="mt-4 ">
-          <h1>Upload image</h1>
+          <h1 class="font-poppins">
+            Upload image
+          </h1>
           <input
             class="border border-gray-300 p-1 mt-2 w-full text-sm"
             type="file"
@@ -73,7 +82,7 @@
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'text'" class="">
         <div class="flex flex-col gap-2 mt-4">
           <InputText id="username" v-model="constant_text_value" aria-describedby="username-help" />
-          <small id="username-help">This text will be constant for all documents</small>
+          <small id="username-help" class="font-poppins">This text will be constant for all documents</small>
         </div>
       </div>
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'timestamp'" class="">
@@ -91,10 +100,10 @@
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'dropdown'" class="">
       </div>
       <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="">
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="w-full pt-4">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="w-full pt-4 font-poppins">
           Draw signature
           <div class="mt-3 bg-white h-32 w-full border border-blue-300 rounded-md"></div>
-          <Button text class="mt-2 w-full ">
+          <Button text class="mt-2 w-full font-poppins ">
             Save signature
           </Button>
         </div>

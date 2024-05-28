@@ -144,14 +144,14 @@ function setIsHovered(item, val) {
 function handleResize() {
   if (baseRoute.value === '/templates/create')
     isCollapsed.value = true
-  else
-    isCollapsed.value = window.innerWidth <= 990
+  // else
+    // isCollapsed.value = window.innerWidth <= 990
 }
 
-// onMounted(() => {
-//   handleResize();
-//   window.addEventListener("resize", handleResize);
-// });
+onMounted(() => {
+  handleResize()
+  // window.addEventListener("resize", handleResize);
+})
 
 // toggle the side bar
 function toggleCollapse() {
