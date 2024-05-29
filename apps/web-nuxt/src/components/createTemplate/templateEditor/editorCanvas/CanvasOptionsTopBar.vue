@@ -1,56 +1,56 @@
 <template>
-  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-500 sticky top-0 left-0  ">
+  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
       <div
         v-tooltip.top="'Display guide'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
-          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
+          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer text-white " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
-          <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-else class="cursor-pointer text-primary-500 " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
+          <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
       </div>
       <div
         v-tooltip.top="'Advanced pointer'"
       >
-        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-white" @click="templateEditorStore.activeAdvancedPointer = true">
-          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeAdvancedPointer = true">
+          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer text-white" @click="templateEditorStore.activeAdvancedPointer = false">
-          <font-awesome-icon icon="fa-solid fa-arrow-pointer" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-else class="cursor-pointer text-primary-500" @click="templateEditorStore.activeAdvancedPointer = false">
+          <font-awesome-icon icon="fa-solid fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
       </div>
       <div
         v-tooltip.top="templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
-          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
+          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
-          <font-awesome-icon icon="fa-solid fa-ruler-combined" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
+        <div v-else class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
+          <font-awesome-icon icon="fa-solid fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
       </div>
     </div>
 
     <div class="flex flex-row-reverse ">
       <Button
-        v-if="!templateEditorStore.showPreview" v-tooltip.top="'Show preview'" text outlined class="w-max px-3 text-white" @click="templateEditorStore.showPreview = true"
+        v-if="!templateEditorStore.showPreview" v-tooltip.top="'Show preview'" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
       >
         <font-awesome-icon icon=" fa-solid fa-eye" size="xl" />
       </Button>
       <Button
-        v-else v-tooltip.top="'Hide preview'" text outlined class="w-max px-3 text-white" @click="templateEditorStore.showPreview = false"
+        v-else v-tooltip.top="'Hide preview'" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = false"
       >
         <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" />
       </Button>
 
       <div v-if="templateEditorStore.showPreview" class="flex items-center">
-        <Button text icon="pi pi-chevron-left text-white " @click="changePreviewNo('prev')" />
-        <p class="font-poppins text-white">
+        <Button text icon="pi pi-chevron-left text-primary-500 " @click="changePreviewNo('prev')" />
+        <p class="font-poppins text-primary-500">
           {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
         </p>
-        <Button text icon="pi pi-chevron-right text-white" @click="changePreviewNo('next')" />
+        <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />
       </div>
     </div>
   </div>

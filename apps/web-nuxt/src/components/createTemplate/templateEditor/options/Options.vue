@@ -1,13 +1,13 @@
 <template>
   <div class="flex-1 h-full overflow-auto  ">
-    <div v-if="templateEditorStore.showTemplateOptions === false" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.showTemplateOptions = true">
-      <p class="font-poppins text-white text-lg">
+    <div v-if="templateEditorStore.showTemplateOptions === false" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.showTemplateOptions = true">
+      <p class="font-poppins  text-lg">
         Template options
       </p>
     </div>
-    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.showTemplateOptions = false">
+    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.showTemplateOptions = false">
       <i class="pi pi-angle-left"></i>
-      <p class="font-poppins text-white text-lg">
+      <p class="font-poppins  text-lg">
         Field options
       </p>
     </div>

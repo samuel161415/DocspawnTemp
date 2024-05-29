@@ -4,15 +4,15 @@
     class=" flex-1 h-full overflow-auto  pr-1 "
   >
     <div class="w-full">
-      <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
+      <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
         <i class="pi pi-plus"></i>
-        <p class="font-poppins text-white text-lg">
+        <p class="font-poppins  text-lg">
           Add new field
         </p>
       </div>
-      <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
+      <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
         <i class="pi pi-angle-left"></i>
-        <p class="font-poppins text-white text-lg">
+        <p class="font-poppins  text-lg">
           Fields list
         </p>
       </div>
