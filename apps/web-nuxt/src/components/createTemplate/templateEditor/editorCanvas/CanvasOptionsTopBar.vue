@@ -1,104 +1,56 @@
 <template>
-  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
+  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-500 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
       <div
-        v-tooltip.top="{
-          value: 'Display guide',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: 'var(--primary-color)',
-              },
-            },
-            text: 'bg-primary font-medium',
-          },
-        }"
+        v-tooltip.top="'Display guide'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
-          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
+          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
-          <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-else class="cursor-pointer text-white " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
+          <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
       </div>
       <div
-        v-tooltip.bottom="{
-          value: 'Advanced pointer',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: '#009ee2',
-              },
-            },
-            text: 'bg-primary font-medium',
-          },
-        }"
+        v-tooltip.top="'Advanced pointer'"
       >
-        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer" @click="templateEditorStore.activeAdvancedPointer = true">
-          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-white" @click="templateEditorStore.activeAdvancedPointer = true">
+          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer" @click="templateEditorStore.activeAdvancedPointer = false">
-          <font-awesome-icon icon="fa-duotone fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-else class="cursor-pointer text-white" @click="templateEditorStore.activeAdvancedPointer = false">
+          <font-awesome-icon icon="fa-solid fa-arrow-pointer" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
       </div>
       <div
-        v-tooltip.bottom="{
-          value: templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: '#009ee2',
-              },
-            },
-            text: 'bg-primary font-medium',
-          },
-        }"
+        v-tooltip.top="templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
-          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
+          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
-        <div v-else class="cursor-pointer" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
-          <font-awesome-icon icon="fa-duotone fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <div v-else class="cursor-pointer text-white" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
+          <font-awesome-icon icon="fa-solid fa-ruler-combined" size="xl" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ffffff; --fa-secondary-opacity: 1;" />
         </div>
       </div>
     </div>
 
     <div class="flex flex-row-reverse ">
       <Button
-        v-if="!templateEditorStore.showPreview" v-tooltip.top="{
-          value: 'Show preview',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: 'var(--primary-color)',
-              },
-            },
-            text: 'bg-primary font-medium',
-          },
-        }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = true"
+        v-if="!templateEditorStore.showPreview" v-tooltip.top="'Show preview'" text outlined class="w-max px-3 text-white" @click="templateEditorStore.showPreview = true"
       >
-        <font-awesome-icon icon=" fa-solid fa-eye" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <font-awesome-icon icon=" fa-solid fa-eye" size="xl" />
       </Button>
       <Button
-        v-else v-tooltip.top="{
-          value: 'End preview',
-          pt: {
-            arrow: {
-              style: {
-                borderBottomColor: 'var(--primary-color)',
-              },
-            },
-            text: 'bg-primary font-medium',
-          },
-        }" text outlined class="w-max px-3" @click="templateEditorStore.showPreview = false"
+        v-else v-tooltip.top="'Hide preview'" text outlined class="w-max px-3 text-white" @click="templateEditorStore.showPreview = false"
       >
-        <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 0.6;" />
+        <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" />
       </Button>
 
       <div v-if="templateEditorStore.showPreview" class="flex items-center">
-        <Button text icon="pi pi-chevron-left " @click="changePreviewNo('prev')" />
-        <p>{{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}</p>
-        <Button text icon="pi pi-chevron-right" @click="changePreviewNo('next')" />
+        <Button text icon="pi pi-chevron-left text-white " @click="changePreviewNo('prev')" />
+        <p class="font-poppins text-white">
+          {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
+        </p>
+        <Button text icon="pi pi-chevron-right text-white" @click="changePreviewNo('next')" />
       </div>
     </div>
   </div>

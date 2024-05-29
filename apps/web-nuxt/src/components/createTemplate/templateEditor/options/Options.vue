@@ -1,17 +1,16 @@
 <template>
   <div class="flex-1 h-full overflow-auto  ">
-    <Button v-if="templateEditorStore.showTemplateOptions === false" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-none" @click="templateEditorStore.showTemplateOptions = true">
+    <div v-if="templateEditorStore.showTemplateOptions === false" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.showTemplateOptions = true">
       <p class="font-poppins text-white text-lg">
         Template options
       </p>
-      <i class="pi pi-angle-right"></i>
-    </Button>
-    <Button v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-none" @click="templateEditorStore.showTemplateOptions = false">
+    </div>
+    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.showTemplateOptions = false">
       <i class="pi pi-angle-left"></i>
       <p class="font-poppins text-white text-lg">
-        Fields options
+        Field options
       </p>
-    </Button>
+    </div>
 
     <div
 
@@ -36,8 +35,8 @@
         <p v-if="templateEditorStore?.selectedAddedField?.name" class="font-poppins">
           {{ templateEditorStore?.selectedAddedField?.name }}
         </p>
-        <p v-if="templateEditorStore.selectedAddedField.fieldType" class="font-poppins">
-          ({{ templateEditorStore.selectedAddedField.fieldType }})
+        <p v-if="templateEditorStore.selectedAddedField?.fieldType" class="font-poppins">
+          ({{ templateEditorStore.selectedAddedField?.fieldType }})
         </p>
 
         <hr />
@@ -129,7 +128,7 @@
             </Button>
           </div>
         </div>
-        <TextFormatting v-if="templateEditorStore.selectedAddedField.fieldType === 'Data field'" />
+        <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field'" />
         <p v-if="activeDataField === 'Lorem ipsum'" class="font-poppins text-sm text-red-500 mt-1">
           Styles will be applied once you select a data field
         </p>
@@ -210,7 +209,7 @@ watch(
     if (newVal) {
       fieldName.value = newVal.name
 
-      if (newVal.fieldType === 'Data field' || newVal.fieldType === 'Dataset image')
+      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image')
         activeDataField.value = newVal.name
     }
   },

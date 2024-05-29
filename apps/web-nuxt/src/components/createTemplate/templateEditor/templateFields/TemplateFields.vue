@@ -4,18 +4,18 @@
     class=" flex-1 h-full overflow-auto  pr-1 "
   >
     <div class="w-full">
-      <Button v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-none" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
+      <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
         <i class="pi pi-plus"></i>
         <p class="font-poppins text-white text-lg">
           Add new field
         </p>
-      </Button>
-      <Button v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-none" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
+      </div>
+      <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-white cursor-pointer bg-primary-500 flex items-center justify-center gap-2" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
         <i class="pi pi-angle-left"></i>
         <p class="font-poppins text-white text-lg">
           Fields list
         </p>
-      </Button>
+      </div>
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="px-5 h-[62px] flex items-center mb-3 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore?.selectedAddedField?.hash === field?.hash, 'border-surface-100 bg-surface-50': templateEditorStore?.selectedAddedField?.hash !== field?.hash }">
@@ -399,8 +399,8 @@ function confirm2(event) {
     message: ' Do you want to delete this field?',
     group: 'confirmFieldDeletion',
     icon: 'pi pi-info-circle',
-    rejectClass: 'p-button-secondary p-button-outlined p-button-sm',
-    acceptClass: 'p-button-danger p-button-sm',
+    rejectClass: 'p-button-secondary p-button-outlined p-button-sm text-black  ',
+    acceptClass: ' p-button-sm bg-red-500 hover:bg-red-500 ring-0 focus:ring-0 border-none ',
     rejectLabel: 'Cancel',
     acceptLabel: 'Delete',
     accept: () => {
