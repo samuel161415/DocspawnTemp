@@ -20,7 +20,6 @@ import { activeTextStyles } from '../store/activeTextStyles'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 
-const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
 const templateCanvas = ref()
 const hoveredElement = ref()
 const canvasWrapper = ref()
@@ -181,7 +180,7 @@ async function createCanvas() {
   templateEditorStore.canvas.on('mouse:down', () => {
     // get active object
     const activeObject = templateEditorStore.canvas?.getActiveObject()
-    console.log('active object', activeObject)
+
     // templateEditorStore.activeDisplayGuide = !!activeObject.displayGuide
     if (activeObject) {
       templateEditorStore.anyObjectSelected = true
@@ -219,7 +218,7 @@ function addEventsToCanvas() {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
         if (obj.left === 0) {
-          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'dataset-image')
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image')
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
           else
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
@@ -234,7 +233,7 @@ function addEventsToCanvas() {
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'data-fields') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -282,7 +281,7 @@ function addEventsToCanvas() {
 
       templateEditorStore.canvas.renderAll()
     }
-    if (templateEditorStore.fieldToAdd.type === 'dataset-image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
+    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
       fabric.Image.fromURL(
         'https://placehold.co/300x200?text=DocSpawn'
         , (myImg) => {
@@ -328,7 +327,7 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:down', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'data-fields') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -420,7 +419,7 @@ function addEventsToCanvas() {
       const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
       templateEditorStore.addedFields = remainingFields
     }
-    if (templateEditorStore.fieldToAdd.type === 'dataset-image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
+    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
       const ftoadd = templateEditorStore.fieldToAdd
       templateEditorStore.fieldToAdd = {}
       fabric.Image.fromURL(
@@ -531,7 +530,7 @@ function addEventsToCanvas() {
       templateEditorStore.canvas.remove(tempYMargin)
       tempYMargin = null
     }
-    if (hoveredElement && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'data-fields' || templateEditorStore.fieldToAdd.type === 'dataset-image'))
+    if (hoveredElement && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
       templateEditorStore.canvas.remove(hoveredElement.value)
   })
 }

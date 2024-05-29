@@ -1,5 +1,5 @@
 <template>
-  <div class="h-20  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
+  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
       <div
         v-tooltip.top="{
@@ -138,7 +138,7 @@ function toggleMargins() {
             pageNo: templateEditorStore.activePageForCanvas,
           }))
 
-          if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+          if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
               left: 0,
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -193,7 +193,7 @@ function showMargins() {
         pageNo: templateEditorStore.activePageForCanvas,
       }))
 
-      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0,
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -261,7 +261,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         id: e.target.hash,
         fieldType: obj.fieldType,
       }))
-      if (obj.fieldType === 'dataset-image' || obj.fieldType === 'fixed-image') {
+      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
