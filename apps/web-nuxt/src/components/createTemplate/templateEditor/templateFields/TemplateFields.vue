@@ -34,12 +34,12 @@
           <div
             class="flex flex-row gap-4   "
           >
-            <Button v-tooltip.top="'Duplicate it'" text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
+            <Button v-tooltip.top="'Duplicate'" text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
               <font-awesome-icon
                 icon="fa-light fa-clone" size="lg"
               />
             </Button>
-            <Button v-tooltip.top="'Delete it'" text class="text-lg text-surface-600  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
+            <Button v-tooltip.top="'Delete'" text class="text-lg text-surface-600  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
               <font-awesome-icon icon="fa-light fa-trash" size="lg" />
             </Button>
           </div>
@@ -371,6 +371,8 @@ function selectField(field) {
 }
 
 function selectAddedField(field) {
+  templateEditorStore.canvas.discardActiveObject()
+  templateEditorStore.canvas.renderAll()
   templateEditorStore.canvas._objects.forEach((obj) => {
     if (obj.hash === field.hash) {
       if (field.page !== templateEditorStore.activePageForCanvas) {

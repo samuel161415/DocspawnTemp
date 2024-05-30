@@ -1,11 +1,11 @@
 <template>
   <div class="flex-1 h-full overflow-auto  ">
-    <div v-if="templateEditorStore.showOptionsBar " icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
+    <div v-if="templateEditorStore.showOptionsBar " icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500  bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
       <p class="font-poppins  ">
         Field options
       </p>
     </div>
-    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
+    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500  bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
       <p class="font-poppins ">
         Template options
       </p>
