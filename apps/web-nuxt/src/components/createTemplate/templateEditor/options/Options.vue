@@ -16,9 +16,6 @@
       class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6   bg-surface-50 px-5 py-2  overflow-hidden"
     >
       <div v-if="templateEditorStore.showOptionsBar === false">
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-md text-gray-400 text-primaryBlue font-thin mb-3">
-          Template options
-        </p>
         <p class="font-poppins">
           Coming soon
         </p>
@@ -27,23 +24,30 @@
         <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
           No template field is selected
         </p>
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-md text-gray-400 text-primaryBlue font-thin mb-3">
-          Field options
-        </p>
-
-        <p v-if="templateEditorStore?.selectedAddedField?.name" class="font-poppins">
+        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-lg justify-center  text-center text-gray-400 text-primaryBlue font-thin my-3">
           {{ templateEditorStore?.selectedAddedField?.name }}
         </p>
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType" class="font-poppins">
+
+        <!-- <p v-if="templateEditorStore?.selectedAddedField?.name" class="font-poppins">
+          {{ templateEditorStore?.selectedAddedField?.name }}
+        </p> -->
+        <!-- <p v-if="templateEditorStore.selectedAddedField?.fieldType" class="font-poppins">
           ({{ templateEditorStore.selectedAddedField?.fieldType }})
-        </p>
+        </p> -->
 
-        <hr />
+        <!-- <hr /> -->
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full pt-4">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
+          <div class="mb-6">
+            <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field'" />
+            <p v-if="activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field'" class="font-poppins text-sm text-red-500 mt-2">
+              Styles will be applied once you select a data field
+            </p>
+          </div>
           <p class="mb-1 font-poppins">
-            Datafield key
+            Datafield
           </p>
+
           <div v-if="!activeDataField || activeDataField === 'Lorem ipsum'" class="my-3 flex text-red gap-2">
             <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins">
@@ -127,10 +131,6 @@
             </Button>
           </div>
         </div>
-        <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field'" />
-        <p v-if="activeDataField === 'Lorem ipsum'" class="font-poppins text-sm text-red-500 mt-1">
-          Styles will be applied once you select a data field
-        </p>
       </div>
       <div v-else>
         <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
