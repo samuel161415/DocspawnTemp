@@ -4,8 +4,8 @@
       <div
         v-tooltip.top="'Display guide'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
-          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
+          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" />
         </div>
         <div v-else class="cursor-pointer text-primary-500 " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
           <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
@@ -14,8 +14,8 @@
       <div
         v-tooltip.top="'Advanced pointer'"
       >
-        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeAdvancedPointer = true">
-          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeAdvancedPointer = true">
+          <font-awesome-icon icon="fa-thin fa-arrow-pointer " size="xl" />
         </div>
         <div v-else class="cursor-pointer text-primary-500" @click="templateEditorStore.activeAdvancedPointer = false">
           <font-awesome-icon icon="fa-solid fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
@@ -24,8 +24,8 @@
       <div
         v-tooltip.top="templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides'"
       >
-        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
-          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
+        <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
+          <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" />
         </div>
         <div v-else class="cursor-pointer text-primary-500" @click="templateEditorStore.activeDisplayGuideForAll = false;removeMargins()">
           <font-awesome-icon icon="fa-solid fa-ruler-combined" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
@@ -47,7 +47,7 @@
 
       <div v-if="templateEditorStore.showPreview" class="flex items-center">
         <Button text icon="pi pi-chevron-left text-primary-500 " @click="changePreviewNo('prev')" />
-        <p class="font-poppins text-primary-500">
+        <p class="font-poppins text-black">
           {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
         </p>
         <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />

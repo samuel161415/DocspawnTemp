@@ -4,15 +4,15 @@
     class=" flex-1 h-full overflow-auto  pr-1 "
   >
     <div class="w-full">
-      <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
+      <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] text-lg rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 hover:border hover:border-primaryBlue " @click="templateEditorStore.ShowAddedFieldsinTemplateFields = false">
         <i class="pi pi-plus"></i>
-        <p class="font-poppins  text-lg">
+        <p class="font-poppins  ">
           Add new field
         </p>
       </div>
-      <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
+      <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 hover:border hover:border-primaryBlue" @click="templateEditorStore.ShowAddedFieldsinTemplateFields = true">
         <i class="pi pi-angle-left"></i>
-        <p class="font-poppins  text-lg">
+        <p class="font-poppins  ">
           Fields list
         </p>
       </div>
@@ -34,12 +34,12 @@
           <div
             class="flex flex-row gap-4   "
           >
-            <Button text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
+            <Button v-tooltip.top="'Duplicate it'" text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
               <font-awesome-icon
                 icon="fa-light fa-clone" size="lg"
               />
             </Button>
-            <Button text class="text-lg text-surface-600  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
+            <Button v-tooltip.top="'Delete it'" text class="text-lg text-surface-600  w-max h-max" @click="fieldToDelete = field;confirm2($event)">
               <font-awesome-icon icon="fa-light fa-trash" size="lg" />
             </Button>
           </div>
@@ -371,15 +371,22 @@ function selectField(field) {
 }
 
 function selectAddedField(field) {
-  if (field.page !== templateEditorStore.activePageForCanvas)
-    return
-
   templateEditorStore.canvas._objects.forEach((obj) => {
     if (obj.hash === field.hash) {
-      templateEditorStore.canvas.setActiveObject(obj)
+      if (field.page !== templateEditorStore.activePageForCanvas) {
+        templateEditorStore.activePageForCanvas = field.page
+        setTimeout(() => {
+          templateEditorStore.canvas.setActiveObject(obj)
+          templateEditorStore.canvas.renderAll()
+        }, 500)
+      }
+      else {
+        templateEditorStore.canvas.setActiveObject(obj)
+        templateEditorStore.canvas.renderAll()
+      }
       templateEditorStore.selectedAddedField = { ...field, obj }
       templateEditorStore.showOptionsBar = true
-      templateEditorStore.canvas.renderAll()
+
       if (obj.text && obj.id !== 'Lorem ipsum') {
         activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
         activeTextStyles.fontFamily = obj.fontFamily ? obj.fontFamily : 'Arial'

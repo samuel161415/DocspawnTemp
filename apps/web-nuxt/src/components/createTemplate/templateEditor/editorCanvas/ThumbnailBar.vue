@@ -5,7 +5,7 @@
         Current page: <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> out of <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
       </p>
       <div v-if="templateEditorStore.activePageForCanvas !== 0" class="flex gap-4 w-full overflow-x-auto overflow-y-hidden p-3">
-        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="changeCurrentPageOnCanvas(item)">
+        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="selectPageFromThumbnail(item)">
           <canvas :id="`template-thumbnail-${item}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer ">
           </canvas>
         </div>
@@ -19,10 +19,15 @@ import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { templateEditorStore } from '../store/templateEditorStore'
 
-async function changeCurrentPageOnCanvas(pageNo) {
+function selectPageFromThumbnail(page) {
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
-  templateEditorStore.activePageForCanvas = pageNo
+  templateEditorStore.showOptionsBar = false
+  templateEditorStore.selectedAddedField = null
+  templateEditorStore.activePageForCanvas = page
+}
+
+async function changeCurrentPageOnCanvas(pageNo) {
   const response = await fetch(templateEditorStore.templateBackgroundUrl)
   const pdfData = await response.arrayBuffer()
 
@@ -67,6 +72,17 @@ async function changeCurrentPageOnCanvas(pageNo) {
         img,
         () => {
           templateEditorStore.canvas.renderAll()
+
+          const objs = templateEditorStore.canvas._objects
+
+          templateEditorStore.canvas._objects = objs.map((obj) => {
+            if (obj.pageNo === pageNo)
+              obj.set({ visible: true, opacity: 1 })
+            else obj.set({ visible: false, opacity: 0 })
+            return obj
+          })
+
+          templateEditorStore.canvas.renderAll()
         },
         {
           scaleX: canvasWidth / img.width,
@@ -78,18 +94,7 @@ async function changeCurrentPageOnCanvas(pageNo) {
 }
 
 watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
-  templateEditorStore.selectedAddedField = null
-  templateEditorStore.showOptionsBar = false
-  const objs = templateEditorStore.canvas._objects
-
-  templateEditorStore.canvas._objects = objs.map((obj) => {
-    if (obj.pageNo === newVal)
-      obj.set({ visible: true, opacity: 1 })
-    else obj.set({ visible: false, opacity: 0 })
-    return obj
-  })
-
-  templateEditorStore.canvas.renderAll()
+  changeCurrentPageOnCanvas(newVal)
 })
 </script>
 

@@ -1,11 +1,27 @@
 <template>
-  <div class="h-full  w-max overflow-auto">
+  <div class="h-full  w-max overflow-auto  ">
     <CanvasOptionsTopBar />
 
-    <div id="canvas-wrapper" ref="canvasWrapper" class="  rounded-md min-h-full  flex flex-col w-[900px]  relative  ">
+    <div v-if="!isCanvasLoaded " class="w-full h-full ">
+      <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
+        <div class="flex mb-4">
+          <!-- <Skeleton shape="circle" size="4rem" class="mr-2" /> -->
+          <div>
+            <Skeleton width="10rem" class="mb-2" />
+            <Skeleton width="5rem" class="mb-2" />
+            <Skeleton height=".5rem" />
+          </div>
+        </div>
+        <Skeleton width="100%" height="60%" />
+        <div class="flex justify-between mt-4">
+          <Skeleton width="4rem" height="2rem" />
+          <Skeleton width="4rem" height="2rem" />
+        </div>
+      </div>
+    </div>
+    <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  ">
       </canvas>
-
       <ThumbnailBar />
     </div>
   </div>
@@ -20,6 +36,7 @@ import { activeTextStyles } from '../store/activeTextStyles'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 
+const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
 const hoveredElement = ref()
 const canvasWrapper = ref()
@@ -34,8 +51,9 @@ function callCreateCanvas() {
   const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
   if (parentWidth && parentWidth > 0)
     createCanvas()
-  else
-    setTimeout(() => callCreateCanvas(), 1000)
+    // setTimeout(() => isCanvasLoaded.value = true, 1000)
+
+  else setTimeout(() => callCreateCanvas(), 1000)
 }
 
 async function showThumbnail() {
@@ -165,6 +183,7 @@ async function createCanvas() {
         img,
         () => {
           canvas.renderAll()
+          isCanvasLoaded.value = true
         },
         {
         // Set the background image to cover the canvas without cropping

@@ -1,14 +1,13 @@
 <template>
   <div class="flex-1 h-full overflow-auto  ">
-    <div v-if="templateEditorStore.showTemplateOptions === false" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.showTemplateOptions = true">
-      <p class="font-poppins  text-lg">
-        Template options
+    <div v-if="templateEditorStore.showOptionsBar " icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
+      <p class="font-poppins  ">
+        Field options
       </p>
     </div>
-    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2 hover:scale-105 transition-all ease-linear duration-75" @click="templateEditorStore.showTemplateOptions = false">
-      <i class="pi pi-angle-left"></i>
-      <p class="font-poppins  text-lg">
-        Field options
+    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 cursor-pointer bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
+      <p class="font-poppins ">
+        Template options
       </p>
     </div>
 
@@ -16,7 +15,7 @@
 
       class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6   bg-surface-50 px-5 py-2  overflow-hidden"
     >
-      <div v-if="templateEditorStore.showTemplateOptions">
+      <div v-if="templateEditorStore.showOptionsBar === false">
         <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-md text-gray-400 text-primaryBlue font-thin mb-3">
           Template options
         </p>
