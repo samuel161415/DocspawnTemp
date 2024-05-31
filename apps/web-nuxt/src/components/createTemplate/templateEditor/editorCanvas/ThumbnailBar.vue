@@ -17,7 +17,7 @@
 <script setup>
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
-import { templateEditorStore } from '../store/templateEditorStore'
+import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 function selectPageFromThumbnail(page) {
   templateEditorStore.canvas.discardActiveObject()
@@ -99,24 +99,17 @@ watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
 </script>
 
   <style lang="scss" scoped>
-    /* width */
-    ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
     height:10px;
     }
-
-    /* Track */
     ::-webkit-scrollbar-track {
     background: #f1f1f1;
     }
-
-    /* Handle */
     ::-webkit-scrollbar-thumb {
     background: #009ee299;
     border-radius: 8px;
     }
-
-    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
     background: #009ee2;
     }

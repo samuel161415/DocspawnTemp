@@ -14,11 +14,10 @@
 
 <script setup>
 import ImageOptions from '../../../../components/createTemplate/templateEditor/options/ImageOptions.vue'
-import { templateEditorStore } from '../store/templateEditorStore.ts'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const { timeFormats, dateFormats } = useTimestampFormats()
-
 const selectedTimeFormat = ref()
 const selectedDateFormat = ref()
 </script>

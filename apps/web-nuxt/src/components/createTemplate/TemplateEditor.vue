@@ -14,10 +14,8 @@ import * as XLSX from 'xlsx'
 import TemplateFields from './templateEditor/templateFields/TemplateFields.vue'
 import Options from './templateEditor/options/Options.vue'
 import EditorCanvas from './templateEditor/editorCanvas/EditorCanvas.vue'
-import { templateEditorStore } from './templateEditor/store/templateEditorStore'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
-// sample dataset file
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/51b2ee2b-f2d3-4fc4-8c6e-8be78fd0a482_template_canvas_dataset.xlsx
 onMounted(() => {
   const dataset = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/51b2ee2b-f2d3-4fc4-8c6e-8be78fd0a482_template_canvas_dataset.xlsx'
 
@@ -49,24 +47,17 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-    /* width */
-    ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
     height:10px;
     }
-
-    /* Track */
     ::-webkit-scrollbar-track {
     background: #f1f1f1;
     }
-
-    /* Handle */
     ::-webkit-scrollbar-thumb {
     background: #009ee233;
     border-radius: 8px;
     }
-
-    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
     background: #009ee288;
     }

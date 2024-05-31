@@ -10,9 +10,7 @@
         Template options
       </p>
     </div>
-
     <div
-
       class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6   bg-surface-50 px-5 py-2  overflow-hidden"
     >
       <div v-if="templateEditorStore.showOptionsBar === false">
@@ -25,25 +23,20 @@
           No template field is selected
         </p>
         <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-lg justify-center  text-center text-gray-400 text-primaryBlue font-thin my-3">
-          {{ templateEditorStore?.selectedAddedField?.name }}
+          <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'">
+            {{ templateEditorStore?.selectedAddedField?.fieldType }}
+          </span>
+          <span v-else>
+            {{ templateEditorStore?.selectedAddedField?.name }}
+          </span>
         </p>
-
-        <!-- <p v-if="templateEditorStore?.selectedAddedField?.name" class="font-poppins">
-          {{ templateEditorStore?.selectedAddedField?.name }}
-        </p> -->
-        <!-- <p v-if="templateEditorStore.selectedAddedField?.fieldType" class="font-poppins">
-          ({{ templateEditorStore.selectedAddedField?.fieldType }})
-        </p> -->
-
-        <!-- <hr /> -->
-
+        <div class="mb-6">
+          <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'" />
+          <p v-if="activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field' " class="font-poppins text-sm text-red-500 mt-2">
+            Styles will be applied once you select a data field
+          </p>
+        </div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
-          <div class="mb-6">
-            <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field'" />
-            <p v-if="activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field'" class="font-poppins text-sm text-red-500 mt-2">
-              Styles will be applied once you select a data field
-            </p>
-          </div>
           <p class="mb-1 font-poppins">
             Datafield
           </p>
@@ -77,7 +70,8 @@
             </Dropdown>
           </div>
         </div>
-        <div v-else class="w-full pt-4">
+
+        <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== 'Fixed text'" class="w-full pt-4">
           <p class="mb-1 font-poppins">
             Field name
           </p>
@@ -102,9 +96,9 @@
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'text'" class="">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'" class="">
           <div class="flex flex-col gap-2 mt-4">
-            <InputText id="username" v-model="constant_text_value" aria-describedby="username-help" />
+            <InputText id="username" v-model="constantTextValue" aria-describedby="username-help" />
             <small id="username-help" class="font-poppins">This text will be constant for all documents</small>
           </div>
         </div>
@@ -145,16 +139,15 @@
 </template>
 
 <script setup>
-import { templateEditorStore } from '../store/templateEditorStore.ts'
-import { activeTextStyles } from '../store/activeTextStyles'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
+import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()
 const selectedDateFormat = ref()
-const constant_text_value = ref(null)
+const constantTextValue = ref(null)
 const fileUrl = ref()
 const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
@@ -163,6 +156,19 @@ function getFile(e) {
   const file = e.target.files[0]
   fileUrl.value = URL.createObjectURL(file)
 }
+
+watch(constantTextValue, () => {
+  const activeObj = templateEditorStore.canvas.getActiveObject()
+  if (activeObj)
+    activeObj.set({ text: constantTextValue.value ? constantTextValue.value : 'Fixed text' })
+  templateEditorStore.canvas.renderAll()
+  const allFs = templateEditorStore.addedFields
+  templateEditorStore.addedFields = allFs.map((f) => {
+    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Fixed text' }
+    else return f
+  })
+})
 
 watch(activeDataField, () => {
   if (templateEditorStore.canvas) {
@@ -210,6 +216,8 @@ watch(
 
       if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image')
         activeDataField.value = newVal.name
+      if (newVal?.fieldType === 'Fixed text')
+        constantTextValue.value = newVal.name
     }
   },
 )

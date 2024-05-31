@@ -19,11 +19,11 @@
 
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="px-5 h-[62px] flex items-center mb-3 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore?.selectedAddedField?.hash === field?.hash, 'border-surface-100 bg-surface-50': templateEditorStore?.selectedAddedField?.hash !== field?.hash }">
-          <div class=" h-full w-full py-2 cursor-pointer" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
-            <p v-if="field.name === 'Lorem ipsum'" class="font-poppins text-red-400 text-lg mt-1">
+          <div class=" h-full w-full py-2 cursor-pointer overflow-hidden" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
+            <p v-if="field.name === 'Lorem ipsum' && field?.fieldType !== 'Fixed text'" class="font-poppins text-red-400 text-lg mt-1">
               Select a data field
             </p>
-            <p v-else class="font-poppins text-surface-600 text-lg mt-1">
+            <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
               {{ field.name }}
             </p>
             <p class="font-poppins text-surface-600 text-sm">
@@ -85,10 +85,6 @@
             Data field
           </p>
         </div>
-        <!-- <div class="p-5 flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" :class="{ 'bg-white text-primaryBlue border  border-[#009ee2]': templateEditorStore.activeTemplateField === 'Data field' }" @click="selectField('Data field')">
-          <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-          Data field
-        </div> -->
 
         <div class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showImageOptions ? showImageOptions = false : showImageOptions = true">
           <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
@@ -109,7 +105,7 @@
             </p>
           </div>
         </div>
-        <div class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'text' }" @click="selectField('text')">
+        <div class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Fixed text' }" @click="selectField('Fixed text')">
           <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
           <p class="font-poppins text-surface-600 text-lg">
             Text
@@ -167,8 +163,7 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useConfirm } from 'primevue/useconfirm'
-import { templateEditorStore } from '../store/templateEditorStore.ts'
-import { activeTextStyles } from '../store/activeTextStyles'
+import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const showFormFields = ref(false)
 const showTimestamp = ref(false)
@@ -366,7 +361,10 @@ function selectField(field) {
   templateEditorStore.canvas.discardActiveObject()
   templateEditorStore.canvas.renderAll()
   templateEditorStore.activeTemplateField = field
-  templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
+  if (field === 'Data field' || field === 'Dataset image')
+    templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
+  if (field === 'Fixed text')
+    templateEditorStore.fieldToAdd = { name: 'Fixed text', type: field, id: 'Fixed text' }
   templateEditorStore.showOptionsBar = true
 }
 
@@ -414,34 +412,28 @@ function confirm2(event) {
     acceptLabel: 'Delete',
     accept: () => {
       deleteField()
-      // toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Field deleted', life: 3000 })
     },
     reject: () => {
-
     },
   })
 }
 </script>
 
 <style lang="scss" scoped>
-    /* width */
-    ::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 10px;
     height:10px;
     }
 
-    /* Track */
     ::-webkit-scrollbar-track {
     background: #f1f1f1;
     }
 
-    /* Handle */
     ::-webkit-scrollbar-thumb {
     background: #009ee233;
     border-radius: 8px;
     }
 
-    /* Handle on hover */
     ::-webkit-scrollbar-thumb:hover {
     background: #009ee277;
     }

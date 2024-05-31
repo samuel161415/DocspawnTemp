@@ -1,5 +1,15 @@
-// store.js
 import { reactive } from 'vue'
+
+export const activeTextStyles = reactive({
+  fontFamily: 'Arial',
+  fontSize: 32,
+  textAlign: 'left',
+  fill: '#000000',
+  fontStyle: 'normal',
+  fontWeight: 300,
+  underline: false,
+
+})
 
 export const templateEditorStore = reactive({
   templateBackgroundUrl: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/5505cb55-58e7-4784-888a-4ed8bbf5b70e_template_canvas_pdf_2.pdf',
@@ -26,8 +36,3 @@ export const templateEditorStore = reactive({
   showPreview: false,
 
 })
-
-// sample pdf
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/fb48e439-497e-45aa-90fd-fbee7b7f33f1_Bon de livraison.pdf
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/5505cb55-58e7-4784-888a-4ed8bbf5b70e_template_canvas_pdf_2.pdf
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/bf4768eb-59f6-40b2-9ef8-fde65a76ea4b_docapwn multipage sample pdf.pdf

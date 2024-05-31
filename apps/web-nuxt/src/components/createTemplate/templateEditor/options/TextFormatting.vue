@@ -36,14 +36,12 @@
 </template>
 
 <script setup>
-import { useTextFormattingOptions } from '../../../../composables/useTextFormattingOptions'
-import { activeTextStyles } from '../store/activeTextStyles'
+import { activeTextStyles } from '@/composables/useTemplateEditorData'
+import { useTextFormattingOptions } from '@/composables/useTextFormattingOptions'
 
 const { fonts, fontSizes } = useTextFormattingOptions()
-
 const showFontOptions = ref()
 const showFontSizesOptions = ref()
-
 const selectedFont = ref()
 const selectedFontSize = ref()
 const selectedColor = ref()

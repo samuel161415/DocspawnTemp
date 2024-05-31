@@ -5,7 +5,6 @@
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
         <div class="flex mb-4">
-          <!-- <Skeleton shape="circle" size="4rem" class="mr-2" /> -->
           <div>
             <Skeleton width="10rem" class="mb-2" />
             <Skeleton width="5rem" class="mb-2" />
@@ -31,10 +30,9 @@
 import { uuid } from 'vue-uuid'
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
-import { templateEditorStore } from '../store/templateEditorStore'
-import { activeTextStyles } from '../store/activeTextStyles'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
+import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
@@ -252,22 +250,23 @@ function addEventsToCanvas() {
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Fixed text') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field'
       hoveredElement.value = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (Number.parseFloat(activeTextStyles.fontSize) / 5),
-          fill: '#ff0000', // activeTextStyles.fill,
-          fontFamily: 'Arial', // activeTextStyles.fontFamily,
+          fill: isDatafield ? '#ff0000' : activeTextStyles.fill,
+          fontFamily: isDatafield ? 'Arial' : activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
-          underline: false, // activeTextStyles.underline,
-          textAlign: 'center', // activeTextStyles.textAlign,
-          fontStyle: 'normal', // activeTextStyles.fontStyle,
-          fontWeight: 300, // activeTextStyles.fontWeight,
+          underline: isDatafield ? false : activeTextStyles.underline,
+          textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
+          fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
+          fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
           hasBorders: true,
           zIndex: 1,
           pageNo: templateEditorStore.activePageForCanvas,
@@ -346,7 +345,7 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:down', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Fixed text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -363,18 +362,19 @@ function addEventsToCanvas() {
       }
       templateEditorStore.canvas.renderAll()
 
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field'
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
           left: event.absolutePointer.x,
           top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (1 * (Number.parseFloat(activeTextStyles.fontSize) / 5)),
-          fill: '#ff0000', // activeTextStyles.fill,
-          fontFamily: 'Arial', // activeTextStyles.fontFamily,
+          fill: isDatafield ? '#ff0000' : activeTextStyles.fill,
+          fontFamily: isDatafield ? 'Arial' : activeTextStyles.fontFamily,
           fontSize: activeTextStyles.fontSize,
-          underline: false, // activeTextStyles.underline,
-          textAlign: 'center', // activeTextStyles.textAlign,
-          fontStyle: 'normal', // activeTextStyles.fontStyle,
-          fontWeight: 300, // activeTextStyles.fontWeight,
+          underline: isDatafield ? false : activeTextStyles.underline,
+          textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
+          fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
+          fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
           hasBorders: true,
           zIndex: 1,
           fieldType: templateEditorStore.fieldToAdd.type,
@@ -388,7 +388,6 @@ function addEventsToCanvas() {
 
       const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
       }
-
       const allFields = []
       templateEditorStore.addedFields.forEach((f) => {
         allFields.push(JSON.parse(JSON.stringify(f)))

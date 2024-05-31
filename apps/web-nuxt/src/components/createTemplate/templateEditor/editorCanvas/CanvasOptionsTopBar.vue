@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { templateEditorStore } from '../store/templateEditorStore'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const currentPreviewNo = ref(1)
 
