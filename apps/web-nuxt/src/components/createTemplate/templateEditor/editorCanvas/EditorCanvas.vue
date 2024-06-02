@@ -250,7 +250,7 @@ function addEventsToCanvas() {
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Fixed text') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -345,7 +345,7 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:down', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Fixed text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -548,7 +548,7 @@ function addEventsToCanvas() {
       templateEditorStore.canvas.remove(tempYMargin)
       tempYMargin = null
     }
-    if (hoveredElement && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
+    if (hoveredElement && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
       templateEditorStore.canvas.remove(hoveredElement.value)
   })
 }

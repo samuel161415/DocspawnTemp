@@ -23,19 +23,21 @@
           No template field is selected
         </p>
         <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-lg justify-center  text-center text-gray-400 text-primaryBlue font-thin my-3">
-          <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'">
+          <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time'">
             {{ templateEditorStore?.selectedAddedField?.fieldType }}
           </span>
           <span v-else>
             {{ templateEditorStore?.selectedAddedField?.name }}
+
           </span>
         </p>
         <div class="mb-6">
-          <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'" />
+          <TextFormatting v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time'" />
           <p v-if="activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field' " class="font-poppins text-sm text-red-500 mt-2">
             Styles will be applied once you select a data field
           </p>
         </div>
+        <!-- /*************************************************************/ -->
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
           <p class="mb-1 font-poppins">
             Datafield
@@ -71,18 +73,17 @@
           </div>
         </div>
 
-        <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== 'Fixed text'" class="w-full pt-4">
+        <!-- <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== 'Static text'" class="w-full pt-4">
           <p class="mb-1 font-poppins">
             Field name
           </p>
           <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
-        </div>
+        </div> -->
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'form-field'" class="">
           <FormOptions />
         </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field'" class="">
-        </div>
+
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'image'" class="">
           <div class="mt-4 ">
             <h1 class="font-poppins">
@@ -96,20 +97,34 @@
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Fixed text'" class="">
-          <div class="flex flex-col gap-2 mt-4">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text'" class="">
+          <div class="flex flex-col  mt-4">
             <InputText id="username" v-model="constantTextValue" aria-describedby="username-help" />
-            <small id="username-help" class="font-poppins">This text will be constant for all documents</small>
+            <p id="username-help" class="font-poppins text-xs mt-2">
+              Static text that will appear on all future documents
+            </p>
           </div>
         </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'timestamp'" class="">
-          <div v-if="templateEditorStore.activeTimestampField === 'time'" class="w-full pt-4">
-            <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-14rem" />
-          </div>
-          <div v-if="templateEditorStore.activeTimestampField === 'date'" class="w-full pt-4">
-            <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-14rem" />
-          </div>
+
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static time'" class="w-full pt-4">
+          <p class="font-poppins text-md text-surface-600 mb-2">
+            Select Format
+          </p>
+          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-14rem" />
+          <p id="username-help" class="font-poppins text-xs mt-2">
+            Time of document generation that will appear on each future document
+          </p>
         </div>
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static date'" class="w-full pt-4">
+          <p class="font-poppins text-md text-surafce-600 mb-2">
+            Select Format
+          </p>
+          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-14rem" />
+          <p id="username-help" class="font-poppins text-xs mt-2">
+            Date of document generation that will appear on each future document
+          </p>
+        </div>
+
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'checkbox'" class="">
         </div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'radio'" class="">
@@ -160,12 +175,36 @@ function getFile(e) {
 watch(constantTextValue, () => {
   const activeObj = templateEditorStore.canvas.getActiveObject()
   if (activeObj)
-    activeObj.set({ text: constantTextValue.value ? constantTextValue.value : 'Fixed text' })
+    activeObj.set({ text: constantTextValue.value ? constantTextValue.value : 'Static text' })
   templateEditorStore.canvas.renderAll()
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Fixed text' }
+      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Static text' }
+    else return f
+  })
+})
+watch(selectedTimeFormat, () => {
+  const activeObj = templateEditorStore.canvas.getActiveObject()
+  if (activeObj)
+    activeObj.set({ text: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' })
+  templateEditorStore.canvas.renderAll()
+  const allFs = templateEditorStore.addedFields
+  templateEditorStore.addedFields = allFs.map((f) => {
+    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+      return { ...f, name: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' }
+    else return f
+  })
+})
+watch(selectedDateFormat, () => {
+  const activeObj = templateEditorStore.canvas.getActiveObject()
+  if (activeObj)
+    activeObj.set({ text: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' })
+  templateEditorStore.canvas.renderAll()
+  const allFs = templateEditorStore.addedFields
+  templateEditorStore.addedFields = allFs.map((f) => {
+    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+      return { ...f, name: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
     else return f
   })
 })
@@ -216,8 +255,12 @@ watch(
 
       if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image')
         activeDataField.value = newVal.name
-      if (newVal?.fieldType === 'Fixed text')
+      if (newVal?.fieldType === 'Static text')
         constantTextValue.value = newVal.name
+      if (newVal?.fieldType === 'Static date')
+        selectedDateFormat.value = { name: newVal.name }
+      if (newVal?.fieldType === 'Static time')
+        selectedTimeFormat.value = { name: newVal.name }
     }
   },
 )
