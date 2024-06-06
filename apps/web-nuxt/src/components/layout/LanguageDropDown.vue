@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center gap-4" v-tooltip.bottom="'Select Language'">
+  <div class="flex items-center gap-4 mb-5" v-tooltip.bottom="'Select Language'">
     <Button v-if="!selectedLanguage" type="button" icon="pi pi-globe" class="p-4 border-none" rounded outlined
       size="large"  @click="toggleMenu" aria-haspopup="true"
       aria-controls="overlay_menu" />

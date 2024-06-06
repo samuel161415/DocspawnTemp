@@ -11,11 +11,11 @@ export default {
             'border rounded-md rounded-r-none',
 
             // Spacing
-            'px-4 py-3',
+            'px-4 py-3  h-[43px]',
 
             // Color
             props.modelValue === 'list'
-                ? 'bg-primary-500 dark:bg-primary-400 border-primary-500 dark:border-primary-400 text-white dark:text-surface-900'
+                ? 'bg-primary-500 dark:bg-primary-400  dark:border-primary-400 text-white dark:text-surface-900'
                 : 'bg-surface-0 dark:bg-surface-900 border-surface-200 dark:border-surface-700 text-surface-700 dark:text-white/80',
 
             // States
@@ -38,7 +38,7 @@ export default {
             'inline-flex items-center align-bottom text-center',
 
             // Shape
-            'border rounded-md rounded-l-none',
+            'border rounded-md rounded-l-none h-[43px]',
 
             // Spacing
             'px-4 py-3',

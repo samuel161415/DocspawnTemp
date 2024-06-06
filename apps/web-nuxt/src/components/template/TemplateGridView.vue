@@ -11,8 +11,8 @@
                    
                     <!-- top section -->
                     <div class="p-4">
-                        <div class="flex justify-end">
-                            <!-- <i :class="[ favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning', 'cursor-pointer']" @click="handleclickFavorite(template, index)"></i> -->
+                        <div class="flex" :class="favoriteStates[index]? 'justify-between': 'justify-end'">
+                            <i v-if="favoriteStates[index]" :class="[ favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning', 'cursor-pointer']"></i>
                             <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer" @click="toggle"></i>
                         </div>
                         <!-- image -->
@@ -20,7 +20,7 @@
                             @mouseleave="hoverStates[index] = false">
                             <img class="w-1/2 h-28 mt-4" :src="template.image"/>
                             <div v-if="hoverStates[index]" class="mt-4" @click="handleTemplatePreview(template)">
-                                <font-awesome-icon  :icon="['fad', 'eye']" size="xl" class="absolute inset-0 m-auto" style="--fa-primary-color: #141414; --fa-secondary-color: #141414; --fa-secondary-opacity: 0.9;" />
+                                <font-awesome-icon :icon="['fas', 'eye']" size="xl" class="absolute inset-0 m-auto"  style="color: #141414;" />
                             </div>
                         </div>
                         <!-- title -->
@@ -41,12 +41,11 @@
             </div>
 
             <OverlayPanel ref="op">
-                <div class="flex flex-col justify-start w-44 h-40">
-                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Edit</p>
-                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Delete</p>
-                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Download</p>
-                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Add to favorites</p>
-
+                <div class="flex flex-col justify-start w-48 h-44">
+                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Edit template</p>
+                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Access data</p>
+                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Access document</p>
+                    <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Set as favorites</p>
                 </div>
             </OverlayPanel>
 
@@ -101,7 +100,6 @@ watch(() => props.templates, (newVal) => {
 const handleTemplatePreview = (template) =>{
     visible.value = true;
     currentTemplate.value = template;
-
 }
 
 const handleclickFavorite = (template, index) => {
@@ -143,7 +141,7 @@ const handleFileDrop = (template, event) => {
         // split file name to get the file type
         const fileParts = file.name.split('.');
         
-        const thumbnail = thumbnails[0]
+        const thumbnail = thumbnails[0];
         if (thumbnail[fileParts[fileParts.length - 1]]) {
             template.image = thumbnail[fileParts[fileParts.length - 1]];
         }

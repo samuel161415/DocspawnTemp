@@ -1,13 +1,13 @@
 <template>
   
-  <div class="h-full w-full bg-secondary overflow-scroll">
+  <div class="h-full w-full bg-white rounded-lg overflow-scroll no-scrollbar">
  
-      <div class="px-8 py-7 rounded-md bg-white h-full">
-        <!-- <BreadcrumbComponent :home="home" :items="items" /> -->
+      <div class="px-8 py-8 h-full">
+  
         <h2 class="font-semibold text-surface-600 text-2xl px-3 py-2">Data Library</h2>
     
         <div  class="flex flex-col justify-center text-center space-y-2 ">
-          <div class="mt-5">
+          <div class="mt-6">
 
             <DataList  
                 :data="dataLibraryData"
