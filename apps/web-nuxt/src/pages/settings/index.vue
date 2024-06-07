@@ -74,7 +74,6 @@
             <p class="text-surface-500 font-poppins text-lg font-normal mt-2">Select the way times & dates are displayed.</p>
           </div>
 
-
           <p class="text-surface-600 font-poppins text-lg mt-8">Start of the calendar week</p>
           <div class="mt-3 flex justify-between">
 
