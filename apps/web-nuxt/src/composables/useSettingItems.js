@@ -9,23 +9,36 @@ export const useSettingItems = () => {
         isHovered:false,
         subitems:[
           {
-            title: "Time zone",
+            title: "My profile",
             icon: "pi pi-calendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
+            componentId:"my-profile",
             nestedMenuVisible: false
           
           },
           {
-            title: "Dark mode",
-            icon: "pi pi-moon",
+            title: "Language & Region",
+            icon: "pi pi-language",
             route: "/settings",
             isHovered: false,
             subitems: [],
+            componentId:"language-region",
+            nestedMenuVisible: false
+          
+          },
+          {
+            title: "Time & date format",
+            icon: "pi pi-clock",
+            route: "/settings",
+            isHovered: false,
+            subitems: [],
+            componentId:"time-date-format",
             nestedMenuVisible: false
           
           }
+
         ]
       },
       {
@@ -34,6 +47,16 @@ export const useSettingItems = () => {
         route: '/workspace',
         isHovered: false,
         subitems: [
+          {
+            title: "Info",
+            icon: "pi pi-info-circle",
+            route: "/settings",
+            isHovered: false,
+            subitems: [],
+            componentId:"info",
+            nestedMenuVisible: false
+          
+          },
           {
             title: 'Members',
             icon: "pi pi-users",
@@ -59,11 +82,27 @@ export const useSettingItems = () => {
             nestedMenuVisible: false
           },
           {
-            title: 'Workspace management',
+            title: 'Field options',
             icon: "pi pi-table",
             route: "/workspace_management",
             isHovered: false,
-            subitems:[],
+            componentId:"field-options",
+            subitems:[
+              {
+                title: "Time & Date",
+                icon: "pi pi-clock",
+                route: "/workspace",
+                componentId: "user-roles",
+                isHovered: false
+              },
+              {
+                title: "Checkboxes",
+                icon: "pi pi-check-square",
+                route: "/workspace",
+                componentId: "user-roles",
+                isHovered: false
+              },
+            ],
             nestedMenuVisible: false
           }
         ]

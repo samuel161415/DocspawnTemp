@@ -1,8 +1,8 @@
 <template>
     <div @click="navigateToComponent(subItem.componentId)" class="ml-6">
-        <div class="flex py-2 pl-1 hover:bg-surface-100 items-center  font-poppins" @click="toggleVisible">
+        <div class="flex py-2 pl-2 hover:bg-surface-100 items-center  font-poppins" @click="toggleVisible">
             <i style="font-size: 0.9rem" :class="[subItem.icon, ' py-1 text-gray-500']"></i>
-            <p class="text-base font-normal ml-1 text-gray-500">{{ subItem.title }} </p>
+            <p class="text-base font-normal ml-3 text-gray-500">{{ subItem.title }} </p>
         </div>
 
         <ul v-if="subItem.nestedMenuVisible">
