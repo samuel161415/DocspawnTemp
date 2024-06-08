@@ -14,9 +14,7 @@
       class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6   bg-surface-50 px-5 py-2  overflow-hidden"
     >
       <div v-if="templateEditorStore.showOptionsBar === false">
-        <p class="font-poppins">
-          Coming soon
-        </p>
+        <TemplateOptions />
       </div>
       <div v-else-if="templateEditorStore.showOptionsBar === true && templateEditorStore.selectedAddedField?.fieldType !== ''">
         <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
@@ -50,7 +48,7 @@
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.keys" filter placeholder="Select data field" class="w-full md:w-14rem">
+            <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.keys" filter placeholder="Select data field" class="w-full md:w-full">
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -99,6 +97,9 @@
         </div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text'" class="">
           <div class="flex flex-col  mt-4">
+            <p class="font-poppins text-md text-surface-600 mb-2">
+              Add text
+            </p>
             <InputText id="username" v-model="constantTextValue" aria-describedby="username-help" />
             <p id="username-help" class="font-poppins text-xs mt-2">
               Static text that will appear on all future documents
@@ -110,7 +111,7 @@
           <p class="font-poppins text-md text-surface-600 mb-2">
             Select Format
           </p>
-          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-14rem" />
+          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full" />
           <p id="username-help" class="font-poppins text-xs mt-2">
             Time of document generation that will appear on each future document
           </p>
@@ -119,7 +120,7 @@
           <p class="font-poppins text-md text-surafce-600 mb-2">
             Select Format
           </p>
-          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-14rem" />
+          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-full" />
           <p id="username-help" class="font-poppins text-xs mt-2">
             Date of document generation that will appear on each future document
           </p>
@@ -157,6 +158,7 @@
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
+import TemplateOptions from './TemplateOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const activeDataField = ref()
@@ -174,13 +176,17 @@ function getFile(e) {
 
 watch(constantTextValue, () => {
   const activeObj = templateEditorStore.canvas.getActiveObject()
-  if (activeObj)
-    activeObj.set({ text: constantTextValue.value ? constantTextValue.value : 'Static text' })
+  if (activeObj) {
+    if (constantTextValue.value)
+      activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: constantTextValue.value, id: constantTextValue.value })
+    else
+      activeObj.set({ text: 'Add text', fill: '#ff0000', id: 'Lorem ipsum' })
+  }
   templateEditorStore.canvas.renderAll()
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Static text' }
+      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Add text', id: constantTextValue.value ? constantTextValue.value : 'Lorem ipsum' }
     else return f
   })
 })
@@ -255,8 +261,12 @@ watch(
 
       if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image')
         activeDataField.value = newVal.name
-      if (newVal?.fieldType === 'Static text')
-        constantTextValue.value = newVal.name
+      if (newVal?.fieldType === 'Static text') {
+        if (newVal.name === 'Lorem ipsum' || newVal.name === 'Add text')
+          constantTextValue.value = ''
+        else
+          constantTextValue.value = newVal.name
+      }
       if (newVal?.fieldType === 'Static date')
         selectedDateFormat.value = { name: newVal.name }
       if (newVal?.fieldType === 'Static time')

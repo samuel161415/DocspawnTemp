@@ -34,5 +34,6 @@ export const templateEditorStore = reactive({
   activeDisplayGuideForAll: false,
   anyObjectSelected: false,
   showPreview: false,
+  watermarkImage: {},
 
 })

@@ -23,6 +23,9 @@
             <p v-if="field.name === 'Lorem ipsum' && field?.fieldType !== 'Static text'" class="font-poppins text-red-400 text-lg mt-1">
               Select a data field
             </p>
+            <p v-else-if="field.name === 'Add text' && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
+              Add text
+            </p>
             <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
               {{ field.name }}
             </p>
@@ -519,7 +522,7 @@ function selectField(field) {
   if (field === 'Data field' || field === 'Dataset image')
     templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
   if (field === 'Static text')
-    templateEditorStore.fieldToAdd = { name: 'Static text', type: field, id: 'Static text' }
+    templateEditorStore.fieldToAdd = { name: 'Add text', type: field, id: 'Lorem ipsum' }
   if (field === 'Static date')
     templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
   if (field === 'Static time')

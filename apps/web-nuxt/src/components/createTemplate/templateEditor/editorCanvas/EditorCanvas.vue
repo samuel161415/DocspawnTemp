@@ -194,12 +194,20 @@ async function createCanvas() {
 
   addEventsToCanvas()
   showThumbnail()
+
   templateEditorStore.canvas.on('mouse:down', () => {
+    const objs = templateEditorStore.canvas._objects
+    objs.forEach((obj) => {
+      if (obj.id === 'watermark-docspawn')
+
+        templateEditorStore.canvas.bringToFront(obj)
+    })
+
     // get active object
     const activeObject = templateEditorStore.canvas?.getActiveObject()
 
     // templateEditorStore.activeDisplayGuide = !!activeObject.displayGuide
-    if (activeObject) {
+    if (activeObject && activeObject?.id !== 'watermark-docspawn') {
       templateEditorStore.anyObjectSelected = true
       templateEditorStore.activeDisplayGuide = activeObject.displayGuide
       templateEditorStore.ShowAddedFieldsinTemplateFields = true
@@ -229,9 +237,49 @@ async function createCanvas() {
 }
 
 function addEventsToCanvas() {
+  /** ********* adding watermark */
+  if (templateEditorStore?.watermarkImage) {
+    const isWaterMarkExists = templateEditorStore.canvas._objects.find(obj => obj?.id === 'watermark-docspawn') !== undefined
+
+    if (!isWaterMarkExists) {
+      fabric.Image.fromURL(
+        templateEditorStore?.watermarkImage?.src
+        , (myImg) => {
+          myImg.set({
+            left: 0,
+            top: 0,
+            scaleX: 80 / myImg.width,
+            scaleY: 80 / myImg.height,
+            id: 'watermark-docspawn',
+
+            lockUniScaling: true,
+            lockScalingX: true,
+            lockScalingY: true,
+            uniformScaling: false,
+
+          })
+
+          templateEditorStore.canvas.add(myImg)
+          templateEditorStore.canvas.renderAll()
+        },
+      )
+    }
+  }
+
+  /** */
   templateEditorStore.canvas.on('object:moving', (e) => {
     templateEditorStore.canvas._objects.forEach((obj) => {
-      if (obj.id === e.target.hash && obj.stroke) {
+      if (obj.id === 'watermark-docspawn') {
+        if (e.target.left <= 0)
+          obj.set({ left: 0 })
+        if (e.target.top <= 0)
+          obj.set({ top: 0 })
+        if (e.target.left + (e.target.width * e.target.scaleX) >= templateEditorStore.canvas.width)
+          obj.set({ left: templateEditorStore.canvas.width - (e.target.width * e.target.scaleX) })
+        if (e.target.top + (e.target.height * e.target.scaleY) >= templateEditorStore.canvas.height)
+          obj.set({ top: templateEditorStore.canvas.height - (e.target.height * e.target.scaleY) })
+      }
+      else if (obj.id === e.target.hash && obj.stroke) {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
         if (obj.left === 0) {
@@ -254,7 +302,7 @@ function addEventsToCanvas() {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text'
       hoveredElement.value = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
@@ -362,7 +410,7 @@ function addEventsToCanvas() {
       }
       templateEditorStore.canvas.renderAll()
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text'
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
@@ -525,7 +573,7 @@ function addEventsToCanvas() {
     // for showing options when click
     const activeObj = templateEditorStore.canvas.getActiveObject()
 
-    if (activeObj) {
+    if (activeObj && activeObj?.id !== 'watermark-docspawn') {
       templateEditorStore.showOptionsBar = true
       const field = templateEditorStore.addedFields.filter(f => f?.hash === activeObj?.hash)[0]
       templateEditorStore.selectedAddedField = { ...field, obj: activeObj }

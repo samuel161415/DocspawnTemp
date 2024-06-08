@@ -133,7 +133,7 @@ function showMargins() {
   const objs = templateEditorStore.canvas._objects
 
   objs.forEach((obj) => {
-    if (obj.pageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon) {
+    if (obj.pageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon && obj?.id !== 'watermark-docspawn') {
       obj.displayGuide = true
       templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
         left: obj.left,
@@ -188,7 +188,7 @@ function removeMargins() {
 
 watch(() => templateEditorStore.activeDisplayGuide, () => {
   const activeObject = templateEditorStore.canvas.getActiveObject()
-  if (activeObject) {
+  if (activeObject && activeObject?.id !== 'watermark-docspawn') {
     if (templateEditorStore.activeDisplayGuide) {
       activeObject.set({ displayGuide: true })
       templateEditorStore.canvas.renderAll()
@@ -292,6 +292,8 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
     const objs = templateEditorStore.canvas._objects
 
     templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj?.id === 'watermark-docspawn')
+        return obj
       if (obj.stroke || obj.isAlertIcon)
         return obj
 
@@ -322,6 +324,8 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
   else {
     const objs = templateEditorStore.canvas._objects
     templateEditorStore.canvas.objects = objs.map((obj) => {
+      if (obj?.id === 'watermark-docspawn')
+        return obj
       if (obj.stroke || obj.isAlertIcon)
         return obj
       if (!obj._element && obj.id !== 'Lorem ipsum') {
