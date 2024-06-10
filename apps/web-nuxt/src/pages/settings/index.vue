@@ -75,7 +75,7 @@
           </div>
 
           <p class="text-surface-600 font-poppins text-lg mt-8">Start of the calendar week</p>
-          <div class="mt-3 flex justify-between">
+          <div class="mt-3 flex justify-between w-1/2">
 
             <div class="flex">
               <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
@@ -90,7 +90,7 @@
           
           <p class="text-surface-600 font-poppins text-lg mt-7">Time format</p>
 
-          <div class="mt-3 flex justify-between">
+          <div class="mt-3 flex justify-between w-1/2">
 
             <div class="flex">
               <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
@@ -104,7 +104,7 @@
 
           <p class="text-surface-600 font-poppins text-lg mt-7">Date format</p>
           
-          <div class="mt-3 flex justify-between">
+          <div class="mt-3 flex justify-between w-1/2">
             <div class="flex">
               <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
               <label for="ingredient1" class="text-surface-600 font-poppins text-lg ml-2">mm/dd/yyyy</label>

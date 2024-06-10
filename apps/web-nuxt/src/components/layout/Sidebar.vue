@@ -65,6 +65,7 @@
 
       <ul>
         <!-- avatar -->
+        <hr />
         <div>
           <!-- <LanguageDropDown /> -->
           <li  v-for="item in menuItems" 

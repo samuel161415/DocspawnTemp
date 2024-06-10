@@ -1,5 +1,5 @@
 <template>
-    <Dialog v-model:visible="visible" modal :draggable="false" :style="{  width: '40rem' }">
+    <Dialog v-model:visible="visible" modal :draggable="false" :style="{  width: '45rem' }">
         
         <template #header>
             <div class="flex justify-center items-center ml-5">
@@ -19,48 +19,24 @@
             <label for="containsublist" class="ml-2">Contains sublist</label>
         </div>
 
+        <!--  -->
+        <div v-if="containsublist" class="mt-5">
+            <SublistComponent  />
+        </div>
+     
+        <!--  -->
+
         <div class="flex justify-center mt-5 mr-5">
             <Button label="Save" icon="pi pi-check" class="bg-success text-white hover:bg-success hover:border-success w-28" @click="handleEditItem" />
         </div>
         
-        <!-- dialog -->
-        <!-- 
-            <Dialog  v-model:visible="containsublist" header="Sublist" modal  :style="{ width: '25rem' }">
-                <span class="p-text-secondary block mb-5">Do you want to create a new Sublist?</span>
-                
-                <div class="flex justify-end gap-2">
-                    <Button type="button" label="No" outlined @click="containsublist = false"></Button>
-                
-                    <Button type="button" label="Yes" @click="emitOpenCreateListModal"></Button>
-                </div>
-            </Dialog> 
-        -->
-        <!--  -->
-
-        <!--  -->
-        <div v-if="containsublist" class="px-5">
-
-            <div class="flex flex-col align-items-center gap-2 mb-3">
-                <label for="sublistitems" class="font-semibold w-6rem text-lg">Sublist items <span class="text-red-400">*</span></label>
-                <span class="text-sm text-surface-500">Multiple entries are allowed <br/> (Comma separated entries)</span>
-                        
-                <span v-if="addClicked && sublistItems.length === 0" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>You should Add Items!</span>
-                <Textarea id="sublistItems" v-model="sublistItem" rows="10" cols="30" placeholder="List item" :invalid="addClicked && sublistItem === ''"/>
-            </div>
-                
-            <Button 
-                label="Add" 
-                icon="pi pi-plus" 
-                @click="handleAdd" 
-                class="bg-success text-white hover:bg-success hover:border-success  my-2" /> 
-        </div> 
-        <!--  -->
     </Dialog>
 
 </template>
 
 <script setup>
   import { watch, ref } from "vue";
+  import SublistComponent from "./SublistComponent.vue";
 
   const emit = defineEmits();
   const props= defineProps({
