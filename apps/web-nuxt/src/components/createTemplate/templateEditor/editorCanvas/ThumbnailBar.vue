@@ -76,6 +76,9 @@ async function changeCurrentPageOnCanvas(pageNo) {
           const objs = templateEditorStore.canvas._objects
 
           templateEditorStore.canvas._objects = objs.map((obj) => {
+            if (obj?.id === 'watermark-docspawn')
+              return obj
+
             if (obj.pageNo === pageNo)
               obj.set({ visible: true, opacity: 1 })
             else obj.set({ visible: false, opacity: 0 })

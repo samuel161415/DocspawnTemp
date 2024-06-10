@@ -238,7 +238,7 @@ async function createCanvas() {
 
 function addEventsToCanvas() {
   /** ********* adding watermark */
-  if (templateEditorStore?.watermarkImage) {
+  if (templateEditorStore?.watermarkImage?.src) {
     const isWaterMarkExists = templateEditorStore.canvas._objects.find(obj => obj?.id === 'watermark-docspawn') !== undefined
 
     if (!isWaterMarkExists) {
@@ -246,8 +246,10 @@ function addEventsToCanvas() {
         templateEditorStore?.watermarkImage?.src
         , (myImg) => {
           myImg.set({
-            left: 0,
-            top: 0,
+            // left: 0,
+            // top: 0,
+            left: templateEditorStore.canvas.width - (myImg.width * (80 / myImg.width)),
+            top: templateEditorStore.canvas.height - (myImg.height * (80 / myImg.height)),
             scaleX: 80 / myImg.width,
             scaleY: 80 / myImg.height,
             id: 'watermark-docspawn',
