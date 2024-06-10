@@ -208,6 +208,7 @@ async function createCanvas() {
 
     // templateEditorStore.activeDisplayGuide = !!activeObject.displayGuide
     if (activeObject && activeObject?.id !== 'watermark-docspawn') {
+      console.log('ctive object', activeObject.id)
       templateEditorStore.anyObjectSelected = true
       templateEditorStore.activeDisplayGuide = activeObject.displayGuide
       templateEditorStore.ShowAddedFieldsinTemplateFields = true
@@ -318,11 +319,11 @@ function addEventsToCanvas() {
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text'
       hoveredElement.value = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
@@ -417,7 +418,7 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:down', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -434,7 +435,7 @@ function addEventsToCanvas() {
       }
       templateEditorStore.canvas.renderAll()
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text'
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
