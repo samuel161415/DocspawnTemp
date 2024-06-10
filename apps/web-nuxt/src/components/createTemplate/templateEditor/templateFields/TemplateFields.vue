@@ -339,7 +339,7 @@ function duplicateField(field) {
         )
         templateEditorStore.canvas.add(ele)
 
-        const fieldToAdd = { fieldType: field.fieldType, name: field.name, hash: ele.hash, page: ele.pageNo, obj: ele }
+        const fieldToAdd = { ...field, fieldType: field.fieldType, name: field.name, hash: ele.hash, page: ele.pageNo, obj: ele }
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {
           allFields.push(JSON.parse(JSON.stringify(f)))
