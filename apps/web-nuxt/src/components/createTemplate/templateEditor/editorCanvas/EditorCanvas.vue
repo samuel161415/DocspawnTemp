@@ -297,6 +297,24 @@ function addEventsToCanvas() {
 
     templateEditorStore.canvas.renderAll()
   })
+  templateEditorStore.canvas.on('object:scaling', (e) => {
+    templateEditorStore.canvas._objects.forEach((obj) => {
+      if (obj.id === e.target.hash && obj.stroke) {
+        if (obj.top === 0)
+          obj.set({ top: 0, left: e.target.left })
+        if (obj.left === 0) {
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image')
+            obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+          else
+            obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+        }
+      }
+      if (obj.isAlertIcon && obj.id === e.target.hash)
+        obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
+    })
+
+    templateEditorStore.canvas.renderAll()
+  })
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
@@ -334,6 +352,7 @@ function addEventsToCanvas() {
             left: event.absolutePointer.x,
             top: 0,
             stroke: '#3978eb',
+            selectable: false,
 
           })
           templateEditorStore.canvas.add(tempXMargin)
@@ -341,6 +360,7 @@ function addEventsToCanvas() {
             left: 0, // event.absolutePointer.x,
             top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10),
             stroke: '#3978eb',
+            selectable: false,
 
           })
           templateEditorStore.canvas.add(tempYMargin)
@@ -374,6 +394,7 @@ function addEventsToCanvas() {
                 left: event.absolutePointer.x,
                 top: 0,
                 stroke: '#3978eb',
+                selectable: false,
 
               })
 
@@ -382,6 +403,7 @@ function addEventsToCanvas() {
                 left: 0,
                 top: event.absolutePointer.y,
                 stroke: '#3978eb',
+                selectable: false,
 
               })
               templateEditorStore.canvas.add(tempYMargin)
@@ -457,6 +479,7 @@ function addEventsToCanvas() {
           stroke: '#3978eb',
           id: e.target.hash,
           fieldType: textEle.fieldType,
+          selectable: false,
         }))
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0, // event.absolutePointer.x,
@@ -464,6 +487,7 @@ function addEventsToCanvas() {
           stroke: '#3978eb',
           id: e.target.hash,
           fieldType: textEle.fieldType,
+          selectable: false,
         }))
       })
       textEle.on('mouseout', (e) => {
@@ -541,6 +565,7 @@ function addEventsToCanvas() {
               stroke: '#3978eb',
               id: e.target.hash,
               fieldType: myImg.fieldType,
+              selectable: false,
 
             }))
             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
@@ -550,6 +575,7 @@ function addEventsToCanvas() {
               stroke: '#3978eb',
               id: e.target.hash,
               fieldType: myImg.fieldType,
+              selectable: false,
             }))
           })
           myImg.on('mouseout', (e) => {

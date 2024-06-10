@@ -85,9 +85,10 @@ function toggleMargins() {
             top: 0,
             stroke: '#3978eb',
             id: obj.hash,
-            selection: false,
+            selectable: false,
             fieldType: obj.fieldType,
             pageNo: templateEditorStore.activePageForCanvas,
+            selectable: false,
           }))
 
           if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
@@ -96,9 +97,10 @@ function toggleMargins() {
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
               stroke: '#3978eb',
               id: obj.hash,
-              selection: false,
+              selectable: false,
               fieldType: obj.fieldType,
               pageNo: templateEditorStore.activePageForCanvas,
+              selectable: false,
             }))
           }
           else {
@@ -107,9 +109,10 @@ function toggleMargins() {
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
               stroke: '#3978eb',
               id: obj.hash,
-              selection: false,
+              selectable: false,
               fieldType: obj.fieldType,
               pageNo: templateEditorStore.activePageForCanvas,
+              selectable: false,
             }))
           }
         }
@@ -140,7 +143,7 @@ function showMargins() {
         top: 0,
         stroke: '#3978eb',
         id: obj.hash,
-        selection: false,
+        selectable: false,
         fieldType: obj.fieldType,
         pageNo: templateEditorStore.activePageForCanvas,
       }))
@@ -151,7 +154,7 @@ function showMargins() {
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
           stroke: '#3978eb',
           id: obj.hash,
-          selection: false,
+          selectable: false,
           fieldType: obj.fieldType,
           pageNo: templateEditorStore.activePageForCanvas,
         }))
@@ -162,7 +165,7 @@ function showMargins() {
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
           stroke: '#3978eb',
           id: obj.hash,
-          selection: false,
+          selectable: false,
           fieldType: obj.fieldType,
           pageNo: templateEditorStore.activePageForCanvas,
         }))
@@ -212,6 +215,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         stroke: '#3978eb',
         id: e.target.hash,
         fieldType: obj.fieldType,
+        selectable: false,
       }))
       if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
@@ -220,6 +224,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           stroke: '#3978eb',
           id: e.target.hash,
           fieldType: obj.fieldType,
+          selectable: false,
         }))
       }
       else {
@@ -229,6 +234,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           stroke: '#3978eb',
           id: e.target.hash,
           fieldType: obj.fieldType,
+          selectable: false,
         }))
       }
     })
