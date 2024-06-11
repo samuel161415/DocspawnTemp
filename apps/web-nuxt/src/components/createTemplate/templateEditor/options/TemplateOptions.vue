@@ -47,7 +47,7 @@ watch(() => templateEditorStore.watermarkImage, (newVal) => {
   if (newVal.src) {
     const objs = templateEditorStore.canvas._objects
 
-    templateEditorStore.canvas.objects = objs.map((obj) => {
+    templateEditorStore.canvas.objects = objs?.map((obj) => {
       if (obj._element && obj.id === 'watermark-docspawn') {
         const originalHeight = obj.height * obj.scaleY
         const originalWidth = obj.width * obj.scaleX

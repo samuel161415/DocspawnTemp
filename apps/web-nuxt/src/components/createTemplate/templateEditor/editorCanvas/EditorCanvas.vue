@@ -126,7 +126,8 @@ async function createCanvas() {
   const canvasWrapperWidth = canvasWrapper.value.clientWidth > 0 ? canvasWrapper.value.clientWidth : 900
 
   templateEditorStore.fabric = fabric
-  const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
+  const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false })
+
   templateEditorStore.canvas = canvas
   const response = await fetch(templateEditorStore.templateBackgroundUrl)
   const pdfData = await response.arrayBuffer()
@@ -208,7 +209,6 @@ async function createCanvas() {
 
     // templateEditorStore.activeDisplayGuide = !!activeObject.displayGuide
     if (activeObject && activeObject?.id !== 'watermark-docspawn') {
-      console.log('ctive object', activeObject.id)
       templateEditorStore.anyObjectSelected = true
       templateEditorStore.activeDisplayGuide = activeObject.displayGuide
       templateEditorStore.ShowAddedFieldsinTemplateFields = true
@@ -272,7 +272,7 @@ function addEventsToCanvas() {
   /** */
   templateEditorStore.canvas.on('object:moving', (e) => {
     templateEditorStore.canvas._objects.forEach((obj) => {
-      if (obj.id === 'watermark-docspawn') {
+      if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
         if (e.target.left <= 0)
           obj.set({ left: 0 })
         if (e.target.top <= 0)
@@ -300,6 +300,9 @@ function addEventsToCanvas() {
   })
   templateEditorStore.canvas.on('object:scaling', (e) => {
     templateEditorStore.canvas._objects.forEach((obj) => {
+      if (obj.id === 'watermark-docspawn')
+        return
+
       if (obj.id === e.target.hash && obj.stroke) {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
@@ -319,11 +322,11 @@ function addEventsToCanvas() {
   let tempXMargin = null
   let tempYMargin = null
   templateEditorStore.canvas.on('mouse:move', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time'
       hoveredElement.value = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
@@ -370,7 +373,7 @@ function addEventsToCanvas() {
 
       templateEditorStore.canvas.renderAll()
     }
-    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
+    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image') {
       fabric.Image.fromURL(
         'https://placehold.co/300x200?text=DocSpawn'
         , (myImg) => {
@@ -418,7 +421,7 @@ function addEventsToCanvas() {
   })
 
   templateEditorStore.canvas.on('mouse:down', (event) => {
-    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+    if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
       if (hoveredElement.value)
         templateEditorStore.canvas.remove(hoveredElement.value)
 
@@ -435,7 +438,8 @@ function addEventsToCanvas() {
       }
       templateEditorStore.canvas.renderAll()
 
-      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text'
+      const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time'
+
       const textEle = new templateEditorStore.fabric.Text(
         `${templateEditorStore.fieldToAdd.name}`,
         {
@@ -512,7 +516,7 @@ function addEventsToCanvas() {
       const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
       templateEditorStore.addedFields = remainingFields
     }
-    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image') {
+    if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image') {
       const ftoadd = templateEditorStore.fieldToAdd
       templateEditorStore.fieldToAdd = {}
       fabric.Image.fromURL(
@@ -548,10 +552,12 @@ function addEventsToCanvas() {
 
           const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
           }
+
           const allFields = []
           templateEditorStore.addedFields.forEach((f) => {
             allFields.push(JSON.parse(JSON.stringify(f)))
           })
+
           allFields.push(fieldToAdd)
           templateEditorStore.addedFields = allFields
           templateEditorStore.canvas.renderAll()

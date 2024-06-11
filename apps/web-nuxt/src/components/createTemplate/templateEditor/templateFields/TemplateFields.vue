@@ -20,13 +20,13 @@
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="px-5 h-[62px] flex items-center mb-3 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore?.selectedAddedField?.hash === field?.hash, 'border-surface-100 bg-surface-50': templateEditorStore?.selectedAddedField?.hash !== field?.hash }">
           <div class=" h-full w-full py-2 cursor-pointer overflow-hidden" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
-            <p v-if="field.name === 'Lorem ipsum' && (field?.fieldType !== 'Static text' && field?.fieldType !== 'Form text')" class="font-poppins text-red-400 text-lg mt-1">
+            <p v-if="field.name === 'Lorem ipsum' && (field?.fieldType !== 'Static text' && field?.fieldType !== 'Form text' && field?.fieldType !== 'Form image' && field?.fieldType !== 'Form date' && field?.fieldType !== 'Form time')" class="font-poppins text-red-400 text-lg mt-1">
               Select a data field
             </p>
-            <p v-else-if="field.name === 'Add text' && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
+            <p v-else-if="(field.name === 'Add text' || field.name === 'Lorem ipsum') && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
               Add text
             </p>
-            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && field?.fieldType === 'Form text'" class="font-poppins text-red-400 text-lg mt-1 ">
+            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time')" class="font-poppins text-red-400 text-lg mt-1 ">
               Add field name
             </p>
             <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
@@ -417,6 +417,12 @@ function selectField(field) {
   else if (field === 'Static time')
     templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
   else if (field === 'Form text')
+    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+  else if (field === 'Form image')
+    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+  else if (field === 'Form date')
+    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+  else if (field === 'Form time')
     templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
   else
     templateEditorStore.fieldToAdd = { name: field, type: field, id: field }
