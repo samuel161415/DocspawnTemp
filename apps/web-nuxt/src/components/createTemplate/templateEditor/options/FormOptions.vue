@@ -155,6 +155,8 @@ function fillUpOptions() {
   const sF = templateEditorStore.selectedAddedField
   if (sF?.name !== 'Lorem ipsum' && sF?.name !== 'Add field name')
     fieldName.value = sF?.name
+  else
+    fieldName.value = ''
 
   isRequired.value = !!sF?.isRequired
   if (sF?.fieldDescription)
