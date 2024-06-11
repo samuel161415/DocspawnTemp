@@ -126,7 +126,8 @@ async function createCanvas() {
   const canvasWrapperWidth = canvasWrapper.value.clientWidth > 0 ? canvasWrapper.value.clientWidth : 900
 
   templateEditorStore.fabric = fabric
-  const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false })
+  const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false,
+  })
 
   templateEditorStore.canvas = canvas
   const response = await fetch(templateEditorStore.templateBackgroundUrl)
@@ -286,7 +287,7 @@ function addEventsToCanvas() {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
         if (obj.left === 0) {
-          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image')
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image')
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
           else
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
@@ -307,7 +308,7 @@ function addEventsToCanvas() {
         if (obj.top === 0)
           obj.set({ top: 0, left: e.target.left })
         if (obj.left === 0) {
-          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image')
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image')
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
           else
             obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })

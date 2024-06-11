@@ -1,7 +1,7 @@
 <template>
   <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
-      <div
+      <!-- <div
         v-tooltip.top="'Display guide'"
       >
         <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
@@ -10,7 +10,7 @@
         <div v-else class="cursor-pointer text-primary-500 " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
           <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
-      </div>
+      </div> -->
       <div
         v-tooltip.top="'Advanced pointer'"
       >
@@ -91,7 +91,7 @@ function toggleMargins() {
             selectable: false,
           }))
 
-          if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
+          if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
               left: 0,
               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -148,7 +148,7 @@ function showMargins() {
         pageNo: templateEditorStore.activePageForCanvas,
       }))
 
-      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
+      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0,
           top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -217,7 +217,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
         fieldType: obj.fieldType,
         selectable: false,
       }))
-      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image') {
+      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
         templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
           left: 0,
           top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
