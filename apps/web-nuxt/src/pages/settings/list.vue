@@ -280,13 +280,15 @@ const handleAddItems = (data) => {
 }
 
 const handleEditItem = (data) => {
-
+   
     editableItem.value = data;
     openItemOptions.value = true;
 
     tableData.value.sublists.map((sublist) => {
         if (sublist.id === data.id) {
             sublist.title = data.title;
+            sublist.sublists = data.sublists;
+
         }
     });
 }

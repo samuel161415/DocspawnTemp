@@ -20,7 +20,7 @@ export default {
             // States
             'hover:border-primary-500 dark:hover:border-primary-300',
             { 'outline-none outline-offset-0 ring ring-primary-400/50 dark:ring-primary-300/50': state.focused },
-
+            'font-poppins',
             // Misc
             'cursor-pointer',
             'select-none',
@@ -30,7 +30,7 @@ export default {
     input: ({ props }) => ({
         class: [
             //Font
-            'font-sans',
+            'font-poppins',
             'leading-none',
 
             // Display
@@ -40,7 +40,7 @@ export default {
             // Color and Background
             'bg-transparent',
             'border-0',
-            { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-400 dark:text-surface-500': !props.modelValue },
+            { 'text-surface-800 dark:text-white/80': props.modelValue, 'text-surface-500 dark:text-surface-500': !props.modelValue },
             'placeholder:text-surface-400 dark:placeholder:text-surface-500',
 
             // Sizing and Spacing
@@ -115,7 +115,7 @@ export default {
     item: ({ context }) => ({
         class: [
             // Font
-            'font-normal',
+            'font-normal font-poppins',
             'leading-none',
 
             // Position
@@ -203,7 +203,7 @@ export default {
     filterinput: {
         class: [
             // Font
-            'font-sans',
+            'font-poppins',
             'leading-none',
 
             // Sizing
