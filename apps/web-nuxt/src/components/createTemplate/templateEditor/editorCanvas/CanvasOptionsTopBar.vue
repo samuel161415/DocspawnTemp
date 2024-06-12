@@ -323,7 +323,6 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
 
         if (!obj._element && obj?.id !== 'Lorem ipsum') {
           const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-          console.log('correspondingData', correspondingData)
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }

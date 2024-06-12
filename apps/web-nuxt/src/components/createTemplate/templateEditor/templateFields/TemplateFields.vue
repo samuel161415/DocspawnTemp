@@ -282,7 +282,7 @@ function duplicateField(field) {
 
                 const objs = canvas._objects
                 canvas._objects = objs.filter((obj) => {
-                  if (obj?.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+                  if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
                     return false
                   else
                     return true

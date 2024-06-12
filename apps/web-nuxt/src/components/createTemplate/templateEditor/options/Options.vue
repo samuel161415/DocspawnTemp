@@ -242,7 +242,7 @@ watch(activeDataField, () => {
 
     const objs = canvas._objects
     canvas._objects = objs.filter((obj) => {
-      if (obj.id === activeObject.hash && obj.isAlertIcon && activeDataField.value !== 'Lorem ipsum')
+      if (obj.id === activeObject?.hash && obj.isAlertIcon && activeDataField.value !== 'Lorem ipsum')
         return false
       else
         return true
