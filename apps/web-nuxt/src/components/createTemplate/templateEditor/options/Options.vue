@@ -35,6 +35,8 @@
             Styles will be applied once you select a data field
           </p>
         </div>
+        <!-- /**************************** */ -->
+        <ElementRotation />
         <!-- /*************************************************************/ -->
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
           <p class="mb-1 font-poppins">
@@ -158,6 +160,7 @@
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
+import ElementRotation from './ElementRotation.vue'
 import TemplateOptions from './TemplateOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'

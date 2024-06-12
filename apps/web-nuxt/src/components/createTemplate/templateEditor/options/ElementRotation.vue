@@ -1,0 +1,76 @@
+<template>
+  <div class="my-4 bg-white p-2 ">
+    <div class="h-12 w-full  flex items-center justify-between">
+      <div class="font-poppins">
+        Rotation
+        <!-- : <span class="text-primary-500">{{ rotationVal }} deg</span> -->
+      </div>
+      <div class="flex gap-2">
+        <div v-tooltip.top="'rotate 45 deg clockwise'" class="h-8 w-8 text-2xl text-surface-600  flex items-center justify-center rounded-md cursor-pointer p-2 bg-blue-300" @click="rotateClockwise">
+          <font-awesome-icon icon="fa-sharp fa-arrow-rotate-right" size="xs" />
+        </div>
+        <div v-tooltip.top="'rotate 45 deg anti-clockwise'" class="h-8 w-8 text-2xl text-surface-600  flex items-center justify-center rounded-md cursor-pointer p-2 bg-blue-300" @click="rotateAntiClockwise">
+          <font-awesome-icon icon="fa-sharp fa-arrow-rotate-left" size="xs" />
+        </div>
+      </div>
+    </div>
+    <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field') " class="font-poppins text-sm text-surface-500 mt-2">
+      Apply rotation to the element on pdf
+    </p>
+  </div>
+</template>
+
+<script setup>
+import canvasService from '@/composables/useTemplateCanvas'
+import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+
+const rotationVal = ref(0)
+
+function initiateRotation() {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    if (activeObject) {
+      if (!activeObject?.angle || activeObject?.angle === 0) {
+        // activeObject.set({ angle: 0 })
+        activeObject.rotate(0)
+        rotationVal.value = 0
+        canvas.renderAll()
+      }
+      else {
+        rotationVal.value = activeObject?.angle
+      }
+    }
+  }
+}
+onMounted(() => {
+  initiateRotation()
+})
+watch(() => templateEditorStore.selectedAddedField, () => {
+  initiateRotation()
+})
+function rotateClockwise() {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    const ang = activeObject?.angle ? activeObject?.angle + 45 : 0 + 45
+
+    // activeObject.set({ angle: ang })
+    activeObject.rotate(ang)
+    rotationVal.value = ang
+    canvas.renderAll()
+  }
+}
+function rotateAntiClockwise() {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    const ang = activeObject?.angle ? activeObject?.angle - 45 : -45
+    rotationVal.value = ang
+
+    // activeObject.set({ angle: ang })
+    activeObject.rotate(ang)
+    canvas.renderAll()
+  }
+}
+</script>

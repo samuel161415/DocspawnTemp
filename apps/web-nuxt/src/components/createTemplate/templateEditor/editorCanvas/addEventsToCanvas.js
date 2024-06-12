@@ -423,6 +423,7 @@ export default function addEventsToCanvas() {
                 selectable: false,
               }))
             })
+
             myImg.on('mouseout', (e) => {
               if (!templateEditorStore.activeAdvancedPointer)
                 return
