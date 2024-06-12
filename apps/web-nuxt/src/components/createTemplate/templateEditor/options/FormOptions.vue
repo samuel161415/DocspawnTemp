@@ -163,7 +163,7 @@ function fillUpOptions() {
   if (sF?.fieldDescription)
     fieldDescription.value = sF?.fieldDescription
 
-  if (sF?.fieldType === 'Form date') {
+  if (sF?.fieldType === 'Form text') {
     if (sF?.allowDecimals)
       allowDecimals.value = sF?.allowDecimals
     if (sF?.minCharAllowed)
