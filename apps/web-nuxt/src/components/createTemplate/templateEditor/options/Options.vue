@@ -160,6 +160,7 @@ import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
 import TemplateOptions from './TemplateOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()
@@ -175,48 +176,58 @@ function getFile(e) {
 }
 
 watch(constantTextValue, () => {
-  const activeObj = templateEditorStore.canvas.getActiveObject()
-  if (activeObj) {
-    if (constantTextValue.value)
-      activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: constantTextValue.value, id: constantTextValue.value })
-    else
-      activeObj.set({ text: 'Add text', fill: '#ff0000', id: 'Lorem ipsum' })
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObj = canvas.getActiveObject()
+    if (activeObj) {
+      if (constantTextValue.value)
+        activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: constantTextValue.value, id: constantTextValue.value })
+      else
+        activeObj.set({ text: 'Add text', fill: '#ff0000', id: 'Lorem ipsum' })
+    }
+    canvas.renderAll()
+    const allFs = templateEditorStore.addedFields
+    templateEditorStore.addedFields = allFs.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+        return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Add text', id: constantTextValue.value ? constantTextValue.value : 'Lorem ipsum' }
+      else return f
+    })
   }
-  templateEditorStore.canvas.renderAll()
-  const allFs = templateEditorStore.addedFields
-  templateEditorStore.addedFields = allFs.map((f) => {
-    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: constantTextValue.value ? constantTextValue.value : 'Add text', id: constantTextValue.value ? constantTextValue.value : 'Lorem ipsum' }
-    else return f
-  })
 })
 watch(selectedTimeFormat, () => {
-  const activeObj = templateEditorStore.canvas.getActiveObject()
-  if (activeObj)
-    activeObj.set({ text: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' })
-  templateEditorStore.canvas.renderAll()
-  const allFs = templateEditorStore.addedFields
-  templateEditorStore.addedFields = allFs.map((f) => {
-    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' }
-    else return f
-  })
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObj = canvas.getActiveObject()
+    if (activeObj)
+      activeObj.set({ text: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' })
+    canvas.renderAll()
+    const allFs = templateEditorStore.addedFields
+    templateEditorStore.addedFields = allFs.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+        return { ...f, name: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS', id: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : 'HH:MM:SS' }
+      else return f
+    })
+  }
 })
 watch(selectedDateFormat, () => {
-  const activeObj = templateEditorStore.canvas.getActiveObject()
-  if (activeObj)
-    activeObj.set({ text: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' })
-  templateEditorStore.canvas.renderAll()
-  const allFs = templateEditorStore.addedFields
-  templateEditorStore.addedFields = allFs.map((f) => {
-    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
-    else return f
-  })
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObj = canvas.getActiveObject()
+    if (activeObj)
+      activeObj.set({ text: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' })
+    canvas.renderAll()
+    const allFs = templateEditorStore.addedFields
+    templateEditorStore.addedFields = allFs.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+        return { ...f, name: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
+      else return f
+    })
+  }
 })
 
 watch(activeDataField, () => {
-  if (templateEditorStore.canvas) {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
     templateEditorStore.activeDataField = activeDataField.value
 
     templateEditorStore.addedFields = templateEditorStore.addedFields.map((field) => {
@@ -227,10 +238,10 @@ watch(activeDataField, () => {
     })
 
     templateEditorStore.selectedAddedField.name = activeDataField.value
-    const activeObject = templateEditorStore.canvas.getActiveObject()
+    const activeObject = canvas.getActiveObject()
 
-    const objs = templateEditorStore.canvas._objects
-    templateEditorStore.canvas._objects = objs.filter((obj) => {
+    const objs = canvas._objects
+    canvas._objects = objs.filter((obj) => {
       if (obj.id === activeObject.hash && obj.isAlertIcon && activeDataField.value !== 'Lorem ipsum')
         return false
       else
@@ -249,7 +260,7 @@ watch(activeDataField, () => {
       }
     })
 
-    templateEditorStore.canvas.renderAll()
+    canvas.renderAll()
   }
 })
 

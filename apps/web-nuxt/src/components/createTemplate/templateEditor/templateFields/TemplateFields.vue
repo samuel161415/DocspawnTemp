@@ -209,6 +209,7 @@
 import { uuid } from 'vue-uuid'
 import { useConfirm } from 'primevue/useconfirm'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const showFormFields = ref(false)
 const showDataFields = ref(false)
@@ -221,108 +222,90 @@ const confirm = useConfirm()
 
 function duplicateField(field) {
   const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
-
-  const objs = templateEditorStore.canvas._objects
-  objs.forEach((obj) => {
-    if (obj.hash === field.hash) {
-      if (obj?._element && !obj.stroke && !obj.isAlertIcon) {
-        fabric.Image.fromURL(
-          'https://placehold.co/300x200?text=DocSpawn'
-          , (myImg) => {
-            myImg.set({
-              left: 20,
-              top: 20,
-              scaleX: obj.scaleX,
-              scaleY: obj.scaleY,
-              height: obj.height,
-              width: obj.width,
-              id: obj.id,
-              hash: uuid.v1(),
-              fieldType: obj.fieldType,
-              pageNo: obj.pageNo,
-              displayGuide: false,
-            })
-
-            if (obj?.id === 'Lorem ipsum') {
-              fabric.Image.fromURL(
-                alertIconUrl
-                , (imgia) => {
-                  imgia.set({
-                    left: myImg.left + (myImg.width * myImg.scaleX),
-                    top: myImg.top,
-                    scaleX: 0.07,
-                    scaleY: 0.07,
-                    isAlertIcon: true,
-                    id: myImg.hash,
-                    pageNo: myImg.pageNo,
-                    displayGuide: false,
-                    selectable: false,
-                  })
-                  templateEditorStore.canvas.add(imgia)
-                  templateEditorStore.canvas.renderAll()
-                },
-              )
-            }
-
-            const fieldToAdd = { fieldType: myImg.fieldType, name: myImg.id, hash: myImg.hash, page: myImg.pageNo,
-            }
-            const allFields = []
-            templateEditorStore.addedFields.forEach((f) => {
-              allFields.push(JSON.parse(JSON.stringify(f)))
-            })
-            allFields.push(fieldToAdd)
-
-            templateEditorStore.addedFields = allFields
-            templateEditorStore.canvas.renderAll()
-
-            myImg.on('mouseover', (e) => {
-              if (!templateEditorStore.activeAdvancedPointer)
-                return
-              templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-                left: e.target.left,
-                top: 0,
-                stroke: '#3978eb',
-                id: e.target.hash,
-                fieldType: myImg.fieldType,
-
-              }))
-              templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-                left: 0, // event.absolutePointer.x,
-                top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
-
-                stroke: '#3978eb',
-                id: e.target.hash,
-                fieldType: myImg.fieldType,
-              }))
-            })
-            myImg.on('mouseout', (e) => {
-              if (!templateEditorStore.activeAdvancedPointer)
-                return
-
-              const objs = templateEditorStore.canvas._objects
-              templateEditorStore.canvas._objects = objs.filter((obj) => {
-                if (obj?.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
-                  return false
-                else
-                  return true
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const objs = canvas._objects
+    objs.forEach((obj) => {
+      if (obj.hash === field.hash) {
+        if (obj?._element && !obj.stroke && !obj.isAlertIcon) {
+          fabric.Image.fromURL(
+            'https://placehold.co/300x200?text=DocSpawn'
+            , (myImg) => {
+              myImg.set({
+                left: 20,
+                top: 20,
+                scaleX: obj.scaleX,
+                scaleY: obj.scaleY,
+                height: obj.height,
+                width: obj.width,
+                id: obj.id,
+                hash: uuid.v1(),
+                fieldType: obj.fieldType,
+                pageNo: obj.pageNo,
+                displayGuide: false,
               })
 
-              templateEditorStore.canvas.renderAll()
-            })
+              const fieldToAdd = { fieldType: myImg.fieldType, name: myImg.id, hash: myImg.hash, page: myImg.pageNo,
+              }
+              const allFields = []
+              templateEditorStore.addedFields.forEach((f) => {
+                allFields.push(JSON.parse(JSON.stringify(f)))
+              })
+              allFields.push(fieldToAdd)
 
-            templateEditorStore.canvas.add(myImg)
-            templateEditorStore.canvas.renderAll()
-            setTimeout(() => selectAddedField({ ...fieldToAdd, obj: myImg }), 50)
-          },
-        )
-      }
-      else {
-        const ele = new templateEditorStore.fabric.Text(
+              templateEditorStore.addedFields = allFields
+              canvas.renderAll()
+
+              myImg.on('mouseover', (e) => {
+                if (!templateEditorStore.activeAdvancedPointer)
+                  return
+                canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+                  left: e.target.left,
+                  top: 0,
+                  stroke: '#3978eb',
+                  id: e.target.hash,
+                  fieldType: myImg.fieldType,
+
+                }))
+                canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+                  left: 0, // event.absolutePointer.x,
+                  top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+
+                  stroke: '#3978eb',
+                  id: e.target.hash,
+                  fieldType: myImg.fieldType,
+                }))
+              })
+              myImg.on('mouseout', (e) => {
+                if (!templateEditorStore.activeAdvancedPointer)
+                  return
+
+                const objs = canvas._objects
+                canvas._objects = objs.filter((obj) => {
+                  if (obj?.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+                    return false
+                  else
+                    return true
+                })
+
+                canvas.renderAll()
+              })
+
+              canvas.add(myImg)
+              canvas.renderAll()
+              setTimeout(() => selectAddedField({ ...fieldToAdd, obj: myImg }), 50)
+            },
+          )
+        }
+        else {
+          const ele = new templateEditorStore.fabric.Text(
         `${obj.text}`,
         {
 
           top: 20,
           left: 20,
+          scaleX: obj.scaleX,
+          scaleY: obj.scaleY,
           fill: obj.fill,
           fontFamily: obj.fontFamily,
           fontSize: obj.fontSize,
@@ -336,129 +319,139 @@ function duplicateField(field) {
           hash: uuid.v1(),
           pageNo: obj.pageNo,
         },
-        )
-        templateEditorStore.canvas.add(ele)
+          )
+          canvas.add(ele)
 
-        const fieldToAdd = { ...field, fieldType: field.fieldType, name: field.name, hash: ele.hash, page: ele.pageNo, obj: ele }
-        const allFields = []
-        templateEditorStore.addedFields.forEach((f) => {
-          allFields.push(JSON.parse(JSON.stringify(f)))
-        })
-        allFields.push(fieldToAdd)
-        templateEditorStore.addedFields = allFields
+          const fieldToAdd = { ...field, fieldType: field.fieldType, name: field.name, hash: ele.hash, page: ele.pageNo, obj: ele }
+          const allFields = []
+          templateEditorStore.addedFields.forEach((f) => {
+            allFields.push(JSON.parse(JSON.stringify(f)))
+          })
+          allFields.push(fieldToAdd)
+          templateEditorStore.addedFields = allFields
 
-        ele.on('mouseover', (e) => {
-          if (!templateEditorStore.activeAdvancedPointer)
-            return
-          templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-            left: e.target.left,
-            top: 0,
-            stroke: '#3978eb',
-            id: e.target.hash,
-            fieldType: ele.fieldType,
-          }))
-          templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-            left: 0,
-            top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
-            stroke: '#3978eb',
-            id: e.target.hash,
-            fieldType: ele.fieldType,
-          }))
-        })
-        ele.on('mouseout', (e) => {
-          if (!templateEditorStore.activeAdvancedPointer)
-            return
+          ele.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: ele.fieldType,
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: ele.fieldType,
+            }))
+          })
+          ele.on('mouseout', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
 
-          const objs = templateEditorStore.canvas._objects
-          templateEditorStore.canvas._objects = objs.filter((obj) => {
-            if (obj.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
-              return false
-            else
-              return true
+            const objs = canvas._objects
+            canvas._objects = objs.filter((obj) => {
+              if (obj.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+                return false
+              else
+                return true
+            })
+
+            canvas.renderAll()
           })
 
-          templateEditorStore.canvas.renderAll()
-        })
-
-        templateEditorStore.canvas.setActiveObject(ele)
-        templateEditorStore.canvas.renderAll()
-        setTimeout(() => selectAddedField(fieldToAdd), 50)
+          canvas.setActiveObject(ele)
+          canvas.renderAll()
+          setTimeout(() => selectAddedField(fieldToAdd), 50)
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 function deleteField() {
-  templateEditorStore.canvas._objects = templateEditorStore.canvas._objects.filter((obj) => {
-    if (obj?.hash === fieldToDelete?.value?.hash || obj.id === fieldToDelete?.value?.hash)
-      return false
-    else
-      return true
-  })
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas._objects = canvas._objects.filter((obj) => {
+      if (obj?.hash === fieldToDelete?.value?.hash || obj.id === fieldToDelete?.value?.hash)
+        return false
+      else
+        return true
+    })
 
-  const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== fieldToDelete?.value?.hash)
-  templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
-  templateEditorStore.canvas.discardActiveObject()
-  templateEditorStore.canvas.renderAll()
-  templateEditorStore.showOptionsBar = false
-  deleteText.value = ''
+    const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== fieldToDelete?.value?.hash)
+    templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
+    canvas.discardActiveObject()
+    canvas.renderAll()
+    templateEditorStore.showOptionsBar = false
+    deleteText.value = ''
+  }
 }
 
 function selectField(field) {
-  templateEditorStore.canvas.discardActiveObject()
-  templateEditorStore.canvas.renderAll()
-  templateEditorStore.activeTemplateField = field
-  if (field === 'Data field' || field === 'Dataset image')
-    templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
-  else if (field === 'Static text')
-    templateEditorStore.fieldToAdd = { name: 'Add text', type: field, id: 'Lorem ipsum' }
-  else if (field === 'Static date')
-    templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
-  else if (field === 'Static time')
-    templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
-  else if (field === 'Form text')
-    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
-  else if (field === 'Form image')
-    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
-  else if (field === 'Form date')
-    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
-  else if (field === 'Form time')
-    templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
-  else
-    templateEditorStore.fieldToAdd = { name: field, type: field, id: field }
-  templateEditorStore.showOptionsBar = true
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas.discardActiveObject()
+    canvas.renderAll()
+    templateEditorStore.activeTemplateField = field
+    if (field === 'Data field' || field === 'Dataset image')
+      templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Static text')
+      templateEditorStore.fieldToAdd = { name: 'Add text', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Static date')
+      templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
+    else if (field === 'Static time')
+      templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
+    else if (field === 'Form text')
+      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form image')
+      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form date')
+      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form time')
+      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else
+      templateEditorStore.fieldToAdd = { name: field, type: field, id: field }
+    templateEditorStore.showOptionsBar = true
+  }
 }
 
 function selectAddedField(field) {
-  templateEditorStore.canvas.discardActiveObject()
-  templateEditorStore.canvas.renderAll()
-  templateEditorStore.canvas._objects.forEach((obj) => {
-    if (obj.hash === field.hash) {
-      if (field.page !== templateEditorStore.activePageForCanvas) {
-        templateEditorStore.activePageForCanvas = field.page
-        setTimeout(() => {
-          templateEditorStore.canvas.setActiveObject(obj)
-          templateEditorStore.canvas.renderAll()
-        }, 500)
-      }
-      else {
-        templateEditorStore.canvas.setActiveObject(obj)
-        templateEditorStore.canvas.renderAll()
-      }
-      templateEditorStore.selectedAddedField = { ...field, obj }
-      templateEditorStore.showOptionsBar = true
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas.discardActiveObject()
+    canvas.renderAll()
+    canvas._objects.forEach((obj) => {
+      if (obj.hash === field.hash) {
+        if (field.page !== templateEditorStore.activePageForCanvas) {
+          templateEditorStore.activePageForCanvas = field.page
+          setTimeout(() => {
+            canvas.setActiveObject(obj)
+            canvas.renderAll()
+          }, 500)
+        }
+        else {
+          canvas.setActiveObject(obj)
+          canvas.renderAll()
+        }
+        templateEditorStore.selectedAddedField = { ...field, obj }
+        templateEditorStore.showOptionsBar = true
 
-      if (obj.text && obj.id !== 'Lorem ipsum') {
-        activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
-        activeTextStyles.fontFamily = obj.fontFamily ? obj.fontFamily : 'Arial'
-        activeTextStyles.fontSize = obj.fontSize ? obj.fontSize : 32
-        activeTextStyles.underline = obj.underline ? obj.underline : false
-        activeTextStyles.textAlign = obj.textAlign ? obj.textAlign : 'center'
-        activeTextStyles.fontStyle = obj.fontStyle ? obj.fontStyle : 'normal'
-        activeTextStyles.fontWeight = obj.fontWeight ? obj.fontWeight : 300
+        if (obj.text && obj.id !== 'Lorem ipsum') {
+          activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
+          activeTextStyles.fontFamily = obj.fontFamily ? obj.fontFamily : 'Arial'
+          activeTextStyles.fontSize = obj.fontSize ? obj.fontSize : 32
+          activeTextStyles.underline = obj.underline ? obj.underline : false
+          activeTextStyles.textAlign = obj.textAlign ? obj.textAlign : 'center'
+          activeTextStyles.fontStyle = obj.fontStyle ? obj.fontStyle : 'normal'
+          activeTextStyles.fontWeight = obj.fontWeight ? obj.fontWeight : 300
+        }
       }
-    }
-  })
+    })
+  }
 }
 
 function confirm2(event) {

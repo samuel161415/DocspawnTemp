@@ -58,6 +58,7 @@
 
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const currentPreviewNo = ref(1)
 
@@ -72,189 +73,200 @@ function changePreviewNo(dir) {
   }
 }
 
-function toggleMargins() {
-  const activeObject = templateEditorStore.canvas.getActiveObject()
+// function toggleMargins() {
+//   const activeObject = templateEditorStore.canvas.getActiveObject()
 
-  if (activeObject) {
-    if (templateEditorStore.activeDisplayGuide) {
-      const objs = templateEditorStore.canvas._objects
-      objs.forEach((obj) => {
-        if (obj === activeObject) {
-          templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-            left: obj.left,
-            top: 0,
+//   if (activeObject) {
+//     if (templateEditorStore.activeDisplayGuide) {
+//       const objs = templateEditorStore.canvas._objects
+//       objs.forEach((obj) => {
+//         if (obj === activeObject) {
+//           templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+//             left: obj.left,
+//             top: 0,
+//             stroke: '#3978eb',
+//             id: obj.hash,
+//             selectable: false,
+//             fieldType: obj.fieldType,
+//             pageNo: templateEditorStore.activePageForCanvas,
+//             selectable: false,
+//           }))
+
+//           if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+//             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+//               left: 0,
+//               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
+//               stroke: '#3978eb',
+//               id: obj.hash,
+//               selectable: false,
+//               fieldType: obj.fieldType,
+//               pageNo: templateEditorStore.activePageForCanvas,
+//               selectable: false,
+//             }))
+//           }
+//           else {
+//             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+//               left: 0,
+//               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+//               stroke: '#3978eb',
+//               id: obj.hash,
+//               selectable: false,
+//               fieldType: obj.fieldType,
+//               pageNo: templateEditorStore.activePageForCanvas,
+//               selectable: false,
+//             }))
+//           }
+//         }
+//       })
+//       templateEditorStore.canvas.renderAll()
+//     }
+//     else {
+//       const objs = templateEditorStore.canvas._objects
+//       templateEditorStore.canvas._objects = objs.filter((obj) => {
+//         if (obj.stroke === '#3978eb' && obj.id === activeObject.hash)
+//           return false
+//         else
+//           return true
+//       })
+
+//       templateEditorStore.canvas.renderAll()
+//     }
+//   }
+// }
+function showMargins() {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const objs = canvas._objects
+
+    objs.forEach((obj) => {
+      if (obj.pageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon && obj?.id !== 'watermark-docspawn') {
+        obj.displayGuide = true
+        canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+          left: obj.left,
+          top: 0,
+          stroke: '#3978eb',
+          id: obj.hash,
+          selectable: false,
+          fieldType: obj.fieldType,
+          pageNo: templateEditorStore.activePageForCanvas,
+        }))
+
+        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            left: 0,
+            top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
             stroke: '#3978eb',
             id: obj.hash,
             selectable: false,
             fieldType: obj.fieldType,
             pageNo: templateEditorStore.activePageForCanvas,
-            selectable: false,
           }))
-
-          if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
-            templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-              left: 0,
-              top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
-              stroke: '#3978eb',
-              id: obj.hash,
-              selectable: false,
-              fieldType: obj.fieldType,
-              pageNo: templateEditorStore.activePageForCanvas,
-              selectable: false,
-            }))
-          }
-          else {
-            templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-              left: 0,
-              top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-              stroke: '#3978eb',
-              id: obj.hash,
-              selectable: false,
-              fieldType: obj.fieldType,
-              pageNo: templateEditorStore.activePageForCanvas,
-              selectable: false,
-            }))
-          }
         }
-      })
-      templateEditorStore.canvas.renderAll()
-    }
-    else {
-      const objs = templateEditorStore.canvas._objects
-      templateEditorStore.canvas._objects = objs.filter((obj) => {
-        if (obj.stroke === '#3978eb' && obj.id === activeObject.hash)
-          return false
-        else
-          return true
-      })
-
-      templateEditorStore.canvas.renderAll()
-    }
+        else {
+          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            left: 0,
+            top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
+            stroke: '#3978eb',
+            id: obj.hash,
+            selectable: false,
+            fieldType: obj.fieldType,
+            pageNo: templateEditorStore.activePageForCanvas,
+          }))
+        }
+      }
+    })
+    canvas.renderAll()
   }
 }
-function showMargins() {
-  const objs = templateEditorStore.canvas._objects
-
-  objs.forEach((obj) => {
-    if (obj.pageNo === templateEditorStore.activePageForCanvas && !obj.stroke && !obj.isAlertIcon && obj?.id !== 'watermark-docspawn') {
-      obj.displayGuide = true
-      templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-        left: obj.left,
-        top: 0,
-        stroke: '#3978eb',
-        id: obj.hash,
-        selectable: false,
-        fieldType: obj.fieldType,
-        pageNo: templateEditorStore.activePageForCanvas,
-      }))
-
-      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0,
-          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
-          stroke: '#3978eb',
-          id: obj.hash,
-          selectable: false,
-          fieldType: obj.fieldType,
-          pageNo: templateEditorStore.activePageForCanvas,
-        }))
-      }
-      else {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0,
-          top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-          stroke: '#3978eb',
-          id: obj.hash,
-          selectable: false,
-          fieldType: obj.fieldType,
-          pageNo: templateEditorStore.activePageForCanvas,
-        }))
-      }
-    }
-  })
-  templateEditorStore.canvas.renderAll()
-}
 function removeMargins() {
-  const objs = templateEditorStore.canvas._objects
-
-  templateEditorStore.canvas._objects = objs.filter((obj) => {
-    if (obj.displayGuide)
-      obj.displayGuide = false
-    if (obj.stroke === '#3978eb'
-      && obj.pageNo === templateEditorStore.activePageForCanvas)
-      return false
-    else
-      return true
-  })
-  templateEditorStore.canvas.renderAll()
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const objs = canvas._objects
+    canvas._objects = objs.filter((obj) => {
+      if (obj.displayGuide)
+        obj.displayGuide = false
+      if (obj.stroke === '#3978eb'
+        && obj.pageNo === templateEditorStore.activePageForCanvas)
+        return false
+      else
+        return true
+    })
+    canvas.renderAll()
+  }
 }
 
 watch(() => templateEditorStore.activeDisplayGuide, () => {
-  const activeObject = templateEditorStore.canvas.getActiveObject()
-  if (activeObject && activeObject?.id !== 'watermark-docspawn') {
-    if (templateEditorStore.activeDisplayGuide) {
-      activeObject.set({ displayGuide: true })
-      templateEditorStore.canvas.renderAll()
-    }
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    if (activeObject && activeObject?.id !== 'watermark-docspawn') {
+      if (templateEditorStore.activeDisplayGuide) {
+        activeObject.set({ displayGuide: true })
+        canvas.renderAll()
+      }
 
-    else {
-      activeObject.set({ displayGuide: false })
-      templateEditorStore.canvas.renderAll()
+      else {
+        activeObject.set({ displayGuide: false })
+        canvas.renderAll()
+      }
     }
   }
 })
 
 watch(templateEditorStore.activeAdvancedPointer, () => {
-  templateEditorStore.canvas._objects.forEach((obj) => {
-    obj.on('mouseover', (e) => {
-      if (!templateEditorStore.activeAdvancedPointer)
-        return
-      templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-        left: e.target.left,
-        top: 0,
-        stroke: '#3978eb',
-        id: e.target.hash,
-        fieldType: obj.fieldType,
-        selectable: false,
-      }))
-      if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0,
-          top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas._objects.forEach((obj) => {
+      obj.on('mouseover', (e) => {
+        if (!templateEditorStore.activeAdvancedPointer)
+          return
+        canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+          left: e.target.left,
+          top: 0,
           stroke: '#3978eb',
           id: e.target.hash,
           fieldType: obj.fieldType,
           selectable: false,
         }))
-      }
-      else {
-        templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-          left: 0,
-          top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
-          stroke: '#3978eb',
-          id: e.target.hash,
-          fieldType: obj.fieldType,
-          selectable: false,
-        }))
-      }
-    })
-    obj.on('mouseout', (e) => {
-      if (!templateEditorStore.activeAdvancedPointer)
-        return
-
-      const objs = templateEditorStore.canvas._objects
-      templateEditorStore.canvas._objects = objs.filter((obj) => {
-        if (obj.stroke === '#3978eb' && obj.id === e.target.hash)
-          return false
-        else
-          return true
+        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            left: 0,
+            top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+            stroke: '#3978eb',
+            id: e.target.hash,
+            fieldType: obj.fieldType,
+            selectable: false,
+          }))
+        }
+        else {
+          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            left: 0,
+            top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
+            stroke: '#3978eb',
+            id: e.target.hash,
+            fieldType: obj.fieldType,
+            selectable: false,
+          }))
+        }
       })
+      obj.on('mouseout', (e) => {
+        if (!templateEditorStore.activeAdvancedPointer)
+          return
 
-      templateEditorStore.canvas.renderAll()
+        const objs = canvas._objects
+        canvas._objects = objs.filter((obj) => {
+          if (obj.stroke === '#3978eb' && obj.id === e.target.hash)
+            return false
+          else
+            return true
+        })
+
+        canvas.renderAll()
+      })
     })
-  })
 
-  templateEditorStore.canvas.renderAll()
+    canvas.renderAll()
+  }
 })
 
 watch(() => templateEditorStore.activePageForCanvas, () => {
@@ -263,95 +275,103 @@ watch(() => templateEditorStore.activePageForCanvas, () => {
 })
 watch(currentPreviewNo, (newVal) => {
   if (templateEditorStore.showPreview) {
-    const data = templateEditorStore?.datasetData?.allEntries
-    const objs = templateEditorStore.canvas._objects
+    const canvas = canvasService.getCanvas()
+    if (canvas) {
+      const data = templateEditorStore?.datasetData?.allEntries
+      const objs = canvas._objects
 
-    templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj.stroke || obj.isAlertIcon)
-        return obj
-      if (!obj._element && obj.id !== 'Lorem ipsum') {
-        const correspondingData = data[newVal - 1][obj?.id]
-        if (correspondingData)
-          obj.set({ text: correspondingData })
-      }
-      else if (obj._element && obj.id !== 'Lorem ipsum') {
-        const correspondingData = data[newVal - 1][obj?.id]
-        if (correspondingData) {
-          const originalHeight = obj.height * obj.scaleY
-          const originalWidth = obj.width * obj.scaleX
+      canvas.objects = objs.map((obj) => {
+        if (obj.stroke || obj.isAlertIcon)
+          return obj
+        if (!obj._element && obj.id !== 'Lorem ipsum') {
+          const correspondingData = data[newVal - 1][obj?.id]
 
-          obj.setSrc(correspondingData, () => {
-            obj.scaleToWidth(originalWidth)
-            obj.scaleToHeight(originalHeight)
-            templateEditorStore.canvas.renderAll()
-          })
+          if (correspondingData)
+            obj.set({ text: correspondingData?.toString() })
         }
-      }
-      return obj
-    })
-    templateEditorStore.canvas.renderAll()
+        else if (obj._element && obj.id !== 'Lorem ipsum') {
+          const correspondingData = data[newVal - 1][obj?.id]
+          if (correspondingData) {
+            const originalHeight = obj.height * obj.scaleY
+            const originalWidth = obj.width * obj.scaleX
+
+            obj.setSrc(correspondingData, () => {
+              obj.scaleToWidth(originalWidth)
+              obj.scaleToHeight(originalHeight)
+              canvas.renderAll()
+            })
+          }
+        }
+        return obj
+      })
+      canvas.renderAll()
+    }
   }
 })
 watch(() => templateEditorStore.showPreview, (newVal) => {
-  if (newVal) {
-    const data = templateEditorStore?.datasetData?.allEntries
-    const objs = templateEditorStore.canvas._objects
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    if (newVal) {
+      const data = templateEditorStore?.datasetData?.allEntries
+      const objs = canvas._objects
 
-    templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj?.id === 'watermark-docspawn')
+      canvas.objects = objs.map((obj) => {
+        if (obj?.id === 'watermark-docspawn')
+          return obj
+        if (obj.stroke || obj.isAlertIcon)
+          return obj
+
+        if (!obj._element && obj?.id !== 'Lorem ipsum') {
+          const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+          console.log('correspondingData', correspondingData)
+          if (correspondingData)
+            obj.set({ text: correspondingData?.toString() })
+        }
+        else if (obj?.id !== 'Lorem ipsum') {
+          const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+
+          if (correspondingData) {
+            const originalHeight = obj.height * obj.scaleY
+            const originalWidth = obj.width * obj.scaleX
+
+            obj.setSrc(correspondingData, () => {
+              obj.scaleToWidth(originalWidth)
+              obj.scaleToHeight(originalHeight)
+              canvas.renderAll()
+            })
+          }
+        }
+
         return obj
-      if (obj.stroke || obj.isAlertIcon)
-        return obj
-
-      if (!obj._element && obj?.id !== 'Lorem ipsum') {
-        const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-        if (correspondingData)
-          obj.set({ text: correspondingData })
-      }
-      else if (obj?.id !== 'Lorem ipsum') {
-        const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-
-        if (correspondingData) {
+      })
+      canvas.renderAll()
+    }
+    else {
+      const objs = canvas._objects
+      canvas.objects = objs.map((obj) => {
+        if (obj?.id === 'watermark-docspawn')
+          return obj
+        if (obj.stroke || obj.isAlertIcon)
+          return obj
+        if (!obj._element && obj.id !== 'Lorem ipsum') {
+          obj.set({ text: obj?.id })
+        }
+        else if (obj._element && obj.id !== 'Lorem ipsum') {
+          const correspondingData = 'https://placehold.co/300x200?text=DocSpawn'
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
           obj.setSrc(correspondingData, () => {
             obj.scaleToWidth(originalWidth)
             obj.scaleToHeight(originalHeight)
-            templateEditorStore.canvas.renderAll()
+            canvas.renderAll()
           })
         }
-      }
-
-      return obj
-    })
-    templateEditorStore.canvas.renderAll()
-  }
-  else {
-    const objs = templateEditorStore.canvas._objects
-    templateEditorStore.canvas.objects = objs.map((obj) => {
-      if (obj?.id === 'watermark-docspawn')
         return obj
-      if (obj.stroke || obj.isAlertIcon)
-        return obj
-      if (!obj._element && obj.id !== 'Lorem ipsum') {
-        obj.set({ text: obj?.id })
-      }
-      else if (obj._element && obj.id !== 'Lorem ipsum') {
-        const correspondingData = 'https://placehold.co/300x200?text=DocSpawn'
-        const originalHeight = obj.height * obj.scaleY
-        const originalWidth = obj.width * obj.scaleX
-
-        obj.setSrc(correspondingData, () => {
-          obj.scaleToWidth(originalWidth)
-          obj.scaleToHeight(originalHeight)
-          templateEditorStore.canvas.renderAll()
-        })
-      }
-      return obj
-    })
-    templateEditorStore.canvas.renderAll()
-    currentPreviewNo.value = 1
+      })
+      canvas.renderAll()
+      currentPreviewNo.value = 1
+    }
   }
 })
 </script>

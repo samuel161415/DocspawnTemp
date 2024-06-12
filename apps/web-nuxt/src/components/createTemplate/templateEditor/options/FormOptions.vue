@@ -132,6 +132,7 @@
 import ImageOptions from '../../../../components/createTemplate/templateEditor/options/ImageOptions.vue'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const showAdvancedOptions = ref(false)
 const fieldName = ref('')
@@ -187,20 +188,23 @@ watch(() => templateEditorStore.selectedAddedField, () => {
 })
 
 watch(fieldName, () => {
-  const activeObj = templateEditorStore.canvas.getActiveObject()
-  if (activeObj) {
-    if (fieldName.value)
-      activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: fieldName.value, id: fieldName.value })
-    else
-      activeObj.set({ text: 'Add field name', fill: '#ff0000', id: 'Lorem ipsum' })
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObj = canvas.getActiveObject()
+    if (activeObj) {
+      if (fieldName.value)
+        activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: fieldName.value, id: fieldName.value })
+      else
+        activeObj.set({ text: 'Add field name', fill: '#ff0000', id: 'Lorem ipsum' })
+    }
+    canvas.renderAll()
+    const allFs = templateEditorStore.addedFields
+    templateEditorStore.addedFields = allFs.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+        return { ...f, name: fieldName.value ? fieldName.value : 'Add field name', id: fieldName.value ? fieldName.value : 'Lorem ipsum' }
+      else return f
+    })
   }
-  templateEditorStore.canvas.renderAll()
-  const allFs = templateEditorStore.addedFields
-  templateEditorStore.addedFields = allFs.map((f) => {
-    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, name: fieldName.value ? fieldName.value : 'Add field name', id: fieldName.value ? fieldName.value : 'Lorem ipsum' }
-    else return f
-  })
 })
 watch(fieldDescription, () => {
   const allFs = templateEditorStore.addedFields

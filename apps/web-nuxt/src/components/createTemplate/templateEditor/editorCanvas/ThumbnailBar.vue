@@ -18,82 +18,89 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 function selectPageFromThumbnail(page) {
-  templateEditorStore.canvas.discardActiveObject()
-  templateEditorStore.canvas.renderAll()
-  templateEditorStore.showOptionsBar = false
-  templateEditorStore.selectedAddedField = null
-  templateEditorStore.activePageForCanvas = page
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas.discardActiveObject()
+    canvas.renderAll()
+    templateEditorStore.showOptionsBar = false
+    templateEditorStore.selectedAddedField = null
+    templateEditorStore.activePageForCanvas = page
+  }
 }
 
 async function changeCurrentPageOnCanvas(pageNo) {
-  const response = await fetch(templateEditorStore.templateBackgroundUrl)
-  const pdfData = await response.arrayBuffer()
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const response = await fetch(templateEditorStore.templateBackgroundUrl)
+    const pdfData = await response.arrayBuffer()
 
-  pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
+    pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
 
-  const pdf = await pdfjs.getDocument({ data: pdfData }).promise
-  const page = await pdf.getPage(pageNo || 1)
+    const pdf = await pdfjs.getDocument({ data: pdfData }).promise
+    const page = await pdf.getPage(pageNo || 1)
 
-  const viewport = page.getViewport({ scale: 2 })
+    const viewport = page.getViewport({ scale: 2 })
 
-  const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
+    const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
 
-  const scale = parentWidth / viewport.width
+    const scale = parentWidth / viewport.width
 
-  const canvasWidth = viewport.width * scale
-  const canvasHeight = viewport.height * scale
+    const canvasWidth = viewport.width * scale
+    const canvasHeight = viewport.height * scale
 
-  templateEditorStore.canvas.width = canvasWidth
-  templateEditorStore.canvas.height = canvasHeight
+    canvas.width = canvasWidth
+    canvas.height = canvasHeight
 
-  templateEditorStore.canvas.setDimensions({
-    width: canvasWidth,
-    height: canvasHeight,
-  })
+    canvas.setDimensions({
+      width: canvasWidth,
+      height: canvasHeight,
+    })
 
-  const canvas2 = document.createElement('canvas')
-  const context = canvas2.getContext('2d')
-  canvas2.width = viewport.width
-  canvas2.height = viewport.height
+    const canvas2 = document.createElement('canvas')
+    const context = canvas2.getContext('2d')
+    canvas2.width = viewport.width
+    canvas2.height = viewport.height
 
-  const renderContext = {
-    canvasContext: context,
-    viewport: page.getViewport({ scale: 2 }),
-  }
-
-  await page.render(renderContext).promise
-  const bg = canvas2.toDataURL('image/png')
-
-  fabric.Image.fromURL(bg, (img) => {
-    if (img) {
-      templateEditorStore.canvas.setBackgroundImage(
-        img,
-        () => {
-          templateEditorStore.canvas.renderAll()
-
-          const objs = templateEditorStore.canvas._objects
-
-          templateEditorStore.canvas._objects = objs.map((obj) => {
-            if (obj?.id === 'watermark-docspawn')
-              return obj
-
-            if (obj.pageNo === pageNo)
-              obj.set({ visible: true, opacity: 1 })
-            else obj.set({ visible: false, opacity: 0 })
-            return obj
-          })
-
-          templateEditorStore.canvas.renderAll()
-        },
-        {
-          scaleX: canvasWidth / img.width,
-          scaleY: canvasHeight / img.height,
-        },
-      )
+    const renderContext = {
+      canvasContext: context,
+      viewport: page.getViewport({ scale: 2 }),
     }
-  })
+
+    await page.render(renderContext).promise
+    const bg = canvas2.toDataURL('image/png')
+
+    fabric.Image.fromURL(bg, (img) => {
+      if (img) {
+        canvas.setBackgroundImage(
+          img,
+          () => {
+            canvas.renderAll()
+
+            const objs = canvas._objects
+
+            canvas._objects = objs.map((obj) => {
+              if (obj?.id === 'watermark-docspawn')
+                return obj
+
+              if (obj.pageNo === pageNo)
+                obj.set({ visible: true, opacity: 1 })
+              else obj.set({ visible: false, opacity: 0 })
+              return obj
+            })
+
+            canvas.renderAll()
+          },
+          {
+            scaleX: canvasWidth / img.width,
+            scaleY: canvasHeight / img.height,
+          },
+        )
+      }
+    })
+  }
 }
 
 watch(() => templateEditorStore.activePageForCanvas, (newVal) => {

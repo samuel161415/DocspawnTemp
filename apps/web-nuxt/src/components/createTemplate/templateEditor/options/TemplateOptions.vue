@@ -34,6 +34,7 @@
 
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const disableWatermark = ref(false)
 const watermarkImages = ref([{ id: 1, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/494a88a1-edeb-4652-b190-c0ad775b9c80_DS watermark 1 (1).png.png' }, { id: 2, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/84c85464-5815-4414-bd71-b70695ed0af3_DS watermark 2 (1).png.png' }])
@@ -42,34 +43,35 @@ onMounted(() => {
     templateEditorStore.watermarkImage = watermarkImages.value[0]
 })
 watch(() => templateEditorStore.watermarkImage, (newVal) => {
-  if (!templateEditorStore.canvas)
-    return
-  if (newVal.src) {
-    const objs = templateEditorStore.canvas._objects
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    if (newVal.src) {
+      const objs = canvas._objects
 
-    templateEditorStore.canvas.objects = objs?.map((obj) => {
-      if (obj._element && obj.id === 'watermark-docspawn') {
+      canvas.objects = objs?.map((obj) => {
+        if (obj._element && obj.id === 'watermark-docspawn') {
         // const originalHeight = obj.height * obj.scaleY
-        const originalWidth = obj.width * obj.scaleX
+          const originalWidth = obj.width * obj.scaleX
 
-        obj.setSrc(newVal.src, () => {
-          obj.scaleToWidth(originalWidth)
-          //   obj.scaleToHeight(originalHeight)
-          templateEditorStore.canvas.renderAll()
-          if (obj.left <= 0)
-            obj.set({ left: 0 })
-          if (obj.top <= 0)
-            obj.set({ top: 0 })
-          if (obj.left + (obj.width * obj.scaleX) >= templateEditorStore.canvas.width)
-            obj.set({ left: templateEditorStore.canvas.width - (obj.width * obj.scaleX) })
-          if (obj.top + (obj.height * obj.scaleY) >= templateEditorStore.canvas.height)
-            obj.set({ top: templateEditorStore.canvas.height - (obj.height * obj.scaleY) })
-          templateEditorStore.canvas.renderAll()
-        })
-      }
-      return obj
-    })
-    templateEditorStore.canvas.renderAll()
+          obj.setSrc(newVal.src, () => {
+            obj.scaleToWidth(originalWidth)
+            //   obj.scaleToHeight(originalHeight)
+            canvas.renderAll()
+            if (obj.left <= 0)
+              obj.set({ left: 0 })
+            if (obj.top <= 0)
+              obj.set({ top: 0 })
+            if (obj.left + (obj.width * obj.scaleX) >= canvas.width)
+              obj.set({ left: canvas.width - (obj.width * obj.scaleX) })
+            if (obj.top + (obj.height * obj.scaleY) >= canvas.height)
+              obj.set({ top: canvas.height - (obj.height * obj.scaleY) })
+            canvas.renderAll()
+          })
+        }
+        return obj
+      })
+      canvas.renderAll()
+    }
   }
 })
 </script>
