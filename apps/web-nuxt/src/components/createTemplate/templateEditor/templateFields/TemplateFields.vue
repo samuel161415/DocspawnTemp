@@ -221,7 +221,6 @@ const deleteText = ref('')
 const confirm = useConfirm()
 
 function duplicateField(field) {
-  const alertIconUrl = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/33538a37-c1a2-4b6e-93d8-ab8433a8f727_attention.png.png'
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const objs = canvas._objects
