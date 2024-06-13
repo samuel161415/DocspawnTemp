@@ -3,7 +3,7 @@ import { ref } from 'vue';
 export const useSettingItems = () => {
     const settingItems = ref([
       {
-        title:'General',
+        title:'General settings',
         icon:'pi pi-user',
         route:'/',
         isHovered:false,
