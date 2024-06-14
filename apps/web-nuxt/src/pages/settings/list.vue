@@ -114,7 +114,7 @@
             v-model:tableData="tableData" />
 
         <EditItemOptionModal v-if="editableItem" v-model:visible="openItemOptions" @editItem="handleEditItem"
-            v-model:editableItem="editableItem" @cancel="openItemOptions = false"
+            v-model:editableItem="editableItem" v-model:containsublist="containsublist" @cancel="cancelEditItemOptionModal"
             @openCreateListModal="createSubList" />
 
         <!-- delete -->
@@ -156,7 +156,9 @@ const editableItem = ref();
 const tableData = ref({});
 const deleteItem = ref();
 const openCreateSubList = ref(false);
-const currentListLevel = ref()
+const currentListLevel = ref();
+const containsublist = ref(false);
+
 // sublist id
 const sublistId = ref();
 const searchQuery = ref('');
@@ -311,6 +313,11 @@ const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 });
 };
 
+const cancelEditItemOptionModal = () => {
+    openItemOptions.value = false;
+    containsublist.value = false;
+    console.log('cancel', containsublist.value );
+};
 </script>
 
 <style scoped>

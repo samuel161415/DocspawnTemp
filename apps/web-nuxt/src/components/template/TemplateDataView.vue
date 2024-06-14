@@ -3,8 +3,8 @@
     <div class="mt-14 rounded-lg pb-2">
         <DataView :value="filteredTemplates" :layout="layout">
             <template #header>
-                <div class="flex justify-between">
-                    <div class="flex flex-wrap justify-center space-x-5 mt-2">
+                <div class="flex justify-between space-x-2">
+                    <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
                         <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
                             All 
                         </p> 
@@ -25,7 +25,7 @@
                             Table to doc 
                         </p>
                     </div>
-                    <div class="flex space-x-4">
+                    <div class="flex space-y-2 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
 
                         <div class="flex space-x-2">
                             <span class="relative flex">
@@ -44,14 +44,21 @@
             </template>
 
             <template #list="slotProps">
-                <div class="">
+                <div class="flex flex-wrap">
                     <div v-for="(item, index) in slotProps.items" :key="index"  class="w-full py-2"
                         @dragover.prevent="item.templateType !== 'form to doc' && handleDragOver(item, index)"
                         @dragenter.prevent="item.templateType !== 'form to doc' && handleDragEnter(item, index)"
                         @dragleave.prevent="item.templateType !== 'form to doc' && handleDragLeave(item, index)"
                         @drop.prevent="item.templateType !== 'form to doc' && handleFileDrop(item, $event)">
 
-                        <div :class="{ 'drag-over': isDragging[index] }" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-50">
+                        <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[240px] md:h-[113px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+                            <font-awesome-icon :icon="fad.faUpload" size="xl" style="--fa-primary-color: #747576; --fa-secondary-color: #747576; --fa-secondary-opacity: 0.5;" />
+                            <p class="text-surface-600 font-poppins text-lg ">Drag and drop file</p>
+                            <p class="text-surface-500 font-poppins text-base text-center mt-1">Supported format: XLSX or CSV</p>
+
+                        </div>
+
+                        <div v-else  class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-50">
                             <div class="md:w-[10rem] relative cursor-pointer" @click="handleTemplatePreview(item)">
                                 <img class="block xl:block mx-auto rounded-md w-32 h-28" :src="`${item.image}`" :alt="item.name" />
                             </div>
@@ -61,8 +68,8 @@
                                         <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-600 mt-1 ">{{ item.name }}</p>
                                     </div>
                                 </div>
-                                <div class="flex justify-center items-center">
-                                    <div class="flex space-x-8 mr-5">
+                                <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
+                                    <div class="flex space-x-8 mr-5 mb-3 md:mb-0">
                                         <i class="pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" v-tooltip.top="'Edit template'"></i>
                                         <i class="pi pi-file text-surface-500 cursor-pointer" v-tooltip.top="'Access data'" style="font-size: 1.3rem"></i>
                                         <i class="pi pi-folder-open text-surface-500 cursor-pointer" v-tooltip.top="'Access document'" style="font-size: 1.3rem"></i>
@@ -83,14 +90,21 @@
             <template #grid="slotProps">
                 <div class="flex flex-wrap ">
                     <div v-for="(item, index) in slotProps.items" :key="index" 
-                        class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 "
-                        
+                        class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4"
                         @dragover.prevent="item.templateType !== 'form to doc' && handleDragOver(item, index)"
                         @dragenter.prevent="item.templateType !== 'form to doc' && handleDragEnter(item, index)"
                         @dragleave.prevent="item.templateType !== 'form to doc' && handleDragLeave(item, index)"
                         @drop.prevent="item.templateType !== 'form to doc' && handleFileDrop(item, $event)">
 
-                        <div :class="{ 'drag-over': isDragging[index] }" class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+                        <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
+                            <font-awesome-icon :icon="fad.faUpload" size="xl" style="--fa-primary-color: #747576; --fa-secondary-color: #747576; --fa-secondary-opacity: 0.5;" />
+                            <p class="text-surface-600 font-poppins text-lg mt-5">Drag and drop file</p>
+                            <p class="text-surface-500 font-poppins text-base text-center mt-2">Supported format: XLSX or CSV</p>
+
+                        </div>
+
+                        <div v-else class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+                           
                             <div class="flex pt-4" :class="favoriteStates[index]? 'justify-between': 'justify-end'">
                                 <i v-if="favoriteStates[index]" :class="[ favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning', 'cursor-pointer']"></i>
                                 <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer" @click="toggle"></i>
@@ -134,6 +148,7 @@
         </OverlayPanel>
 
         <TemplatePreview v-if="visible" v-model:visible="visible" @cancel="visible = false" :template="currentTemplate" @outsideClick="handleOutsideClick"/>
+        <Toast />
     </div>
 </template>
 
@@ -142,8 +157,11 @@ import { ref } from "vue";
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
 import FormEditorPreview from "~/components/createTemplate/formEditor/FormEditorPreview.vue";
 import TemplatePreview from './TemplatePreview.vue';
-import { thumbnails } from '../../services/templates';
+import { useToast } from "primevue/usetoast";
+import { fad } from '@fortawesome/pro-duotone-svg-icons';
 
+
+const toast = useToast();
 
 const props = defineProps({
   templates: {
@@ -155,13 +173,14 @@ const props = defineProps({
 
 const isDragging = ref(new Array(props.templates.length).fill(false));
 const layout = ref('grid');
-const hoverStates = reactive({});
+
 const favoriteStates = reactive({});
 const currentTemplate = ref();
 const visible = ref(false);
 const previewFormVisible = ref(false);
 const filterOption = ref('')
 const searchQuery = ref("");
+const fileTypeCheck = ref(false)
 
 // default favorite state
 props.templates.forEach((template, index) => {
@@ -185,6 +204,10 @@ const op = ref();
 const toggle = (event) => {
     op.value.toggle(event);
 }
+
+const showError = () => {
+    toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid file format. Please select a CSV, XLS, or XLSX file.', life: 3000 });
+};
 
 const filteredTemplates = computed(() => {
   let filtered = props.templates;
@@ -220,14 +243,11 @@ const handleFillForm = () => {
     previewFormVisible.value = true;
 };
 
-
 const handleDragOver = (item, index) => {
-  console.log('drag handleDragOver');
   isDragging.value.splice(index, 1, true); // Update drag state for the specific card
 };
 
 const handleDragEnter = (item, index) => {
-  console.log('drag handleDragEnter');
   isDragging.value.splice(index, 1, true);
 };
 
@@ -239,36 +259,23 @@ const handleDragLeave = (item, index) => {
 const handleFileDrop = (template, event) => {
     const files = event.dataTransfer.files;
 
-    if (files.length > 0) {
-        const file = files[0];
+    const fileName = files[0].name;
+    const fileType = fileName.split('.').pop();
 
-        // change template name to file name
-        template.name = file.name;
-
-        // split file name to get the file type
-        const fileParts = file.name.split('.');
-        
-        const thumbnail = thumbnails[0];
-        if (thumbnail[fileParts[fileParts.length - 1]]) {
-            template.image = thumbnail[fileParts[fileParts.length - 1]];
-        }
-
+    if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
+        fileTypeCheck.value = true;
         handleFileUpload(files); 
+    } else {
+        fileTypeCheck.value = false;
+        showError();
     }
     isDragging.value.fill(false);
 };
 
 const handleFileUpload = (files) => {
-    // Implement file upload logic here
+    // file upload logic here
     console.log('Uploading files', files);
 };
 
 </script>
 
-<style scoped>
-.drag-over {
-    border: 2px dashed #747474; 
-    opacity: 0.4; /* Opacity to indicate drop area */
-}
-
-</style>

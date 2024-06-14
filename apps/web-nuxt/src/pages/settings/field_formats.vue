@@ -3,7 +3,7 @@
            
         <div class="px-8 py-8 rounded-r-md bg-white h-full w-full">
        
-            <div class="py-2 mr-12 ml-3">
+            <div class="py-2 mx-3">
                 <p class="font-semibold text-surface-600 text-2xl mb-4">Formatting option</p>
                 <div class="text-lg text-surface-500 " id="date-formats">
                     <p>

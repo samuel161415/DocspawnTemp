@@ -3,7 +3,7 @@
        
        <div class="px-8 py-8 rounded-lg bg-white  w-full">
 
-           <div class="py-2 mr-12 ml-3">
+           <div class="py-2 mx-3">
             <p class="font-semibold text-surface-600 text-2xl mb-5">Billing</p>
                 <div class="space-y-2 mb-4">
                     <p class="font-semibold text-surface-700 text-lg">Payment method</p>

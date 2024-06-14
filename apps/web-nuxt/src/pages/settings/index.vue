@@ -2,22 +2,25 @@
   <div class="h-full w-full bg-white overflow-scroll no-scrollbar rounded-lg ml-4">
     <div class="px-8 py-8 w-full">
 
-      <div class="py-2 mr-12 ml-3">
+      <div class="py-2 mx-3">
         <p class="font-semibold text-surface-600 font-poppins text-2xl mb-5">General settings</p>
 
         <div class="flex justify-between">
           <div class="mt-5">
             <p class="text-surface-600 font-poppins text-xl font-medium" id="my-profile">My profile</p>
             <p class="text-surface-500 font-poppins text-lg mt-2">Your personal information and account security settings. </p>
-          </div>
+        </div>
   
-          <div class="my-5">
-            <p class="text-surface-600 font-poppins text-lg font-normal">Avatar</p>
-            <Avatar v-if="avatarImage" :image="avatarImage" class="mr-2 text-xl mt-1 cursor-pointer rounded-full" size="large" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;"  @click="uploadImage"/>
-            <Avatar v-else label="AD" :image="avatarImage" class="mr-2 text-xl mt-1 cursor-pointer rounded-full" size="large" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;"  @click="uploadImage"/>
-            
+        <div class="my-5">
+          <p class="text-surface-600 font-poppins text-lg font-normal">Avatar</p>
+          <div class="relative flex items-center justify-center cursor-pointer hover:opacity-50" @mouseenter="showCamera = true" @mouseleave="showCamera = false">
+            <Avatar v-if="avatarImage" :image="avatarImage" class="text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
+            <Avatar v-else label="AD" :image="avatarImage" class=" text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
+            <i v-show="showCamera" class="pi pi-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"></i>
           </div>
         </div>
+          
+      </div>
 
         <div class="mt-10">
           <p class="text-surface-600 font-poppins text-lg font-normal">Full name</p>
@@ -42,33 +45,32 @@
           <div class="flex justify-between mt-3">
             <!-- password -->
             <span class="relative flex w-full">
-              <i class="pi pi-lock  absolute top-1/4 z-50 left-3 text-surface-400 dark:text-surface-600"
-                  style="color: rgb(117, 119, 120);"></i>
-              <Password v-model="password" style="width: 80%; height: 44px;" toggleMask>
-                  <template #header>
-                      <h6>Pick a password</h6>
-                  </template>
-                  <template #footer>
-                      <Divider />
-                      <div class="">
-                        <p class="mt-2 p-0 mb-2">Suggestions</p>
-                        <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
-                            <li>At least one lowercase</li>
-                            <li>At least one uppercase</li>
-                            <li>At least one numeric</li>
-                            <li>Minimum 8 characters</li>
-                        </ul>
-                    
-                      </div>
-                  </template>
+              <i class="pi pi-lock  absolute top-1/4 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
+              <Password v-model="password" style="width: 98%; height: 44px;" toggleMask>
+                <template #header>
+                    <h6>Pick a password</h6>
+                </template>
+                <template #footer>
+                    <Divider />
+                    <div class="">
+                      <p class="mt-2 p-0 mb-2">Suggestions</p>
+                      <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
+                          <li>At least one lowercase</li>
+                          <li>At least one uppercase</li>
+                          <li>At least one numeric</li>
+                          <li>Minimum 8 characters</li>
+                      </ul>
+                  
+                    </div>
+                </template>
               </Password>
           </span>
          
-            <Button 
-                label="Save password" 
-                class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
-                severity="success"
-                />
+          <Button 
+              label="Change password" 
+              class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
+              severity="success"
+              />
           </div>
         </div>
         <!--  -->
@@ -166,6 +168,7 @@ const fullName = ref('');
 const email = ref('');
 const password = ref('');
 const notifyTimeZone = ref(false)
+const showCamera = ref(false);
 
 const selectedLanguage = ref();
 const selectedTimeZone = ref();

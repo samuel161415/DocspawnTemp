@@ -1,7 +1,7 @@
 export const templateData = [
   {
     id: 1,
-    name: "Budget Report.xlsx",
+    name: "Budget Report",
     docCreated: 2,
     createdOn: "Wed Mar 20 2024",
     modifiedOn: "Wed Mar 20 2024",
@@ -13,7 +13,7 @@ export const templateData = [
   },
   {
     id: 2,
-    name: "Invoice template.docx",
+    name: "Invoice template",
     docCreated: 0,
     createdOn: "Mon Jan 29 2024",
     modifiedOn: "Mon Jan 29 2024",
@@ -25,7 +25,7 @@ export const templateData = [
   },
   {
     id: 3,
-    name: "Licence form.docx",
+    name: "Licence form",
     docCreated: 3,
     createdOn: "Mon Jan 29 2024",
     modifiedOn: "Mon Jan 29 2024",
@@ -37,7 +37,7 @@ export const templateData = [
   },
   {
     id: 4,
-    name: "Project Plan.docx",
+    name: "Project Plan",
     docCreated: 1,
     createdOn: "Tue Feb 13 2024",
     modifiedOn: "Tue Feb 13 2024",
@@ -49,7 +49,7 @@ export const templateData = [
   },
   {
     id: 5,
-    name: "Application Form.pdf",
+    name: "Application Form",
     docCreated: 2,
     createdOn: "Mon Jan 29 2024",
     modifiedOn: "Mon Jan 29 2024",
@@ -61,7 +61,7 @@ export const templateData = [
   },
   {
     id: 6,
-    name: "Employee Handbook.pdf",
+    name: "Employee Handbook",
     docCreated: 4,
     createdOn: "Thu Apr 05 2024",
     modifiedOn: "Thu Apr 05 2024",
@@ -73,7 +73,7 @@ export const templateData = [
   },
   {
     id: 7,
-    name: "Marketing Plan.docx",
+    name: "Marketing Plan",
     docCreated: 1,
     createdOn: "Fri May 10 2024",
     modifiedOn: "Fri May 10 2024",
@@ -85,7 +85,7 @@ export const templateData = [
   },
   {
     id: 8,
-    name: "Annual Report.pdf",
+    name: "Annual Report",
     docCreated: 3,
     createdOn: "Sat Jun 15 2023",
     modifiedOn: "Sat Jun 15 2023",
@@ -97,7 +97,7 @@ export const templateData = [
   },
   {
     id: 9,
-    name: "Sales Contract.docx",
+    name: "Sales Contract",
     docCreated: 0,
     createdOn: "Sun Jan 21 2024",
     modifiedOn: "Sun Jan 21 2024",
@@ -109,7 +109,7 @@ export const templateData = [
   },
   {
     id: 10,
-    name: "Meeting Minutes.pdf",
+    name: "Meeting Minutes",
     docCreated: 2,
     createdOn: "Mon Aug 26 2023",
     modifiedOn: "Mon Aug 26 2023",
@@ -121,7 +121,7 @@ export const templateData = [
   },
   {
     id: 11,
-    name: "Business Proposal.docx",
+    name: "Business Proposal",
     docCreated: 1,
     createdOn: "Tue Sep 30 2023",
     modifiedOn: "Tue Nov 29 2023",
@@ -133,7 +133,7 @@ export const templateData = [
   },
   {
     id: 12,
-    name: "Training Manual.pdf",
+    name: "Training Manual",
     docCreated: 3,
     createdOn: "Wed Jan 15 2024",
     modifiedOn: "Wed Apr 04 2024",
@@ -146,7 +146,7 @@ export const templateData = [
   {
 
     id: 13,
-    name: "Hr management form.docx",
+    name: "Hr management form",
     docCreated: 3,
     createdOn: "Wed may 15 2024",
     modifiedOn: "Wed may 20 2024",
