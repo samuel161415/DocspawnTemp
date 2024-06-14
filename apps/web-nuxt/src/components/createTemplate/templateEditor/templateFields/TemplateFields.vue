@@ -20,13 +20,13 @@
       <template v-for="(field, index) in templateEditorStore.addedFields">
         <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true" :key="index" class="px-5 h-[62px] flex items-center mb-3 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore?.selectedAddedField?.hash === field?.hash, 'border-surface-100 bg-surface-50': templateEditorStore?.selectedAddedField?.hash !== field?.hash }">
           <div class=" h-full w-full py-2 cursor-pointer overflow-hidden" @click="templateEditorStore?.selectedAddedField?.hash !== field?.hash && selectAddedField(field)">
-            <p v-if="field.name === 'Lorem ipsum' && (field?.fieldType !== 'Static text' && field?.fieldType !== 'Form text' && field?.fieldType !== 'Form image' && field?.fieldType !== 'Form date' && field?.fieldType !== 'Form time')" class="font-poppins text-red-400 text-lg mt-1">
+            <p v-if="field.name === 'Lorem ipsum' && (field?.fieldType !== 'Static text' && field?.fieldType !== 'Form text' && field?.fieldType !== 'Form image' && field?.fieldType !== 'Form date' && field?.fieldType !== 'Form time' && field?.fieldType !== 'Form multiline')" class="font-poppins text-red-400 text-lg mt-1">
               Select a data field
             </p>
             <p v-else-if="(field.name === 'Add text' || field.name === 'Lorem ipsum') && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
               Add text
             </p>
-            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time')" class="font-poppins text-red-400 text-lg mt-1 ">
+            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time' || field?.fieldType === 'Form multiline')" class="font-poppins text-red-400 text-lg mt-1 ">
               Add field name
             </p>
             <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
@@ -136,7 +136,14 @@
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
-              Advanced Text
+              Text
+            </p>
+          </div>
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form multiline', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form multiline' }" @click="selectField('Form multiline')">
+            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
+            <font-awesome-icon icon="fa-light fa-paragraph" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
+            <p class="font-poppins text-surface-600 text-lg">
+              Multiline Text
             </p>
           </div>
 
@@ -231,6 +238,10 @@ function duplicateField(field) {
             'https://placehold.co/300x200?text=DocSpawn'
             , (myImg) => {
               myImg.set({
+                cornerStyle: 'circle',
+                borderColor: '#00000066',
+                cornerColor: '#119bd6',
+                transparentCorners: false,
                 left: 20,
                 top: 20,
                 scaleX: obj.scaleX,
@@ -243,6 +254,7 @@ function duplicateField(field) {
                 pageNo: obj.pageNo,
                 displayGuide: false,
               })
+              myImg.setControlsVisibility({ mtr: false })
 
               const fieldToAdd = { fieldType: myImg.fieldType, name: myImg.id, hash: myImg.hash, page: myImg.pageNo,
               }
@@ -296,11 +308,110 @@ function duplicateField(field) {
             },
           )
         }
+        else if (obj?.type === 'textbox') {
+          const textEle = new templateEditorStore.fabric.Textbox(
+          `${templateEditorStore.fieldToAdd.name}`,
+          {
+            cornerStyle: 'circle',
+            borderColor: '#00000066',
+            cornerColor: '#119bd6',
+
+            transparentCorners: false,
+            transparentBorders: false,
+            width: obj.width,
+            top: 20,
+            left: 20,
+            scaleX: obj.scaleX,
+            scaleY: obj.scaleY,
+            fill: obj.fill,
+            fontFamily: obj.fontFamily,
+            fontSize: obj.fontSize,
+            fontStyle: obj.fontStyle,
+            underline: obj.underline,
+            fontWeight: obj.fontWeight,
+            textAlign: obj.textAlign,
+            fieldType: field.fieldType,
+            id: obj.id,
+            name: field.name,
+            hash: uuid.v1(),
+            pageNo: obj.pageNo,
+            editable: false,
+            text: obj.text,
+          },
+          )
+          textEle.setControlsVisibility({
+            mt: false, // middle top
+            // mb: false, // middle bottom
+            ml: false, // middle left
+            // mr: false, // middle right
+            bl: false, // bottom left
+            br: false, // bottom right
+            tl: false, // top left
+            tr: false, // top right
+            mtr: false, // middle top rotate
+          })
+
+          const fieldToAdd = { ...field, fieldType: field.fieldType, name: field.name, hash: textEle.hash, page: textEle.pageNo, obj: textEle }
+
+          const allFields = []
+          templateEditorStore.addedFields.forEach((f) => {
+            allFields.push(JSON.parse(JSON.stringify(f)))
+          })
+          allFields.push(fieldToAdd)
+          templateEditorStore.addedFields = allFields
+
+          canvas.renderAll()
+
+          textEle.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: textEle.fieldType,
+              selectable: false,
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: textEle.fieldType,
+              selectable: false,
+            }))
+          })
+
+          textEle.on('mouseout', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+
+            const objs = canvas._objects
+            canvas._objects = objs.filter((obj) => {
+              if (obj.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+                return false
+              else
+                return true
+            })
+
+            canvas.renderAll()
+          })
+          canvas.add(textEle)
+
+          canvas.renderAll()
+          canvas.setActiveObject(textEle)
+          canvas.renderAll()
+          setTimeout(() => selectAddedField(fieldToAdd), 50)
+        }
         else {
           const ele = new templateEditorStore.fabric.Text(
         `${obj.text}`,
         {
-
+          cornerStyle: 'circle',
+          borderColor: '#00000066',
+          cornerColor: '#119bd6',
+          transparentCorners: false,
           top: 20,
           left: 20,
           scaleX: obj.scaleX,
@@ -319,6 +430,7 @@ function duplicateField(field) {
           pageNo: obj.pageNo,
         },
           )
+          ele.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
           canvas.add(ele)
 
           const fieldToAdd = { ...field, fieldType: field.fieldType, name: field.name, hash: ele.hash, page: ele.pageNo, obj: ele }
@@ -406,6 +518,8 @@ function selectField(field) {
       templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
     else if (field === 'Form text')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form multiline')
+      templateEditorStore.fieldToAdd = { name: 'Multiline-text', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form image')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form date')

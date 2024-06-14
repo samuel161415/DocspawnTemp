@@ -46,69 +46,50 @@
         <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
       </div>
       <div v-if="showAdvancedOptions">
-        <Accordion expand-icon="pi pi-plus" collapse-icon="pi pi-minus">
-          <AccordionTab>
-            <template #header>
-              <span class="flex items-center gap-2 w-full">
-                <p class="font-poppins text-md text-surface-600 ">
-                  Accepted characters
-                </p>
-                <div v-tooltip.top="'Allowing type of characters user can input'" class="ml-auto mr-2">
-                  <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
-                </div>
-              </span>
-            </template>
+        <p class="font-poppins text-md text-surface-600 mt-4 mb-2 ">
+          Accepted characters
+        </p>
+        <div class="flex flex-col gap-3">
+          <div v-for="option in characterAcceptionOptions" :key="option" class="flex items-center">
+            <RadioButton v-model="selectedCharacterAcception" :input-id="option" name="dynamic" :value="option" />
+            <label :for="option" class="ml-2 font-poppins">{{ option }}</label>
+          </div>
+        </div>
+        <div v-if="selectedCharacterAcception === 'Numbers'" class="flex items-center mt-6 gap-4">
+          <Checkbox v-model="allowDecimals" :binary="true" />
+          <p class="font-poppins text-md text-surface-600 ">
+            Allow decimals
+          </p>
+        </div>
 
-            <div class="flex flex-col gap-3">
-              <div v-for="option in characterAcceptionOptions" :key="option" class="flex items-center">
-                <RadioButton v-model="selectedCharacterAcception" :input-id="option" name="dynamic" :value="option" />
-                <label :for="option" class="ml-2 font-poppins">{{ option }}</label>
-              </div>
-            </div>
-            <div v-if="selectedCharacterAcception === 'Numbers'" class="flex items-center mt-6 gap-4">
-              <Checkbox v-model="allowDecimals" :binary="true" />
-              <p class="font-poppins text-md text-surface-600 ">
-                Allow decimals
-              </p>
-            </div>
-          </AccordionTab> <AccordionTab>
-            <template #header>
-              <span class="flex items-center gap-2 w-full">
-                <p class="font-poppins text-md text-surface-600 ">
-                  Field validations
-                </p>
-                <div v-tooltip.top="'Validations including Characters allowed and custom regex'" class="ml-auto mr-2">
-                  <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
-                </div>
-              </span>
-            </template>
+        <!-- <p class="font-poppins text-md text-surface-600 ">
+          Field validations
+        </p> -->
 
-            <div class="flex flex-col  mt-2">
-              <div class="mb-2 flex items-center gap-2">
-                <p class="font-poppins text-md text-surface-600 ">
-                  Min. field length
-                </p>
-                <div v-tooltip.top="'Minimum character length'">
-                  <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
-                </div>
-              </div>
-
-              <InputNumber v-model="minFieldLength" input-id="integeronly1" :use-grouping="false" @input="changeMinLength" />
+        <div class="flex flex-col  mt-6">
+          <div class="mb-2 flex items-center gap-2">
+            <p class="font-poppins text-md text-surface-600 ">
+              Min. field length
+            </p>
+            <div v-tooltip.top="'Minimum character length'">
+              <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
             </div>
-            <div class="flex flex-col  mt-4">
-              <div class="mb-2 flex items-center gap-2">
-                <p class="font-poppins text-md text-surface-600 ">
-                  Max. field length
-                </p>
-                <div v-tooltip.top="'Maximum character length'">
-                  <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
-                </div>
-              </div>
+          </div>
 
-              <InputNumber v-model="maxFieldLength" input-id="integeronly2" :use-grouping="false" @input="changeMaxLength" />
+          <InputNumber v-model="minFieldLength" input-id="integeronly1" :use-grouping="false" @input="changeMinLength" />
+        </div>
+        <div class="flex flex-col  mt-4">
+          <div class="mb-2 flex items-center gap-2">
+            <p class="font-poppins text-md text-surface-600 ">
+              Max. field length
+            </p>
+            <div v-tooltip.top="'Maximum character length'">
+              <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
             </div>
-          </AccordionTab>
-        </Accordion>
+          </div>
+
+          <InputNumber v-model="maxFieldLength" input-id="integeronly2" :use-grouping="false" @input="changeMaxLength" />
+        </div>
       </div>
     <!-- </AccordionTab>
     </Accordion> -->
@@ -192,10 +173,18 @@ watch(fieldName, () => {
   if (canvas) {
     const activeObj = canvas.getActiveObject()
     if (activeObj) {
-      if (fieldName.value)
-        activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: fieldName.value, id: fieldName.value })
-      else
-        activeObj.set({ text: 'Add field name', fill: '#ff0000', id: 'Lorem ipsum' })
+      if (activeObj.fieldType === 'Form multiline') {
+        if (fieldName.value)
+          activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, id: fieldName.value })
+        else
+          activeObj.set({ fill: '#ff0000', id: 'Lorem ipsum' })
+      }
+      else {
+        if (fieldName.value)
+          activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: fieldName.value, id: fieldName.value })
+        else
+          activeObj.set({ text: 'Add field name', fill: '#ff0000', id: 'Lorem ipsum' })
+      }
     }
     canvas.renderAll()
     const allFs = templateEditorStore.addedFields

@@ -92,7 +92,7 @@ function changePreviewNo(dir) {
 //             selectable: false,
 //           }))
 
-//           if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+//           if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image'||obj.fieldType==='Form multiline') {
 //             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
 //               left: 0,
 //               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -151,7 +151,7 @@ function showMargins() {
           pageNo: templateEditorStore.activePageForCanvas,
         }))
 
-        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
           canvas.add(new fabric.Line([1000, 100, 2000, 100], {
             left: 0,
             top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
@@ -228,7 +228,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           fieldType: obj.fieldType,
           selectable: false,
         }))
-        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image') {
+        if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
           canvas.add(new fabric.Line([1000, 100, 2000, 100], {
             left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),

@@ -58,6 +58,27 @@ function rotateClockwise() {
     // activeObject.set({ angle: ang })
     activeObject.rotate(ang)
     rotationVal.value = ang
+
+    /** */
+    canvas._objects.forEach((obj) => {
+      if (obj.id === 'watermark-docspawn')
+        return
+
+      if (obj.id === activeObject.hash && obj.stroke) {
+        if (obj.top === 0)
+          obj.set({ top: 0, left: activeObject.left })
+
+        if (obj.left === 0) {
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image')
+            obj.set({ top: activeObject.top + (Number.parseFloat(activeObject.height) * activeObject.scaleY), left: 0 })
+          else
+            obj.set({ top: activeObject.top + (Number.parseFloat(activeObject.height) * activeObject.scaleY) - (1 * ((Number.parseFloat(activeObject.height) * activeObject.scaleY) / 5)), left: 0 })
+        }
+      }
+      if (obj.isAlertIcon && obj.id === activeObject.hash)
+        obj.set({ top: activeObject.top, left: activeObject.left + (activeObject.width * activeObject.scaleX) })
+    })
+
     canvas.renderAll()
   }
 }
@@ -70,6 +91,25 @@ function rotateAntiClockwise() {
 
     // activeObject.set({ angle: ang })
     activeObject.rotate(ang)
+    /** */
+    canvas._objects.forEach((obj) => {
+      if (obj.id === 'watermark-docspawn')
+        return
+
+      if (obj.id === activeObject.hash && obj.stroke) {
+        if (obj.top === 0)
+          obj.set({ top: 0, left: activeObject.left })
+
+        if (obj.left === 0) {
+          if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image')
+            obj.set({ top: activeObject.top + (Number.parseFloat(activeObject.height) * activeObject.scaleY), left: 0 })
+          else
+            obj.set({ top: activeObject.top + (Number.parseFloat(activeObject.height) * activeObject.scaleY) - (1 * ((Number.parseFloat(activeObject.height) * activeObject.scaleY) / 5)), left: 0 })
+        }
+      }
+      if (obj.isAlertIcon && obj.id === activeObject.hash)
+        obj.set({ top: activeObject.top, left: activeObject.left + (activeObject.width * activeObject.scaleX) })
+    })
     canvas.renderAll()
   }
 }
