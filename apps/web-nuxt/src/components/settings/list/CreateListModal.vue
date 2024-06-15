@@ -11,14 +11,14 @@
 
             <div class="flex flex-col align-items-center gap-3 mb-5">
               <label for="listname" class="font-semibold w-6rem text-lg">List name <span class="text-red-400">*</span></label>
-              <span v-if="addClicked && listName === ''" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>List name should not be empty!</span>
+              <span v-if="addClicked && listName === ''" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>List name should not be empty</span>
               <InputText id="listname" class="flex-auto" v-model="listName" placeholder="List name" autocomplete="off" :invalid="addClicked && listName === ''"/>
             </div>
 
             <div class="flex flex-col align-items-center gap-2 mb-3">
                 <label for="listitems" class="font-semibold w-6rem text-lg">List items<span class="text-red-400">*</span></label>
                 <span class="text-sm text-surface-500">Multiple entries are allowed <br/> (Comma separated entries)</span>
-                <span v-if="addClicked && listItems.length === 0" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>You should Add Items!</span>
+                <span v-if="addClicked && listItems.length === 0" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>You should add items</span>
                 <Textarea id="listItems" v-model="listItem" rows="10" cols="30" placeholder="List item" :invalid="addClicked && listItem === ''"/>
             </div>
         

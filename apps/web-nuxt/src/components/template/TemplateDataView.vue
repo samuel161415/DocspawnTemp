@@ -51,10 +51,10 @@
                         @dragleave.prevent="item.templateType !== 'form to doc' && handleDragLeave(item, index)"
                         @drop.prevent="item.templateType !== 'form to doc' && handleFileDrop(item, $event)">
 
-                        <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[240px] md:h-[113px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
-                            <font-awesome-icon :icon="fad.faUpload" size="xl" style="--fa-primary-color: #747576; --fa-secondary-color: #747576; --fa-secondary-opacity: 0.5;" />
-                            <p class="text-surface-600 font-poppins text-lg ">Drag and drop file</p>
-                            <p class="text-surface-500 font-poppins text-base text-center mt-1">Supported format: XLSX or CSV</p>
+                        <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[113px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+                            <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
+                            <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">Drop your data here</p>
+                            <p class="text-black font-poppins text-base text-center">Supported format: .csv, .xls, .xlsx</p>
 
                         </div>
 
@@ -78,7 +78,7 @@
                                     
                                     <div class="flex flex-row-reverse md:flex-row">
                                         <Button v-if="item.templateType === 'form to doc'" label="Fill form"  class="flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm"></Button>
-                                        <Button v-else label="Drag or upload a file"  class="flex-auto md:flex-initial white-space-nowrap w-80 h-16"></Button>
+                                        <Button v-else label="Select or drop file"  class="flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="uploadFile"></Button>
                                     </div>
                                 </div>
                             </div>
@@ -97,9 +97,9 @@
                         @drop.prevent="item.templateType !== 'form to doc' && handleFileDrop(item, $event)">
 
                         <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
-                            <font-awesome-icon :icon="fad.faUpload" size="xl" style="--fa-primary-color: #747576; --fa-secondary-color: #747576; --fa-secondary-opacity: 0.5;" />
-                            <p class="text-surface-600 font-poppins text-lg mt-5">Drag and drop file</p>
-                            <p class="text-surface-500 font-poppins text-base text-center mt-2">Supported format: XLSX or CSV</p>
+                            <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
+                            <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">Drop your data here</p>
+                            <p class="text-black font-poppins text-base text-center mt-2">Supported format: <br/> .csv, .xls, .xlsx</p>
 
                         </div>
 
@@ -121,7 +121,7 @@
                                 </div>
                                 <div class="flex flex-col">
                                     <Button v-if="item.templateType === 'form to doc'" label="Fill form"  class="flex-auto cursor-pointer font-poppins" @click="handleFillForm"></Button>
-                                    <Button v-else label="Drag or upload file"  class="flex-auto white-space-nowrap font-poppins cursor-pointer"></Button>
+                                    <Button v-else label="Select or drop file"  class="flex-auto white-space-nowrap font-poppins cursor-pointer" @click="uploadFile"></Button>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +148,21 @@
         </OverlayPanel>
 
         <TemplatePreview v-if="visible" v-model:visible="visible" @cancel="visible = false" :template="currentTemplate" @outsideClick="handleOutsideClick"/>
-        <Toast />
+        <!-- <Toast /> -->
+        <Toast position="top-right">
+            <template #message="slotProps">
+                <div class="flex  items-start space-x-2">
+                    <div class="mt-1">
+                        <font-awesome-icon :icon="fal.faFileCircleXmark" size="lg" style="color: #c8432f;" />
+                    </div>
+                    <div class="">
+                        <div class="font-bold text-lg font-poppins text-error ">{{ slotProps.message.summary }}</div>
+                        <div class="font-normal text-base font-poppins text-error">{{ slotProps.message.detail }}</div>
+                    </div>
+                    
+                </div>
+            </template>
+        </Toast>
     </div>
 </template>
 
@@ -159,7 +173,7 @@ import FormEditorPreview from "~/components/createTemplate/formEditor/FormEditor
 import TemplatePreview from './TemplatePreview.vue';
 import { useToast } from "primevue/usetoast";
 import { fad } from '@fortawesome/pro-duotone-svg-icons';
-
+import { fal } from '@fortawesome/pro-light-svg-icons';
 
 const toast = useToast();
 
@@ -206,7 +220,7 @@ const toggle = (event) => {
 }
 
 const showError = () => {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Invalid file format. Please select a CSV, XLS, or XLSX file.', life: 3000 });
+    toast.add({ severity: 'error', summary: 'Invalid file format', detail: 'Please upload a .csv, .xls or .xlsx file', life: 3000 });
 };
 
 const filteredTemplates = computed(() => {
@@ -277,5 +291,27 @@ const handleFileUpload = (files) => {
     console.log('Uploading files', files);
 };
 
+const uploadFile = () => {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+  fileInput.style.display = 'none';
+  
+  fileInput.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+  
+    reader.onload = () => {
+      avatarImage.value = reader.result;
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  document.body.appendChild(fileInput);
+  fileInput.click();
+};
 </script>
 

@@ -10,34 +10,37 @@
             <p class="text-surface-600 font-poppins text-xl font-medium" id="my-profile">My profile</p>
             <p class="text-surface-500 font-poppins text-lg mt-2">Your personal information and account security settings. </p>
         </div>
-  
-        <div class="my-5">
-          <p class="text-surface-600 font-poppins text-lg font-normal">Avatar</p>
-          <div class="relative flex items-center justify-center cursor-pointer hover:opacity-50" @mouseenter="showCamera = true" @mouseleave="showCamera = false">
-            <Avatar v-if="avatarImage" :image="avatarImage" class="text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
-            <Avatar v-else label="AD" :image="avatarImage" class=" text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
-            <i v-show="showCamera" class="pi pi-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer"></i>
-          </div>
-        </div>
           
       </div>
+        <div class="flex justify-between">
 
-        <div class="mt-10">
-          <p class="text-surface-600 font-poppins text-lg font-normal">Full name</p>
-          <span class="relative flex">
-              <i class="pi pi-user absolute top-2/4 left-3 text-surface-400 dark:text-surface-600"
-                  style="color: rgb(117, 119, 120);"></i>
-              <InputText type="text" v-model="fullName" class="w-full mt-3 rounded-lg pl-10" />
-          </span>
-        </div>
+          <div class="mt-5 w-full">
+            <p class="text-surface-600 font-poppins text-lg font-normal">Full name</p>
+            <span class="relative flex">
+                <i class="pi pi-user absolute top-1/3 my-2 left-3 text-surface-400 dark:text-surface-600"
+                    style="color: rgb(117, 119, 120);"></i>
+                <InputText type="text" v-model="fullName" class="mt-3 rounded-lg pl-10" style="width: 98%;" />
+            </span>
+         
+            <p class="text-surface-600 font-poppins text-lg font-normal mt-5">Email</p>
+            <span class="relative flex">
+                <i class="pi pi-envelope absolute top-1/3 my-2 left-3 text-surface-400 dark:text-surface-600"
+                    style="color: rgb(117, 119, 120);"></i>
+                <InputText type="text" v-model="email" class="mt-3 rounded-lg pl-10" style="width: 98%;"/>
+            </span>
+          </div>
 
-        <div class="mt-5">
-          <p class="text-surface-600 font-poppins text-lg font-normal">Email</p>
-          <span class="relative flex">
-              <i class="pi pi-envelope absolute top-2/4  left-3 text-surface-400 dark:text-surface-600"
-                  style="color: rgb(117, 119, 120);"></i>
-              <InputText type="text" v-model="email" class="w-full mt-3 rounded-lg pl-10" />
-          </span>
+          <!-- avatar -->
+
+          <div class="w-64 mt-5">
+            <p class="text-surface-600 flex font-poppins text-lg font-normal justify-center">Avatar</p>
+            <div class="mt-2 relative flex  cursor-pointer hover:opacity-40 ml-4 justify-center" @mouseenter="showCamera = true" @mouseleave="showCamera = false" @click="uploadImage">
+              <Avatar v-if="avatarImage" :image="avatarImage" class="text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
+              <Avatar v-else label="AD" :image="avatarImage" class=" text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
+              <i v-show="showCamera" class="pi pi-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-black"></i>
+            </div>
+          </div>
+
         </div>
 
         <div class="mt-5">
@@ -45,7 +48,7 @@
           <div class="flex justify-between mt-3">
             <!-- password -->
             <span class="relative flex w-full">
-              <i class="pi pi-lock  absolute top-1/4 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
+              <i class="pi pi-lock  absolute top-1/3 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
               <Password v-model="password" style="width: 98%; height: 44px;" toggleMask>
                 <template #header>
                     <h6>Pick a password</h6>
@@ -70,6 +73,7 @@
               label="Change password" 
               class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
               severity="success"
+              @click="requireConfirmation($event)"
               />
           </div>
         </div>
@@ -81,17 +85,17 @@
             <p class="text-surface-500 font-poppins text-lg font-normal mt-2">Customize your language and region.</p>
           </div>
 
-          <div class="mt-7">
+          <div class="mt-5">
             <p class="text-surface-600 font-poppins text-lg font-normal">Language</p>
             <Dropdown v-model="selectedLanguage" :options="language" optionLabel="name" placeholder="English" style="width: 100%; height: 44px;" class="flex justify-center mt-3 font-poppins" />
           </div>
 
-          <div class="mt-7">
+          <div class="mt-5">
             <p class="text-surface-600 font-poppins text-lg font-normal">Timezone</p>
             <Dropdown v-model="selectedTimeZone" :options="cities" optionLabel="name" placeholder="Asian/Kuala Lumpur"  style="width: 100%; height: 44px;" class="flex justify-center mt-3 font-poppins" />
           </div>
 
-          <div class="flex mt-7">
+          <div class="flex mt-5">
               <Checkbox v-model="notifyTimeZone" inputId="notifyTimeZone" name="notifyTimeZone" value="notifyTimeZone" :binary="true" />
               <label for="notifyTimeZone" class="ml-4 text-surface-500 font-poppins text-lg font-normal"> Notify me of timezone changes </label>
           </div>
@@ -104,7 +108,7 @@
             <p class="text-surface-500 font-poppins text-lg font-normal mt-2">Select the way times & dates are displayed.</p>
           </div>
 
-          <p class="text-surface-600 font-poppins text-lg mt-8">Start of the calendar week</p>
+          <p class="text-surface-600 font-poppins text-lg mt-5">Start of the calendar week</p>
           <div class="mt-3 flex justify-between w-1/2"> 
 
             <div class="flex w-1/2"> 
@@ -118,7 +122,7 @@
             </div>
           </div>
 
-          <p class="text-surface-600 font-poppins text-lg mt-7">Time format</p>
+          <p class="text-surface-600 font-poppins text-lg mt-5">Time format</p>
           <div class="mt-3 flex justify-between w-1/2"> 
 
             <div class="flex w-1/2"> 
@@ -132,7 +136,7 @@
             </div>
           </div>
 
-          <p class="text-surface-600 font-poppins text-lg mt-7">Date format</p>
+          <p class="text-surface-600 font-poppins text-lg mt-5">Date format</p>
           
           <div class="mt-3 flex justify-between w-1/2">
             <div class="flex w-1/2">
@@ -155,13 +159,28 @@
       </div>
     </div>
   
+    <ConfirmPopup group="headless">
+        <template #container="{ message, acceptCallback, rejectCallback }">
+          <div class="rounded-full p-3 mt-2">
+            <i class="pi pi-exclamation-triangle = mr-2"></i>
+            <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
+            <div class="flex justify-end gap-2 mt-3">
+              <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
+              <Button label="Yes" @click="acceptCallback"  severity="success" size="small" ></Button>
+            </div>
+          </div>
+        </template>
+    </ConfirmPopup>
+
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useConfirm } from "primevue/useconfirm";
 
+const confirm = useConfirm();
 const router = useRouter();
 
 const fullName = ref('');
@@ -209,6 +228,14 @@ const uploadImage = () => {
   
   document.body.appendChild(fileInput);
   fileInput.click();
+};
+
+const requireConfirmation = (event) => {
+    confirm.require({
+        target: event.currentTarget,
+        group: 'headless',
+        message: 'Are you sure you want to change password ?'
+    });
 };
 </script>
 

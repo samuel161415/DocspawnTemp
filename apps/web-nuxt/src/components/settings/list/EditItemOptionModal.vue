@@ -27,7 +27,7 @@
                     <label for="sublistitems" class="font-semibold w-6rem text-lg">Sublist items <span class="text-red-400">*</span></label>
                     <span class="text-sm text-surface-500">Multiple entries are allowed <br/> (Comma separated entries)</span>
                     
-                    <span v-if="addClicked && sublistItems.length === 0" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>You should Add Items</span>
+                    <span v-if="addClicked && sublistItems.length === 0" class="text-sm text-error"><i class="pi pi-exclamation-triangle text-error mr-2"></i>You should add items</span>
                     <Textarea id="sublistItems" v-model="sublistItem" rows="10" cols="30" placeholder="List item" :invalid="addClicked && sublistItem === ''"/>
                 </div>
 
@@ -101,7 +101,6 @@
   const addClicked = ref(false);
 
 //   const containsublist = ref(false);
-// Change this line in EditItemOptionModal.vue
 const containsublist = ref(props.containsublist);
   const visible = ref(false);
   const listItemName = ref(props.editableItem.title);

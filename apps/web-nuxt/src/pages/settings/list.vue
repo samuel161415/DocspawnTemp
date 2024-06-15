@@ -60,7 +60,7 @@
 
                                     <ul v-if="subItem.opensubmenu" class="ml-3" >
                                         <li v-for="subsubItem in subItem.sublists" :key="subsubItem.title">
-                                            <div  v-if="subsubItem?.sublists && subsubItem.sublists.length > 0" :key="subsubItem.title" 
+                                            <div v-if="subsubItem?.sublists && subsubItem.sublists.length > 0" :key="subsubItem.title" 
                                                 class="ml-5 font-poppins flex py-2 pl-1 hover:bg-surface-100 items-center" 
                                                 @click="handleopensubmenu(subsubItem)">
                                                 
@@ -129,6 +129,22 @@
             </div>
         </Dialog>
 
+        <ConfirmDialog group="headless">
+            <template #container="{ message, acceptCallback, rejectCallback }">
+                <div class="flex flex-col items-center p-5 bg-surface-0 dark:bg-surface-900 rounded-md">
+                    <div class="rounded-full bg-primarytext-white dark:text-surface-950 inline-flex justify-center items-center h-[6rem] w-[6rem] -mt-8">
+                        <i class="pi pi-question text-5xl"></i>
+                    </div>
+                    <span class="font-bold text-2xl block mb-2 mt-4">{{ message.header }}</span>
+                    <p class="mb-0">{{ message.message }}</p>
+                    <div class="flex items-center gap-2 mt-4">
+                        <Button label="Save" @click="acceptCallback"></Button>
+                        <Button label="Cancel" outlined @click="rejectCallback"></Button>
+                    </div>
+                </div>
+            </template>
+        </ConfirmDialog>
+
     </div>
 </template>
 
@@ -136,6 +152,7 @@
 import { ref, watch } from "vue";
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
 import DataTableComponent from '~/components/settings/list/Table.vue';
 import CreateListModal from '~/components/settings/list/CreateListModal.vue';
 import AddItemsModal from '~/components/settings/list/AddItemsModal.vue';
@@ -147,6 +164,7 @@ import { addNewListItem } from '~/services/newListData.js';
 const copiedList = ref(JSON.parse(JSON.stringify(addNewListItem.value)));
 
 const toast = useToast();
+const confirm = useConfirm();
 const visible = ref(false);
 const openAddItems = ref(false);
 const openListOptions = ref(false);
@@ -313,11 +331,38 @@ const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 });
 };
 
+const requireConfirmation = () => {
+    confirm.require({
+        group: 'headless',
+        header: 'Are you sure?',
+        message: 'Please confirm to proceed.',
+        accept: () => {
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
+};
+
+console.log('openItemOptions', openItemOptions.value );
+watch(openItemOptions, (newValue, oldValue) => {
+    console.log('openItemOptions', openItemOptions.value );
+    if (openItemOptions.value === false) {
+        containsublist.value = false;
+        editableItem.value = null;
+    }
+    // requireConfirmation();
+});
+
 const cancelEditItemOptionModal = () => {
-    openItemOptions.value = false;
+    console.log('cancel', openItemOptions.value );
+    // openItemOptions.value = false;
+    requireConfirmation();
     containsublist.value = false;
     console.log('cancel', containsublist.value );
 };
+
 </script>
 
 <style scoped>
