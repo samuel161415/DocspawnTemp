@@ -54,8 +54,7 @@
                         <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[113px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
                             <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
                             <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">Drop your data here</p>
-                            <p class="text-black font-poppins text-base text-center">Supported format: .csv, .xls, .xlsx</p>
-
+                            <p class="text-black font-poppins text-base text-center">Supported file formats: .csv, .xls, .xlsx</p>
                         </div>
 
                         <div v-else  class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-50">
@@ -99,8 +98,7 @@
                         <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
                             <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
                             <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">Drop your data here</p>
-                            <p class="text-black font-poppins text-base text-center mt-2">Supported format: <br/> .csv, .xls, .xlsx</p>
-
+                            <p class="text-black font-poppins text-base text-center mt-2">Supported file formats: <br/> .csv, .xls, .xlsx</p>
                         </div>
 
                         <div v-else class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
@@ -138,7 +136,8 @@
             :isCollapsed="isCollapsed"
             @cancel="previewFormVisible = false"
         />
-         <OverlayPanel ref="op">
+        
+        <OverlayPanel ref="op">
             <div class="flex flex-col justify-start w-48 h-44">
                 <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Edit template</p>
                 <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Access data</p>
@@ -272,18 +271,25 @@ const handleDragLeave = (item, index) => {
 
 const handleFileDrop = (template, event) => {
     const files = event.dataTransfer.files;
-
-    const fileName = files[0].name;
-    const fileType = fileName.split('.').pop();
-
-    if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
-        fileTypeCheck.value = true;
-        handleFileUpload(files); 
-    } else {
-        fileTypeCheck.value = false;
+   
+    if (!files[0]){
+        isDragging.value.fill(false);
         showError();
     }
-    isDragging.value.fill(false);
+    else{
+
+        const fileName = files[0].name;
+        const fileType = fileName.split('.').pop();
+        
+        if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
+            fileTypeCheck.value = true;
+            handleFileUpload(files); 
+        } else {
+            fileTypeCheck.value = false;
+            showError();
+        }
+        isDragging.value.fill(false);
+    }
 };
 
 const handleFileUpload = (files) => {
