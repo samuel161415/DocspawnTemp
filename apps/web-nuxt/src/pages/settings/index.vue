@@ -35,9 +35,9 @@
           <div class="w-64 mt-5">
             <p class="text-surface-600 flex font-poppins text-lg font-normal justify-center">Avatar</p>
             <div class="mt-2 relative flex  cursor-pointer hover:opacity-40 ml-4 justify-center" @mouseenter="showCamera = true" @mouseleave="showCamera = false" @click="uploadImage">
-              <Avatar v-if="avatarImage" :image="avatarImage" class="text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
-              <Avatar v-else label="AD" :image="avatarImage" class=" text-xl mt-1 rounded-full" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: large; border-radius: 100%;" />
-              <i v-show="showCamera" class="pi pi-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-black"></i>
+              <Avatar v-if="avatarImage" :image="avatarImage" class="text-xl mt-1 rounded-full border object-fill" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: x-large; border-radius: 100%; height: 141px; width: 141px;" />
+              <Avatar v-else label="AD" :image="avatarImage" class=" text-xl mt-1 rounded-full border object-fill" size="xlarge" shape="circle" style="background-color: #009EE2; color: #fff; font-weight: 600; font-size: xx-large; border-radius: 100%; height: 141px; width: 141px;" />
+              <i v-show="showCamera" class="pi pi-camera absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 cursor-pointer text-black text-4xl"></i>
             </div>
           </div>
 

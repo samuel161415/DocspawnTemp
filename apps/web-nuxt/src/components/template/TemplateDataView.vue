@@ -136,7 +136,7 @@
             :isCollapsed="isCollapsed"
             @cancel="previewFormVisible = false"
         />
-        
+
         <OverlayPanel ref="op">
             <div class="flex flex-col justify-start w-48 h-44">
                 <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">Edit template</p>
@@ -223,29 +223,30 @@ const showError = () => {
 };
 
 const filteredTemplates = computed(() => {
-  let filtered = props.templates;
+    let filtered = props.templates;
 
-  // Filter by type
-  switch (filterOption.value) {
-    case 'favorites':
-      filtered = filtered.filter(template => template.isFavorite === true);
-      break;
-    case 'form to doc':
-      filtered = filtered.filter(template => template.templateType === 'form to doc');
-      break;
-    case 'data to doc':
-      filtered = filtered.filter(template => template.templateType === 'data to doc');
-      break;
-    case 'table to doc':
-      filtered = filtered.filter(template => template.templateType === 'table to doc');
-      break;
-  }
+    // Filter by type
+    switch (filterOption.value) {
+        case 'favorites':
+        filtered = filtered.filter(template => template.isFavorite === true);
+        break;
+        case 'form to doc':
+        filtered = filtered.filter(template => template.templateType === 'form to doc');
+        break;
+        case 'data to doc':
+        filtered = filtered.filter(template => template.templateType === 'data to doc');
+        break;
+        case 'table to doc':
+        filtered = filtered.filter(template => template.templateType === 'table to doc');
+        break;
+    }
 
     // Filter by search query
     if (searchQuery.value) {
         filtered = filtered.filter(template => template.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
     }
-  return filtered;
+    
+    return filtered;
 });
 
 const handleOutsideClick = () => {
