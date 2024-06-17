@@ -114,13 +114,14 @@
             v-model:tableData="tableData" />
 
         <EditItemOptionModal v-if="editableItem" v-model:visible="openItemOptions" @editItem="handleEditItem"
-            v-model:editableItem="editableItem" v-model:containsublist="containsublist" @cancel="cancelEditItemOptionModal"
+            v-model:editableItem="editableItem" v-model:containsublist="containsublist" @cancel="openItemOptions = false"
             @openCreateListModal="createSubList" />
 
         <!-- delete -->
         <Dialog v-model:visible="openDeleteModal" header="Delete" modal :style="{ width: '25rem' }">
-            <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-error mr-2"></i>Are you
-                sure you want to delete this Item?</span>
+            <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-error mr-2"></i>
+                Are you sure you want to delete this Item?
+            </span>
 
             <div class="flex justify-end gap-2">
                 <Button type="button" label="Cancel" outlined @click="openDeleteModal = false"></Button>
@@ -128,22 +129,6 @@
                     class="bg-error hover:bg-red-500 hover:border-error text-white"></Button>
             </div>
         </Dialog>
-
-        <ConfirmDialog group="headless">
-            <template #container="{ message, acceptCallback, rejectCallback }">
-                <div class="flex flex-col items-center p-5 bg-surface-0 dark:bg-surface-900 rounded-md">
-                    <div class="rounded-full bg-primarytext-white dark:text-surface-950 inline-flex justify-center items-center h-[6rem] w-[6rem] -mt-8">
-                        <i class="pi pi-question text-5xl"></i>
-                    </div>
-                    <span class="font-bold text-2xl block mb-2 mt-4">{{ message.header }}</span>
-                    <p class="mb-0">{{ message.message }}</p>
-                    <div class="flex items-center gap-2 mt-4">
-                        <Button label="Save" @click="acceptCallback"></Button>
-                        <Button label="Cancel" outlined @click="rejectCallback"></Button>
-                    </div>
-                </div>
-            </template>
-        </ConfirmDialog>
 
     </div>
 </template>
@@ -331,37 +316,14 @@ const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 });
 };
 
-const requireConfirmation = () => {
-    confirm.require({
-        group: 'headless',
-        header: 'Are you sure?',
-        message: 'Please confirm to proceed.',
-        accept: () => {
-            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
-        },
-        reject: () => {
-            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
-        }
-    });
-};
-
-console.log('openItemOptions', openItemOptions.value );
 watch(openItemOptions, (newValue, oldValue) => {
-    console.log('openItemOptions', openItemOptions.value );
+    
     if (openItemOptions.value === false) {
         containsublist.value = false;
         editableItem.value = null;
     }
-    // requireConfirmation();
 });
 
-const cancelEditItemOptionModal = () => {
-    console.log('cancel', openItemOptions.value );
-    // openItemOptions.value = false;
-    requireConfirmation();
-    containsublist.value = false;
-    console.log('cancel', containsublist.value );
-};
 
 </script>
 
