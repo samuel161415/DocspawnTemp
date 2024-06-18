@@ -42,7 +42,7 @@
         <!-- <ElementRotation /> -->
         <!-- /*************************************************************/ -->
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
-          <p class="mb-1 font-poppins">
+          <p class="mb-1 font-poppins text-surface-500">
             Datafield
           </p>
 
@@ -83,7 +83,7 @@
           <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
         </div> -->
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form multiline' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time'" class="">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form multiline' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="">
           <FormOptions />
         </div>
 

@@ -249,7 +249,7 @@ async function showThumbnail() {
 
 watch(activeTextStyles, () => {
   addEventsToCanvas()
-  console.log('setting on onject', activeTextStyles)
+
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObject = canvas?.getActiveObject()

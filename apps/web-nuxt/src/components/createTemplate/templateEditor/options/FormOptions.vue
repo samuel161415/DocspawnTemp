@@ -26,6 +26,15 @@
         header-class="text-surface-500 "
         header="Advanced options"
       > -->
+    <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="w-full pt-4 mb-4">
+      <p class="font-poppins text-md text-surface-500 mb-2">
+        Select list
+      </p>
+      <CascadeSelect
+        v-model="selectedCity" :options="countries" option-label="cname" option-group-label="name" class="w-full md:w-full"
+        :option-group-children="['states', 'cities']" style="min-width: 14rem" placeholder="Select list"
+      />
+    </div>
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form time'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surface-500 mb-2">
         Select Format
@@ -263,6 +272,78 @@ watch(selectedDateFormat, () => {
     else return f
   })
 })
+// /******************* */
+const selectedCity = ref()
+const countries = ref([
+  {
+    name: 'Australia',
+    code: 'AU',
+    states: [
+      { cname: 'Sydney', code: 'A-SY' },
+      { cname: 'Newcastle', code: 'A-NE' },
+
+      {
+        name: 'Queensland',
+        cities: [
+          { cname: 'Brisbane', code: 'A-BR' },
+          { cname: 'Townsville', code: 'A-TO' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Canada',
+    code: 'CA',
+    states: [
+      {
+        name: 'Quebec',
+        cities: [
+          { cname: 'Montreal', code: 'C-MO' },
+          { cname: 'Quebec City', code: 'C-QU' },
+        ],
+      },
+      {
+        name: 'Ontario',
+        cities: [
+          { cname: 'Ottawa', code: 'C-OT' },
+          { cname: 'Toronto', code: 'C-TO' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'United States',
+    code: 'US',
+    states: [
+      {
+        name: 'California',
+        cities: [
+          { cname: 'Los Angeles', code: 'US-LA' },
+          { cname: 'San Diego', code: 'US-SD' },
+          { cname: 'San Francisco', code: 'US-SF' },
+        ],
+      },
+      {
+        name: 'Florida',
+        cities: [
+          { cname: 'Jacksonville', code: 'US-JA' },
+          { cname: 'Miami', code: 'US-MI' },
+          { cname: 'Tampa', code: 'US-TA' },
+          { cname: 'Orlando', code: 'US-OR' },
+        ],
+      },
+      {
+        name: 'Texas',
+        cities: [
+          { cname: 'Austin', code: 'US-AU' },
+          { cname: 'Dallas', code: 'US-DA' },
+          { cname: 'Houston', code: 'US-HO' },
+        ],
+      },
+    ],
+  },
+  { cname: 'Wollongong', code: 'A-WO' },
+])
 </script>
 
   <style lang="scss" scoped>
