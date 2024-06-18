@@ -187,7 +187,7 @@ watch(constantTextValue, () => {
     const activeObj = canvas.getActiveObject()
     if (activeObj) {
       if (constantTextValue.value)
-        activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: constantTextValue.value, id: constantTextValue.value })
+        activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, charSpacing: activeTextStyles.charSpacing, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: constantTextValue.value, id: constantTextValue.value })
       else
         activeObj.set({ text: 'Add text', fill: '#ff0000', id: 'Lorem ipsum' })
     }
@@ -258,7 +258,7 @@ watch(activeDataField, () => {
         if (activeDataField.value === 'Lorem ipsum')
           obj.set({ text: activeDataField.value === 'Lorem ipsum' ? obj.text : activeDataField.value, id: activeDataField.value === 'Lorem ipsum' ? obj.id : activeDataField.value })
         else
-          obj.set({ ...activeObject.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: activeDataField.value === 'Lorem ipsum' ? obj.text : activeDataField.value, id: activeDataField.value === 'Lorem ipsum' ? obj.id : activeDataField.value })
+          obj.set({ ...activeObject.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, charSpacing: activeTextStyles.charSpacing, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, text: activeDataField.value === 'Lorem ipsum' ? obj.text : activeDataField.value, id: activeDataField.value === 'Lorem ipsum' ? obj.id : activeDataField.value })
         return obj
       }
       else {

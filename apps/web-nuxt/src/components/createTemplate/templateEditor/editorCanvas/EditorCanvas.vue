@@ -165,6 +165,7 @@ async function createCanvas() {
           activeTextStyles.textAlign = activeObject.textAlign ? activeObject.textAlign : 'center'
           activeTextStyles.fontStyle = activeObject.fontStyle ? activeObject.fontStyle : 'normal'
           activeTextStyles.fontWeight = activeObject.fontWeight ? activeObject.fontWeight : 300
+          activeTextStyles.charSpacing = activeObject.charSpacing ? activeObject?.charSpacing : 0
         }
 
         templateEditorStore.addedFields.forEach((f) => {
@@ -248,6 +249,7 @@ async function showThumbnail() {
 
 watch(activeTextStyles, () => {
   addEventsToCanvas()
+  console.log('setting on onject', activeTextStyles)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObject = canvas?.getActiveObject()
@@ -262,6 +264,7 @@ watch(activeTextStyles, () => {
         textAlign: activeTextStyles.textAlign,
         fontStyle: activeTextStyles.fontStyle,
         fontWeight: activeTextStyles.fontWeight,
+        charSpacing: activeTextStyles.charSpacing,
       })
       canvas.renderAll()
     }

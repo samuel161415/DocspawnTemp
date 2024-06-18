@@ -8,6 +8,7 @@ export const activeTextStyles = reactive({
   fontStyle: 'normal',
   fontWeight: 300,
   underline: false,
+  charSpacing: 0,
 
 })
 

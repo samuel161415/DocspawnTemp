@@ -48,8 +48,8 @@ export default function addEventsToCanvas() {
           const bound = obj.getBoundingRect()
 
           canvas.contextContainer.strokeRect(
-            bound.left + 0.5,
-            bound.top + 0.5,
+            bound.left + 0.1,
+            bound.top + 0.1,
             bound.width,
             bound.height,
           )
@@ -95,7 +95,8 @@ export default function addEventsToCanvas() {
           if (obj.top === 0)
             obj.set({ top: 0, left: e.target.left })
           if (obj.left === 0) {
-            if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline')
+            if (
+              obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline')
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
             else
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
@@ -231,6 +232,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
+            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
@@ -251,6 +253,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
+            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
@@ -479,6 +482,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
+            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             fieldType: templateEditorStore.fieldToAdd.type,
@@ -487,6 +491,7 @@ export default function addEventsToCanvas() {
 
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
+
           },
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
