@@ -234,7 +234,7 @@ const requireConfirmation = (event) => {
     confirm.require({
         target: event.currentTarget,
         group: 'headless',
-        message: 'Are you sure you want to change password ?'
+        message: 'Are you sure you want to change your password?'
     });
 };
 </script>

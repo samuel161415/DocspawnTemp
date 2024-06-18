@@ -19,7 +19,7 @@
             v-model:filters="filters"
             :value="filteredData"
             show-gridlines
-            paginator
+            :paginator="filteredData.length > 0"
             responsive-layout="scroll"
             :rows="25"
             :row-hover="true"
