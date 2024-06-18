@@ -140,8 +140,8 @@ const handleAdd = () => {
 };
 
 const handleEditItem = () => {
-
-    isInvalid.value = listItemName.value === '';
+ 
+    isInvalid.value = listItemName.value === '' || (containsublist.value && sublistItems.value.length === 0);
     if (sublistItems.value.length > 0 && props.editableItem?.level != 3){
         sublistItems.value = sublistItems.value.map((item, index) => {
             return { 
@@ -157,7 +157,7 @@ const handleEditItem = () => {
     const editedData = {
         'id':props.editableItem.id,
         'title':listItemName.value,
-        'sublists':sublistItems.value,
+        'sublists': props.editableItem.sublists.concat(sublistItems.value),
     };
 
     emit('editItem',editedData)
@@ -182,6 +182,17 @@ const handleEditItem = () => {
 
         emit('cancel');
 
+    } else if (!containsublist.value && props.editableItem?.level != 3){
+        const editedData = {
+            'id':props.editableItem.id,
+            'title':listItemName.value,
+            'sublists': props.editableItem.sublists,
+        };
+        emit('editItem',editedData)
+
+        listItemName.value = '';
+
+        emit('cancel');
     }
  
 
