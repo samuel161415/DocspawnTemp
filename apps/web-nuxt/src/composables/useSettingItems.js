@@ -115,24 +115,25 @@ export const useSettingItems = () => {
         subitems: []
       },
       {
-        title: "Formatting options",
+        title: "Custom formatting",
         icon: "pi pi-home",
-        route: "/field_formats",
+        route: "/formatting_options",
         isHovered: false,
         subitems: [
-          {
-            title: "Time & Date",
-            icon: "pi pi-clock",
-            componentId: "date-formats",
-            route: "/field_formats",
-            isHovered: false,
-            nestedMenuVisible: false,
-            subitems:[]
-          },
+          // {
+          //   title: "Custom formatting",
+          //   icon: "pi pi-clock",
+          //   componentId: "custom-formatting",
+          //   route: "/formatting_options",
+          //   isHovered: false,
+          //   nestedMenuVisible: false,
+          //   subitems:[]
+          // },
+
           {
             title: "Checkboxes ",
             icon: "pi pi-check-square",
-            route: "/field_formats",
+            route: "/formatting_options",
             componentId: "checkbox-formats",
             isHovered: false,
             nestedMenuVisible: false,

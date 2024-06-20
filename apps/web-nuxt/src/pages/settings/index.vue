@@ -77,7 +77,36 @@
               />
           </div>
         </div>
-        <!--  -->
+
+        <!--confirm password  -->
+        <div class="mt-5">
+          <p class="text-surface-600 font-poppins text-lg font-normal">Password confirmation</p>
+          <div class="flex justify-between mt-3">
+            <!-- password -->
+            <span class="relative flex w-full">
+              <i class="pi pi-lock  absolute top-1/3 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
+              <Password v-model="confirmPassword" style="width: 100%; height: 44px;" toggleMask>
+                <template #header>
+                    <h6>Pick a password</h6>
+                </template>
+                <template #footer>
+                    <Divider />
+                    <div class="">
+                      <p class="mt-2 p-0 mb-2">Suggestions</p>
+                      <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
+                          <li>At least one lowercase</li>
+                          <li>At least one uppercase</li>
+                          <li>At least one numeric</li>
+                          <li>Minimum 8 characters</li>
+                      </ul>
+                  
+                    </div>
+                </template>
+              </Password>
+          </span>
+      
+          </div>
+        </div>
 
         <div class="mt-28" id="language-region">
           <div class="">
@@ -186,6 +215,7 @@ const router = useRouter();
 const fullName = ref('');
 const email = ref('');
 const password = ref('');
+const confirmPassword = ref('');
 const notifyTimeZone = ref(false)
 const showCamera = ref(false);
 

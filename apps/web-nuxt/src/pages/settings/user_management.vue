@@ -3,7 +3,7 @@
     <div class="ml-4 w-full overflow-scroll no-scrollbar rounded-lg">
         <div class="rounded-lg bg-white py-8 px-8 ">
             <div class="py-2">
-                <p class="font-semibold text-surface-600 text-2xl">User management</p>
+                <p class="font-semibold text-surface-600 text-2xl font-poppins">User management</p>
                 <!-- User's view -->
                 <Users />
             

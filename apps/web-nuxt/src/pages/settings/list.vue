@@ -204,6 +204,7 @@ const highlight = (data) => {
 };
 
 const handleopensubmenu = (clickedItem) => {
+    clickedItem.opensubmenu = !clickedItem.opensubmenu
     tableData.value = clickedItem;
 };
 
