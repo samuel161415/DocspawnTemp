@@ -493,7 +493,7 @@ function deleteField() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     canvas._objects = canvas._objects.filter((obj) => {
-      if (obj?.hash === fieldToDelete?.value?.hash || obj.id === fieldToDelete?.value?.hash)
+      if (obj?.hash === fieldToDelete?.value?.hash || obj.id === fieldToDelete?.value?.hash || obj?.checkboxGroupHash === fieldToDelete?.value?.hash)
         return false
       else
         return true
@@ -547,33 +547,85 @@ function selectAddedField(field) {
   if (canvas) {
     canvas.discardActiveObject()
     canvas.renderAll()
-    canvas._objects.forEach((obj) => {
-      if (obj.hash === field.hash) {
-        if (field.page !== templateEditorStore.activePageForCanvas) {
-          templateEditorStore.activePageForCanvas = field.page
-          setTimeout(() => {
-            canvas.setActiveObject(obj)
-            canvas.renderAll()
-          }, 500)
-        }
-        else {
-          canvas.setActiveObject(obj)
+    if (field?.fieldType === 'Form checkbox group') {
+      let obj = {}
+      const allObjs = canvas?.getObjects()
+      allObjs?.forEach((r) => {
+        if (obj?.checkboxIdentifierHash)
+          return
+        if (r?.id !== 'checkboxIdNoIcon' && r?.hash === field?.hash) {
+          obj = r
+          canvas.discardActiveObject()
           canvas.renderAll()
         }
-        templateEditorStore.selectedAddedField = { ...field, obj }
-        templateEditorStore.showOptionsBar = true
+      })
 
-        if (obj.text && obj.id !== 'Lorem ipsum') {
-          activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
-          activeTextStyles.fontFamily = obj.fontFamily ? obj.fontFamily : 'Arial'
-          activeTextStyles.fontSize = obj.fontSize ? obj.fontSize : 32
-          activeTextStyles.underline = obj.underline ? obj.underline : false
-          activeTextStyles.textAlign = obj.textAlign ? obj.textAlign : 'center'
-          activeTextStyles.fontStyle = obj.fontStyle ? obj.fontStyle : 'normal'
-          activeTextStyles.fontWeight = obj.fontWeight ? obj.fontWeight : 300
-        }
+      console.log('obj', obj)
+
+      if (field.page !== templateEditorStore.activePageForCanvas) {
+        templateEditorStore.activePageForCanvas = field.page
+        setTimeout(() => {
+          const sel = new fabric.ActiveSelection(canvas.getObjects()?.filter(f => f?.hash === obj?.hash || f?.checkboxGroupHash === obj?.hash), {
+            canvas,
+            cornerStyle: 'circle',
+            borderColor: '#00000066',
+            cornerColor: '#119bd6',
+            transparentCorners: false,
+            hash: obj?.hash,
+          })
+          sel.setControlsVisibility({ mtr: false })
+          canvas.setActiveObject(sel)
+          canvas.requestRenderAll()
+          canvas.renderAll()
+        }, 500)
       }
-    })
+      else {
+        const sel = new fabric.ActiveSelection(canvas.getObjects()?.filter(f => f?.hash === obj?.hash || f?.checkboxGroupHash === obj?.hash), {
+          canvas,
+          cornerStyle: 'circle',
+          borderColor: '#00000066',
+          cornerColor: '#119bd6',
+          transparentCorners: false,
+          hash: obj?.hash,
+        })
+        sel.setControlsVisibility({ mtr: false })
+        canvas.setActiveObject(sel)
+        canvas.requestRenderAll()
+        canvas.renderAll()
+      }
+      templateEditorStore.selectedAddedField = { ...field }
+      templateEditorStore.showOptionsBar = true
+    }
+    else {
+      canvas._objects.forEach((obj) => {
+        if (obj.hash === field.hash) {
+          if (field.page !== templateEditorStore.activePageForCanvas) {
+            templateEditorStore.activePageForCanvas = field.page
+            setTimeout(() => {
+              canvas.setActiveObject(obj)
+              canvas.renderAll()
+            }, 500)
+          }
+          else {
+            canvas.setActiveObject(obj)
+            canvas.renderAll()
+          }
+
+          templateEditorStore.selectedAddedField = { ...field }
+          templateEditorStore.showOptionsBar = true
+
+          if (obj.text && obj.id !== 'Lorem ipsum') {
+            activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
+            activeTextStyles.fontFamily = obj.fontFamily ? obj.fontFamily : 'Arial'
+            activeTextStyles.fontSize = obj.fontSize ? obj.fontSize : 32
+            activeTextStyles.underline = obj.underline ? obj.underline : false
+            activeTextStyles.textAlign = obj.textAlign ? obj.textAlign : 'center'
+            activeTextStyles.fontStyle = obj.fontStyle ? obj.fontStyle : 'normal'
+            activeTextStyles.fontWeight = obj.fontWeight ? obj.fontWeight : 300
+          }
+        }
+      })
+    }
   }
 }
 

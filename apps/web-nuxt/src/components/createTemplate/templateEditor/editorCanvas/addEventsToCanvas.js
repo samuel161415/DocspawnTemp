@@ -59,8 +59,6 @@ export default function addEventsToCanvas() {
             bound.height,
           )
         }
-        if (obj.fieldType === 'Form checkbox group')
-          console.log('obj', obj?.checkboxIdentifierHash)
       })
     })
 
@@ -89,6 +87,8 @@ export default function addEventsToCanvas() {
         }
         if (obj.isAlertIcon && obj.id === e.target.hash)
           obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
+        if (obj.id === 'checkboxIdNoIcon' && obj.checkboxHash === e.target.checkboxIdentifierHash)
+          obj.set({ left: e.target?.left + (e.target?.width * e.target?.scaleX) - 13, top: e.target?.top + (e.target.height * e.target?.scaleY) - 13 })
       })
 
       canvas.renderAll()
@@ -111,6 +111,8 @@ export default function addEventsToCanvas() {
         }
         if (obj.isAlertIcon && obj.id === e.target.hash)
           obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
+        if (obj.id === 'checkboxIdNoIcon' && obj.checkboxHash === e.target.checkboxIdentifierHash)
+          obj.set({ left: e.target?.left + (e.target?.width * e.target?.scaleX) - 13, top: e.target?.top + (e.target.height * e.target?.scaleY) - 13 })
 
         if (obj?.fieldType === 'Form long text') {
           // Adjust height by adding sample text
@@ -456,8 +458,8 @@ export default function addEventsToCanvas() {
       if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
         if (currentHoveredEle && currentHoveredEle?._element) {
           currentHoveredEle.set({
-            left: event.absolutePointer.x,
-            top: event.absolutePointer.y - (currentHoveredEle.height),
+            left: event.absolutePointer.x - (40 / currentHoveredEle.width),
+            top: event.absolutePointer.y - (40 / currentHoveredEle.height),
             scaleX: 40 / currentHoveredEle.width,
             scaleY: 40 / currentHoveredEle.height,
           })
@@ -499,8 +501,8 @@ export default function addEventsToCanvas() {
                 canvas.remove(currentHoveredEle)
 
               myImg.set({
-                left: event.absolutePointer.x,
-                top: event.absolutePointer.y - (myImg.height),
+                left: event.absolutePointer.x - (40 / myImg.width),
+                top: event.absolutePointer.y - (40 / myImg.height),
                 scaleX: 40 / myImg.width,
                 scaleY: 40 / myImg.height,
               })
@@ -881,8 +883,8 @@ export default function addEventsToCanvas() {
               cornerColor: '#119bd6',
               transparentCorners: false,
 
-              left: event.absolutePointer.x,
-              top: event.absolutePointer.y - (myImg.height),
+              left: event.absolutePointer.x - (40 / myImg.width),
+              top: event.absolutePointer.y - (40 / myImg.height),
               scaleX: 40 / myImg.width,
               scaleY: 40 / myImg.height,
               id: ftoadd.id,
@@ -944,6 +946,33 @@ export default function addEventsToCanvas() {
 
               canvas.renderAll()
             })
+
+            /** ********creating checkbox info icon */
+            // https://placehold.co/400/000000/ffffff?font=roboto&text=1
+            fabric.Image.fromURL(
+              'https://placehold.co/100/ffffff/ff0000?font=roboto&text=1'
+              , (icon) => {
+                icon.set({
+
+                  left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13,
+                  top: myImg?.top + (myImg.height * myImg?.scaleY) - 13,
+                  scaleX: 20 / icon.width,
+                  scaleY: 20 / icon.height,
+                  id: 'checkboxIdNoIcon',
+                  checkboxHash: myImg.checkboxIdentifierHash,
+                  checkboxGroupHash: myImg?.hash,
+                  fieldType: 'checkboxIdNoIcon',
+                  pageNo: templateEditorStore.activePageForCanvas,
+                  displayGuide: false,
+                  hasControls: false,
+                  selectable: false,
+                })
+                canvas.add(icon)
+                canvas.renderAll()
+              },
+            )
+
+            /** */
 
             canvas.add(myImg)
             canvas.renderAll()

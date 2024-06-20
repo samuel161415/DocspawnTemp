@@ -38,6 +38,9 @@
       <!-- <InputNumber v-model="noOfCheckboxes" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" /> -->
     </div>
   </div>
+  <Button outline class="w-full mt-2" @click="selectAllInGroup">
+    Select all in a group
+  </Button>
   <Button class="w-full mt-2" @click="addCheckboxToGroup">
     Add checkbox to group
   </Button>
@@ -97,7 +100,20 @@ watch(fieldDescription, () => {
 function addCheckboxToGroup() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
-    const activeObject = canvas.getActiveObject()
+    let activeObject = canvas.getActiveObject()
+    if (activeObject?._objects?.length > 0) {
+      const rev = activeObject?._objects?.reverse()
+      rev?.forEach((r) => {
+        if (activeObject?.checkboxIdentifierHash)
+          return
+        if (r?.id !== 'checkboxIdNoIcon') {
+          activeObject = r
+          canvas.discardActiveObject()
+          canvas.renderAll()
+        }
+      })
+    }
+    console.log('active object', activeObject)
     fabric.Image.fromURL(
       'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
       , (myImg) => {
@@ -178,12 +194,57 @@ function addCheckboxToGroup() {
 
           canvas.renderAll()
         })
+        /** ********* adding info icon */
+        fabric.Image.fromURL(
+          `https://placehold.co/100/ffffff/ff0000?font=roboto&text=${noOfCheckboxes.value}`
+          , (icon) => {
+            icon.set({
+
+              left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13,
+              top: myImg?.top + (myImg.height * myImg?.scaleY) - 13,
+              scaleX: 20 / icon.width,
+              scaleY: 20 / icon.height,
+              id: 'checkboxIdNoIcon',
+              checkboxHash: myImg?.checkboxIdentifierHash,
+              checkboxGroupHash: myImg?.hash,
+              fieldType: 'checkboxIdNoIcon',
+              pageNo: templateEditorStore.activePageForCanvas,
+              displayGuide: false,
+              hasControls: false,
+              selectable: false,
+            })
+            canvas.add(icon)
+            canvas.renderAll()
+          },
+        )
+
+        /** */
 
         canvas.add(myImg)
         canvas.setActiveObject(myImg)
         canvas.renderAll()
+        // selectAllInGroup()
       },
     )
+  }
+}
+
+function selectAllInGroup() {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    canvas.discardActiveObject()
+    const sel = new fabric.ActiveSelection(canvas.getObjects()?.filter(f => f?.hash === activeObject?.hash || f?.checkboxGroupHash === activeObject?.hash), {
+      canvas,
+      cornerStyle: 'circle',
+      borderColor: '#00000066',
+      cornerColor: '#119bd6',
+      transparentCorners: false,
+      hash: activeObject?.hash,
+    })
+    sel.setControlsVisibility({ mtr: false })
+    canvas.setActiveObject(sel)
+    canvas.requestRenderAll()
   }
 }
 </script>
