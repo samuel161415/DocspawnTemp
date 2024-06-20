@@ -876,6 +876,7 @@ export default function addEventsToCanvas() {
               })
             }
             canvas.renderAll()
+            const colorsForCheckboxGroup = generateLightAndDarkColors()
             const uniqueHashForEle = uuid.v1()
             myImg.set({
               cornerStyle: 'circle',
@@ -896,7 +897,7 @@ export default function addEventsToCanvas() {
             })
             myImg.setControlsVisibility({ mtr: false })
 
-            const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }],
+            const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
 
             const allFields = []
@@ -950,26 +951,26 @@ export default function addEventsToCanvas() {
             /** ********creating checkbox info icon */
             // https://placehold.co/400/000000/ffffff?font=roboto&text=1
             fabric.Image.fromURL(
-              'https://placehold.co/100/ffffff/ff0000?font=roboto&text=1'
-              , (icon) => {
-                icon.set({
+                `https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=1`
+                , (icon) => {
+                  icon.set({
 
-                  left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13,
-                  top: myImg?.top + (myImg.height * myImg?.scaleY) - 13,
-                  scaleX: 20 / icon.width,
-                  scaleY: 20 / icon.height,
-                  id: 'checkboxIdNoIcon',
-                  checkboxHash: myImg.checkboxIdentifierHash,
-                  checkboxGroupHash: myImg?.hash,
-                  fieldType: 'checkboxIdNoIcon',
-                  pageNo: templateEditorStore.activePageForCanvas,
-                  displayGuide: false,
-                  hasControls: false,
-                  selectable: false,
-                })
-                canvas.add(icon)
-                canvas.renderAll()
-              },
+                    left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13,
+                    top: myImg?.top + (myImg.height * myImg?.scaleY) - 13,
+                    scaleX: 20 / icon.width,
+                    scaleY: 20 / icon.height,
+                    id: 'checkboxIdNoIcon',
+                    checkboxHash: myImg.checkboxIdentifierHash,
+                    checkboxGroupHash: myImg?.hash,
+                    fieldType: 'checkboxIdNoIcon',
+                    pageNo: templateEditorStore.activePageForCanvas,
+                    displayGuide: false,
+                    hasControls: false,
+                    selectable: false,
+                  })
+                  canvas.add(icon)
+                  canvas.renderAll()
+                },
             )
 
             /** */
@@ -1008,5 +1009,28 @@ export default function addEventsToCanvas() {
       if (currentHoveredEle && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
         canvas.remove(currentHoveredEle.value)
     })
+  }
+}
+
+function getRandomHexColor(isLight) {
+  let color = ''
+  for (let i = 0; i < 3; i++) {
+    let component = Math.floor(Math.random() * 128) // Values from 0 to 127
+    if (isLight)
+      component += 128 // Values from 128 to 255
+
+    const hex = component.toString(16).padStart(2, '0')
+    color += hex
+  }
+  return color
+}
+
+function generateLightAndDarkColors() {
+  const lightColor = getRandomHexColor(true)
+  const darkColor = getRandomHexColor(false)
+
+  return {
+    light: lightColor,
+    dark: darkColor,
   }
 }

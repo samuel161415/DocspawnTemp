@@ -560,8 +560,6 @@ function selectAddedField(field) {
         }
       })
 
-      console.log('obj', obj)
-
       if (field.page !== templateEditorStore.activePageForCanvas) {
         templateEditorStore.activePageForCanvas = field.page
         setTimeout(() => {

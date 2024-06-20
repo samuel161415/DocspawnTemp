@@ -113,7 +113,7 @@ function addCheckboxToGroup() {
         }
       })
     }
-    console.log('active object', activeObject)
+
     fabric.Image.fromURL(
       'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
       , (myImg) => {
@@ -195,8 +195,9 @@ function addCheckboxToGroup() {
           canvas.renderAll()
         })
         /** ********* adding info icon */
+        const { colorsForCheckboxGroup } = templateEditorStore?.selectedAddedField
         fabric.Image.fromURL(
-          `https://placehold.co/100/ffffff/ff0000?font=roboto&text=${noOfCheckboxes.value}`
+          `https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=${noOfCheckboxes.value}`
           , (icon) => {
             icon.set({
 
