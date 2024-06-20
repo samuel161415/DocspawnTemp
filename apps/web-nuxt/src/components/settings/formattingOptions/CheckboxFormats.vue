@@ -127,7 +127,6 @@ const handleEdit = (data) => {
 };
 
 const handleAdd = () => {
-    console.log('Add');
     openAddModal.value = true;
 };
 

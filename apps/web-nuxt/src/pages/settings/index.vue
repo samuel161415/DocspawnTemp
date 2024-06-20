@@ -73,13 +73,13 @@
               label="Change password" 
               class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
               severity="success"
-              @click="requireConfirmation($event)"
+              @click="openConfirmationModal = true"
               />
           </div>
         </div>
 
         <!--confirm password  -->
-        <div class="mt-5">
+        <div v-if="isTyping && password != ''" class="mt-5">
           <p class="text-surface-600 font-poppins text-lg font-normal">Password confirmation</p>
           <div class="flex justify-between mt-3">
             <!-- password -->
@@ -94,10 +94,7 @@
                     <div class="">
                       <p class="mt-2 p-0 mb-2">Suggestions</p>
                       <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
-                          <li>At least one lowercase</li>
-                          <li>At least one uppercase</li>
-                          <li>At least one numeric</li>
-                          <li>Minimum 8 characters</li>
+                          <li>Password must match</li>
                       </ul>
                   
                     </div>
@@ -108,7 +105,7 @@
           </div>
         </div>
 
-        <div class="mt-28" id="language-region">
+        <div :class="{'mt-5': isTyping && password != '', 'mt-28': !isTyping || password === '' }" id="language-region">
           <div class="">
             <p class="text-surface-600 font-poppins text-xl font-medium">Language & Region</p>
             <p class="text-surface-500 font-poppins text-lg font-normal mt-2">Customize your language and region.</p>
@@ -187,19 +184,20 @@
         </div>
       </div>
     </div>
-  
-    <ConfirmPopup group="headless">
-        <template #container="{ message, acceptCallback, rejectCallback }">
-          <div class="rounded-full p-3 mt-2">
+    
+    <Dialog v-model:visible="openConfirmationModal" group="headless" modal :style="{ width: '29rem' }">
+        <template #container>
+          <div class="bg-white rounded-lg px-5 py-14 ">
             <i class="pi pi-exclamation-triangle = mr-2"></i>
-            <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
-            <div class="flex justify-end gap-2 mt-3">
-              <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
-              <Button label="Yes" @click="acceptCallback"  severity="success" size="small" ></Button>
+            <span class="mt-2 font-poppins text-base text-surface-600">Are you sure you want to change your password?</span>
+            <div class="flex justify-end gap-2 mt-3 px-2">
+              <Button label="No" outlined  severity="secondary" size="small" text @click="openConfirmationModal = false"></Button>
+              <Button label="Yes"  severity="success" size="small" @click="openConfirmationModal = false" ></Button>
             </div>
           </div>
-        </template>
-    </ConfirmPopup>
+        </template>   
+    </Dialog>
+ 
 
   </div>
 </template>
@@ -218,10 +216,15 @@ const password = ref('');
 const confirmPassword = ref('');
 const notifyTimeZone = ref(false)
 const showCamera = ref(false);
-
+const isTyping = ref(false);
 const selectedLanguage = ref();
 const selectedTimeZone = ref();
 const avatarImage = ref('');
+const openConfirmationModal = ref(false);
+
+watch(password, () => {
+    isTyping.value = true;
+});
 
 const cities = ref([
     { name: 'New York', code: 'NY' },
