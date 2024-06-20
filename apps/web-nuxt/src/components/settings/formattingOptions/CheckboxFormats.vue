@@ -83,13 +83,14 @@
                 
                 <div class="mt-7">
                     <p class="text-surface-600 font-poppins text-lg font-normal mb-4">Select option image to upload:</p>
-                    <Toast />
+                   
                     <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/*" :maxFileSize="1000000" @upload="onUpload" />
                 </div>
                 <div class="flex justify-center mt-10">
                     <Button type="button" label="Upload" severity="success" class="w-32" @click="upload"></Button>
                 </div>
             </Dialog>
+            <Toast />
         </div>
     </div>
 </template>
@@ -110,7 +111,7 @@ const upload = () => {
 const onUpload = () => {
     
     toast.add({ severity: 'success', summary: 'Success', detail: 'File Uploaded', life: 3000 });
-    // openAddModal.value = false;
+    openAddModal.value = false;
 };
 
 const checkboxData = ref([
