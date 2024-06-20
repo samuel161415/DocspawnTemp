@@ -21,7 +21,7 @@
           No template field is selected
         </p>
         <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-lg justify-center  text-center text-gray-400 text-primaryBlue font-thin my-3">
-          <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time' || templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form multiline'">
+          <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time' || templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'">
             {{ templateEditorStore?.selectedAddedField?.fieldType }}
           </span>
           <span v-else>
@@ -34,7 +34,7 @@
           <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field') " class="font-poppins text-sm text-red-500 mt-2">
             Styles will be applied once you select a data field
           </p>
-          <p v-if="((templateEditorStore.selectedAddedField?.name === 'Lorem ipsum' || templateEditorStore.selectedAddedField?.name === 'Add field name') && (['Form text', 'Form multiline', 'Form date', 'Form time']?.includes(templateEditorStore?.selectedAddedField?.fieldType))) " class="font-poppins text-sm text-red-500 mt-2">
+          <p v-if="((templateEditorStore.selectedAddedField?.name === 'Lorem ipsum' || templateEditorStore.selectedAddedField?.name === 'Add field name') && (['Form text', 'Form long text', 'Form date', 'Form time']?.includes(templateEditorStore?.selectedAddedField?.fieldType))) " class="font-poppins text-sm text-red-500 mt-2">
             Styles will be applied once you add field name
           </p>
         </div>
@@ -83,7 +83,7 @@
           <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
         </div> -->
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form multiline' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="">
           <FormOptions />
         </div>
 

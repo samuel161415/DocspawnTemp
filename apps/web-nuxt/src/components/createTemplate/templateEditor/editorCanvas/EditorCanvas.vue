@@ -58,7 +58,7 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value.clientWidth > 0 ? canvasWrapper.value.clientWidth : 900
+  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
 
   templateEditorStore.fabric = fabric
   // const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false,

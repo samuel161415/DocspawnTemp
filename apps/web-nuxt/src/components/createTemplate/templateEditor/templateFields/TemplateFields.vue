@@ -26,8 +26,11 @@
             <p v-else-if="(field.name === 'Add text' || field.name === 'Lorem ipsum') && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
               Add text
             </p>
-            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time' || field?.fieldType === 'Form multiline' || field?.fieldType === 'Form list')" class="font-poppins text-red-400 text-lg mt-1 ">
+            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time' || field?.fieldType === 'Form long text' || field?.fieldType === 'Form list')" class="font-poppins text-red-400 text-lg mt-1 ">
               Add field name
+            </p>
+            <p v-else-if="(field.name === 'Add description' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form checkbox group')" class="font-poppins text-red-400 text-lg mt-1 ">
+              Add description
             </p>
             <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
               {{ field.name }}
@@ -139,11 +142,11 @@
               Text
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form multiline', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form multiline' }" @click="selectField('Form multiline')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form long text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form long text' }" @click="selectField('Form long text')">
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-paragraph" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
-              Multiline Text
+              Long Text
             </p>
           </div>
 
@@ -185,7 +188,7 @@
               List
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form checkbox', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form checkbox' }" @click="selectField('Form checkbox')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form checkbox group', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form checkbox group' }" @click="selectField('Form checkbox group')">
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
@@ -521,8 +524,8 @@ function selectField(field) {
       templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
     else if (field === 'Form text')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
-    else if (field === 'Form multiline')
-      templateEditorStore.fieldToAdd = { name: 'Multiline-text', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form long text')
+      templateEditorStore.fieldToAdd = { name: 'Long-text', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form image')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form date')
@@ -530,6 +533,8 @@ function selectField(field) {
     else if (field === 'Form time')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form list')
+      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+    else if (field === 'Form checkbox group')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
     else
       templateEditorStore.fieldToAdd = { name: field, type: field, id: field }

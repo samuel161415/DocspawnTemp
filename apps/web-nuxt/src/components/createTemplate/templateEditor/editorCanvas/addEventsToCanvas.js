@@ -1,3 +1,8 @@
+// checked image
+// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png
+// unchecked image
+// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png
+
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
@@ -44,7 +49,7 @@ export default function addEventsToCanvas() {
       canvas.contextContainer.strokeStyle = '#0003'
 
       canvas.forEachObject((obj) => {
-        if (obj.fieldType === 'Form multiline' && !obj.stroke) {
+        if (obj.fieldType === 'Form long text' && !obj.stroke) {
           const bound = obj.getBoundingRect()
 
           canvas.contextContainer.strokeRect(
@@ -54,6 +59,8 @@ export default function addEventsToCanvas() {
             bound.height,
           )
         }
+        if (obj.fieldType === 'Form checkbox group')
+          console.log('obj', obj?.checkboxIdentifierHash)
       })
     })
 
@@ -74,7 +81,7 @@ export default function addEventsToCanvas() {
           if (obj.top === 0)
             obj.set({ top: 0, left: e.target.left })
           if (obj.left === 0) {
-            if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline')
+            if (obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
             else
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
@@ -96,7 +103,7 @@ export default function addEventsToCanvas() {
             obj.set({ top: 0, left: e.target.left })
           if (obj.left === 0) {
             if (
-              obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline')
+              obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
             else
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
@@ -105,7 +112,7 @@ export default function addEventsToCanvas() {
         if (obj.isAlertIcon && obj.id === e.target.hash)
           obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
 
-        if (obj?.fieldType === 'Form multiline') {
+        if (obj?.fieldType === 'Form long text') {
           // Adjust height by adding sample text
           // const lineHeight = obj.fontSize * obj.lineHeight
           // const currentHeight = obj.height
@@ -240,6 +247,7 @@ export default function addEventsToCanvas() {
           )
         }
         else {
+          canvas.remove(currentHoveredEle)
           const isDatafield = templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list'
           currentHoveredEle = new templateEditorStore.fabric.Text(
           `${templateEditorStore.fieldToAdd.name}`,
@@ -289,10 +297,10 @@ export default function addEventsToCanvas() {
 
         canvas.renderAll()
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form multiline') {
+      if (templateEditorStore.fieldToAdd.type === 'Form long text') {
         // canvas.renderAll()
         if (currentHoveredEle && currentHoveredEle?.text) {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form multiline'
+          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
           currentHoveredEle.set({
             width: 300,
             left: event.absolutePointer.x,
@@ -301,7 +309,7 @@ export default function addEventsToCanvas() {
             fontFamily: isDatafield ? 'Arial' : activeTextStyles.fontFamily,
             fontSize: activeTextStyles.fontSize,
             underline: isDatafield ? false : activeTextStyles.underline,
-            textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
+            textAlign: isDatafield ? 'left' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
             hasBorders: true,
@@ -311,7 +319,8 @@ export default function addEventsToCanvas() {
           )
         }
         else {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form multiline'
+          canvas.remove(currentHoveredEle)
+          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
           currentHoveredEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,
           {
@@ -322,7 +331,7 @@ export default function addEventsToCanvas() {
             fontFamily: isDatafield ? 'Arial' : activeTextStyles.fontFamily,
             fontSize: activeTextStyles.fontSize,
             underline: isDatafield ? false : activeTextStyles.underline,
-            textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
+            textAlign: isDatafield ? 'left' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
             hasBorders: true,
@@ -410,6 +419,90 @@ export default function addEventsToCanvas() {
                 top: event.absolutePointer.y - (myImg.height),
                 scaleX: 400 / myImg.width,
                 scaleY: 200 / myImg.height,
+              })
+
+              currentHoveredEle = myImg
+              if (templateEditorStore.activeAdvancedPointer) {
+                if (tempXMargin && tempYMargin) {
+                  tempXMargin.set({ left: event.absolutePointer.x })
+                  tempYMargin.set({ top: event.absolutePointer.y })
+                }
+                else {
+                  tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+                    left: event.absolutePointer.x,
+                    top: 0,
+                    stroke: '#3978eb',
+                    selectable: false,
+
+                  })
+
+                  canvas.add(tempXMargin)
+                  tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+                    left: 0,
+                    top: event.absolutePointer.y,
+                    stroke: '#3978eb',
+                    selectable: false,
+
+                  })
+                  canvas.add(tempYMargin)
+                }
+              }
+              canvas.add(myImg)
+              canvas.renderAll()
+            },
+          )
+        }
+      }
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+        if (currentHoveredEle && currentHoveredEle?._element) {
+          currentHoveredEle.set({
+            left: event.absolutePointer.x,
+            top: event.absolutePointer.y - (currentHoveredEle.height),
+            scaleX: 40 / currentHoveredEle.width,
+            scaleY: 40 / currentHoveredEle.height,
+          })
+
+          if (templateEditorStore.activeAdvancedPointer) {
+            if (tempXMargin && tempYMargin) {
+              tempXMargin.set({ left: event.absolutePointer.x })
+              tempYMargin.set({ top: event.absolutePointer.y })
+            }
+            else {
+              canvas.remove(tempXMargin)
+              canvas.remove(tempYMargin)
+              tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
+                left: event.absolutePointer.x,
+                top: 0,
+                stroke: '#3978eb',
+                selectable: false,
+
+              })
+
+              canvas.add(tempXMargin)
+              tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+                left: 0,
+                top: event.absolutePointer.y,
+                stroke: '#3978eb',
+                selectable: false,
+
+              })
+              canvas.add(tempYMargin)
+            }
+          }
+          canvas.renderAll()
+        }
+        else {
+          fabric.Image.fromURL(
+            'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+            , (myImg) => {
+              if (currentHoveredEle)
+                canvas.remove(currentHoveredEle)
+
+              myImg.set({
+                left: event.absolutePointer.x,
+                top: event.absolutePointer.y - (myImg.height),
+                scaleX: 40 / myImg.width,
+                scaleY: 40 / myImg.height,
               })
 
               currentHoveredEle = myImg
@@ -549,7 +642,7 @@ export default function addEventsToCanvas() {
         const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
         templateEditorStore.addedFields = remainingFields
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form multiline') {
+      if (templateEditorStore.fieldToAdd.type === 'Form long text') {
         if (tempXMargin && tempYMargin) {
           const obs = canvas._objects
           canvas._objects = obs.filter((ob) => {
@@ -563,7 +656,7 @@ export default function addEventsToCanvas() {
         }
         canvas.renderAll()
 
-        const isDatafield = templateEditorStore.fieldToAdd.type === 'Form multiline'
+        const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
 
         const textEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,
@@ -581,7 +674,7 @@ export default function addEventsToCanvas() {
             fontFamily: isDatafield ? 'Arial' : activeTextStyles.fontFamily,
             fontSize: activeTextStyles.fontSize,
             underline: isDatafield ? false : activeTextStyles.underline,
-            textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
+            textAlign: isDatafield ? 'left' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
             hasBorders: true,
@@ -706,6 +799,102 @@ export default function addEventsToCanvas() {
             myImg.setControlsVisibility({ mtr: false })
 
             const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
+            }
+
+            const allFields = []
+            templateEditorStore.addedFields.forEach((f) => {
+              allFields.push(JSON.parse(JSON.stringify(f)))
+            })
+
+            allFields.push(fieldToAdd)
+            templateEditorStore.addedFields = allFields
+            canvas.renderAll()
+            templateEditorStore.fieldToAdd = {}
+
+            myImg.on('mouseover', (e) => {
+              if (!templateEditorStore.activeAdvancedPointer)
+                return
+              canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+                left: e.target.left,
+                top: 0,
+                stroke: '#3978eb',
+                id: e.target.hash,
+                fieldType: myImg.fieldType,
+                selectable: false,
+
+              }))
+              canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+                left: 0, // event.absolutePointer.x,
+                top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+
+                stroke: '#3978eb',
+                id: e.target.hash,
+                fieldType: myImg.fieldType,
+                selectable: false,
+              }))
+            })
+
+            myImg.on('mouseout', (e) => {
+              if (!templateEditorStore.activeAdvancedPointer)
+                return
+
+              const objs = canvas._objects
+              canvas._objects = objs.filter((obj) => {
+                if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
+                  return false
+                else
+                  return true
+              })
+
+              canvas.renderAll()
+            })
+
+            canvas.add(myImg)
+            canvas.renderAll()
+          },
+        )
+      }
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+        const ftoadd = templateEditorStore.fieldToAdd
+        templateEditorStore.fieldToAdd = {}
+        fabric.Image.fromURL(
+          'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+          , (myImg) => {
+            if (currentHoveredEle)
+              canvas.remove(currentHoveredEle)
+            if (tempXMargin && tempYMargin) {
+              const obs = canvas._objects
+              canvas._objects = obs.filter((ob) => {
+                const test3 = (ob.left === tempXMargin.left && ob.top === tempXMargin.top) || (ob.left === tempYMargin.left && ob.top === tempYMargin.top)
+
+                if (test3)
+                  return false
+                else
+                  return true
+              })
+            }
+            canvas.renderAll()
+            const uniqueHashForEle = uuid.v1()
+            myImg.set({
+              cornerStyle: 'circle',
+              borderColor: '#00000066',
+              cornerColor: '#119bd6',
+              transparentCorners: false,
+
+              left: event.absolutePointer.x,
+              top: event.absolutePointer.y - (myImg.height),
+              scaleX: 40 / myImg.width,
+              scaleY: 40 / myImg.height,
+              id: ftoadd.id,
+              hash: uuid.v1(),
+              checkboxIdentifierHash: uniqueHashForEle,
+              fieldType: ftoadd.type,
+              pageNo: templateEditorStore.activePageForCanvas,
+              displayGuide: false,
+            })
+            myImg.setControlsVisibility({ mtr: false })
+
+            const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }],
             }
 
             const allFields = []

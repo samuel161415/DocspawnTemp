@@ -1,20 +1,23 @@
 <template>
   <div>
-    <div class="flex flex-col  mt-4">
-      <p class="font-poppins text-md text-surface-600 mb-2">
-        Field name
-      </p>
-      <InputText v-model="fieldName" />
+    <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'">
+      <div class="flex flex-col  mt-4">
+        <p class="font-poppins text-md text-surface-600 mb-2">
+          Field name
+        </p>
+        <InputText v-model="fieldName" />
+      </div>
+      <div class="flex flex-col  mt-4">
+        <p class="font-poppins text-md text-surface-600 mb-2">
+          Field description
+        </p>
+        <Textarea v-model="fieldDescription" rows="3" />
+        <p id="username-help" class="font-poppins text-xs mt-2">
+          It is an optional. But using it will replace field name in final form view.
+        </p>
+      </div>
     </div>
-    <div class="flex flex-col  mt-4">
-      <p class="font-poppins text-md text-surface-600 mb-2">
-        Field description
-      </p>
-      <Textarea v-model="fieldDescription" rows="3" />
-      <p id="username-help" class="font-poppins text-xs mt-2">
-        It is an optional. But using it will replace field name in final form view.
-      </p>
-    </div>
+
     <div class="flex items-center mt-6 gap-4">
       <Checkbox v-model="isRequired" :binary="true" />
       <p class="font-poppins text-md text-surface-600 ">
@@ -104,6 +107,9 @@
     </Accordion> -->
     </div>
 
+    <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="w-full pt-4">
+      <CheckboxOptions />
+    </div>
     <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">
       <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full p-1" />
     </div>
@@ -120,6 +126,7 @@
 
 <script setup>
 import ImageOptions from '../../../../components/createTemplate/templateEditor/options/ImageOptions.vue'
+import CheckboxOptions from '../../../../components/createTemplate/templateEditor/options/CheckboxOptions.vue'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
@@ -182,7 +189,7 @@ watch(fieldName, () => {
   if (canvas) {
     const activeObj = canvas.getActiveObject()
     if (activeObj) {
-      if (activeObj.fieldType === 'Form multiline') {
+      if (activeObj.fieldType === 'Form long text') {
         if (fieldName.value)
           activeObj.set({ ...activeObj.styles, fill: activeTextStyles.fill[0] === '#' ? activeTextStyles.fill : `#${activeTextStyles.fill}`, fontFamily: activeTextStyles.fontFamily, fontSize: activeTextStyles.fontSize, underline: activeTextStyles.underline, textAlign: activeTextStyles.textAlign, fontStyle: activeTextStyles.fontStyle, fontWeight: activeTextStyles.fontWeight, id: fieldName.value })
         else
