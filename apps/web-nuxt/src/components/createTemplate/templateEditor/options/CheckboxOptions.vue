@@ -38,8 +38,8 @@
       <!-- <InputNumber v-model="noOfCheckboxes" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" /> -->
     </div>
   </div>
-  <Button outline class="w-full mt-2" @click="selectAllInGroup">
-    Select all in a group
+  <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
+    Select all checkboxes
   </Button>
   <Button class="w-full mt-2" @click="addCheckboxToGroup">
     Add checkbox to group
@@ -49,7 +49,15 @@
       <p class=" font-poppins text-surface-600">
         Checkbox {{ item }} text
       </p>
-      <InputText class="w-full mt-1" />
+      <div class="w-full flex mt-1 border rounded-lg">
+        <InputText class="flex-1 rounded rounded-r-none border-0 " />
+        <Button v-tooltip.top="'Delete checkbox'" :disabled="noOfCheckboxes === 1" class="w-12 bg-white" outlined small @click="deleteCheckboxById(item)">
+          <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
+        </Button>
+      </div>
+      <p v-if="noOfCheckboxes === 1" class="font-poppins text-surface-600 text-sm mt-2">
+        Deletion disabled: Checkbox group must have atleast one checkbox
+      </p>
     </div>
   </div>
 </template>
@@ -246,6 +254,69 @@ function selectAllInGroup() {
     sel.setControlsVisibility({ mtr: false })
     canvas.setActiveObject(sel)
     canvas.requestRenderAll()
+  }
+}
+
+function deleteCheckboxById(id) {
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeField = templateEditorStore?.addedFields?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash)[0]
+
+    const hashToDel = activeField?.checkboxes[id - 1]?.checkboxIdentifierHash
+
+    if (hashToDel) {
+      // removing from canvas
+      canvas.getObjects()?.forEach((obj) => {
+        if (obj?.checkboxIdentifierHash === hashToDel || obj?.checkboxHash === hashToDel) {
+          canvas?.remove(obj)
+          canvas.renderAll()
+        }
+      })
+
+      // removing from added fields
+      const checkboxes = activeField?.checkboxes
+
+      // Find the index of the checkbox with the given id
+      const index = checkboxes.findIndex(checkbox => checkbox.id === id)
+
+      // If found, remove the element from the array
+      if (index !== -1) {
+        checkboxes.splice(index, 1)
+
+        // Reassign the ids of the remaining elements in ascending order
+        for (let i = 0; i < checkboxes.length; i++)
+          checkboxes[i].id = i + 1
+        templateEditorStore.selectedAddedField = { ...activeField, checkboxes }
+        templateEditorStore.addedFields.map((f) => {
+          if (activeField?.hash === f?.hash)
+            return { ...f, checkboxes }
+          else
+            return f
+        })
+        noOfCheckboxes.value = noOfCheckboxes?.value - 1
+        /** ** now updating info number image of each box */
+        const { colorsForCheckboxGroup } = templateEditorStore?.selectedAddedField
+        checkboxes.forEach((c) => {
+          canvas.getObjects()?.forEach((obj) => {
+            if (obj?.checkboxHash === c?.checkboxIdentifierHash) {
+              obj.setSrc(`https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=${c?.id}`, () => {
+                // obj.scaleToWidth(originalWidth)
+                // obj.scaleToHeight(originalHeight)
+                canvas.renderAll()
+              })
+            }
+            if (obj?.checkboxIdentifierHash === c?.checkboxIdentifierHash) {
+              const activeObject = canvas?.getActiveObject()
+              if (!activeObject)
+                canvas.setActiveObject(obj)
+            }
+          })
+        })
+      }
+      else {
+        // console.log(`Checkbox with id ${id} not found.`)
+      }
+    }
   }
 }
 </script>

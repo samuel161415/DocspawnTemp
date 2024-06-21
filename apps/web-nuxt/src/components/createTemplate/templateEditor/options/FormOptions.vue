@@ -107,7 +107,7 @@
     </Accordion> -->
     </div>
 
-    <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="w-full pt-4">
+    <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="w-full pt-0">
       <CheckboxOptions />
     </div>
     <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">

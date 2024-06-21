@@ -896,8 +896,10 @@ export default function addEventsToCanvas() {
               displayGuide: false,
             })
             myImg.setControlsVisibility({ mtr: false })
+            /** calculating no of checkbox groups and assigning position no */
+            const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
-            const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
+            const fieldToAdd = { groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
 
             const allFields = []

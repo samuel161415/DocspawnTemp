@@ -32,10 +32,15 @@
             <p v-else-if="(field.name === 'Add description' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form checkbox group')" class="font-poppins text-red-400 text-lg mt-1 ">
               Add description
             </p>
+
             <p v-else class="font-poppins text-surface-600 text-lg mt-1 overflow-ellipsis max-w-36 whitespace-nowrap overflow-hidden ">
               {{ field.name }}
             </p>
-            <p class="font-poppins text-surface-600 text-sm">
+
+            <p v-if="field?.fieldType === 'Form checkbox group'" class="font-poppins text-surface-600 text-sm">
+              Checkbox group {{ field?.groupPosition }} - <span class="text-primaryBlue">p.{{ field.page }}</span>
+            </p>
+            <p v-else class="font-poppins text-surface-600 text-sm">
               {{ field?.fieldType }} - <span class="text-primaryBlue">p.{{ field.page }}</span>
             </p>
           </div>
@@ -43,7 +48,7 @@
           <div
             class="flex flex-row gap-4   "
           >
-            <Button v-tooltip.top="'Duplicate'" text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
+            <Button v-if="field?.fieldType !== 'Form checkbox group'" v-tooltip.top="'Duplicate'" text class="text-lg text-surface-600  w-max h-max " @click="duplicateField(field)">
               <font-awesome-icon
                 icon="fa-light fa-clone" size="lg"
               />
