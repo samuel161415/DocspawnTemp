@@ -20,7 +20,7 @@
   </div>
   <div class="flex flex-col  mt-4">
     <p class="font-poppins text-md text-surface-600 mb-2">
-      Field description
+      Checkbox description
     </p>
     <Textarea v-model="fieldDescription" rows="3" />
   </div>
@@ -51,13 +51,13 @@
       </p>
       <div class="w-full flex mt-1 border rounded-lg">
         <InputText class="flex-1 rounded rounded-r-none border-0 " />
-        <Button v-tooltip.top="'Delete checkbox'" :disabled="noOfCheckboxes === 1" class="w-12 bg-white" outlined small @click="deleteCheckboxById(item)">
+        <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(item)">
           <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
         </Button>
       </div>
-      <p v-if="noOfCheckboxes === 1" class="font-poppins text-surface-600 text-sm mt-2">
+      <!-- <p v-if="noOfCheckboxes === 1" class="font-poppins text-surface-600 text-sm mt-2">
         Deletion disabled: Checkbox group must have atleast one checkbox
-      </p>
+      </p> -->
     </div>
   </div>
 </template>
