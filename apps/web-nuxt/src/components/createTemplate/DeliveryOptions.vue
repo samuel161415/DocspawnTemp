@@ -44,8 +44,7 @@
 
       <hr class="my-10"/>
 
-       <!-- section 2  -->
-       
+       <!-- section 2  -->    
        <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">File options</p>
        <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
         <!-- col 1 -->
@@ -91,7 +90,8 @@
       </div>
 
       <hr class="my-10"/>
-       <!-- section 3  -->
+
+       <!-- section 3  -->    
        <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">Recipients</p>
        <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
         <!-- col 1 -->
@@ -100,10 +100,9 @@
         </div>
 
         <!-- col 2 -->
-        <div class="w-1/3">
+        <div class="w-1/3 flex flex-col flex-wrap">
           <p class="text-lg text-surface-500 font-poppins mb-2">Email delivery</p>
           <div class="flex">
-
             <div class="flex items-center mb-3">
               <Checkbox v-model="tolinkedData" inputId="tolinkedData" name="tolinkedData" value="tolinkedData" :binary="true"/>
               <label for="tolinkedData" class="ml-2 text-base text-surface-500 font-poppins"> Send to linked data  </label>
@@ -111,9 +110,13 @@
             <Button v-if="tolinkedData" text label="Edit email template" class="-mt-3" @click="handleOpenEditModal"/>
           </div>
 
+          
           <div class="flex items-center ">
             <Checkbox v-model="sendtoMultiple" inputId="sendtoMultiple" name="sendtoMultiple" value="sendtoMultiple" :binary="true" />
-            <label for="sendtoMultiple" class="ml-2 text-base text-surface-500 flex font-poppins"> Send to multiple <TagComponent value="Business"/> </label>
+            <label for="sendtoMultiple" class="ml-2 text-base text-surface-500 flex font-poppins"> 
+              Send to multiple 
+              <TagComponent value="Business"/> 
+            </label>
           </div>
           <div v-if="sendtoMultiple" class="mt-3 ml-8 w-2/3">
               <Chips v-model="selectedEmails" />
@@ -122,45 +125,60 @@
 
         <!-- col 3 -->
         <div class="w-1/3">
-          <p class="text-lg text-surface-500 font-poppins mb-2 flex">Extranet <TagComponent value="Business"/></p>
+          <p class="text-lg text-surface-500 font-poppins mb-2">Extranet</p>
           <div class="flex items-center mb-3">
-            <Checkbox v-model="recipentExtranetAccount" inputId="recipentExtranetAccount" name="recipentExtranetAccount" value="recipentExtranetAccount" />
-            <label for="recipentExtranetAccount" class="ml-2 text-base text-surface-500 font-poppins"> Create an extranet account </label>
+            <Checkbox v-model="thirdparty" inputId="thirdparty" name="thirdparty" value="thirdparty" />
+            <label for="thirdparty" class="ml-2 text-base text-surface-500 font-poppins"> Create extranet account  </label>
           </div>
 
           <div class="flex items-center ">
-            <Checkbox v-model="recipentExtranetAccount" disabled="" inputId="recipentExtranetAccount" name="recipentExtranetAccount" value="recipentExtranetAccount" />
-            <label for="recipentExtranetAccount" class="ml-2 text-base text-surface-500 font-poppins"> Create extranet account  </label>
+            <Checkbox v-model="addpages" inputId="addpages" name="addpages" value="addpages" />
+            <label for="addpages" class="ml-2 text-base text-surface-500 font-poppins"> Create an extranet account </label>
           </div>
         </div>
       </div>
 
       <hr class="my-10"/>
 
-       <!-- section 4  -->
-       <p class="font-medium text-surface-600 text-lg mb-5 flex font-poppins">Email Personalization <TagComponent value="Business"/> </p>
-       <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
-        <!-- col 1 -->
-        <div class="w-1/4">
-          <p class="text-base text-surface-500 font-poppins">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum. </p>
-        </div>
+      <!-- section 4 -->  
+      <div class=" flex">
 
-        <!-- col 2 -->
-        <div class="w-1/3">
-          
-          <div class="flex items-center mb-3">
-            <Checkbox v-model="emailPersonalization" inputId="emailPersonalization" name="emailPersonalization" value="emailPersonalization" />
-            <label for="emailPersonalization" class="ml-2 text-base text-surface-500 font-poppins"> Email Personalization </label>
-          </div>
-
-          <div class="flex items-center ">
-            <Checkbox v-model="extranetaccount" inputId="extranetaccount" name="extranetaccount" value="extranetaccount" />
-            <label for="extranetaccount" class="ml-2 text-base text-surface-500 flex font-poppins"> Create extranet account </label>
-          </div>
-    
-        </div>
-
+        <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">Email Personalization 
+        </p>
+        <TagComponent value="Business"/> 
+      </div>  
+      <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
+      <!-- col 1 -->
+      <div class="w-1/4">
+        <p class="text-base text-surface-500 font-poppins">Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum. </p>
       </div>
+
+      <!-- col 2 -->
+      <div class="w-1/3 flex flex-col flex-wrap">
+        <p class="text-lg text-surface-500 font-poppins mb-2">{{ " " }}</p>
+        <div class="flex">
+          <div class="flex items-center mb-3">
+            <Checkbox v-model="emailPersonalization" inputId="emailPersonalization" name="emailPersonalization" value="emailPersonalization":binary="true"/>
+            <label for="emailPersonalization" class="ml-2 text-base text-surface-500 font-poppins">Email Personalization </label>
+          </div>
+          
+        </div>
+
+        
+        <div class="flex items-center ">
+          <Checkbox v-model="extranetaccount" inputId="extranetaccount" name="extranetaccount" value="extranetaccount" :binary="true" />
+          <label for="extranetaccount" class="ml-2 text-base text-surface-500 flex font-poppins"> 
+            Create extranet account
+          </label>
+        </div>
+      
+      </div>
+
+      <!-- col 3 -->
+      <div class="w-1/3">
+      </div>
+      </div>
+      
     </div>
     <EditEmailTemplateModal v-model:visible="openEditModal" />
     <Toast />

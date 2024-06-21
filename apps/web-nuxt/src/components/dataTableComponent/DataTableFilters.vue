@@ -5,7 +5,7 @@
         <Button
           type="button"
           label="Form to doc"
-          class="px-4  flex rounded-xl border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
+          class="px-4 flex rounded-lg shadow-none border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
           :class="[typefilter === 'Form to Doc' ? 'bg-primaryBlue border-primaryBlue text-white' : 'bg-white text-primaryBlue']"
           :outlined="typefilter !== 'Form to Doc'"
           raised
@@ -19,7 +19,7 @@
         <Button
           type="button"
           label="Table to doc"
-          class="px-4 rounded-xl text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:border-primaryPink hover:text-white"
+          class="px-4 rounded-lg shadow-none text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:border-primaryPink hover:text-white"
           :class="[typefilter === 'Table to doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
           :icon="dataToDoc"
           :outlined="typefilter !== 'Table to doc'"
@@ -35,12 +35,13 @@
 
     <div class="flex flex-col md:flex-row space-x-0 space-y-2 md:space-y-0 md:space-x-2">
       <Button
+        v-tooltip.top="'Clear all filters'"
         type="button"
         icon="pi pi-filter-slash"
         label="Clear"
         outlined
         raised
-        class="p-7  rounded-xl w-1/2 md:w-24 raised  border-primaryBlue"
+        class="p-7 shadow-none rounded-lg w-1/2 md:w-24 raised  border-primaryBlue"
         @click="clearFilter"
       />
       <span class="relative flex">
@@ -50,8 +51,8 @@
         ></i>
         <InputText
           v-model="filters.global.value"
-          placeholder="Keyword Search"
-          class="pl-10 font-normal rounded-xl border-gray-300"
+          placeholder="Search"
+          class="pl-10 font-normal rounded-lg border-gray-300"
         />
       </span>
     </div>

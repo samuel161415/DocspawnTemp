@@ -1,6 +1,6 @@
 <template>
   <!-- side bar component -->
-  <div class="z-40  bg-white mb-0 h-full border-r border-surface-100 overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
+  <div class="z-40 bg-white mb-0 h-full border-r border-surface-100 overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
     <div class="z-50 fixed mt-12" :class="{ 'w-20': isCollapsed, 'xs:w-44 sm:w-48 md:w-56 lg:w-60 sm:ml-6 md:ml-2 ': !isCollapsed }">
       <button
         v-if="baseRoute !== '/templates/create'"
@@ -71,25 +71,28 @@
 
       <ul>
         <!-- avatar -->
-        <NuxtLink to="/signin">
-          <div
-            class="flex mt-auto px-3 "
-            :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed }"
-          >
-            <span class="relative inline-block">
-              <img
-                class="h-8 w-8 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
-              />
-              <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
-            </span>
+        <div class="px-3 ">
+          <!-- <LanguageDropDown /> -->
+          <NuxtLink to="/signin">
+            <div
+              class="flex mt-auto "
+              :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'pl-2': !isCollapsed }"
+            >
+              <span class="relative inline-block">
+                <img
+                  class="h-8 w-8 rounded-full"
+                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                  alt=""
+                />
+                <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
+              </span>
 
-            <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7 font-poppins">
-              John Doe
-            </p>
-          </div>
-        </NuxtLink>
+              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7 font-poppins">
+                John Doe
+              </p>
+            </div>
+          </NuxtLink>
+        </div>
       </ul>
     </div>
   </div>

@@ -8,7 +8,7 @@
         <template #subtitle>
             <div class="flex flex-col gap-5">
                 <div class="flex flex-row gap-3">
-                    <p class="place-self-center">Available users 10/200</p>
+                    <p class="place-self-center font-poppins">Available users 10/200</p>
                     <Tag class="place-self-center bg-success" severity="success" value="Upgrade"></Tag>
                 </div>
                 <div>

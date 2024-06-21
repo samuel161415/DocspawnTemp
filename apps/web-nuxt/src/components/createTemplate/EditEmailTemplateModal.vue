@@ -32,7 +32,6 @@
 <script setup>
 import { ref } from 'vue';
 import Editor from 'primevue/editor';
-import FileUpload from 'primevue/fileupload';
 
 const visible = ref(false);
 const value = ref('');

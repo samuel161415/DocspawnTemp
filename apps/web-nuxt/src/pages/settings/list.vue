@@ -6,8 +6,12 @@
                 <!-- left side menu -->
                 <div class="flex flex-col justify-between h-full overflow-y-scroll w-64 pt-5 no-scrollbar">
                     <div class="flex ml-1">
-                        <Button icon="pi pi-plus" label="Create new list" outlined
+                        <Button 
+                            icon="pi pi-plus" 
+                            label="Create new list" 
+                            outlined
                             class="text-success border-success hover:bg-green-50 hover:border-success w-48"
+                            severity="success"
                             @click="visible = true" />
                     </div>
 
@@ -80,7 +84,7 @@
                 <!-- right section -->
                 <div class="w-full py-5">
                     <div class="flex flex-col md:flex-row justify-end gap-2">
-                        <Button icon="pi pi-plus" label="Add item(s)" outlined @click="openAddItems = true"
+                        <Button icon="pi pi-plus" label="Add item(s)" outlined @click="openAddItems = true" severity="success"
                             class="text-success border-success hover:bg-green-50" />
                         <Button icon="pi pi-cog" label="List options" class="p-button-success" outlined
                             @click="openListOptions = true" />

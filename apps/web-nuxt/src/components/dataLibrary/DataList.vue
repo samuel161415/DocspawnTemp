@@ -15,7 +15,7 @@
 
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :export-file="props.exportFile" @export-c-s-v="exportCSVHandler" />
 
-    <div v-if="filteredData.length > 0 " class="mt-10">
+    <div class="mt-10">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
@@ -23,7 +23,7 @@
         show-gridlines
         paginator
         responsive-layout="scroll"
-        :rows="5"
+        :rows="25"
         :row-hover="true"
         data-key="id"
         filter-display="menu"
@@ -31,8 +31,9 @@
         striped-rows
         csv-separator
         :global-filter-fields="['filled_on', 'text_filled']"
-        paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-        current-page-report-template="Showing {first} to {last} of {totalRecords} entries"
+        paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+        :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
+        :rows-per-page-options="[25, 50, 100]"
         @update:filters="onFilterChange"
       >
         <template #header>
@@ -264,3 +265,18 @@ function clearFilter() {
   })
 }
 </script>
+
+<style scoped>
+::v-deep .p-datatable-header {
+    border-radius: 0.4rem 0.4rem 0 0!important;
+}
+/* Bottom Left Would Be: */
+::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
+    border-radius:  0  0  0 0.5rem!important;
+}
+
+/* Bottom Right Would Be: */
+::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
+    border-radius:  0  0 0.5rem 0 !important;
+}
+</style>

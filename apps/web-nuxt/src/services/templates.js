@@ -1,15 +1,15 @@
 export const templateData = [
-
   {
     id: 1,
-    name: "Application Form.pdf",
+    name: "Budget Report.xlsx",
     docCreated: 2,
-    createdOn: "Mon Jan 29 2024",
-    modifiedOn: "Mon Jan 29 2024",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1667px-PDF_file_icon.svg.png",
+    createdOn: "Wed Mar 20 2024",
+    modifiedOn: "Wed Mar 20 2024",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/.xlsx_icon.svg/2048px-.xlsx_icon.svg.png",
     filePath: "https://via.placeholder.com/150",
-    isFavorite: true,
-    templateType: "form to doc",
+    isFavorite: false,
+    templateType: "table to doc",
+    timeSaved: 5
   },
   {
     id: 2,
@@ -20,18 +20,20 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: "data to doc"
+    templateType: "data to doc",
+    timeSaved: 3
   },
   {
     id: 3,
-    name: "Licence agreement form.docx",
+    name: "Licence form.docx",
     docCreated: 3,
     createdOn: "Mon Jan 29 2024",
     modifiedOn: "Mon Jan 29 2024",
     image: "https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: "data to doc"
+    templateType: "data to doc",
+    timeSaved: 1
   },
   {
     id: 4,
@@ -42,18 +44,20 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: true,
-    templateType: "form to doc"
+    templateType: "form to doc",
+    timeSaved: 0
   },
   {
     id: 5,
-    name: "Budget Report.xlsx",
+    name: "Application Form.pdf",
     docCreated: 2,
-    createdOn: "Wed Mar 20 2024",
-    modifiedOn: "Wed Mar 20 2024",
-    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/.xlsx_icon.svg/2048px-.xlsx_icon.svg.png",
+    createdOn: "Mon Jan 29 2024",
+    modifiedOn: "Mon Jan 29 2024",
+    image: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/PDF_file_icon.svg/1667px-PDF_file_icon.svg.png",
     filePath: "https://via.placeholder.com/150",
-    isFavorite: false,
-    templateType: "table to doc"
+    isFavorite: true,
+    templateType: "form to doc",
+    timeSaved: 2
   },
   {
     id: 6,
@@ -64,7 +68,8 @@ export const templateData = [
     image: "https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all",
     filePath: "https://via.placeholder.com/150",
     isFavorite: true,
-    templateType: "form to doc"
+    templateType: "form to doc",
+    timeSaved: 3
   },
   {
     id: 7,
@@ -75,7 +80,8 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: "data to doc"
+    templateType: "data to doc",
+    timeSaved: 4
   },
   {
     id: 8,
@@ -86,7 +92,8 @@ export const templateData = [
     image: "https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all",
     filePath: "https://via.placeholder.com/150",
     isFavorite: true,
-    templateType: "table to doc"
+    templateType: "table to doc",
+    timeSaved: 2
   },
   {
     id: 9,
@@ -97,7 +104,8 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: "form to doc"
+    templateType: "form to doc",
+    timeSaved: 5
   },
   {
     id: 10,
@@ -108,7 +116,8 @@ export const templateData = [
     image: "https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all",
     filePath: "https://via.placeholder.com/150",
     isFavorite: true,
-    templateType: "table to doc"
+    templateType: "table to doc",
+    timeSaved: 9
   },
   {
     id: 11,
@@ -119,7 +128,8 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: "data to doc"
+    templateType: "data to doc",
+    timeSaved: 6
   },
   {
     id: 12,
@@ -130,7 +140,8 @@ export const templateData = [
     image: "https://www.pcworld.com/wp-content/uploads/2024/02/pdf-icon.jpg?quality=50&strip=all",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType:'table to doc'
+    templateType:'table to doc',
+    timeSaved: 7
   },
   {
 
@@ -142,7 +153,8 @@ export const templateData = [
     image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSigR_OdqSU2ReJe6SZuI9qsDjkNoDs8NgtgIrSHV26ng&s",
     filePath: "https://via.placeholder.com/150",
     isFavorite: false,
-    templateType: 'form to doc'
+    templateType: 'form to doc',
+    timeSaved: 4
   }
 ];
 

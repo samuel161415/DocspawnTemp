@@ -1,8 +1,7 @@
 <template>
-  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar ">
-    <div class="px-8 py-7 flex flex-col gap-2 bg-white ">
-      <FirstStep v-if="!createNewTemplate" @update-create-new-template="createNewTemplate = $event" />
-      <div v-if="createNewTemplate" class="">
+  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar">
+    <div class="px-4 py-7 flex flex-col gap-2 bg-white ">
+      <div class="">
         <h2 class="font-semibold text-surface-600 text-2xl mt-2 px-5">
           Template creation
         </h2>
@@ -11,8 +10,8 @@
             <StepperPanel>
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="'General information'" class="bg-transparent border-none inline-flex flex-column gap-2 " @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="['fad', 'square-info']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="['fad', 'square-info']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ nextCallback }">
@@ -31,12 +30,12 @@
             <StepperPanel header="Template editor">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="'Template editor'" :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="['fad', 'file-invoice']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ prevCallback, nextCallback }">
-                <div class=" mx-0">
+                <div class=" mx-6">
                   <TemplateEditor />
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
@@ -49,8 +48,8 @@
             <StepperPanel header="Form editor">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="['fad', 'file-signature']" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ prevCallback, nextCallback }">
@@ -70,8 +69,8 @@
             <StepperPanel header="Delivery options">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="'Delivery options'" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="['fad', 'sliders']" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ prevCallback }">
@@ -87,34 +86,20 @@
         </div>
       </div>
     </div>
-
-    <!-- buttons -->
-    <!-- <ConfirmPopup group="headless">
-        <template #container="{ message, acceptCallback, rejectCallback }">
-          <div class="rounded-full p-3">
-            <i class="pi pi-exclamation-triangle text-error mr-2"></i>
-            <span class="mt-2 font-poppins text-base text-surface-500">{{ message.message }}</span>
-            <div class="flex justify-end gap-2 mt-3">
-              <Button label="Yes" @click="acceptCallback" text severity="error"size="small" class="text-error"></Button>
-              <Button label="No" outlined @click="rejectCallback" severity="secondary" size="small" text></Button>
-            </div>
-          </div>
-        </template>
-      </ConfirmPopup> -->
   </div>
 </template>
 
 <script setup>
-import Stepper from 'primevue/stepper'
-import StepperPanel from 'primevue/stepperpanel'
 import { ref, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
 import { useToast } from 'primevue/usetoast'
+import { fad } from '@fortawesome/pro-duotone-svg-icons'
+import Stepper from 'primevue/stepper'
+import StepperPanel from 'primevue/stepperpanel'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
-import FirstStep from '~/components/createTemplate/FirstStep.vue'
 
 const confirm = useConfirm()
 const toast = useToast()
@@ -134,11 +119,6 @@ const formEditor = ref(true)
 // step 3 - template editor
 const templateTitle = ref('')
 const templateDescription = ref('')
-
-const items = ref([
-  { label: 'Templates', route: '/templates' },
-  { label: 'Create new template', route: '/templates/create' },
-])
 
 const isStep1Valid = ref(false)
 const isStep2Valid = ref(true)
