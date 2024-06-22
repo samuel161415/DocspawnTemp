@@ -62,20 +62,6 @@ import { onMounted, ref } from 'vue'
 const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns'])
 const selectedColumns = ref(props?.dataSourceSelectedColumns ? props?.dataSourceSelectedColumns : [])
 
-onMounted(() => {
-  loading.value = true
-
-  lazyParams.value = {
-    first: 0,
-    rows: 10,
-    sortField: null,
-    sortOrder: null,
-    filters: filters.value,
-  }
-
-  loadLazyData()
-})
-
 const dt = ref()
 const loading = ref(false)
 const totalRecords = ref(0)
@@ -104,6 +90,19 @@ watch(() => props?.dataSourceSelectedColumns, (newVal) => {
   console.log('new val of data source slected columns', newVal)
   selectedColumns.value = newVal
 })
+onMounted(() => {
+  loading.value = true
+
+  lazyParams.value = {
+    first: 0,
+    rows: 10,
+    sortField: null,
+    sortOrder: null,
+    filters: filters.value,
+  }
+
+  loadLazyData()
+})
 
 function loadLazyData(event) {
   loading.value = true
@@ -128,8 +127,6 @@ function onFilter(event) {
   loadLazyData(event)
 }
 function onSelectAllChange(event) {
-  console.log('event', event)
-  console.log('event checked', event.checked)
   const cData = JSON.parse(JSON.stringify(completeData?.value))
   if (event.checked) {
     selectedRows.value = cData
