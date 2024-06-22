@@ -2,7 +2,6 @@
     <div class="">
         <div class="">
             <DataTable 
-           
                 striped-rows 
                 show-gridlines 
                 :value="checkboxData" 

@@ -49,32 +49,25 @@
             <!-- password -->
             <span class="relative flex w-full">
               <i class="pi pi-lock  absolute top-1/3 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
-              <Password v-model="password" style="width: 98%; height: 44px;" toggleMask>
+              <Password v-model="password" style="width: 100%; height: 44px;" toggleMask>
                 <template #header>
                     <h6>Pick a password</h6>
                 </template>
                 <template #footer>
                     <Divider />
                     <div class="">
-                      <p class="mt-2 p-0 mb-2">Suggestions</p>
+                      <p class=" p-0 mb-1">Suggestions</p>
                       <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
                           <li>At least one lowercase</li>
                           <li>At least one uppercase</li>
                           <li>At least one numeric</li>
                           <li>Minimum 8 characters</li>
                       </ul>
-                  
                     </div>
                 </template>
               </Password>
-          </span>
-         
-          <Button 
-              label="Change password" 
-              class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
-              severity="success"
-              @click="openConfirmationModal = true"
-              />
+            </span>
+
           </div>
         </div>
 
@@ -85,22 +78,29 @@
             <!-- password -->
             <span class="relative flex w-full">
               <i class="pi pi-lock  absolute top-1/3 z-50 left-3 text-surface-400 dark:text-surface-600" style="color: rgb(117, 119, 120);"></i>
-              <Password v-model="confirmPassword" style="width: 100%; height: 44px;" toggleMask>
+              <Password v-model="confirmPassword" style="width: 98%; height: 44px;" toggleMask>
                 <template #header>
                     <h6>Pick a password</h6>
                 </template>
                 <template #footer>
                     <Divider />
                     <div class="">
-                      <p class="mt-2 p-0 mb-2">Suggestions</p>
+                      <p class="p-0 mb-1">Suggestions</p>
                       <ul class="p-0 pl-2 m-0 ml-2 list-disc leading-6" style="line-height: 1.5">
                           <li>Password must match</li>
                       </ul>
-                  
                     </div>
                 </template>
               </Password>
-          </span>
+            </span>
+
+            <Button 
+              label="Change password" 
+              class="text-white border-success bg-success hover:bg-success hover:border-success w-60"
+              severity="success"
+              :disabled="!validPassword"
+              @click="openConfirmationModal = true"
+              />
       
           </div>
         </div>
@@ -221,11 +221,15 @@ const selectedLanguage = ref();
 const selectedTimeZone = ref();
 const avatarImage = ref('');
 const openConfirmationModal = ref(false);
+const validPassword = ref(false);
 
 watch(password, () => {
     isTyping.value = true;
 });
 
+watch(confirmPassword, () => {
+  validPassword.value = password.value.length >= 8 && /[a-z]/.test(password.value) &&  /[A-Z]/.test(password.value) && /\d/.test(password.value) && password.value === confirmPassword.value;  
+});
 const cities = ref([
     { name: 'New York', code: 'NY' },
     { name: 'Rome', code: 'RM' },
@@ -233,6 +237,17 @@ const cities = ref([
     { name: 'Istanbul', code: 'IST' },
     { name: 'Paris', code: 'PRS' }
 ]);
+
+const validatePassword = () => {
+  return (
+      password.value.length >= 8 &&
+      /[a-z]/.test(password) &&
+      /[A-Z]/.test(password) &&
+      /\d/.test(password) &&
+      password.value === confirmPassword.value
+  );
+};
+
 
 const language = ref([
     { name: 'English', code: 'EN' },
