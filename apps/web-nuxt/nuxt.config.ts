@@ -14,11 +14,7 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
-    resolve: {
-      alias: {
-        './dist/cpexcel.js': path.resolve(__dirname, 'node_modules/xlsx/dist/cpexcel.js'),
-      },
-    },
+
   },
   srcDir: './src',
   modules: [

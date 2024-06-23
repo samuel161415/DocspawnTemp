@@ -156,7 +156,7 @@ function isObjectEmpty(obj) {
   return true
 }
 
-async function processFiles(data, fileType) {
+async function processFiles(data, fileType, file) {
   if (data && fileType) {
     if (fileType === 'csv') {
     // Dynamically import xlsx
@@ -182,7 +182,9 @@ async function processFiles(data, fileType) {
     else if (['xls', 'xlsx'].includes(fileType)) {
       try {
       // Convert ArrayBuffer to Uint8Array
-        const uint8Array = new Uint8Array(data)
+        // const uint8Array = new Uint8Array(data)
+        const dataF = await file.arrayBuffer()
+        const uint8Array = new Uint8Array(dataF)
 
         // Attempt to read the workbook
         const workbook = XLSX.read(uint8Array, { type: 'array' })
@@ -242,7 +244,7 @@ watch(selectedFiles, () => {
         const data = e.target.result
         const fileType = file.name.split('.').pop().toLowerCase()
 
-        processFiles(data, fileType)
+        processFiles(data, fileType, file)
       }
       reader.readAsArrayBuffer(file)
     }
