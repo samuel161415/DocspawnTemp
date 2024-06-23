@@ -56,9 +56,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import * as XLSX from 'xlsx'
 
-// import Papa from 'papaparse'
+// import * as XLSX from 'xlsx'
+import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
@@ -164,48 +164,47 @@ watch(selectedFiles, () => {
         const data = e.target.result
         const fileType = file.name.split('.').pop().toLowerCase()
 
-        // if (fileType === 'csv') {
-        // // Parse CSV file using PapaParse
-        //   const csvText = new TextDecoder().decode(data)
+        if (fileType === 'csv') {
+        // Parse CSV file using PapaParse
+          const csvText = new TextDecoder().decode(data)
 
-        //   Papa.parse(csvText, {
-        //     complete: (results) => {
-        //       const parsedData = results.data
-        //       const filteredData = parsedData.filter(
-        //         entry => !isObjectEmpty(entry),
-        //       )
-        //       // console.log('filtered data', filteredData)
-        //       dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
-        //         return { ...f, auto_index_by_docspawn: i + 1 }
-        //       })
-        //       // setCSVFileJSON(filteredData)
-        //     },
-        //     header: true,
-        //   })
-        // }
-        // else
-        if (['xls', 'xlsx'].includes(fileType)) {
-        // Parse Excel file using xlsx
-          const workbook = XLSX.read(data, { type: 'array' })
-          const firstSheetName = workbook.SheetNames[0]
-          const worksheet = workbook.Sheets[firstSheetName]
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-
-          // Assuming the first row in the Excel sheet contains headers
-          const [headers, ...dataRows] = jsonData
-
-          // Map data rows to objects with keys based on headers
-          const formattedData = dataRows.map((row) => {
-            const rowData = {}
-            headers.forEach((header, index) => {
-              rowData[header] = row[index]
-            })
-            return rowData
-          })
-          dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
-            return { ...f, auto_index_by_docspawn: i + 1 }
+          Papa.parse(csvText, {
+            complete: (results) => {
+              const parsedData = results.data
+              const filteredData = parsedData.filter(
+                entry => !isObjectEmpty(entry),
+              )
+              // console.log('filtered data', filteredData)
+              dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+                return { ...f, auto_index_by_docspawn: i + 1 }
+              })
+              // setCSVFileJSON(filteredData)
+            },
+            header: true,
           })
         }
+        // else if (['xls', 'xlsx'].includes(fileType)) {
+        // // Parse Excel file using xlsx
+        //   const workbook = XLSX.read(data, { type: 'array' })
+        //   const firstSheetName = workbook.SheetNames[0]
+        //   const worksheet = workbook.Sheets[firstSheetName]
+        //   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+
+        //   // Assuming the first row in the Excel sheet contains headers
+        //   const [headers, ...dataRows] = jsonData
+
+        //   // Map data rows to objects with keys based on headers
+        //   const formattedData = dataRows.map((row) => {
+        //     const rowData = {}
+        //     headers.forEach((header, index) => {
+        //       rowData[header] = row[index]
+        //     })
+        //     return rowData
+        //   })
+        //   dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
+        //     return { ...f, auto_index_by_docspawn: i + 1 }
+        //   })
+        // }
       }
       reader.readAsArrayBuffer(file)
     }
