@@ -156,28 +156,29 @@ function isObjectEmpty(obj) {
 }
 
 async function processFiles(data, fileType) {
-  if (fileType === 'csv') {
-    // Dynamically import xlsx
-    const Papa = await import('papaparse')
-    // Parse CSV file using PapaParse
-    const csvText = new TextDecoder().decode(data)
+  // if (fileType === 'csv') {
+  //   // Dynamically import xlsx
+  //   const Papa = await import('papaparse')
+  //   // Parse CSV file using PapaParse
+  //   const csvText = new TextDecoder().decode(data)
 
-    Papa.parse(csvText, {
-      complete: (results) => {
-        const parsedData = results.data
-        const filteredData = parsedData.filter(
-          entry => !isObjectEmpty(entry),
-        )
+  //   Papa.parse(csvText, {
+  //     complete: (results) => {
+  //       const parsedData = results.data
+  //       const filteredData = parsedData.filter(
+  //         entry => !isObjectEmpty(entry),
+  //       )
 
-        dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
-          return { ...f, auto_index_by_docspawn: i + 1 }
-        })
-        // setCSVFileJSON(filteredData)
-      },
-      header: true,
-    })
-  }
-  else if (['xls', 'xlsx'].includes(fileType)) {
+  //       dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+  //         return { ...f, auto_index_by_docspawn: i + 1 }
+  //       })
+  //       // setCSVFileJSON(filteredData)
+  //     },
+  //     header: true,
+  //   })
+  // }
+  // else
+  if (['xls', 'xlsx'].includes(fileType)) {
     // Dynamically import xlsx
     const XLSX = await import('xlsx')
 
