@@ -180,7 +180,7 @@ async function processFiles(data, fileType) {
   }
   else
     if (['xls', 'xlsx'].includes(fileType)) {
-    // Dynamically import xlsx
+    /// / Dynamically import xlsx
 
       // Parse Excel file using xlsx
       // const workbook = XLSX.read(data, { type: 'array' })
