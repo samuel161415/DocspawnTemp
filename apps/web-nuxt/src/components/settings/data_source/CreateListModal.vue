@@ -58,7 +58,7 @@
 import { ref } from 'vue'
 
 // import * as XLSX from 'xlsx'
-import Papa from 'papaparse'
+// import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
@@ -157,6 +157,8 @@ function isObjectEmpty(obj) {
 
 async function processFiles(data, fileType) {
   if (fileType === 'csv') {
+    // Dynamically import xlsx
+    const Papa = await import('papaparse')
     // Parse CSV file using PapaParse
     const csvText = new TextDecoder().decode(data)
 
