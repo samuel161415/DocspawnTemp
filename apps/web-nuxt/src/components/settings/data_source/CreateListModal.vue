@@ -45,12 +45,12 @@
         <Button severity="danger" outlined label="Remove" icon="pi pi-times" class="mt-4 font-poppins" @click="removeFiles" />
       </div>
     </div>
-    <TableForDataSourceEdit
+    <!-- <TableForDataSourceEdit
       v-if="dataSourceFileCompleteJSON?.length > 0"
       :data-source-file-complete-j-s-o-n="dataSourceFileCompleteJSON"
       :data-source-column-names="dataSourceColumnNames"
       :data-source-selected-columns="dataSourceSelectedColumns"
-    />
+    /> -->
   </Dialog>
 </template>
 
@@ -61,7 +61,8 @@ import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
-import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
+
+// import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
 
 const toast = useToast()
 const fileupload = ref()

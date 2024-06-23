@@ -33,10 +33,10 @@
 
     <!-- components -->
     <Toast />
-    <!-- <CreateListModal
+    <CreateListModal
       v-if="visible" v-model:visible="visible" @create-list="handleCreateList"
       @cancel="visible = false" @error="showError" @success="showSuccess"
-    /> -->
+    />
 
     <!-- <EditItemOptionModal
       v-if="editableItem" v-model:visible="openItemOptions" v-model:editableItem="editableItem"
@@ -65,8 +65,7 @@ import { ref, watch } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import { useToast } from 'primevue/usetoast'
 import DataTableComponent from '~/components/settings/data_source/Table.vue'
-
-// import CreateListModal from '~/components/settings/data_source/CreateListModal.vue'
+import CreateListModal from '~/components/settings/data_source/CreateListModal.vue'
 
 // import EditItemOptionModal from '~/components/settings/data_source/EditItemOptionModal.vue'
 import { addNewListItem } from '~/services/newListData.js'
