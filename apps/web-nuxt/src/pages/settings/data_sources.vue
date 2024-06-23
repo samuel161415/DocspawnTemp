@@ -13,93 +13,12 @@
             outlined
             class="text-success border-success hover:bg-green-50 hover:border-success w-max ml-auto"
             severity="success"
-
             @click="visible = true"
           />
-
-          <!-- <ul>
-            <li
-              v-for="items in filteredLists" :key="items.title"
-              class="cursor-pointer flex flex-col mt-4 w-full mr-4"
-            >
-              <div
-                :key="items.title"
-                class="flex px-2 py-2 ml-1 hover:bg-surface-100 rounded font-poppins"
-                @click="handleopensubmenu(items)"
-              >
-                <i
-                  class="pt-1 text-gray-500"
-                  :class="{ 'pi pi-chevron-down': items.opensubmenu, 'text-primaryBlue': items.title === tableData.title, 'pi pi-chevron-right': !items.opensubmenu }"
-                  @click="items.opensubmenu = !items.opensubmenu"
-                ></i>
-                <span
-                  class="text-lg font-normal ml-3 "
-                  :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': items.title === tableData.title, 'text-gray-500': !items.isHovered }"
-                  v-html="highlight(items.title) || items.title"
-                ></span>
-              </div>
-
-              <ul v-if="items.opensubmenu" class="ml-3">
-                <li v-for="subItem in items.sublists" :key="subItem.id">
-                  <div
-                    v-if="subItem?.sublists && subItem.sublists.length > 0" :key="subItem.id"
-                    class="flex py-2 pl-1 hover:bg-surface-100 items-center ml-4 font-poppins"
-                    @click="handleopensubmenu(subItem)"
-                  >
-                    <i
-                      class=" text-gray-500"
-                      :class="{ 'pi pi-chevron-down': subItem.opensubmenu, 'text-primaryBlue': subItem.title === tableData.title, 'pi pi-chevron-right': !subItem.opensubmenu }"
-                      @click="subItem.opensubmenu = !subItem.opensubmenu"
-                    ></i>
-
-                    <p
-                      class="text-base font-normal ml-3 text-gray-500"
-                      :class="{ 'text-primaryBlue': subItem.title === tableData.title }"
-                      v-html="highlight(subItem.title) || subItem.title"
-                    >
-                    </p>
-                  </div>
-
-                  <ul v-if="subItem.opensubmenu" class="ml-3">
-                    <li v-for="subsubItem in subItem.sublists" :key="subsubItem.title">
-                      <div
-                        v-if="subsubItem?.sublists && subsubItem.sublists.length > 0" :key="subsubItem.title"
-                        class="ml-5 font-poppins flex py-2 pl-1 hover:bg-surface-100 items-center"
-                        @click="handleopensubmenu(subsubItem)"
-                      >
-                        <i
-                          class=" text-gray-500"
-                          :class="{ 'pi pi-chevron-down': subsubItem.opensubmenu, 'text-primaryBlue': subsubItem.title === tableData.title, 'pi pi-chevron-right': !subsubItem.opensubmenu }"
-                          @click="subsubItem.opensubmenu = !subsubItem.opensubmenu"
-                        ></i>
-                        <p
-                          class="text-base font-normal ml-4 text-gray-500"
-                          :class="{ 'text-primaryBlue': subsubItem.title === tableData.title }"
-                          v-html="highlight(subsubItem.title) || subsubItem.title"
-                        >
-                        </p>
-                      </div>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
-          </ul> -->
         </div>
 
         <!-- right section -->
         <div class="w-full py-5">
-          <!-- <div class="flex flex-col md:flex-row justify-end gap-2">
-            <Button
-              icon="pi pi-plus" label="Add item(s)" outlined severity="success" class="text-success border-success hover:bg-green-50"
-              @click="openAddItems = true"
-            />
-            <Button
-              icon="pi pi-cog" label="List options" class="p-button-success" outlined
-              @click="openListOptions = true"
-            />
-          </div> -->
-
           <!-- table -->
           <div class="mt-4 mb-12 ml-2 ">
             <DataTableComponent
@@ -119,19 +38,7 @@
       @cancel="visible = false" @error="showError" @success="showSuccess"
     />
 
-    <!-- <CreateSublistModal
-      v-if="openCreateSubList" v-model:visible="openCreateSubList" :level="currentListLevel"
-      @create-sub-sub-list="handleCreateSubSublist" @cancel="openCreateSubList = false"
-    />
-
-    <AddItemsModal v-model:visible="openAddItems" @add-items="handleAddItems" @cancel="openAddItems = false" />
-
-    <ListOptionModal
-      v-if="openListOptions" v-model:visible="openListOptions" v-model:tableData="tableData"
-      @cancel="openListOptions = false"
-    />
-
-    <EditItemOptionModal
+    <!-- <EditItemOptionModal
       v-if="editableItem" v-model:visible="openItemOptions" v-model:editableItem="editableItem"
       @edit-item="handleEditItem" @cancel="openItemOptions = false"
       @open-create-list-modal="createSubList"
@@ -160,10 +67,7 @@ import { useToast } from 'primevue/usetoast'
 import DataTableComponent from '~/components/settings/data_source/Table.vue'
 import CreateListModal from '~/components/settings/data_source/CreateListModal.vue'
 
-// import AddItemsModal from '~/components/settings/data_source/AddItemsModal.vue'
 // import EditItemOptionModal from '~/components/settings/data_source/EditItemOptionModal.vue'
-// import ListOptionModal from '~/components/settings/data_source/ListOptionModal.vue'
-// import CreateSublistModal from '~/components/settings/data_source/CreateSublistModal.vue'
 import { addNewListItem } from '~/services/newListData.js'
 import { sampleDataSources } from '~/services/sampleDataSources.js'
 
@@ -178,10 +82,7 @@ const openDeleteModal = ref(false)
 const editableItem = ref()
 const tableData = ref({})
 const deleteItem = ref()
-const openCreateSubList = ref(false)
-const currentListLevel = ref()
-// sublist id
-const sublistId = ref()
+
 const searchQuery = ref('')
 const filteredLists = ref(addNewListItem.value)
 
@@ -202,31 +103,25 @@ const filteredList = computed(() => {
   })
 })
 
-watch(searchQuery, (newValue, oldValue) => {
+watch(searchQuery, (newValue) => {
   if (newValue === '')
     filteredLists.value = addNewListItem.value
   else
     filteredLists.value = filteredList.value
 })
 
-function highlight(data) {
-  if (searchQuery.value) {
-    const pattern = new RegExp(searchQuery.value, 'i')
-    const highlightedData = data.replace(
-      pattern,
-            `<span class="bg-primary-100 capitalize">${searchQuery.value}</span>`,
-    )
-    return highlightedData
-  }
-}
-
-function handleopensubmenu(clickedItem) {
-  tableData.value = clickedItem
-}
+// function highlight(data) {
+//   if (searchQuery.value) {
+//     const pattern = new RegExp(searchQuery.value, 'i')
+//     const highlightedData = data.replace(
+//       pattern,
+//             `<span class="bg-primary-100 capitalize">${searchQuery.value}</span>`,
+//     )
+//     return highlightedData
+//   }
+// }
 
 onMounted(() => {
-  console.log('on mounted table data', sampleDataSources.value)
-
   tableData.value = sampleDataSources.value
 })
 
@@ -239,28 +134,12 @@ const filters = ref({
 },
 )
 
-// // this is emitted from editItemOptionModal
-// function createSubList(data) {
-//   openItemOptions.value = false
-//   openCreateSubList.value = true
-//   sublistId.value = data.id
-//   currentListLevel.value = data.level
-// }
-
-// // this is emitted from createSublistModal
-// function handleCreateSubSublist(data) {
-//   tableData.value.sublists.map((list) => {
-//     if (list.id === sublistId.value)
-//       list.sublists = data.sublistItems
-//   })
-// }
-
 function handleCreateList(data) {
   // data is new list created from createListModal
   const { listName, listItems } = data
   const newSubitems = []
 
-  listItems.map((listitem, index) => {
+  listItems.forEach((listitem, index) => {
     const newsubitem = {
       id: index + 1,
       title: listitem.name,
@@ -283,26 +162,11 @@ function handleCreateList(data) {
   addNewListItem.value.push(newList)
 }
 
-// function handleAddItems(data) {
-//   const lastid = addNewListItem.value.length
-//   data.map((item, index) => {
-//     const newItem = {
-//       id: lastid + index + 1,
-//       title: item.name,
-//       isHovered: false,
-//       level: tableData.value.level + 1,
-//       sublists: [],
-//     }
-
-//     tableData.value.sublists.push(newItem)
-//   })
-// }
-
 function handleEditItem(data) {
   editableItem.value = data
   openItemOptions.value = true
 
-  tableData.value.sublists.map((sublist) => {
+  tableData.value.sublists.forEach((sublist) => {
     if (sublist.id === data.id)
       sublist.title = data.title
   })
@@ -325,10 +189,6 @@ function onRowReorder(event) {
 function showSuccess() {
   toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 })
 }
-
-watch((tableData), () => {
-  console.log('table data', tableData)
-})
 </script>
 
 <style scoped>

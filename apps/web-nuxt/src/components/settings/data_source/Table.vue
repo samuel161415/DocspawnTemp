@@ -19,7 +19,7 @@
       </p>
     </template>
 
-    <template #header :style="{ borderRadius: '1.5rem' }">
+    <template #header>
       <div class="flex flex-row ">
         <!-- <p class="font-semibold text-lg self-center">
           {{ tableData.title }}
@@ -74,8 +74,6 @@
           <Button outlined class="w-max px-4 " severity="danger" @click="handleOpenDelete(data)">
             Delete
           </Button>
-          <!-- <i class="pi pi-pencil text-success text-lg custom-icon cursor-pointer" @click="handleEditItem(data)"></i>
-          <i class="pi pi-trash text-error text-lg cursor-pointer" @click="handleOpenDelete(data)"></i> -->
         </div>
       </template>
     </Column>
@@ -89,20 +87,20 @@ const props = defineProps({
   tableData: Array,
   filters: Object,
 })
-const emit = defineEmits()
+const emit = defineEmits(['rowReorder', 'editItem', 'openDelete'])
 
 const filters = ref(props.filters)
 
 function onRowReorder(event) {
-  emit('row-reorder', event.value)
+  emit('rowReorder', event.value)
 }
 
 function handleEditItem(data) {
-  emit('edit-item', data)
+  emit('editItem', data)
 }
 
 function handleOpenDelete(data) {
-  emit('open-delete', data)
+  emit('openDelete', data)
 }
 </script>
 

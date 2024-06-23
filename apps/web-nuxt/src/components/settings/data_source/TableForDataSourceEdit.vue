@@ -36,22 +36,6 @@
           </p>
         </template>
       </Column>
-      <!-- <Column field="country.name" header="Country" filter-field="country.name" sortable>
-        <template #body="{ data }">
-          <div class="flex items-center gap-2">
-            <span>{{ data.country.name }}</span>
-          </div>
-        </template>
-      </Column>
-      <Column field="company" header="Company" sortable />
-      <Column field="representative.name" header="Representative" sortable>
-        <template #body="{ data }">
-          <div class="flex items-center gap-2">
-            <img :alt="data.representative.name" :src="`https://primefaces.org/cdn/primevue/images/avatar/${data.representative.image}`" style="width: 32px" />
-            <span>{{ data.representative.name }}</span>
-          </div>
-        </template>
-      </Column> -->
     </DataTable>
   </div>
 </template>
@@ -69,25 +53,13 @@ const completeData = ref()
 const selectedRows = ref()
 const selectAll = ref(false)
 const first = ref(0)
-const filters = ref({
-  'name': { value: '', matchMode: 'contains' },
-  'country.name': { value: '', matchMode: 'contains' },
-  'company': { value: '', matchMode: 'contains' },
-  'representative.name': { value: '', matchMode: 'contains' },
-})
+
 const lazyParams = ref({})
-const columns = ref([
-  { field: 'name', header: 'Name' },
-  { field: 'country.name', header: 'Country' },
-  { field: 'company', header: 'Company' },
-  { field: 'representative.name', header: 'Representative' },
-])
 
 watch(() => props?.dataSourceFileCompleteJSON, (newVal) => {
   completeData.value = newVal
 })
 watch(() => props?.dataSourceSelectedColumns, (newVal) => {
-  console.log('new val of data source slected columns', newVal)
   selectedColumns.value = newVal
 })
 onMounted(() => {
@@ -98,7 +70,7 @@ onMounted(() => {
     rows: 10,
     sortField: null,
     sortOrder: null,
-    filters: filters.value,
+
   }
 
   loadLazyData()
@@ -122,10 +94,7 @@ function onSort(event) {
   lazyParams.value = event
   loadLazyData(event)
 }
-function onFilter(event) {
-  lazyParams.value.filters = filters.value
-  loadLazyData(event)
-}
+
 function onSelectAllChange(event) {
   const cData = JSON.parse(JSON.stringify(completeData?.value))
   if (event.checked) {
@@ -139,37 +108,12 @@ function onSelectAllChange(event) {
 }
 
 function onRowSelect(event) {
-  const { data } = event
-  console.log('data', data)
+  // single row selection {data}=event
 }
 
 function onRowUnselect(event) {
-  const { data } = event
-  console.log('data', data)
+// single row unselection {data}=event
 }
-watch(selectedRows, () => {
-  console.log('selected rows', selectedRows?.value)
-})
-// function onSelectAllChange(event) {
-//   console.log('running on sleect all')
-//   selectAll.value = event.checked
-
-//   if (selectAll.value) {
-//     selectAll.value = true
-//     selectedRows.value = props?.dataSourceFileCompleteJSON
-//   }
-//   else {
-//     selectAll.value = false
-//     selectedRows.value = []
-//   }
-// }
-// function onRowSelect() {
-//   console.log('row select')
-// //   selectAll.value = selectedRows.value.length === totalRecords.value
-// }
-// function onRowUnselect() {
-// //   selectAll.value = false
-// }
 
 function toggleColumnSelection(columnName) {
   const index = selectedColumns.value.indexOf(columnName)
@@ -178,7 +122,4 @@ function toggleColumnSelection(columnName) {
   else
     selectedColumns.value.push(columnName) // Add column
 }
-watch(selectedColumns, () => {
-  console.log('selected columns', selectedColumns.value)
-})
 </script>

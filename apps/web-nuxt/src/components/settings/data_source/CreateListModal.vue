@@ -203,8 +203,6 @@ watch(selectedFiles, () => {
           dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
             return { ...f, auto_index_by_docspawn: i + 1 }
           })
-          // console.log('formatted data', formattedData)
-          // setCSVFileJSON(formattedData)
         }
       }
       reader.readAsArrayBuffer(file)
