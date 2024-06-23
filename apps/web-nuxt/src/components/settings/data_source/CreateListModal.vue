@@ -155,6 +155,54 @@ function isObjectEmpty(obj) {
   return true
 }
 
+async function processFiles(data, fileType) {
+  if (fileType === 'csv') {
+    // Parse CSV file using PapaParse
+    const csvText = new TextDecoder().decode(data)
+
+    Papa.parse(csvText, {
+      complete: (results) => {
+        const parsedData = results.data
+        const filteredData = parsedData.filter(
+          entry => !isObjectEmpty(entry),
+        )
+
+        dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+          return { ...f, auto_index_by_docspawn: i + 1 }
+        })
+        // setCSVFileJSON(filteredData)
+      },
+      header: true,
+    })
+  }
+  else if (['xls', 'xlsx'].includes(fileType)) {
+    // Dynamically import xlsx
+    const XLSX = await import('xlsx')
+
+    // Parse Excel file using xlsx
+    const workbook = XLSX.read(data, { type: 'array' })
+    const firstSheetName = workbook.SheetNames[0]
+    const worksheet = workbook.Sheets[firstSheetName]
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+
+    // Assuming the first row in the Excel sheet contains headers
+    const [headers, ...dataRows] = jsonData
+
+    // Map data rows to objects with keys based on headers
+    const formattedData = dataRows.map((row) => {
+      const rowData = {}
+      headers.forEach((header, index) => {
+        rowData[header] = row[index] ? row[index] : ''
+      })
+      return rowData
+    })
+
+    dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
+      return { ...f, auto_index_by_docspawn: i + 1 }
+    })
+  }
+}
+
 watch(selectedFiles, () => {
   if (selectedFiles?.value?.length > 0) {
     const file = selectedFiles.value[0]
@@ -164,47 +212,7 @@ watch(selectedFiles, () => {
         const data = e.target.result
         const fileType = file.name.split('.').pop().toLowerCase()
 
-        if (fileType === 'csv') {
-        // Parse CSV file using PapaParse
-          const csvText = new TextDecoder().decode(data)
-
-          Papa.parse(csvText, {
-            complete: (results) => {
-              const parsedData = results.data
-              const filteredData = parsedData.filter(
-                entry => !isObjectEmpty(entry),
-              )
-              // console.log('filtered data', filteredData)
-              dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
-                return { ...f, auto_index_by_docspawn: i + 1 }
-              })
-              // setCSVFileJSON(filteredData)
-            },
-            header: true,
-          })
-        }
-        // else if (['xls', 'xlsx'].includes(fileType)) {
-        // // Parse Excel file using xlsx
-        //   const workbook = XLSX.read(data, { type: 'array' })
-        //   const firstSheetName = workbook.SheetNames[0]
-        //   const worksheet = workbook.Sheets[firstSheetName]
-        //   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-
-        //   // Assuming the first row in the Excel sheet contains headers
-        //   const [headers, ...dataRows] = jsonData
-
-        //   // Map data rows to objects with keys based on headers
-        //   const formattedData = dataRows.map((row) => {
-        //     const rowData = {}
-        //     headers.forEach((header, index) => {
-        //       rowData[header] = row[index]
-        //     })
-        //     return rowData
-        //   })
-        //   dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
-        //     return { ...f, auto_index_by_docspawn: i + 1 }
-        //   })
-        // }
+        processFiles(data, fileType)
       }
       reader.readAsArrayBuffer(file)
     }
