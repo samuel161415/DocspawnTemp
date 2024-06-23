@@ -56,8 +56,10 @@
 
 <script setup>
 import { ref } from 'vue'
+
 import * as XLSX from 'xlsx'
 
+// import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
@@ -176,100 +178,31 @@ async function processFiles(data, fileType) {
       header: true,
     })
   }
-  else
-    if (['xls', 'xlsx'].includes(fileType)) {
-      //   // // Dynamically import xlsx
+  else if (['xls', 'xlsx'].includes(fileType)) {
+    // Dynamically import xlsx
 
-      //     //   // Parse Excel file using xlsx
-      //     //   const workbook = XLSX.read(data, { type: 'array' })
-      //     //   const firstSheetName = workbook.SheetNames[0]
-      //     //   const worksheet = workbook.Sheets[firstSheetName]
-      //     //   const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+    // Parse Excel file using xlsx
+    const workbook = await XLSX.read(new Uint8Array(data), { type: 'array' })
+    const firstSheetName = workbook.SheetNames[0]
+    const worksheet = workbook.Sheets[firstSheetName]
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
 
-      //     //   // Assuming the first row in the Excel sheet contains headers
-      //     //   const [headers, ...dataRows] = jsonData
+    // Assuming the first row in the Excel sheet contains headers
+    const [headers, ...dataRows] = jsonData
 
-      //     //   // Map data rows to objects with keys based on headers
-      //     //   const formattedData = dataRows.map((row) => {
-      //     //     const rowData = {}
-      //     //     headers.forEach((header, index) => {
-      //     //       rowData[header] = row[index] ? row[index] : ''
-      //     //     })
-      //     //     return rowData
-      //     //   })
+    // Map data rows to objects with keys based on headers
+    const formattedData = dataRows.map((row) => {
+      const rowData = {}
+      headers.forEach((header, index) => {
+        rowData[header] = row[index] ? row[index] : ''
+      })
+      return rowData
+    })
 
-      //     //   dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
-      //     //     return { ...f, auto_index_by_docspawn: i + 1 }
-      //     //   })
-      //     // Parse Excel file using xlsx
-      //     let XLSX
-      //     try {
-      //       XLSX = await import('xlsx')
-      //     }
-      //     catch (error) {
-      //       console.error('Failed to load XLSX module:', error)
-      //       return
-      //     }
-
-      //     if (!XLSX) {
-      //       console.error('XLSX module is not available.')
-      //       return
-      //     }
-
-      //     try {
-      //       const workbook = XLSX.read(data, { type: 'array' })
-      //       const firstSheetName = workbook.SheetNames[0]
-      //       const worksheet = workbook.Sheets[firstSheetName]
-      //       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-
-      //       // Assuming the first row in the Excel sheet contains headers
-      //       const [headers, ...dataRows] = jsonData
-
-      //       // Map data rows to objects with keys based on headers
-      //       const formattedData = dataRows.map((row) => {
-      //         const rowData = {}
-      //         headers.forEach((header, index) => {
-      //           rowData[header] = row[index] ? row[index] : ''
-      //         })
-      //         return rowData
-      //       })
-
-      //       dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
-      //         return { ...f, auto_index_by_docspawn: i + 1 }
-      //       })
-      //     }
-      //     catch (error) {
-      //       console.error('Error processing XLSX file:', error)
-      //     }
-      const dataset = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/51b2ee2b-f2d3-4fc4-8c6e-8be78fd0a482_template_canvas_dataset.xlsx'
-
-      fetch(dataset)
-        .then(response => response.arrayBuffer())
-        .then((data) => {
-          // Parse Excel file using xlsx
-          const workbook = XLSX.read(data, { type: 'array' })
-          const firstSheetName = workbook.SheetNames[0]
-          const worksheet = workbook.Sheets[firstSheetName]
-          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-
-          // Assuming the first row in the Excel sheet contains headers
-          const [headers, ...dataRows] = jsonData
-
-          // Map data rows to objects with keys based on headers
-          const formattedData = dataRows.map((row) => {
-            const rowData = {}
-            headers.forEach((header, index) => {
-              rowData[header] = row[index]
-            })
-
-            return rowData
-          })
-
-          dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
-            return { ...f, auto_index_by_docspawn: i + 1 }
-          })
-        })
-    }
+    dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
+      return { ...f, auto_index_by_docspawn: i + 1 }
+    })
+  }
 }
 
 watch(selectedFiles, () => {
