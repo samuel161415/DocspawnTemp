@@ -56,6 +56,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import * as XLSX from 'xlsx'
 
 // import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
@@ -179,11 +180,37 @@ async function processFiles(data, fileType, file) {
       })
     }
     else if (['xls', 'xlsx'].includes(fileType)) {
-      const formattedData = await xlsxToJSON(file)
+      // const formattedData = await xlsxToJSON(file)
 
-      dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
-        return { ...f, auto_index_by_docspawn: i + 1 }
-      })
+      // dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
+      //   return { ...f, auto_index_by_docspawn: i + 1 }
+      // })
+      const blobUrl = URL.createObjectURL(file)
+      fetch(blobUrl)
+        .then(response => response.arrayBuffer())
+        .then((data) => {
+          // Parse Excel file using xlsx
+          const workbook = XLSX.read(data, { type: 'array' })
+          const firstSheetName = workbook.SheetNames[0]
+          const worksheet = workbook.Sheets[firstSheetName]
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+
+          // Assuming the first row in the Excel sheet contains headers
+          const [headers, ...dataRows] = jsonData
+
+          // Map data rows to objects with keys based on headers
+          const formattedData = dataRows.map((row) => {
+            const rowData = {}
+            headers.forEach((header, index) => {
+              rowData[header] = row[index]
+            })
+
+            return rowData
+          })
+          dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
+            return { ...f, auto_index_by_docspawn: i + 1 }
+          })
+        })
     }
   }
 }
