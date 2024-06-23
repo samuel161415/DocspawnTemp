@@ -76,8 +76,8 @@ importers:
         specifier: ^5.3.0
         version: 5.3.0
       papaparse:
-        specifier: ^5.4.1
-        version: 5.4.1
+        specifier: ^5.3.0
+        version: 5.3.0
       pdfjs-dist:
         specifier: ^4.0.379
         version: 4.0.379
@@ -3549,7 +3549,7 @@ packages:
     dependencies:
       '@vue/compiler-ssr': 3.4.14
       '@vue/shared': 3.4.14
-      vue: 3.4.14(typescript@5.5.2)
+      vue: 3.4.14(typescript@5.3.3)
 
   /@vue/shared@3.4.13:
     resolution: {integrity: sha512-56crFKLPpzk85WXX1L1c0QzPOuoapWlPVys8eMG8kkRmqdMjWUqK8KpFdE2d7BQA4CEbXwyyHPq6MpFr8H9rcg==}
@@ -8966,8 +8966,8 @@ packages:
       recast: 0.22.0
     dev: true
 
-  /papaparse@5.4.1:
-    resolution: {integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==}
+  /papaparse@5.3.0:
+    resolution: {integrity: sha512-Lb7jN/4bTpiuGPrYy4tkKoUS8sTki8zacB5ke1p5zolhcSE4TlWgrlsxjrDTbG/dFVh07ck7X36hUf/b5V68pg==}
     dev: false
 
   /param-case@3.0.4:
@@ -11961,6 +11961,7 @@ packages:
       '@vue/server-renderer': 3.4.14(vue@3.4.14)
       '@vue/shared': 3.4.14
       typescript: 5.5.2
+    dev: false
 
   /w3c-hr-time@1.0.2:
     resolution: {integrity: sha512-z8P5DvDNjKDoFIHK7q8r8lackT6l+jo/Ye3HOle7l9nICP9lf1Ci25fy9vHd0JOWewkIFzXIEig3TdKT7JQ5fQ==}
