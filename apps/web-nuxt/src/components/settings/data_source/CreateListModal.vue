@@ -1,5 +1,5 @@
 <template>
-  <Dialog v-model:visible="visible" modal :draggable="false" :style="{ width: '80vw' }">
+  <Dialog v-model:visible="visible" modal :draggable="false" :style="{ width: '80vw' } ">
     <template #header>
       <div class="flex justify-center items-center ml-5">
         <p class="font-semibold text-xl flex justify-center text-center font-poppins">
@@ -7,49 +7,83 @@
         </p>
       </div>
     </template>
+    <div class="w-full flex justify-center">
+      <div class="w-max flex flex-col gap-6 items-center justify-center  ">
+        <Toast />
 
-    <div class="w-max flex flex-col gap-6 items-center justify-center">
-      <Toast />
+        <div
+          v-if="selectedFiles.length === 0" class="custom-file-upload" :class="{ 'error-border': hasError }"
+          @dragover.prevent
+          @dragenter.prevent="handleDragEnter"
+          @dragleave.prevent="handleDragLeave"
+          @drop.prevent="handleDrop"
+        >
+          <FileUpload
+            ref="fileupload"
+            mode="basic"
+            name="demo[]"
+            :multiple="false"
+            accept=".csv, .xlsx"
+            :max-file-size="100000000"
+            choose-label="Browse"
+            class="hidden-input"
+            @select="onFileSelect"
+          />
+          <div class="drop-zone py-6">
+            <span v-if="!hasError" class="font-poppins p-4">Drag and drop csv or xlsx files here to upload or</span>
+            <span v-else class="bg-red-50 p-4 text-red-400 font-poppins">{{ fileErrorText }}</span>
+            <Button label="Browse" icon="pi pi-plus" class=" font-poppins mt-4" @click="triggerFileInput" />
+          </div>
+        </div>
 
-      <div
-        v-if="selectedFiles.length === 0" class="custom-file-upload" :class="{ 'error-border': hasError }"
-        @dragover.prevent
-        @dragenter.prevent="handleDragEnter"
-        @dragleave.prevent="handleDragLeave"
-        @drop.prevent="handleDrop"
-      >
-        <FileUpload
-          ref="fileupload"
-          mode="basic"
-          name="demo[]"
-          :multiple="false"
-          accept=".csv, .xlsx"
-          :max-file-size="100000000"
-          choose-label="Browse"
-          class="hidden-input"
-          @select="onFileSelect"
-        />
-        <div class="drop-zone py-6">
-          <span v-if="!hasError" class="font-poppins p-4">Drag and drop csv or xlsx files here to upload or</span>
-          <span v-else class="bg-red-50 p-4 text-red-400 font-poppins">{{ fileErrorText }}</span>
-          <Button label="Browse" icon="pi pi-plus" class=" font-poppins mt-4" @click="triggerFileInput" />
+        <div v-else class="file-list custom-file-upload flex flex-col gap-6 items-center justify-center">
+          <ul>
+            <li v-for="file in selectedFiles" :key="file.name" class="font-poppins p-4">
+              {{ file.name }}
+            </li>
+          </ul>
+          <Button severity="danger" outlined label="Remove" icon="pi pi-times" class="mt-4 font-poppins" @click="removeFiles" />
         </div>
       </div>
+    </div>
 
-      <div v-else class="file-list custom-file-upload">
-        <ul>
-          <li v-for="file in selectedFiles" :key="file.name" class="font-poppins p-4">
-            {{ file.name }}
-          </li>
-        </ul>
-        <Button severity="danger" outlined label="Remove" icon="pi pi-times" class="mt-4 font-poppins" @click="removeFiles" />
+    <div
+      v-if="dataSourceFileCompleteJSON?.length > 0"
+      class="my-6  p-4 py-8 w-full flex flex-col gap-8 bg-primary-50 rounded"
+    >
+      <div class="gap-4">
+        <p class="font-poppins text-lg text-surface-600 mb-1">
+          Lookup column
+        </p>
+        <Dropdown
+          v-model="lookupColumn" :options="dataSourceColumnNames" filter placeholder="Select country"
+          class="w-full md:w-80"
+        />
+      </div>
+      <div class="gap-4">
+        <p class="font-poppins text-lg text-surface-600 ">
+          Data starts on line
+        </p>
+        <p class="font-poppins text-sm text-surface-600 mb-2">
+          write between 1 to {{ dataSourceFileCompleteJSON?.length }}
+        </p>
+        <!-- <Dropdown
+          v-model="selectedLine" :options="lines" option-label="name" filter placeholder="Select row number"
+          class="w-full md:w-80"
+        /> -->
+        <InputNumber v-model="dataStartLine" disabled class="w-full md:w-80" input-id="minmax-buttons" mode="decimal" show-buttons :min="1" :max="dataSourceFileCompleteJSON?.length ? dataSourceFileCompleteJSON?.length : 100" />
       </div>
     </div>
+    <div v-if="dataSourceFileCompleteJSON?.length > 0" class="w-full flex justify-center  mt-12">
+      <SelectButton v-model="tableViewType" :options="tableViewOptions" aria-labelledby="basic" class=" font-poppins" />
+    </div>
+
     <TableForDataSourceEdit
       v-if="dataSourceFileCompleteJSON?.length > 0"
       :data-source-file-complete-j-s-o-n="dataSourceFileCompleteJSON"
       :data-source-column-names="dataSourceColumnNames"
       :data-source-selected-columns="dataSourceSelectedColumns"
+      :table-view-type="tableViewType"
     />
   </Dialog>
 </template>
@@ -63,6 +97,13 @@ import Button from 'primevue/button'
 import ExcelJS from 'exceljs'
 import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
 
+const lookupColumn = ref(null)
+
+const dataStartLine = ref(1)
+
+const tableViewType = ref('Editable View')
+const tableViewOptions = ref(['Editable View', 'Final View'])
+
 const toast = useToast()
 const fileupload = ref()
 const selectedFiles = ref([])
@@ -73,6 +114,11 @@ const dataSourceColumnNames = ref([])
 const dataSourceSelectedColumns = ref([])
 
 const validFileTypes = ['.csv', '.xlsx']
+
+watch(dataStartLine, (newVal) => {
+  if (newVal > dataSourceFileCompleteJSON.value?.length)
+    newVal = dataSourceFileCompleteJSON.value?.length
+})
 
 function isValidFileType(file) {
   const fileExtension = file.name.split('.').pop().toLowerCase()

@@ -1,11 +1,7 @@
 <template>
-  <div class="border w-full p-4">
-    <div class="card flex justify-center">
-      <Select v-model="lookupColumn" :options="columnNames" option-label="name" placeholder="Select a City" class="w-full md:w-56" />
-    </div>
-  </div>
   <div class="card p-fluid mt-8">
     <DataTable
+      v-if="props?.tableViewType === 'Editable View'"
       ref="dt"
       v-model:selection="selectedRows"
       :value="completeData"
@@ -42,20 +38,45 @@
         </template>
       </Column>
     </DataTable>
+    <DataTable
+      v-else
+      ref="dt"
+
+      :value="selectedRows"
+      lazy
+      :paginator="selectedRows?.length > 0"
+      :first="first"
+      :rows="10"
+      data-key="auto_index_by_docspawn"
+      :total-records="totalRecords"
+      :loading="loading"
+      :select-all="selectAll"
+      table-style="min-width: 75rem"
+      @page="onPage($event)" @sort="onSort($event)"
+    >
+      <Column v-for="(columnName, index) in selectedColumns" :key="index" :field="columnName">
+        <template #header>
+          <div class="flex flex-col items-center gap-2">
+            <p class="font-poppins whitespace-nowrap">
+              {{ columnName }}
+              <!-- {{ selectedColumns?.includes(columnName) }} -->
+            </p>
+          </div>
+        </template>
+        <template #body="{ data, field }">
+          <p class="font-poppins whitespace-nowrap">
+            {{ data[field] }}
+          </p>
+        </template>
+      </Column>
+    </DataTable>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 
-const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns'])
-
-const lookupColumn = ref()
-const columnNames = ref(props?.dataSourceColumnNames
-  ? props?.dataSourceSelectedColumns?.map((v, i) => {
-    return { name: v, id: i + 1 }
-  })
-  : [])
+const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns', 'tableViewType'])
 
 const selectedColumns = ref(props?.dataSourceSelectedColumns ? props?.dataSourceSelectedColumns : [])
 
@@ -63,7 +84,7 @@ const dt = ref()
 const loading = ref(false)
 const totalRecords = ref(0)
 const completeData = ref()
-const selectedRows = ref()
+const selectedRows = ref(props?.dataSourceFileCompleteJSON?.length > 0 ? props?.dataSourceFileCompleteJSON : [])
 const selectAll = ref(false)
 const first = ref(0)
 
@@ -71,15 +92,12 @@ const lazyParams = ref({})
 
 watch(() => props?.dataSourceFileCompleteJSON, (newVal) => {
   completeData.value = newVal
+  selectedRows.value = newVal
 })
 watch(() => props?.dataSourceSelectedColumns, (newVal) => {
   selectedColumns.value = newVal
 })
-watch(() => props?.dataSourceColumnNames, (newVal) => {
-  columnNames.value = newVal?.map((v, i) => {
-    return { name: v, id: i + 1 }
-  })
-})
+
 onMounted(() => {
   loading.value = true
 
