@@ -157,51 +157,79 @@ function isObjectEmpty(obj) {
 }
 
 async function processFiles(data, fileType) {
-  if (fileType === 'csv') {
+  if (data && fileType) {
+    if (fileType === 'csv') {
     // Dynamically import xlsx
-    const Papa = await import('papaparse')
-    // Parse CSV file using PapaParse
-    const csvText = new TextDecoder().decode(data)
+      const Papa = await import('papaparse')
+      // Parse CSV file using PapaParse
+      const csvText = new TextDecoder().decode(data)
 
-    Papa.parse(csvText, {
-      complete: (results) => {
-        const parsedData = results.data
-        const filteredData = parsedData.filter(
-          entry => !isObjectEmpty(entry),
-        )
+      Papa.parse(csvText, {
+        complete: (results) => {
+          const parsedData = results.data
+          const filteredData = parsedData.filter(
+            entry => !isObjectEmpty(entry),
+          )
 
-        dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+          dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+            return { ...f, auto_index_by_docspawn: i + 1 }
+          })
+        // setCSVFileJSON(filteredData)
+        },
+        header: true,
+      })
+    }
+    else if (['xls', 'xlsx'].includes(fileType)) {
+      try {
+      // Convert ArrayBuffer to Uint8Array
+        const uint8Array = new Uint8Array(data)
+
+        // Attempt to read the workbook
+        const workbook = XLSX.read(uint8Array, { type: 'array' })
+
+        // Check if the workbook contains any sheets
+        if (!workbook.SheetNames || workbook.SheetNames.length === 0)
+          throw new Error('No sheets found in the workbook.')
+
+        // Get the first sheet name and the worksheet
+        const firstSheetName = workbook.SheetNames[0]
+        const worksheet = workbook.Sheets[firstSheetName]
+
+        // Convert the worksheet to JSON
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+
+        // Check if the JSON data contains any rows
+        if (!jsonData || jsonData.length === 0)
+          throw new Error('No data found in the worksheet.')
+
+        // Assuming the first row in the Excel sheet contains headers
+        const [headers, ...dataRows] = jsonData
+
+        // Check if headers are present
+        if (!headers || headers.length === 0)
+          throw new Error('No headers found in the first row of the worksheet.')
+
+        // Map data rows to objects with keys based on headers
+        const formattedData = dataRows.map((row) => {
+          const rowData = {}
+          headers.forEach((header, index) => {
+            rowData[header] = row[index] !== undefined ? row[index] : ''
+          })
+          return rowData
+        })
+
+        // Add auto_index_by_docspawn to each row
+        dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
           return { ...f, auto_index_by_docspawn: i + 1 }
         })
-        // setCSVFileJSON(filteredData)
-      },
-      header: true,
-    })
-  }
-  else if (['xls', 'xlsx'].includes(fileType)) {
-    // Dynamically import xlsx
-
-    // Parse Excel file using xlsx
-    // const workbook = await XLSX.read(new Uint8Array(data), { type: 'array' })
-    // const firstSheetName = workbook.SheetNames[0]
-    // const worksheet = workbook.Sheets[firstSheetName]
-    // const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
-
-    // // Assuming the first row in the Excel sheet contains headers
-    // const [headers, ...dataRows] = jsonData
-
-    // // Map data rows to objects with keys based on headers
-    // const formattedData = dataRows.map((row) => {
-    //   const rowData = {}
-    //   headers.forEach((header, index) => {
-    //     rowData[header] = row[index] ? row[index] : ''
-    //   })
-    //   return rowData
-    // })
-
-    // dataSourceFileCompleteJSON.value = formattedData?.map((f, i) => {
-    //   return { ...f, auto_index_by_docspawn: i + 1 }
-    // })
+      }
+      catch (error) {
+      // Handle any errors that occurred during the process
+        console.error('An error occurred while processing the Excel file:', error.message)
+      // Optionally, you could set an error state or display a user-friendly message
+      // errorState.value = 'An error occurred while processing the Excel file.';
+      }
+    }
   }
 }
 
