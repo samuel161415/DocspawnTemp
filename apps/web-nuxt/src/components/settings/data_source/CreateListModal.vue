@@ -61,8 +61,8 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
+import ExcelJS from 'exceljs'
 import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
-import xlsxToJSON from '@/composables/xlsxToJSON.js'
 
 const toast = useToast()
 const fileupload = ref()
@@ -179,37 +179,94 @@ async function processFiles(data, fileType, file) {
       })
     }
     else if (['xls', 'xlsx'].includes(fileType)) {
-      const formattedData = await xlsxToJSON(file)
+      try {
+        // Read the file as an ArrayBuffer
+        const arrayBuffer = await file.arrayBuffer()
 
-      dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
-        return { ...f, auto_index_by_docspawn: i + 1 }
-      })
-      // const blobUrl = URL.createObjectURL(file)
-      // fetch(blobUrl)
-      //   .then(response => response.arrayBuffer())
-      //   .then((data) => {
-      //     // Parse Excel file using xlsx
-      //     const workbook = XLSX.read(data, { type: 'array' })
+        // Create a new workbook and read the file
+        const workbook = new ExcelJS.Workbook()
+        await workbook.xlsx.load(arrayBuffer)
+
+        // Get the first worksheet
+        const worksheet = workbook.worksheets[0]
+
+        // Convert worksheet to JSON
+        const jsonData = []
+        const headers = []
+        worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+          if (rowNumber === 1) {
+            // Assuming the first row contains headers
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+              headers.push(cell.text)
+            })
+          }
+          else {
+            const rowData = {}
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+              rowData[headers[colNumber - 1]] = cell.text
+            })
+            jsonData.push(rowData)
+          }
+        })
+
+        // return jsonData
+        dataSourceFileCompleteJSON.value = jsonData?.map((f, i) => {
+          return { ...f, auto_index_by_docspawn: i + 1 }
+        })
+      }
+      catch (error) {
+        console.error('Error processing file:', error)
+        throw error
+      }
+
+      // try {
+      //     // Convert ArrayBuffer to Uint8Array
+      //     // const uint8Array = new Uint8Array(data)
+      //     const dataF = await file.arrayBuffer()
+      //     const uint8Array = new Uint8Array(dataF)
+
+      //     // Attempt to read the workbook
+      //     const workbook = XLSX.read(uint8Array, { type: 'array' })
+
+      //     // Check if the workbook contains any sheets
+      //     if (!workbook.SheetNames || workbook.SheetNames.length === 0)
+      //       throw new Error('No sheets found in the workbook.')
+
+      //     // Get the first sheet name and the worksheet
       //     const firstSheetName = workbook.SheetNames[0]
       //     const worksheet = workbook.Sheets[firstSheetName]
+
+      //     // Convert the worksheet to JSON
       //     const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+
+      //     // Check if the JSON data contains any rows
+      //     if (!jsonData || jsonData.length === 0)
+      //       throw new Error('No data found in the worksheet.')
 
       //     // Assuming the first row in the Excel sheet contains headers
       //     const [headers, ...dataRows] = jsonData
+
+      //     // Check if headers are present
+      //     if (!headers || headers.length === 0)
+      //       throw new Error('No headers found in the first row of the worksheet.')
 
       //     // Map data rows to objects with keys based on headers
       //     const formattedData = dataRows.map((row) => {
       //       const rowData = {}
       //       headers.forEach((header, index) => {
-      //         rowData[header] = row[index]
+      //         rowData[header] = row[index] !== undefined ? row[index] : ''
       //       })
-
       //       return rowData
       //     })
-      //     dataSourceFileCompleteJSON.value = formattedData.map((f, i) => {
-      //       return { ...f, auto_index_by_docspawn: i + 1 }
-      //     })
-      //   })
+      //     return formattedData
+      //     // Add auto_index_by_docspawn to each row
+      //   }
+      //   catch (error) {
+      //     // Handle any errors that occurred during the process
+      //     console.error('An error occurred while processing the Excel file:', error.message)
+      //     // Optionally, you could set an error state or display a user-friendly message
+      //     // errorState.value = 'An error occurred while processing the Excel file.';
+      //   }
     }
   }
 }
