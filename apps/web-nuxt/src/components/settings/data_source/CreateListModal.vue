@@ -45,24 +45,24 @@
         <Button severity="danger" outlined label="Remove" icon="pi pi-times" class="mt-4 font-poppins" @click="removeFiles" />
       </div>
     </div>
-    <!-- <TableForDataSourceEdit
+    <TableForDataSourceEdit
       v-if="dataSourceFileCompleteJSON?.length > 0"
       :data-source-file-complete-j-s-o-n="dataSourceFileCompleteJSON"
       :data-source-column-names="dataSourceColumnNames"
       :data-source-selected-columns="dataSourceSelectedColumns"
-    /> -->
+    />
   </Dialog>
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import * as XLSX from 'xlsx'
-import Papa from 'papaparse'
+
+// import Papa from 'papaparse'
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
-
-// import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
+import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
 
 const toast = useToast()
 const fileupload = ref()
@@ -164,26 +164,27 @@ watch(selectedFiles, () => {
         const data = e.target.result
         const fileType = file.name.split('.').pop().toLowerCase()
 
-        if (fileType === 'csv') {
-        // Parse CSV file using PapaParse
-          const csvText = new TextDecoder().decode(data)
+        // if (fileType === 'csv') {
+        // // Parse CSV file using PapaParse
+        //   const csvText = new TextDecoder().decode(data)
 
-          Papa.parse(csvText, {
-            complete: (results) => {
-              const parsedData = results.data
-              const filteredData = parsedData.filter(
-                entry => !isObjectEmpty(entry),
-              )
-              // console.log('filtered data', filteredData)
-              dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
-                return { ...f, auto_index_by_docspawn: i + 1 }
-              })
-              // setCSVFileJSON(filteredData)
-            },
-            header: true,
-          })
-        }
-        else if (['xls', 'xlsx'].includes(fileType)) {
+        //   Papa.parse(csvText, {
+        //     complete: (results) => {
+        //       const parsedData = results.data
+        //       const filteredData = parsedData.filter(
+        //         entry => !isObjectEmpty(entry),
+        //       )
+        //       // console.log('filtered data', filteredData)
+        //       dataSourceFileCompleteJSON.value = filteredData?.map((f, i) => {
+        //         return { ...f, auto_index_by_docspawn: i + 1 }
+        //       })
+        //       // setCSVFileJSON(filteredData)
+        //     },
+        //     header: true,
+        //   })
+        // }
+        // else
+        if (['xls', 'xlsx'].includes(fileType)) {
         // Parse Excel file using xlsx
           const workbook = XLSX.read(data, { type: 'array' })
           const firstSheetName = workbook.SheetNames[0]
