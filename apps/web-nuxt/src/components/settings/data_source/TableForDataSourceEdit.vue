@@ -1,4 +1,9 @@
 <template>
+  <div class="border w-full p-4">
+    <div class="card flex justify-center">
+      <Select v-model="lookupColumn" :options="columnNames" option-label="name" placeholder="Select a City" class="w-full md:w-56" />
+    </div>
+  </div>
   <div class="card p-fluid mt-8">
     <DataTable
       ref="dt"
@@ -44,6 +49,14 @@
 import { onMounted, ref } from 'vue'
 
 const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns'])
+
+const lookupColumn = ref()
+const columnNames = ref(props?.dataSourceColumnNames
+  ? props?.dataSourceSelectedColumns?.map((v, i) => {
+    return { name: v, id: i + 1 }
+  })
+  : [])
+
 const selectedColumns = ref(props?.dataSourceSelectedColumns ? props?.dataSourceSelectedColumns : [])
 
 const dt = ref()
@@ -61,6 +74,11 @@ watch(() => props?.dataSourceFileCompleteJSON, (newVal) => {
 })
 watch(() => props?.dataSourceSelectedColumns, (newVal) => {
   selectedColumns.value = newVal
+})
+watch(() => props?.dataSourceColumnNames, (newVal) => {
+  columnNames.value = newVal?.map((v, i) => {
+    return { name: v, id: i + 1 }
+  })
 })
 onMounted(() => {
   loading.value = true
