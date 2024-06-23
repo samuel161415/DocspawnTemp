@@ -183,12 +183,12 @@ async function processFiles(data, fileType) {
     // Dynamically import xlsx
 
       // Parse Excel file using xlsx
-      const workbook = XLSX.read(data, { type: 'array' })
-      const firstSheetName = workbook.SheetNames[0]
-      const worksheet = workbook.Sheets[firstSheetName]
-      const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
+      // const workbook = XLSX.read(data, { type: 'array' })
+      // const firstSheetName = workbook.SheetNames[0]
+      // const worksheet = workbook.Sheets[firstSheetName]
+      // const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
 
-      // Assuming the first row in the Excel sheet contains headers
+      // // Assuming the first row in the Excel sheet contains headers
       // const [headers, ...dataRows] = jsonData
 
       // // Map data rows to objects with keys based on headers
