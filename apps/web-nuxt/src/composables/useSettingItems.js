@@ -11,6 +11,7 @@ export const useSettingItems = () => {
           {
             title: "My profile",
             icon: "pi pi-calendar",
+            fontawesome: "faCalendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -21,6 +22,7 @@ export const useSettingItems = () => {
           {
             title: "Language & Region",
             icon: "pi pi-language",
+            fontawesome: "faCalendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -31,6 +33,7 @@ export const useSettingItems = () => {
           {
             title: "Time & date format",
             icon: "pi pi-clock",
+            fontawesome: "faCalendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -50,6 +53,7 @@ export const useSettingItems = () => {
           {
             title: "Info",
             icon: "pi pi-info-circle",
+            fontawesome: "faCalendar",
             route: "/settings",
             isHovered: false,
             subitems: [],
@@ -60,6 +64,7 @@ export const useSettingItems = () => {
           {
             title: 'Members',
             icon: "pi pi-users",
+            fontawesome: "faCalendar",
             route: "/workspace",
             componentId: "members",
             isHovered: false,
@@ -67,6 +72,7 @@ export const useSettingItems = () => {
               {
                 title: "Users",
                 icon: "pi pi-user",
+                fontawesome: "faCalendar",
                 route: "/workspace",
                 componentId: "user-roles",
                 isHovered: false
@@ -74,6 +80,7 @@ export const useSettingItems = () => {
               {
                 title: "User groups",
                 icon: "pi pi-user",
+                fontawesome: "faCalendar",
                 route: "/list",
                 componentId: "user-groups",
                 isHovered: false
@@ -82,25 +89,36 @@ export const useSettingItems = () => {
             nestedMenuVisible: false
           },
           {
-            title: 'Field options',
+            title: 'Custom formatting',
             icon: "pi pi-table",
+            fontawesome: "faCalendar",
             route: "/workspace_management",
             isHovered: false,
             componentId:"field-options",
             subitems:[
               {
-                title: "Time & Date",
+                title: "Time",
                 icon: "pi pi-clock",
+                fontawesome: "faCalendar",
                 route: "/workspace",
                 componentId: "user-roles",
                 isHovered: false
               },
               {
+                title: "Date",
+                icon: "pi pi-calendar",
+                fontawesome: "faCalendar",
+                route: "/workspace",
+                componentId: "date",
+                isHovered: false
+              },
+              {
                 title: "Checkboxes",
                 icon: "pi pi-check-square",
+                fontawesome: "faCalendar",
                 route: "/workspace",
-                componentId: "user-roles",
-                isHovered: false
+                componentId: "checkbox-formats",
+                isHovered: false,
               },
             ],
             nestedMenuVisible: false
@@ -114,42 +132,44 @@ export const useSettingItems = () => {
         isHovered: false,
         subitems: []
       },
-      {
-        title: "Custom formatting",
-        icon: "pi pi-home",
-        route: "/formatting_options",
-        isHovered: false,
-        subitems: [
-          // {
-          //   title: "Custom formatting",
-          //   icon: "pi pi-clock",
-          //   componentId: "custom-formatting",
-          //   route: "/formatting_options",
-          //   isHovered: false,
-          //   nestedMenuVisible: false,
-          //   subitems:[]
-          // },
+      // {
+      //   title: "Custom formatting",
+      //   icon: "pi pi-home",
+      //   route: "/formatting_options",
+      //   isHovered: false,
+      //   subitems: [
+      //     // {
+      //     //   title: "Custom formatting",
+      //     //   icon: "pi pi-clock",
+      //     //   componentId: "custom-formatting",
+      //     //   route: "/formatting_options",
+      //     //   isHovered: false,
+      //     //   nestedMenuVisible: false,
+      //     //   subitems:[]
+      //     // },
 
-          {
-            title: "Checkboxes ",
-            icon: "pi pi-check-square",
-            route: "/formatting_options",
-            componentId: "checkbox-formats",
-            isHovered: false,
-            nestedMenuVisible: false,
-            subitems:[]
-          },
-        ]
-      },
+      //     {
+      //       title: "Checkboxes ",
+      //       icon: "pi pi-check-square",
+      //       route: "/formatting_options",
+      //       componentId: "checkbox-formats",
+      //       isHovered: false,
+      //       nestedMenuVisible: false,
+      //       subitems:[]
+      //     },
+      //   ]
+      // },
       {
         title: "User management",
         icon: "pi pi-users",
+        fontawesome: "faCalendar",
         route: "/user_management",
         isHovered: false,
         subitems: [
           {
             title: "Users",
             icon: "pi pi-user",
+            fontawesome: "faCalendar",
             route: "/user_management",
             componentId: "users",
             isHovered: false,
@@ -158,6 +178,7 @@ export const useSettingItems = () => {
           {
             title: "User groups",
             icon: "pi pi-users",
+            fontawesome: "faCalendar",
             route: "/user_management",
             isHovered: false,
             componentId: "user-groups",
@@ -169,6 +190,7 @@ export const useSettingItems = () => {
       {
         title: "Billings",
         icon: "pi pi-credit-card",
+        fontawesome: "faCalendar",
         route: "/billings",
         isHovered: false,
         subitems:[]
@@ -176,6 +198,7 @@ export const useSettingItems = () => {
       {
         title: "Integrations",
         icon: "pi pi-link",
+        fontawesome: "faCalendar",
         route: "/integration",
         isHovered: false,
         subitems:[]
@@ -189,6 +212,7 @@ export const useSettingItems = () => {
           {
             title: "Microservice",
             icon: "pi pi-compass",
+            fontawesome: "faCalendar",
             route: "/meta_admin",
             isHovered: false,
             componentId: "micro-services",

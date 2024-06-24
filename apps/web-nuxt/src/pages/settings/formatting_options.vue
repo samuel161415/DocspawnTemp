@@ -7,12 +7,12 @@
                 <p class="font-semibold text-surface-600 font-poppins text-2xl mb-5">Custom formatting</p>
                 
                 <div id="custom-formatting">
-                    <p class="text-surface-500 font-poppins text-lg">Customize the formats that will be use in the template editor </p>
+                    <p class="text-surface-500 font-poppins text-lg">Customize the format and design of elements within DocSpawn. </p>
                     <CoustomFormatting />
                 </div>
 
                 <div class="mt-14 mb-48" id="checkbox-formats">
-                    <p class="font-medium text-surface-600 font-poppins text-xl mb-5">Checkbox formats</p>
+                    <p class="text-surface-600 font-poppins text-xl font-medium mb-4">Customize the format and design of elements within DocSpawn. </p>
                     <CheckboxFormats />
                 </div>
             </div>

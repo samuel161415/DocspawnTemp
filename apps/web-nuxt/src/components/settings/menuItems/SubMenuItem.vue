@@ -10,10 +10,11 @@
                 <div  
                     v-for="subSubItem in subItem.subitems"
                     :key="subSubItem.title"
-                    class="flex ml-6 py-2 pl-2 hover:bg-surface-100  font-poppins"
-                    @click=""  >
+                    class="flex ml-6 py-2 pl-2 hover:bg-surface-100 font-poppins"
+                    @click="navigateToComponent(subSubItem.componentId)"  >
                     <i style="font-size: 0.9rem" :class="[subSubItem?.icon, 'py-1 ml-1 text-gray-500']"></i>
 
+                    <!-- <font-awesome-icon :icon="fal.faCalendar" size="sm" style="color: #6b7280;" class="py-1" /> -->
                     <p class="text-base font-normal ml-2 text-gray-500">
                         {{ subSubItem?.title }}
                     </p>
@@ -26,14 +27,27 @@
   
   <script setup>
   import { ref } from 'vue';
-  
+  import { useRouter } from 'vue-router';
+  import { fal } from '@fortawesome/pro-light-svg-icons';
+
+  const router = useRouter();
+
   const props = defineProps({
     subItem: {
         type: Object,
         required: false
     }
   });
+
+  const settingsBaseRoute = ref(router.currentRoute.value.path);
+  const currentId = ref(null);
   
+  onMounted(() => {
+    router.afterEach((to, from) => {
+        settingsBaseRoute.value = to.path;
+    });
+  });
+
   const toggleVisible = () => {
     props.subItem.nestedMenuVisible = !props.subItem.nestedMenuVisible;
   };
@@ -41,6 +55,7 @@
   const navigateToComponent = (id) => {
     if (id) {
         window.location.hash = id;
+        currentId.value = id;
     }
 }
   </script>

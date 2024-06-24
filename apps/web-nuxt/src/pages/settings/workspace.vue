@@ -1,21 +1,31 @@
 <template>
-  <div class="h-full w-full flex overflow-scroll no-scrollbar rounded-lg ml-4">
-       
-       <div class="px-8 py-8 rounded-r-md bg-white w-full">
+  <div class="h-full w-full ml-4 bg-white overflow-scroll no-scrollbar rounded-lg">
+         
+      <div class="px-8 py-8 ">
+     
           <div class="py-2 mx-3">
-              <p class="font-semibold text-surface-600 text-2xl mb-5">Workspace</p>
-            </div>
-       </div>
-   </div>
+              <p class="font-semibold text-surface-600 font-poppins text-2xl mb-5">Custom formatting</p>
+              
+              <div id="field-options">
+                  <p class="text-surface-500 font-poppins text-lg">Customize the format and design of elements within DocSpawn. </p>
+                  <CoustomFormatting />
+              </div>
+
+              <div class="mt-14 mb-48" id="checkbox-formats">
+                  <CheckboxFormats />
+              </div>
+          </div>
+      </div>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-
-const router = useRouter();
+import DateFormats from "~/components/settings/formattingOptions/DateFormats.vue";
+import CheckboxFormats from "~/components/settings/formattingOptions/CheckboxFormats.vue";
+import CoustomFormatting from "~/components/settings/formattingOptions/CoustomFormatting.vue";
 
 </script>
-<style>
-/* Your CSS here */
-</style>
+
+

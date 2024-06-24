@@ -193,7 +193,7 @@ const visible = ref(false);
 const previewFormVisible = ref(false);
 const filterOption = ref('')
 const searchQuery = ref("");
-const fileTypeCheck = ref(false)
+const fileTypeCheck = ref(false);
 
 // default favorite state
 props.templates.forEach((template, index) => {
