@@ -34,8 +34,10 @@
     <!-- components -->
     <Toast />
     <CreateListModal
-      v-if="visible" v-model:visible="visible" @create-list="handleCreateList"
-      @cancel="visible = false" @error="showError" @success="showSuccess"
+      v-if="visible" v-model:visible="visible" :editable-item="editableItem" @create-list="handleCreateList"
+      @create-data-source="handleCreateDataSource"
+      @update-data-source="handleUpdateDataSource"
+      @cancel="visible = false;editableItem = {}" @remove-editable="editableItem = {}" @error="showError" @success="showSuccess"
     />
 
     <!-- <EditItemOptionModal
@@ -50,7 +52,7 @@
         sure you want to delete this Item?</span>
 
       <div class="flex justify-end gap-2">
-        <Button type="button" label="Cancel" outlined @click="openDeleteModal = false" />
+        <Button type="button" label="Cancel" outlined @click="openDeleteModal = false;" />
         <Button
           type="button" label="Delete" severity="error" class="bg-error hover:bg-red-500 hover:border-error text-white"
           @click="handleDelete"
@@ -71,16 +73,14 @@ import CreateListModal from '~/components/settings/data_source/CreateListModal.v
 import { addNewListItem } from '~/services/newListData.js'
 import { sampleDataSources } from '~/services/sampleDataSources.js'
 
-const copiedList = ref(JSON.parse(JSON.stringify(addNewListItem.value)))
+const allDataSources = ref([])
 
+const copiedList = ref(JSON.parse(JSON.stringify(addNewListItem.value)))
 const toast = useToast()
 const visible = ref(false)
-// const openAddItems = ref(false)
-// const openListOptions = ref(false)
-const openItemOptions = ref(false)
 const openDeleteModal = ref(false)
 const editableItem = ref()
-const tableData = ref({})
+const tableData = ref([])
 const deleteItem = ref()
 
 const searchQuery = ref('')
@@ -122,7 +122,7 @@ watch(searchQuery, (newValue) => {
 // }
 
 onMounted(() => {
-  tableData.value = sampleDataSources.value
+  // tableData.value = sampleDataSources.value
 })
 
 const filters = ref({
@@ -133,7 +133,26 @@ const filters = ref({
   },
 },
 )
+function handleCreateDataSource(data) {
+  allDataSources.value = [...allDataSources.value, { ...data, type: 'Data table', index: allDataSources.value?.length + 1 }]
+  visible.value = false
+}
+function handleUpdateDataSource(data) {
+  if (data?.isEditable) {
+    allDataSources.value = allDataSources.value?.map((d) => {
+      if (d?.index === data?.index)
+        return { ...data, type: 'Data table' }
 
+      else
+        return d
+    })
+
+    visible.value = false
+  }
+}
+watch(allDataSources, (newVal) => {
+  tableData.value = newVal
+})
 function handleCreateList(data) {
   // data is new list created from createListModal
   const { listName, listItems } = data
@@ -164,12 +183,7 @@ function handleCreateList(data) {
 
 function handleEditItem(data) {
   editableItem.value = data
-  openItemOptions.value = true
-
-  tableData.value.sublists.forEach((sublist) => {
-    if (sublist.id === data.id)
-      sublist.title = data.title
-  })
+  visible.value = true
 }
 
 function handleOpenDelete(data) {
@@ -178,12 +192,12 @@ function handleOpenDelete(data) {
 }
 
 function handleDelete() {
-  tableData.value = tableData.value.filter(item => item.id !== deleteItem.value.id)
+  allDataSources.value = allDataSources.value.filter(item => item.index !== deleteItem.value.index)
   openDeleteModal.value = false
 }
 
 function onRowReorder(event) {
-  tableData.value = event.value
+  allDataSources.value = event
 }
 
 function showSuccess() {

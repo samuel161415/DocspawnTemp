@@ -7,7 +7,7 @@
         </p>
       </div>
     </template>
-    <div class="w-full flex justify-center">
+    <div v-if="!isEditable" class="w-full flex justify-center">
       <div class="w-max flex flex-col gap-6 items-center justify-center  ">
         <Toast />
 
@@ -83,28 +83,37 @@
       :data-source-file-complete-j-s-o-n="dataSourceFileCompleteJSON"
       :data-source-column-names="dataSourceColumnNames"
       :data-source-selected-columns="dataSourceSelectedColumns"
+      :data-source-selected-rows="dataSourceSelectedRows"
       :table-view-type="tableViewType"
+      @change-selected-columns="handleChangeSelectedColumns"
+      @change-selected-rows="handleChangeSelectedRows"
     />
+    <div v-if="dataSourceFileCompleteJSON?.length > 0" class="mb-4 mt-2 flex justify-center gap-2">
+      <Button outlined label="Cancel" @click="emit('cancel')" />
+      <Button :label="isEditable ? 'Update data source' : 'Create data source'" @click="createDataSource" />
+    </div>
   </Dialog>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-
 import { useToast } from 'primevue/usetoast'
 import FileUpload from 'primevue/fileupload'
 import Button from 'primevue/button'
 import ExcelJS from 'exceljs'
 import TableForDataSourceEdit from './TableForDataSourceEdit.vue'
 
+const props = defineProps(['editableItem'])
+const emit = defineEmits(['cancel', 'createDataSource', 'updateDataSource', 'removeEditable'])
+
+const toast = useToast()
+
 const lookupColumn = ref(null)
-
 const dataStartLine = ref(1)
-
+const fileName = ref()
 const tableViewType = ref('Editable View')
 const tableViewOptions = ref(['Editable View', 'Final View'])
 
-const toast = useToast()
 const fileupload = ref()
 const selectedFiles = ref([])
 const hasError = ref(false)
@@ -112,13 +121,25 @@ const fileErrorText = ref('')
 const dataSourceFileCompleteJSON = ref([])
 const dataSourceColumnNames = ref([])
 const dataSourceSelectedColumns = ref([])
+const dataSourceSelectedRows = ref([])
+const isEditable = ref(false)
+const editIndex = ref()
+
+onMounted(() => {
+  if (props?.editableItem?.name) {
+    isEditable.value = true
+    dataSourceColumnNames.value = props?.editableItem?.columnNames,
+    dataSourceSelectedColumns.value = props?.editableItem?.selectedColumns
+    dataSourceFileCompleteJSON.value = props?.editableItem?.completeData
+    dataSourceSelectedRows.value = props?.editableItem?.selectedRows
+    fileName.value = props?.editableItem?.name
+    editIndex.value = props?.editableItem?.index
+    lookupColumn.value = props?.editableItem?.lookupColumn
+    emit('removeEditable')
+  }
+})
 
 const validFileTypes = ['.csv', '.xlsx']
-
-watch(dataStartLine, (newVal) => {
-  if (newVal > dataSourceFileCompleteJSON.value?.length)
-    newVal = dataSourceFileCompleteJSON.value?.length
-})
 
 function isValidFileType(file) {
   const fileExtension = file.name.split('.').pop().toLowerCase()
@@ -201,6 +222,7 @@ function isObjectEmpty(obj) {
 }
 
 async function processFiles(data, fileType, file) {
+  fileName.value = file?.name ? file?.name : file?.fileName ? file?.fileName : ' '
   if (data && fileType) {
     if (fileType === 'csv') {
     // Dynamically import xlsx
@@ -266,7 +288,22 @@ async function processFiles(data, fileType, file) {
     }
   }
 }
-
+function handleChangeSelectedColumns(data) {
+  dataSourceSelectedColumns.value = data
+}
+function handleChangeSelectedRows(data) {
+  dataSourceSelectedRows.value = data
+}
+function createDataSource() {
+  if (isEditable.value)
+    emit('updateDataSource', { name: fileName.value, completeData: dataSourceFileCompleteJSON.value, columnNames: dataSourceColumnNames.value, selectedColumns: dataSourceSelectedColumns.value, selectedRows: dataSourceSelectedRows.value, isEditable: isEditable.value, editIndex: editIndex.value, lookupColumn: lookupColumn.value })
+  else
+    emit('createDataSource', { name: fileName.value, completeData: dataSourceFileCompleteJSON.value, columnNames: dataSourceColumnNames.value, selectedColumns: dataSourceSelectedColumns.value, selectedRows: dataSourceSelectedRows.value, lookupColumn: lookupColumn.value })
+}
+watch(dataStartLine, (newVal) => {
+  if (newVal > dataSourceFileCompleteJSON.value?.length)
+    newVal = dataSourceFileCompleteJSON.value?.length
+})
 watch(selectedFiles, () => {
   if (selectedFiles?.value?.length > 0) {
     const file = selectedFiles.value[0]
@@ -295,7 +332,7 @@ watch(dataSourceFileCompleteJSON, () => {
   if (dataSourceFileCompleteJSON?.value?.length > 0) {
     const JSON = dataSourceFileCompleteJSON?.value
     dataSourceColumnNames.value = Object.keys(JSON[0])
-    dataSourceSelectedColumns.value = Object.keys(JSON[0])
+    dataSourceSelectedColumns.value = isEditable.value ? dataSourceSelectedColumns.value : Object.keys(JSON[0])
   }
 })
 </script>

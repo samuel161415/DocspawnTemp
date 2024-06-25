@@ -76,7 +76,8 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 
-const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns', 'tableViewType'])
+const props = defineProps(['dataSourceFileCompleteJSON', 'dataSourceColumnNames', 'dataSourceSelectedColumns', 'dataSourceSelectedRows', 'tableViewType'])
+const emit = defineEmits(['changeSelectedColumns', 'changeSelectedRows'])
 
 const selectedColumns = ref(props?.dataSourceSelectedColumns ? props?.dataSourceSelectedColumns : [])
 
@@ -84,18 +85,17 @@ const dt = ref()
 const loading = ref(false)
 const totalRecords = ref(0)
 const completeData = ref()
-const selectedRows = ref(props?.dataSourceFileCompleteJSON?.length > 0 ? props?.dataSourceFileCompleteJSON : [])
+const selectedRows = ref()
 const selectAll = ref(false)
 const first = ref(0)
 
 const lazyParams = ref({})
 
-watch(() => props?.dataSourceFileCompleteJSON, (newVal) => {
-  completeData.value = newVal
-  selectedRows.value = newVal
+watch(selectedColumns, (newVal) => {
+  emit('changeSelectedColumns', newVal)
 })
-watch(() => props?.dataSourceSelectedColumns, (newVal) => {
-  selectedColumns.value = newVal
+watch(selectedRows, (newVal) => {
+  emit('changeSelectedRows', newVal)
 })
 
 onMounted(() => {
@@ -110,6 +110,10 @@ onMounted(() => {
   }
 
   loadLazyData()
+
+  completeData.value = props?.dataSourceFileCompleteJSON
+  selectedRows.value = props?.dataSourceSelectedRows?.length > 0 ? props?.dataSourceSelectedRows : props?.dataSourceFileCompleteJSON
+  selectedColumns.value = props?.dataSourceSelectedColumns
 })
 
 function loadLazyData(event) {
