@@ -34,6 +34,7 @@ import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
 const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
@@ -71,7 +72,7 @@ async function createCanvas() {
   })
 
   // templateEditorStore.canvas = canvas
-  const response = await fetch(templateEditorStore.templateBackgroundUrl)
+  const response = await fetch(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
   const pdfData = await response.arrayBuffer()
 
   pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -187,7 +188,7 @@ async function showThumbnail() {
   templateEditorStore.totalPagesArray.forEach(async (i) => {
     const canvasWrapperWidth = 60
     const canvas = new fabric.Canvas(`template-thumbnail-${i}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
-    const response = await fetch(templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
