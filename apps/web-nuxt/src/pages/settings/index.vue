@@ -5,9 +5,9 @@
       <div class="py-2 mx-3">
         <p class="font-semibold text-surface-600 font-poppins text-2xl mb-5">General settings</p>
 
-        <div class="flex justify-between">
+        <div class="flex justify-between" id="my-profile">
           <div class="mt-5">
-            <p class="text-surface-600 font-poppins text-xl font-medium" id="my-profile">My profile</p>
+            <p class="text-surface-600 font-poppins text-xl font-medium" >My profile</p>
             <p class="text-surface-500 font-poppins text-lg mt-2">Your personal information and account security settings. </p>
         </div>
           
@@ -138,13 +138,13 @@
           <div class="mt-3 flex justify-between w-1/2"> 
 
             <div class="flex w-1/2"> 
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">Sunday</label>
+              <RadioButton v-model="selectedDay" inputId="Sunday" name="Sunday" value="Sunday" />
+              <label for="Sunday" class="text-surface-500 font-poppins text-lg ml-2">Sunday</label>
             </div>
 
             <div class="flex w-1/2"> 
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">Monday</label>
+              <RadioButton v-model="selectedDay" inputId="Monday" name="Monday" value="Monday" />
+              <label for="Monday" class="text-surface-500 font-poppins text-lg ml-2">Monday</label>
             </div>
           </div>
 
@@ -152,13 +152,13 @@
           <div class="mt-3 flex justify-between w-1/2"> 
 
             <div class="flex w-1/2"> 
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">24 hour</label>
+              <RadioButton v-model="hours" inputId="24-hour" name="24-hour" value="24-hour" />
+              <label for="24-hour" class="text-surface-500 font-poppins text-lg ml-2">24 hour</label>
             </div>
 
             <div class="flex w-1/2"> 
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">12 hour</label>
+              <RadioButton v-model="hours" inputId="12-hour" name="12-hour" value="12-hour" />
+              <label for="12-hour" class="text-surface-500 font-poppins text-lg ml-2">12 hour</label>
             </div>
           </div>
 
@@ -166,19 +166,19 @@
           
           <div class="mt-3 flex justify-between w-1/2">
             <div class="flex w-1/2">
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">mm/dd/yyyy</label>
+              <RadioButton v-model="date_format" inputId="mm/dd/yyyy" name="mm/dd/yyyy" value="mm/dd/yyyy" />
+              <label for="mm/dd/yyyy" class="text-surface-500 font-poppins text-lg ml-2">mm/dd/yyyy</label>
             </div>
 
             <div class="flex w-1/2">
-              <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-              <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">dd/mm/yyyy</label>
+              <RadioButton v-model="date_format" inputId="dd/mm/yyyy" name="dd/mm/yyyy" value="dd/mm/yyyy" />
+              <label for="dd/mm/yyyy" class="text-surface-500 font-poppins text-lg ml-2">dd/mm/yyyy</label>
             </div>
           </div>
 
           <div class="flex mt-2">
-            <RadioButton v-model="ingredient" inputId="ingredient1" name="pizza" value="Cheese" />
-            <label for="ingredient1" class="text-surface-500 font-poppins text-lg ml-2">yyyy/mm/dd</label>
+            <RadioButton v-model="date_format" inputId="yyyy/mm/dd" name="yyyy/mm/dd" value="yyyy/mm/dd" />
+            <label for="yyyy/mm/dd" class="text-surface-500 font-poppins text-lg ml-2">yyyy/mm/dd</label>
           </div>
 
         </div>
@@ -222,6 +222,9 @@ const selectedTimeZone = ref();
 const avatarImage = ref('');
 const openConfirmationModal = ref(false);
 const validPassword = ref(false);
+const hours = ref('');
+const date_format = ref('');
+const selectedDay = ref('');
 
 watch(password, () => {
     isTyping.value = true;
@@ -237,17 +240,6 @@ const cities = ref([
     { name: 'Istanbul', code: 'IST' },
     { name: 'Paris', code: 'PRS' }
 ]);
-
-const validatePassword = () => {
-  return (
-      password.value.length >= 8 &&
-      /[a-z]/.test(password) &&
-      /[A-Z]/.test(password) &&
-      /\d/.test(password) &&
-      password.value === confirmPassword.value
-  );
-};
-
 
 const language = ref([
     { name: 'English', code: 'EN' },

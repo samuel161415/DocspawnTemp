@@ -1,23 +1,23 @@
 <template>
     <div class="mt-5">
          <!-- time -->
-        <div >
-            <p class="text-surface-600 font-poppins text-xl font-medium mb-2" >Time format</p>
+        <div id="time" >
+            <p class="text-surface-600 font-poppins text-xl font-medium mb-1" >Time format</p>
             <p class="text-surface-500 font-poppins text-lg mb-2">Customize the time formats available for timestamps and time selections in forms. </p>
             <MultiSelect v-model="selectedTimeFormats" display="chip" :options="timeFormat" optionLabel="name" placeholder="Select time formats"
                 :maxSelectedLabels="7" class="w-full min-h-[44px]" />
         </div>
          <!-- date -->
-         <div class="mt-5">
-            <p class="text-surface-600 font-poppins text-xl font-medium mb-2" id="my-profile">Date format</p>
+         <div class="mt-20" id="date">
+            <p class="text-surface-600 font-poppins text-xl font-medium mb-1" id="my-profile">Date format</p>
             <p class="text-surface-500 font-poppins text-lg mb-2">Customize the date formats available for timestamps and date selections in forms. </p>
             <MultiSelect v-model="selectedDateFormats" display="chip" :options="dateFormats" optionLabel="name"  placeholder="Select date formats"
                 :maxSelectedLabels="7" class="w-full h-[44px]" />
         </div>
 
          <!-- number -->
-         <div class="mt-5">
-            <p class="text-surface-600 font-poppins text-xl font-medium mb-2" id="my-profile">Numbers</p>
+         <div class="mt-20" id="number">
+            <p class="text-surface-600 font-poppins text-xl font-medium mb-1" id="my-profile">Numbers</p>
             <p class="text-surface-500 font-poppins text-lg mb-2">Customize the number formats available for numeric entries in forms. </p>
             <MultiSelect v-model="selectedNumberFormats" display="chip" :options="cities" optionLabel="name"  placeholder="Select numbers"
                 :maxSelectedLabels="7" class="w-full h-[44px]" />

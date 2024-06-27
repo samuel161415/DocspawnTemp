@@ -19,11 +19,9 @@
                             items.title }}
                         </span>
                     </div>
-                   <ul class="mt-1">
-                    <li v-for="subItem in items.subitems" >
-                        <SubMenuItem :subItem="subItem" />
-                    </li>
-                   </ul>
+                   <div class="mt-1">
+                       <SubMenuItem :subitems="items.subitems" />
+                </div>
                 </li>
             </ul>
         </div>

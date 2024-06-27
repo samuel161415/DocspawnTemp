@@ -48,7 +48,7 @@
                                     <div v-if="subItem?.sublists && subItem.sublists.length > 0" :key="subItem.id"
                                         class="flex py-2 pl-1 hover:bg-surface-100 items-center ml-4 font-poppins"
                                         @click="handleopensubmenu(subItem)">
-                                        <i class=" text-gray-500"
+                                        <i class="text-gray-500"
                                             :class="{ 'pi pi-chevron-down': subItem.opensubmenu, 'text-primaryBlue': subItem.title === tableData.title, 'pi pi-chevron-right': !subItem.opensubmenu }"
                                             @click="subItem.opensubmenu = !subItem.opensubmenu"></i>
 
@@ -64,13 +64,13 @@
                                                 class="ml-5 font-poppins flex py-2 pl-1 hover:bg-surface-100 items-center" 
                                                 @click="handleopensubmenu(subsubItem)">
                                                 
-                                                    <i class=" text-gray-500"
-                                                        :class="{ 'pi pi-chevron-down': subsubItem.opensubmenu, 'text-primaryBlue': subsubItem.title === tableData.title, 'pi pi-chevron-right': !subsubItem.opensubmenu }"
-                                                        @click="subsubItem.opensubmenu = !subsubItem.opensubmenu"></i>
-                                                    <p class="text-base font-normal ml-4 text-gray-500"
-                                                        :class="{ 'text-primaryBlue': subsubItem.title === tableData.title }"
-                                                        v-html="highlight(subsubItem.title) || subsubItem.title">
-                                                    </p>
+                                                <i class=" text-gray-500"
+                                                    :class="{ 'pi pi-chevron-down': subsubItem.opensubmenu, 'text-primaryBlue': subsubItem.title === tableData.title, 'pi pi-chevron-right': !subsubItem.opensubmenu }"
+                                                    @click="subsubItem.opensubmenu = !subsubItem.opensubmenu"></i>
+                                                <p class="text-base font-normal ml-4 text-gray-500"
+                                                    :class="{ 'text-primaryBlue': subsubItem.title === tableData.title }"
+                                                    v-html="highlight(subsubItem.title) || subsubItem.title">
+                                                </p>
                                             
                                             </div>
                                         </li>

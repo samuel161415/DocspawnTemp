@@ -1,8 +1,9 @@
 <template>
-    <div class="">
+    <div class="mt-20">
+        <p class="text-surface-600 font-poppins text-xl font-medium mb-1" >Checkbox formats</p>
         <div class="">
             <div class="flex justify-between items-center mb-8">
-                <p class="text-surface-600 font-poppins text-xl font-medium ">Customize the format and design of elements within DocSpawn. </p>
+                <p class="text-surface-500 font-poppins text-lg mb-2">Customize the format and design of elements within DocSpawn. </p>
                 <Button 
                     icon="pi pi-plus"
                     label="Add checkbox option"
@@ -37,7 +38,6 @@
                 <Column field="checked" header="Checked" :headerStyle="{ height: '4.5rem' }">
                     <template #body="{ data, field }">
                         <div class="flex items-center space-x-4">
-                           
                             <p class="font-poppins">{{data[field]}}</p>
                         </div>
                     </template>
@@ -63,7 +63,6 @@
                    
                     <template #body="{ data }">
                         <div class="flex pl-3">
-                           
                             <i class="pi pi-pencil text-success text-lg custom-icon cursor-pointer" @click="handleEdit(data)"></i>
                         </div>
                     </template>
