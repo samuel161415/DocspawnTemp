@@ -1,7 +1,7 @@
 export default async function uploadFileToBackend(file, isJSON) {
   const runtimeConfig = useRuntimeConfig()
 
-  console.log('runtimeConfig.public.BASE_URL', runtimeConfig.public.BASE_URL)
+  // console.log('runtimeConfig.public.BASE_URL', runtimeConfig.public.BASE_URL)
   if (!file)
     return
 
@@ -12,8 +12,10 @@ export default async function uploadFileToBackend(file, isJSON) {
     formData.append('files', file)
   // 'https://beta.docspawn.app/api/v1/files/upload/s3'
   // `${runtimeConfig.public.BASE_URL}/files/upload/s3`
+  // `http://localhost:5000/api/v1/files/upload/s3`
+
   try {
-    const response = await fetch(`http://localhost:5000/api/v1/files/upload/s3`, {
+    const response = await fetch(`https://beta.docspawn.app/api/v1/files/upload/s3`, {
       method: 'POST',
       body: formData,
     })
