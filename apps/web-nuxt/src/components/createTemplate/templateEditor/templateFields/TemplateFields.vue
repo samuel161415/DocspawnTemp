@@ -68,12 +68,40 @@
           <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showDataFields }" />
         </div>
         <div v-if="showDataFields" class="flex flex-col gap-2">
-          <div class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Data field', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Data field' }" @click="selectField('Data field')">
+          <div
+            class="px-5 min-h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Data field', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Data field' }"
+            @click="showDatasetOptions = true"
+          >
+            <!-- @click="selectField('Data field')" -->
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
-            <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-            <p class="font-poppins text-surface-600 text-lg">
-              Data field
-            </p>
+            <div class="flex gap-2  items-center " :class="{ 'py-0': !showDatasetOptions, 'pt-6': showDatasetOptions }">
+              <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <p class="font-poppins text-surface-600 text-lg">
+                Data field
+              </p>
+            </div>
+            <div v-if="showDatasetOptions" class="pt-2 pb-8">
+              <Dropdown v-model="selectedDatasetOption" :options="templateEditorStore.datasetData.selectedKeys" filter placeholder="Select data field" class="w-full md:w-full">
+                <template #value="slotProps">
+                  <div v-if="slotProps.value" class="flex align-items-center">
+                    <p class="font-poppins">
+                      {{ slotProps.value }}
+                    </p>
+                  </div>
+                  <span v-else>
+                    <p class="font-poppins">{{ slotProps.placeholder }}</p>
+
+                  </span>
+                </template>
+                <template #option="slotProps">
+                  <div class="flex align-items-center">
+                    <p class="font-poppins">
+                      {{ slotProps.option }}
+                    </p>
+                  </div>
+                </template>
+              </Dropdown>
+            </div>
           </div>
           <div class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Dataset image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Dataset image' }" @click="selectField('Dataset image')">
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
@@ -230,6 +258,12 @@ import { templateGeneralInformation } from '~/composables/useTemplateCreationDat
 
 const showFormFields = ref(false)
 const showDataFields = ref(false)
+const showDatasetOptions = ref(false)
+const selectedDatasetOption = ref('')
+watch(selectedDatasetOption, (val) => {
+  if (val)
+    selectField('Data field', val)
+})
 const showStaticFields = ref(false)
 const showTimestamp = ref(false)
 const showFormTimestamp = ref(false)
@@ -514,13 +548,19 @@ function deleteField() {
   }
 }
 
-function selectField(field) {
+function selectField(field, option) {
+  // clear refs in case of Data field
+  showDatasetOptions.value = false
+  selectedDatasetOption.value = ''
+
   const canvas = canvasService.getCanvas()
   if (canvas) {
     canvas.discardActiveObject()
     canvas.renderAll()
     templateEditorStore.activeTemplateField = field
-    if (field === 'Data field' || field === 'Dataset image')
+    if (field === 'Data field')
+      templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
+    else if (field === 'Dataset image')
       templateEditorStore.fieldToAdd = { name: 'Select a data field', type: field, id: 'Lorem ipsum' }
     else if (field === 'Static text')
       templateEditorStore.fieldToAdd = { name: 'Add text', type: field, id: 'Lorem ipsum' }
