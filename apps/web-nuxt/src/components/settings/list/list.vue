@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full h-full ml-4 bg-white overflow-scroll no-scrollbar">
-        <div class="px-8 py-8 rounded-lg">
-            <p class="font-semibold text-surface-600 text-2xl py-2">List</p>
+    <div >
+        <div class="">
+            <p class="font-medium text-surface-600 font-poppins text-xl mt-5">List</p>
             <div class="flex">
                 <!-- left side menu -->
                 <div class="flex flex-col justify-between h-full overflow-y-scroll w-64 pt-5 no-scrollbar">

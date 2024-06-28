@@ -39,7 +39,6 @@ export const useSettingItems = () => {
             subitems: [],
             componentId:"time-date-format",
             nestedMenuVisible: false
-          
           }
 
         ]
@@ -59,10 +58,9 @@ export const useSettingItems = () => {
             subitems: [],
             componentId:"info",
             nestedMenuVisible: false
-          
           },
           {
-            title: 'Members',
+            title: 'User administration',
             icon: "pi pi-users",
             fontawesome: "faUsers",
             route: "/workspace#members",
@@ -70,26 +68,28 @@ export const useSettingItems = () => {
             isHovered: false,
             subitems: [
               {
-                title: "Users",
+                title: "User directory",
                 icon: "pi pi-user",
                 fontawesome: "faUser",
                 route: "/workspace#users",
                 componentId: "users",
-                isHovered: false
+                isHovered: false,
+                subitems: [],
               },
               {
-                title: "User groups",
+                title: "Group directory",
                 icon: "pi pi-user",
                 fontawesome: "faUser",
                 route: "/workspace#user-groups",
                 componentId: "user-groups",
-                isHovered: false
+                isHovered: false,
+                subitems: [],
               },
             ],
             nestedMenuVisible: false
           },
           {
-            title: 'Custom formatting',
+            title: 'Formatting options',
             icon: "pi pi-table",
             fontawesome: "faSwatchbook",
             route: "/workspace#field-options",
@@ -102,7 +102,8 @@ export const useSettingItems = () => {
                 fontawesome: "faTimer",
                 route: "/workspace#time",
                 componentId: "time",
-                isHovered: false
+                isHovered: false,
+                subitems: [],
               },
               {
                 title: "Date",
@@ -110,7 +111,8 @@ export const useSettingItems = () => {
                 fontawesome: "faCalendar",
                 route: "/workspace#date",
                 componentId: "date",
-                isHovered: false
+                isHovered: false,
+                subitems: [],
               },
               {
                 title: "Checkboxes",
@@ -119,80 +121,69 @@ export const useSettingItems = () => {
                 route: "/workspace#checkbox-formats",
                 componentId: "checkbox-formats",
                 isHovered: false,
+                subitems: [],
               },
             ],
+            nestedMenuVisible: false
+          },
+          {
+            title: 'Billing',
+            icon: "pi pi-credit-card",
+            fontawesome: "faMoneyBill",
+            route: "/workspace#billing",
+            isHovered: false,
+            componentId:"billing",
+            subitems: [],
             nestedMenuVisible: false
           }
         ]
       },
-      {
-        title: "Lists",
-        icon: "pi pi-list",
-        route: "/list",
-        isHovered: false,
-        subitems: []
-      },
       // {
-      //   title: "User management",
-      //   icon: "pi pi-users",
-      //   fontawesome: "faCalendar",
-      //   route: "/user_management",
+      //   title: "Lists",
+      //   icon: "pi pi-list",
+      //   route: "/list",
       //   isHovered: false,
-      //   subitems: [
-      //     {
-      //       title: "Users",
-      //       icon: "pi pi-user",
-      //       fontawesome: "faCalendar",
-      //       route: "/user_management",
-      //       componentId: "users",
-      //       isHovered: false,
-      //       nestedMenuVisible: false,
-      //     },
-      //     {
-      //       title: "User groups",
-      //       icon: "pi pi-users",
-      //       fontawesome: "faCalendar",
-      //       route: "/user_management",
-      //       isHovered: false,
-      //       componentId: "user-groups",
-      //       nestedMenuVisible: false,
-      //     },
-               
-      //   ]
+      //   subitems: []
       // },
       {
-        title: "Billings",
-        icon: "pi pi-credit-card",
+        title: "Data sources",
+        icon: "pi pi-users",
         fontawesome: "faCalendar",
-        route: "/billings",
+        route: "/data_source",
         isHovered: false,
-        subitems:[]
-      },
-      {
-        title: "Integrations",
-        icon: "pi pi-link",
-        fontawesome: "faCalendar",
-        route: "/integration",
-        isHovered: false,
-        subitems:[]
-      },
-      {
-        title:"Meta admin",
-        icon:"",
-        route:'/meta_admin',
-        isHovered:false,
-        subitems:[
+        subitems: [
           {
-            title: "Microservice",
-            icon: "pi pi-compass",
-            fontawesome: "faCalendar",
-            route: "/meta_admin",
+            title: "Lists",
+            icon: "pi pi-user",
+            fontawesome: "faList",
+            route: "/data_source#lists",
+            componentId: "lists",
             isHovered: false,
-            componentId: "micro-services",
+            subitems:[],
             nestedMenuVisible: false,
           },
+          {
+            title: "Databases",
+            icon: "pi pi-users",
+            fontawesome: "faDatabase",
+            route: "/data_source#databases",
+            isHovered: false,
+            componentId: "databases",
+            subitems:[],
+            nestedMenuVisible: false,
+          },
+          {
+            title: "Integrations",
+            icon: "pi pi-link",
+            fontawesome: "faLinkSimple",
+            route: "/data_source#integration",
+            isHovered: false,
+            componentId: "integration",
+            subitems:[],
+            nestedMenuVisible: false,
+          },   
         ]
-      }
+      },
      
     ]);
   

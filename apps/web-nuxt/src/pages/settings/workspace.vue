@@ -25,8 +25,12 @@
                   <CoustomFormatting />
               </div>
 
-              <div class="mb-48" id="checkbox-formats">
+              <div class="mt-20" id="checkbox-formats">
                   <CheckboxFormats />
+              </div>
+
+              <div class="mt-20" id="billing">
+                  <Billing />
               </div>
           </div>
       </div>
@@ -41,6 +45,7 @@ import CheckboxFormats from "~/components/settings/formattingOptions/CheckboxFor
 import CoustomFormatting from "~/components/settings/formattingOptions/CoustomFormatting.vue";
 import UserGroups from "~/components/settings/userManagement/user_groups.vue";
 import Users from "~/components/settings/userManagement/users.vue";
+import Billing from "~/components/settings/billings/Billing.vue";
 
 </script>
 

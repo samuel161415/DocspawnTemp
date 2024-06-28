@@ -10,20 +10,20 @@
                     <div 
                         :key="items.title" 
                         class="flex px-1 py-3 ml-1"
-                        :class="{ 'hover:bg-surface-100 ': settingsBaseRoute !== '/settings' + items.route, 'text-primaryBlue ': settingsBaseRoute === '/settings' + items.route }" 
+                        :class="{ 'hover:bg-surface-100 ': settingsBaseRoute !== '/settings' + items.route, 'text-primaryBlue ': settingsBaseRoute === '/settings' + items.route && currentTitle === '' }" 
                         @click="navigate('settings' + items.route)">
 
                         <span class="text-lg font-normal ml-2 font-poppins"
-                        :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': settingsBaseRoute === '/settings' + items.route, 'text-gray-500': !items.isHovered }"
+                        :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': settingsBaseRoute === '/settings' + items.route && currentTitle === '', 'text-gray-500': !items.isHovered  }"
                         >{{
                             items.title }}
                         </span>
                     </div>
                    <div class="mt-1">
-                       <SubMenuItem :subitems="items.subitems" />
+                       <SubMenuItem :subitems="items.subitems" v-model:currentTitle="currentTitle" @handleCurrentTitle="handleCurrentTitle" />
                 </div>
                 </li>
-            </ul>
+            </ul>d
         </div>
     </div>
 
@@ -35,6 +35,7 @@ import { useRouter } from 'vue-router';
 import { useSettingItems }  from '../../composables/useSettingItems';
 import SubMenuItem from "./menuItems/SubMenuItem.vue";
 
+const currentTitle = ref('');
 const { settingItems } = useSettingItems();
 
 const router = useRouter();
@@ -48,11 +49,12 @@ onMounted(() => {
 });
 
 const navigate = (route) => {
-
-router.currentRoute.value.path = '/';
-
+ router.currentRoute.value.path = '/';
  router.push(route);
  settingsBaseRoute.value = route;
 };
 
+const handleCurrentTitle = (title) => {
+    currentTitle.value = title;
+};
 </script>

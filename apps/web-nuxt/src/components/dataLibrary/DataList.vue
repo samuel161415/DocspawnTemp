@@ -10,7 +10,7 @@
         class="md:w-[20rem] w-full"
         selectionMode="single" />
     </div>
-    
+     
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :exportFile="props.exportFile" @exportCSV="exportCSVHandler" />
 
     <div class="mt-10">
@@ -147,6 +147,8 @@ const selectedValue = ref()
 const templatefiltered = ref([])
 
 const filteredData = ref(templatefiltered)
+
+const showSelectTemplate = ref(false);
 
 const props = defineProps({
   data: {
