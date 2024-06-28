@@ -471,33 +471,35 @@ function handleDragLeave(id) {
 }
 
 onMounted(() => {
+  if (templateEditorStore.addedFields?.length > 0)
+    allFormFields.value = templateEditorStore.addedFields?.filter(f => f?.isFormField)
   // formFieldservice.getformFieldsMini().then((data) => (formFields.value = data));
-  formFields.value = FormFieldsData
-  for (let i = 0; i < formFields.value.length; i++)
-    isDraggedOver.value[i] = false
+  // formFields.value = FormFieldsData
+  // for (let i = 0; i < formFields.value.length; i++)
+  //   isDraggedOver.value[i] = false
 
-  formFields.value.forEach((field) => {
-    if (field.type === 'text')
-      field.state = ref('')
-    else if (field.type === 'multiline-text')
-      field.state = ref('')
-    else if (field.type === 'number')
-      field.state = ref(0)
-    else if (field.type === 'date')
-      field.state = ref(new Date())
-    else if (field.type === 'time')
-      field.state = ref(new Date())
-    else if (field.type === 'email')
-      field.state = ref('')
-    else if (field.type === 'image')
-      field.state = ref('')
-    else if (field.type === 'list')
-      field.state = ref('')
-    else if (field.type === 'checkbox')
-      field.state = ref('')
-    else if (field.type === 'signature')
-      field.state = ref('')
-  })
+  // formFields.value.forEach((field) => {
+  //   if (field.type === 'text')
+  //     field.state = ref('')
+  //   else if (field.type === 'multiline-text')
+  //     field.state = ref('')
+  //   else if (field.type === 'number')
+  //     field.state = ref(0)
+  //   else if (field.type === 'date')
+  //     field.state = ref(new Date())
+  //   else if (field.type === 'time')
+  //     field.state = ref(new Date())
+  //   else if (field.type === 'email')
+  //     field.state = ref('')
+  //   else if (field.type === 'image')
+  //     field.state = ref('')
+  //   else if (field.type === 'list')
+  //     field.state = ref('')
+  //   else if (field.type === 'checkbox')
+  //     field.state = ref('')
+  //   else if (field.type === 'signature')
+  //     field.state = ref('')
+  // })
 })
 
 function onRowEditSave(event) {
