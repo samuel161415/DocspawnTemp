@@ -26,6 +26,26 @@
                 </div>
               </template>
             </StepperPanel>
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="Data selection">
+              <template #header="{ index, clickCallback }">
+                <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                </button>
+              </template>
+              <template #content="{ prevCallback, nextCallback }">
+                <div class="mx-10">
+                  <DataSelection @update-data="handleUpdateData" />
+                </div>
+                <div class="flex pt-4 justify-center mb-14 mx-52">
+                  <Button
+                    label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
+                    @click="prevCallback"
+                  />
+                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                </div>
+              </template>
+            </StepperPanel>
 
             <StepperPanel header="Template editor">
               <template #header="{ index, clickCallback }">
@@ -40,12 +60,16 @@
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
                   <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <Button
+                    label="Next" icon="pi pi-arrow-right"
+                    icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback"
+                  />
+                  <!-- :disabled="!isStep2Valid" -->
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel header="Form editor">
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="Form editor">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
@@ -79,10 +103,15 @@
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
                   <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                  <Button class="px-4 w-max  font-poppins ml-2" @click="saveTemplate()">
+                    Save Template
+                  </Button>
                 </div>
               </template>
             </StepperPanel>
           </Stepper>
+        </div>
+        <div class="flex justify-center ">
         </div>
       </div>
     </div>
@@ -96,30 +125,18 @@ import { useToast } from 'primevue/usetoast'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import Stepper from 'primevue/stepper'
 import StepperPanel from 'primevue/stepperpanel'
+import ExcelJS from 'exceljs'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
+import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
 import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
+import { templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const confirm = useConfirm()
-const toast = useToast()
-const createNewTemplate = ref(false)
-
 const active = ref(0)
-
-// step 1 - general info
-const templateName = ref('')
-const useCase = ref('')
-const templateFileUploaded = ref(false)
-const dataSourceFileUploaded = ref(false)
-
-// step 2 - form editor
-const formEditor = ref(true)
-
-// step 3 - template editor
-const templateTitle = ref('')
-const templateDescription = ref('')
-
 const isStep1Valid = ref(false)
 const isStep2Valid = ref(true)
 const isStep3Valid = ref(false)
@@ -140,6 +157,110 @@ function handleUpdateData({ isValid, step }) {
   else if (step === 3)
     isStep3Valid.value = isValid
 }
+
+function saveTemplate() {
+  console.log('generating documents')
+  console.log('template general information', templateGeneralInformation)
+  console.log('template editor store', templateEditorStore)
+  console.log('template delivery options', templateDeliveryOptions)
+  const canvas = canvasService.getCanvas()
+  console.log('canvas', canvas)
+}
+
+function getFileType(url) {
+  // Use URL constructor to parse the URL
+  const parsedUrl = new URL(url)
+
+  // Get the pathname from the URL which contains the file name
+  const pathname = parsedUrl.pathname
+
+  // Extract the file extension from the pathname
+  const fileExtension = pathname.split('.').pop()
+
+  // Return the file extension
+  return fileExtension
+}
+function isObjectEmpty(obj) {
+  for (const key in obj) {
+    if (obj[key] !== '')
+      return false
+  }
+  return true
+}
+async function readDataset() {
+  const datasetUrl = templateGeneralInformation?.datasetFileUrl ? templateGeneralInformation?.datasetFileUrl : 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/51b2ee2b-f2d3-4fc4-8c6e-8be78fd0a482_template_canvas_dataset.xlsx'
+  try {
+    const response = await fetch(datasetUrl)
+    const arrayBuffer = await response.arrayBuffer()
+
+    const fileType = getFileType(datasetUrl)
+    if (fileType === 'xlsx') {
+      // Create a new workbook and read the file
+      const workbook = new ExcelJS.Workbook()
+      await workbook.xlsx.load(arrayBuffer)
+
+      // Get the first worksheet
+      const worksheet = workbook.worksheets[0]
+
+      // Convert worksheet to JSON
+      const jsonData = []
+      const headers = []
+      worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+        if (rowNumber === 1) {
+        // Assuming the first row contains headers
+          row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+            headers.push(cell.value)
+          })
+        }
+        else {
+          const rowData = {}
+          row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+            rowData[headers[colNumber - 1]] = cell.value
+          })
+          jsonData.push(rowData)
+        }
+      })
+
+      // Store the formatted data in the templateEditorStore
+      templateEditorStore.datasetData = { keys: headers, allEntries: jsonData, selectedKeys: headers }
+    }
+    if (fileType === 'csv') {
+      // Dynamically import PapaParse
+      const Papa = await import('papaparse')
+
+      // Decode arrayBuffer to a string
+      const csvText = new TextDecoder().decode(arrayBuffer)
+
+      // Parse CSV file using PapaParse
+      Papa.parse(csvText, {
+        complete: (results) => {
+          const parsedData = results.data
+          const filteredData = parsedData.filter(
+            entry => !isObjectEmpty(entry),
+          )
+
+          // Assuming similar structure as for XLSX
+          const headers = filteredData.length > 0 ? Object.keys(filteredData[0]) : []
+          templateEditorStore.datasetData = { keys: headers, allEntries: filteredData, selectedKeys: headers }
+        },
+        header: true,
+      })
+    }
+  }
+  catch (error) {
+    console.error('Error fetching or processing file:', error)
+  }
+}
+
+onMounted(() => {
+  readDataset()
+})
+watch(() => templateGeneralInformation.datasetFileUrl, () => {
+  readDataset()
+})
+watch(() => templateEditorStore?.addedFields, (newVal) => {
+  console.log('all added fields', newVal)
+})
 </script>
 
 <style scoped>

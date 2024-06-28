@@ -9,6 +9,8 @@ import { activeTextStyles, templateEditorStore } from '@/composables/useTemplate
 export default function addEventsToCanvas() {
   /** ********* adding watermark */
   const canvas = canvasService.getCanvas()
+  console.log('canvas in addevents to canvas', canvas)
+  console.log('templateEditorStore?.watermarkImage?.src', templateEditorStore?.watermarkImage?.src)
   if (canvas) {
     if (templateEditorStore?.watermarkImage?.src) {
       const isWaterMarkExists = canvas._objects.find(obj => obj?.id === 'watermark-docspawn') !== undefined
@@ -542,6 +544,7 @@ export default function addEventsToCanvas() {
     })
 
     canvas.on('mouse:down', (event) => {
+      const isFormField = ['Form text', 'Form long text', 'Form image', 'Form date', 'Form time', 'Form list', 'Form checkbox group']?.includes(templateEditorStore.fieldToAdd.type)
       if (currentHoveredEle)
         canvas.remove(currentHoveredEle)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
@@ -591,8 +594,9 @@ export default function addEventsToCanvas() {
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
-        const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
+
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {
           allFields.push(JSON.parse(JSON.stringify(f)))
@@ -706,7 +710,7 @@ export default function addEventsToCanvas() {
           mtr: false, // middle top rotate
         })
 
-        const fieldToAdd = { fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {
@@ -800,7 +804,7 @@ export default function addEventsToCanvas() {
             })
             myImg.setControlsVisibility({ mtr: false })
 
-            const fieldToAdd = { fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
+            const fieldToAdd = { isFormField, isRequired: true, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
             }
 
             const allFields = []
@@ -899,7 +903,7 @@ export default function addEventsToCanvas() {
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
-            const fieldToAdd = { groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
+            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
 
             const allFields = []

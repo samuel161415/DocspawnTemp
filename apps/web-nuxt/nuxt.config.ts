@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-primevue',
     'nuxt-gtag',
+
   ],
 
   primevue: {
@@ -54,5 +55,10 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-svg-core/styles.css',
     '~/assets/scss/main.scss',
   ],
+  runtimeConfig: {
+    public: {
+      BASE_URL: process.env.NUXT_API_BASE_URL,
+    },
+  },
 
 })

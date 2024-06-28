@@ -25,7 +25,7 @@
           :key="option.label"
           :label="option.label"
           :is-current="currentData === option.label"
-          :is-selected="selectedTemplate === option.label"
+          :is-selected="templateGeneralInformation.useCase === option.label"
           @select="handleSelectTemplate"
           @hover="setIsHovered"
         />
@@ -33,15 +33,16 @@
 
       <div class="border surface-border rounded-lg flex-auto flex p-6 ml-4">
         <p class="font-poppins text-surface-600 text-lg font-medium">
-          {{ currentData !== '' ? currentData : selectedTemplate }}
+          {{ currentData !== '' ? currentData : templateGeneralInformation.useCase }}
         </p>
       </div>
     </div>
 
     <!-- uploads -->
-    <div :class="selectedTemplate === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
-      <UploadSection v-if="selectedTemplate !== ''" title="Upload your template" :is-background="true" @upload="handleTemplateUpload" />
-      <UploadSection v-if="selectedTemplate !== '' && isDataToDoc" title="Upload your data source" @upload="handleDatasetUpload" />
+
+    <div :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
+      <UploadSection v-if="templateGeneralInformation.useCase !== ''" title="Upload your template" :is-background="true" @upload="handleTemplateUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" title="Upload your data source" @upload="handleDatasetUpload" />
     </div>
   </div>
 </template>
@@ -55,6 +56,7 @@ import uploadFileToBackend from '~/services/uploadFileToBackend'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
 const emit = defineEmits()
+
 const currentData = ref('Content I')
 const selectedTemplate = ref('')
 const templateName = ref('')
@@ -74,10 +76,12 @@ function setIsHovered(label, hovered) {
 }
 
 function handleSelectTemplate(label) {
-  if (label === selectedTemplate.value)
-    selectedTemplate.value = ''
-  else
-    selectedTemplate.value = label
+  // console.log('to select', label, selectedTemplate.value)
+  // // if (label === selectedTemplate.value)
+  // //   selectedTemplate.value = ''
+  // // else
+  // selectedTemplate.value = label
+  templateGeneralInformation.useCase = label
 }
 
 async function handleTemplateUpload(file) {
@@ -96,23 +100,22 @@ async function handleDatasetUpload(file) {
     datasetFile.value = ''
     return
   }
+
   const url = await uploadFileToBackend(file)
   if (url)
 
     datasetFile.value = url
 }
 
-// Watch for changes in variables and emit data
-watch([templateName, selectedTemplate, templateFile, datasetFile], () => {
+watch([templateName, templateFile, datasetFile], () => {
   templateGeneralInformation.name = templateName.value
-  templateGeneralInformation.useCase = selectedTemplate.value
+  // templateGeneralInformation.useCase = selectedTemplate.value
   templateGeneralInformation.backgroundFileUrl = templateFile.value
   templateGeneralInformation.datasetFileUrl = datasetFile.value
-  const isValid = templateName.value !== '' && selectedTemplate.value !== ''
-  //  && templateFile.value && (selectedTemplate.value !== 'Data to doc' || datasetFile.value)
+  const isValid = templateName.value !== '' && templateGeneralInformation.useCase !== '' && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
 
   emit('updateData', { isValid, step: 1 })
 })
 
-const isDataToDoc = computed(() => selectedTemplate.value === 'Data to doc')
+const isDataToDoc = computed(() => templateGeneralInformation.useCase === 'Data to doc')
 </script>

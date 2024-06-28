@@ -19,3 +19,13 @@ export const templateGeneralInformation = reactive({
   datasetFileUrl: '',
 
 })
+
+export const templateDeliveryOptions = reactive({
+  fileFormat: 'pdf', // pdf or pdfxml
+  fileOutput: 'generatefile', // generatefile or mergeFile
+  forceEntriesVerification: false, // true or false,
+  thirdPartyFormFilling: false, // true or false
+  emailDeliveryOption: 'sendToMultiple', // toLinkedData or sendToMultiple
+  selectedEmails: [], // if emailDeliveryOptions=sendToMultiple
+
+})

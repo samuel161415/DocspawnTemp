@@ -53,7 +53,7 @@ function callCreateCanvas() {
     createCanvas()
     // setTimeout(() => isCanvasLoaded.value = true, 1000)
 
-  else setTimeout(() => callCreateCanvas(), 1000)
+  else setTimeout(() => callCreateCanvas(), 2000)
 }
 
 async function createCanvas() {

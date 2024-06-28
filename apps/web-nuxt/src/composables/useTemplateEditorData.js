@@ -26,7 +26,7 @@ export const templateEditorStore = reactive({
   fieldToAdd: {},
   fabric: {},
   canvas: {},
-  datasetData: { keys: {}, allEntries: [] },
+  datasetData: { keys: {}, allEntries: [], selectedKeys: [] },
   activePageForCanvas: 1,
   totalPagesArray: [],
   activeAdvancedPointer: false,
