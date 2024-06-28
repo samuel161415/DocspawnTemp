@@ -14,10 +14,10 @@
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
-              <template #content="{ nextCallback }">
+              <template #content="{ index, nextCallback }">
                 <div class="mb-32">
                   <div class="flex justify-center mx-24">
-                    <GeneralInfo @update-data="handleUpdateData" />
+                    <GeneralInfo v-if="active === index" @update-data="handleUpdateData" />
                   </div>
                   <div class="flex justify-center mb-6 space-x-8 mt-4">
                     <Button label="Cancel" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)" />
@@ -33,9 +33,9 @@
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
-              <template #content="{ prevCallback, nextCallback }">
+              <template #content="{ index, prevCallback, nextCallback }">
                 <div class="mx-10">
-                  <DataSelection @update-data="handleUpdateData" />
+                  <DataSelection v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
                   <Button
@@ -54,9 +54,9 @@
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
-              <template #content="{ prevCallback, nextCallback }">
+              <template #content="{ index, prevCallback, nextCallback }">
                 <div class=" mx-6">
-                  <TemplateEditor />
+                  <TemplateEditor v-if="active === index" />
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
                   <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
@@ -76,9 +76,9 @@
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
-              <template #content="{ prevCallback, nextCallback }">
-                <div class="mx-10">
-                  <FormEditor @update-data="handleUpdateData" />
+              <template #content="{ index, prevCallback, nextCallback }">
+                <div v-if="active === index" class="mx-10">
+                  <FormEditor v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
                   <Button
@@ -97,9 +97,9 @@
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
-              <template #content="{ prevCallback }">
+              <template #content="{ index, prevCallback }">
                 <div class="flex mx-7">
-                  <DeliveryOptions />
+                  <DeliveryOptions v-if="active === index" />
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
                   <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
@@ -133,7 +133,8 @@ import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
-import canvasService from '@/composables/useTemplateCanvas'
+
+// import canvasService from '@/composables/useTemplateCanvas'
 
 const confirm = useConfirm()
 const active = ref(0)
@@ -159,12 +160,12 @@ function handleUpdateData({ isValid, step }) {
 }
 
 function saveTemplate() {
-  console.log('generating documents')
-  console.log('template general information', templateGeneralInformation)
-  console.log('template editor store', templateEditorStore)
-  console.log('template delivery options', templateDeliveryOptions)
-  const canvas = canvasService.getCanvas()
-  console.log('canvas', canvas)
+  // console.log('generating documents')
+  // console.log('template general information', templateGeneralInformation)
+  // console.log('template editor store', templateEditorStore)
+  // console.log('template delivery options', templateDeliveryOptions)
+  // const canvas = canvasService.getCanvas()
+  // console.log('canvas', canvas)
 }
 
 function getFileType(url) {
@@ -257,9 +258,6 @@ onMounted(() => {
 })
 watch(() => templateGeneralInformation.datasetFileUrl, () => {
   readDataset()
-})
-watch(() => templateEditorStore?.addedFields, (newVal) => {
-  console.log('all added fields', newVal)
 })
 </script>
 

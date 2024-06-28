@@ -34,6 +34,7 @@ function selectPageFromThumbnail(page) {
 
 async function changeCurrentPageOnCanvas(pageNo) {
   const canvas = canvasService.getCanvas()
+
   if (canvas) {
     const response = await fetch(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
     const pdfData = await response.arrayBuffer()

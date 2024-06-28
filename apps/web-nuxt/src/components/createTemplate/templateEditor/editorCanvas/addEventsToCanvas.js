@@ -9,8 +9,6 @@ import { activeTextStyles, templateEditorStore } from '@/composables/useTemplate
 export default function addEventsToCanvas() {
   /** ********* adding watermark */
   const canvas = canvasService.getCanvas()
-  console.log('canvas in addevents to canvas', canvas)
-  console.log('templateEditorStore?.watermarkImage?.src', templateEditorStore?.watermarkImage?.src)
   if (canvas) {
     if (templateEditorStore?.watermarkImage?.src) {
       const isWaterMarkExists = canvas._objects.find(obj => obj?.id === 'watermark-docspawn') !== undefined
@@ -40,11 +38,13 @@ export default function addEventsToCanvas() {
             })
             myImg.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
             canvas.add(myImg)
+
             canvas.renderAll()
           },
         )
       }
     }
+    let firstWatermarkFound = false
 
     canvas.on('after:render', () => {
       // setting border to multiline textbox
@@ -60,6 +60,18 @@ export default function addEventsToCanvas() {
             bound.width,
             bound.height,
           )
+
+          // Handle 'watermark' objects
+
+          if (obj.id === 'watermark-docspawn') {
+            if (!firstWatermarkFound) {
+              firstWatermarkFound = true
+            }
+            else {
+              canvas.remove(obj)
+              firstWatermarkFound = false
+            }
+          }
         }
       })
     })

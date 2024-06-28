@@ -38,7 +38,7 @@ import { templateGeneralInformation } from '~/composables/useTemplateCreationDat
 
 const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
-const canvasWrapper = ref()
+const canvasWrapper = ref(null)
 const activeElement = ref()
 
 onMounted(() => {
@@ -53,7 +53,7 @@ function callCreateCanvas() {
     createCanvas()
     // setTimeout(() => isCanvasLoaded.value = true, 1000)
 
-  else setTimeout(() => callCreateCanvas(), 2000)
+  else setTimeout(() => callCreateCanvas(), 1000)
 }
 
 async function createCanvas() {
@@ -126,6 +126,8 @@ async function createCanvas() {
         () => {
           canvas.renderAll()
           isCanvasLoaded.value = true
+          addEventsToCanvas()
+          showThumbnail()
         },
         {
         // Set the background image to cover the canvas without cropping
@@ -136,8 +138,8 @@ async function createCanvas() {
     }
   })
 
-  addEventsToCanvas()
-  showThumbnail()
+  // addEventsToCanvas()
+  // showThumbnail()
 
   if (canvas) {
     canvas.on('mouse:down', () => {

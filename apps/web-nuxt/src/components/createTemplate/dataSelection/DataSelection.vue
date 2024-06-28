@@ -80,7 +80,7 @@ watch(dataStartLine, (newVal) => {
 watch(dataSourceSelectedColumns, (data) => {
   const valid = data.length > 0
   isValid.value = valid
-  console.log('isValid', valid)
+
   emit('updateData', { isValid: valid, step: 2 })
 })
 
