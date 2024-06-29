@@ -24,6 +24,7 @@ export default async function uploadFileToBackend(file, isJSON) {
       throw new Error(`Network response was not ok ${response.statusText}`)
 
     const data = await response.json()
+    console.log('url', data.url)
 
     return data.url // Assuming the response contains the S3 URL
   }

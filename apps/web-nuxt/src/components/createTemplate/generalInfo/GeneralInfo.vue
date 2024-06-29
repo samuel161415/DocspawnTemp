@@ -112,7 +112,10 @@ watch([templateName, templateFile, datasetFile], () => {
   // templateGeneralInformation.useCase = selectedTemplate.value
   templateGeneralInformation.backgroundFileUrl = templateFile.value
   templateGeneralInformation.datasetFileUrl = datasetFile.value
-  const isValid = templateName.value !== '' && templateGeneralInformation.useCase !== '' && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
+  const isValid
+  = templateName.value !== ''
+  && templateGeneralInformation.useCase !== ''
+  // && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
 
   emit('updateData', { isValid, step: 1 })
 })

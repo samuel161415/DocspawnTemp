@@ -11,9 +11,10 @@ export const activeTextStyles = reactive({
   charSpacing: 0,
 
 })
+// 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/5505cb55-58e7-4784-888a-4ed8bbf5b70e_template_canvas_pdf_2.pdf',
 
 export const templateEditorStore = reactive({
-  templateBackgroundUrl: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/5505cb55-58e7-4784-888a-4ed8bbf5b70e_template_canvas_pdf_2.pdf',
+  templateBackgroundUrl: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/96205cfa-09dc-46c9-bef5-aa9c2a9c868f_DS demo 1 - Delivery notice - template.pdf',
   showOptionsBar: false,
   ShowAddedFieldsinTemplateFields: false,
   activeTemplateField: '',
