@@ -780,6 +780,7 @@ export default function addEventsToCanvas() {
       }
       if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image') {
         const ftoadd = templateEditorStore.fieldToAdd
+
         templateEditorStore.fieldToAdd = {}
         fabric.Image.fromURL(
           'https://placehold.co/300x200?text=DocSpawn'
