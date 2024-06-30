@@ -201,7 +201,6 @@ function toggle(event) {
 const filteredTemplates = computed(() => {
   let filtered = props.templates
 
-  // Filter by type
   switch (filterOption.value) {
     case 'favorites':
       filtered = filtered.filter(template => template.isFavorite === true)
