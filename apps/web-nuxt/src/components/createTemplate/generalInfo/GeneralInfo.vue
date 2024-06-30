@@ -80,12 +80,12 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 const emit = defineEmits()
 
 const currentData = ref('Content I')
-const selectedTemplate = ref('')
+// const selectedTemplate = ref('')
 const templateName = ref('')
 const useCase = ref('')
 const templateFile = ref()
 const datasetFile = ref()
-const dataSourceFile = ref()
+// const dataSourceFile = ref()
 const isEditing = ref(false)
 const isUploading = ref(false)
 
