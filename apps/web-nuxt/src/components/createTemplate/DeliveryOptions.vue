@@ -215,7 +215,8 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import TagComponent from '../shared/TagComponent.vue'
 import EditEmailTemplateModal from './EditEmailTemplateModal.vue'
-import { templateDeliveryOptions } from '~/composables/useTemplateCreationData'
+import { templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 // for first section
 const pdf = ref(true)
@@ -292,6 +293,10 @@ const extranetaccount = ref(false)
 const emailPersonalization = ref(false)
 const selectedEmails = ref()
 const openEditModal = ref(false)
+onMounted(() => {
+  if (templateEditorStore?.templateToEdit?.id)
+    selectedEmails.value = templateEditorStore?.templateToEdit?.delivery_options?.selectedEmails
+})
 watch(selectedEmails, (newVal) => {
   templateDeliveryOptions.selectedEmails = newVal
 })

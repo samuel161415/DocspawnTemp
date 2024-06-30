@@ -3,7 +3,7 @@
   <div class="z-40 bg-white mb-0 h-full border-r border-surface-100 overflow-x-hidden" :class="{ 'w-20': isCollapsed, 'w-72': !isCollapsed }">
     <div class="z-50 fixed mt-12" :class="{ 'w-20': isCollapsed, 'xs:w-44 sm:w-48 md:w-56 lg:w-60 sm:ml-6 md:ml-2 ': !isCollapsed }">
       <button
-        v-if="baseRoute !== '/templates/create'"
+        v-if="baseRoute !== '/templates/create' && baseRoute !== '/templates/update'"
         class="absolute justify-center items-center z-10 top-18 mt-4 -right-4 rounded-full w-10 h-10 text-center bg-gray-50  shadow-sm hover:bg-primaryBlue hover:text-white flex"
         @click="toggleCollapse"
         @mouseenter="hoverEffect(true)"
@@ -115,6 +115,8 @@ const isCollapsed = ref(false)
 watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
   if (newValue === '/templates/create')
     isCollapsed.value = true
+  if (newValue === '/templates/update')
+    isCollapsed.value = true
 
   baseRoute.value = newValue
 })
@@ -145,7 +147,7 @@ function setIsHovered(item, val) {
 
 // check if the window is resized
 function handleResize() {
-  if (baseRoute.value === '/templates/create')
+  if (baseRoute.value === '/templates/create' || baseRoute.value === '/templates/update')
     isCollapsed.value = true
   // else
     // isCollapsed.value = window.innerWidth <= 990

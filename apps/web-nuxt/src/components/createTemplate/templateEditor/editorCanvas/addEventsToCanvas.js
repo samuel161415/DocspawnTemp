@@ -1002,6 +1002,7 @@ export default function addEventsToCanvas() {
       }
       // for showing options when click
       const activeObj = canvas.getActiveObject()
+      console.log('active object', activeObj)
 
       if (activeObj && activeObj?.id !== 'watermark-docspawn') {
         templateEditorStore.showOptionsBar = true

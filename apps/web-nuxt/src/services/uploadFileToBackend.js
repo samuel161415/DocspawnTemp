@@ -14,8 +14,9 @@ export default async function uploadFileToBackend(file, isJSON) {
   // `${runtimeConfig.public.BASE_URL}/files/upload/s3`
   // `http://localhost:5000/api/v1/files/upload/s3`
 
+  // console.log('api', `${runtimeConfig.public.BASE_URL}/files/upload/s3`)
   try {
-    const response = await fetch(`https://beta.docspawn.app/api/v1/files/upload/s3`, {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/files/upload/s3`, {
       method: 'POST',
       body: formData,
     })
@@ -24,7 +25,6 @@ export default async function uploadFileToBackend(file, isJSON) {
       throw new Error(`Network response was not ok ${response.statusText}`)
 
     const data = await response.json()
-    console.log('url', data.url)
 
     return data.url // Assuming the response contains the S3 URL
   }

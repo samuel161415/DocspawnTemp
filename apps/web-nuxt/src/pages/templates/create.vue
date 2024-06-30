@@ -131,11 +131,15 @@ import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
 import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
-import { templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
-import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 
-// import canvasService from '@/composables/useTemplateCanvas'
+import canvasService from '@/composables/useTemplateCanvas'
 
+const runtimeConfig = useRuntimeConfig()
+
+const router = useRouter()
+const toast = useToast()
 const confirm = useConfirm()
 const active = ref(0)
 const isStep1Valid = ref(false)
@@ -159,13 +163,93 @@ function handleUpdateData({ isValid, step }) {
     isStep3Valid.value = isValid
 }
 
-function saveTemplate() {
-  // console.log('generating documents')
-  // console.log('template general information', templateGeneralInformation)
-  // console.log('template editor store', templateEditorStore)
-  // console.log('template delivery options', templateDeliveryOptions)
-  // const canvas = canvasService.getCanvas()
-  // console.log('canvas', canvas)
+async function saveTemplate() {
+  const canvas = canvasService.getCanvas()
+
+  const objects = canvas?.getObjects()
+  // creating deserialized because by default canvas does not save its all attributes of object
+  const deserializedObjects = objects.map((obj) => {
+    return obj.toObject(['id', 'hash', '_controlsVisibility', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo'])
+  })
+
+  let canvasToSend = JSON.parse(JSON.stringify(canvas))
+  canvasToSend = { ...canvasToSend, objects: deserializedObjects }
+
+  const objToSend = {
+    name: templateGeneralInformation?.name || 'sample',
+    use_case: templateGeneralInformation?.useCase,
+    background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
+    dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+    added_fields: JSON.stringify(templateEditorStore?.addedFields),
+    dataset_data: JSON.stringify(templateEditorStore?.datasetData),
+    canvas_data: JSON.stringify(canvasToSend),
+    delivery_options: JSON.stringify(templateDeliveryOptions),
+  }
+
+  // return true
+  if (templateEditorStore?.templateToEdit?.id) {
+    try {
+      const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${templateEditorStore?.templateToEdit?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(objToSend), // Serialize the object to JSON string
+      })
+      if (!response.ok)
+        throw new Error(`Network response was not ok ${response.statusText}`)
+
+      // const data = await response.json()
+      toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
+
+      try {
+        setTimeout(() => {
+          resetAllTemplateCreationValues()
+          resetAllTemplateEditorValues()
+          router.currentRoute.value.path = '/'
+          router.push('templates')
+        }, 1000)
+      }
+      catch (err) {
+      // console.log('error', err)
+      }
+    }
+    catch (error) {
+      console.error('Error:', error)
+      toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
+    }
+  }
+  else {
+    try {
+      const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(objToSend), // Serialize the object to JSON string
+      })
+      if (!response.ok)
+        throw new Error(`Network response was not ok ${response.statusText}`)
+
+      // const data = await response.json()
+      toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+      try {
+        setTimeout(() => {
+          resetAllTemplateCreationValues()
+          resetAllTemplateEditorValues()
+          router.currentRoute.value.path = '/'
+          router.push('templates')
+        }, 1000)
+      }
+      catch (err) {
+      // console.log('error', err)
+      }
+    }
+    catch (error) {
+      console.error('Error:', error)
+      toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
+    }
+  }
 }
 
 function getFileType(url) {
@@ -223,7 +307,7 @@ async function readDataset() {
       })
 
       // Store the formatted data in the templateEditorStore
-      templateEditorStore.datasetData = { keys: headers, allEntries: jsonData, selectedKeys: headers }
+      templateEditorStore.datasetData = templateEditorStore?.templateToEdit?.id ? templateEditorStore?.templateToEdit?.dataset_data : { keys: headers, allEntries: jsonData, selectedKeys: headers }
     }
     if (fileType === 'csv') {
       // Dynamically import PapaParse
@@ -254,6 +338,24 @@ async function readDataset() {
 }
 
 onMounted(() => {
+  // templateEditorStore.templateToEdit = {}
+  if (!templateEditorStore.templateToEdit?.id) {
+    templateEditorStore.addedFields = []
+    templateEditorStore.datasetData = {}
+
+    templateGeneralInformation.name = ''
+    templateGeneralInformation.useCase = ''
+    templateGeneralInformation.backgroundFileUrl = ''
+    templateGeneralInformation.datasetFileUrl = ''
+
+    templateDeliveryOptions.fileFormat = ''
+    templateDeliveryOptions.fileOutput = ''
+    templateDeliveryOptions.forceEntriesVerification = ''
+    templateDeliveryOptions.thirdPartyFormFilling = ''
+    templateDeliveryOptions.emailDeliveryOption = ''
+    templateDeliveryOptions.selectedEmails = ''
+  }
+
   readDataset()
 })
 watch(() => templateGeneralInformation.datasetFileUrl, () => {

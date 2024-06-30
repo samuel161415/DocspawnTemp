@@ -10,7 +10,10 @@
           <p class="font-medium text-surface-600 text-lg font-poppins">
             Template name <span class="text-error">*</span>
           </p>
-          <InputText v-model="templateName" type="text" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name" />
+          <p v-if="isEditing" class="font-poppins text-lg text-surface-600">
+            {{ templateName ? templateName : templateGeneralInformation?.name }}
+          </p>
+          <InputText v-else v-model="templateName" type="text" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name" />
         </div>
       </div>
     </div>
@@ -23,6 +26,7 @@
         <TemplateOption
           v-for="option in options"
           :key="option.label"
+          :is-editing="isEditing"
           :label="option.label"
           :is-current="currentData === option.label"
           :is-selected="templateGeneralInformation.useCase === option.label"
@@ -39,8 +43,25 @@
     </div>
 
     <!-- uploads -->
-
-    <div :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
+    <div v-if="isEditing" :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex  mx-8 flex-col gap-8'" class="mt-8">
+      <div v-if="templateGeneralInformation.useCase !== '' && templateFile">
+        <p class="font-medium text-surface-600 text-lg font-poppins">
+          Background file
+        </p>
+        <Button outlined class="w-max px-6 font-poppins mt-2">
+          view file
+        </Button>
+      </div>
+      <div v-if="templateGeneralInformation.useCase !== '' && isDataToDoc && datasetFile">
+        <p class="font-medium text-surface-600 text-lg font-poppins">
+          Dataset file
+        </p>
+        <Button outlined class="w-max px-6 font-poppins mt-2">
+          view file
+        </Button>
+      </div>
+    </div>
+    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
       <UploadSection v-if="templateGeneralInformation.useCase !== ''" title="Upload your template" :is-background="true" @upload="handleTemplateUpload" />
       <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" title="Upload your data source" @upload="handleDatasetUpload" />
     </div>
@@ -54,6 +75,7 @@ import TemplateOption from './Options.vue'
 import UploadSection from './UploadSection.vue'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const emit = defineEmits()
 
@@ -64,6 +86,7 @@ const useCase = ref('')
 const templateFile = ref()
 const datasetFile = ref()
 const dataSourceFile = ref()
+const isEditing = ref(false)
 
 const options = ref([
   { label: 'Data to doc' },
@@ -71,6 +94,22 @@ const options = ref([
   // { label: 'Table to doc' },
 ])
 
+onMounted(() => {
+  if (templateEditorStore?.templateToEdit?.id) {
+    isEditing.value = true
+    useCase.value = templateGeneralInformation?.useCase
+    templateName.value = templateGeneralInformation?.name
+    templateFile.value = templateGeneralInformation?.backgroundFileUrl
+    datasetFile.value = templateGeneralInformation?.datasetFileUrl
+  }
+  else {
+    isEditing.value = false
+    useCase.value = ''
+    templateName.value = ''
+    templateFile.value = ''
+    datasetFile.value = ''
+  }
+})
 function setIsHovered(label, hovered) {
   currentData.value = hovered ? label : ''
 }

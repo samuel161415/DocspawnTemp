@@ -26,9 +26,36 @@
 
 <script setup>
 import { ref } from 'vue'
-import { templateData } from '~/services/templates.js'
+
+// import { templateData } from '~/services/templates.js'
+import { uuid } from 'vue-uuid'
 import FirstStep from '~/components/createTemplate/FirstStep.vue'
 import TemplateDataView from '~/components/template/TemplateDataView.vue'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const visible = ref(false)
+const runtimeConfig = useRuntimeConfig()
+
+const templateData = ref([])
+
+onMounted(async () => {
+  templateEditorStore.templateToEdit = {}
+  try {
+    // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`)
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+    console.log('templates', data)
+    if (data?.length > 0) {
+      templateData.value = data?.map((d) => {
+        return { ...d, image_preview_hash: uuid.v1() }
+      })
+    }
+    // console.log('response of fetching templates', data)
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
+})
 </script>
