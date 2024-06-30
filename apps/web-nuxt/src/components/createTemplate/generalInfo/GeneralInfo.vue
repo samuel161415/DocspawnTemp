@@ -87,6 +87,7 @@ const templateFile = ref()
 const datasetFile = ref()
 const dataSourceFile = ref()
 const isEditing = ref(false)
+const isUploading = ref(false)
 
 const options = ref([
   { label: 'Data to doc' },
@@ -128,10 +129,15 @@ async function handleTemplateUpload(file) {
     templateFile.value = ''
     return
   }
+  isUploading.value = true
   const url = await uploadFileToBackend(file)
-  if (url)
-
+  if (url) {
     templateFile.value = url
+    isUploading.value = false
+  }
+  else {
+    isUploading.value = false
+  }
 }
 
 async function handleDatasetUpload(file) {
@@ -139,12 +145,26 @@ async function handleDatasetUpload(file) {
     datasetFile.value = ''
     return
   }
-
+  isUploading.value = true
   const url = await uploadFileToBackend(file)
-  if (url)
-
+  if (url) {
     datasetFile.value = url
+    isUploading.value = false
+  }
+  else {
+    isUploading.value = false
+  }
 }
+watch(isUploading, (val) => {
+  if (val) {
+    const isValid = false
+    emit('updateData', { isValid, step: 1 })
+  }
+  else {
+    const isValid = true
+    emit('updateData', { isValid, step: 1 })
+  }
+})
 
 watch([templateName, templateFile, datasetFile], () => {
   templateGeneralInformation.name = templateName.value
