@@ -24,9 +24,9 @@
                    </span>
                </div>
                <div class="flex flex-col gap-1">
-                   <label for="username" class="text-surface-500 text-lg font-poppins">cvv</label>
+                   <label for="cvv" class="text-surface-500 text-lg font-poppins">cvv</label>
                   
-                   <InputText id="cardnumber" type="password" v-model="data.cvv" class="w-64 h-10 text-surface-500 text-sm font-poppins" aria-describedby="username-help" />
+                   <InputText id="cvv" type="password" v-model="data.cvv" class="w-64 h-10 text-surface-500 text-sm font-poppins" aria-describedby="username-help" />
                    
                </div>
            </div>

@@ -1,23 +1,23 @@
 <template>
 
-    <div class=" mb-10">
+    <div class="mb-10">
 
-        <div class="py-2 ml-3">
-            <p class="font-medium text-surface-600 font-poppins text-xl mb-5">Integration</p>
+        <div class="py-2 ml-1">
+            <p class="font-medium text-surface-600 font-poppins text-xl mb-5 ml-2">Integration</p>
 
-            <div class="flex justify-between mt-5">
+            <div class="flex justify-between mt-5 ml-2">
                 <span class="relative flex">
                     <i class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
                         style="color: rgb(117, 119, 120);"></i>
                     <InputText v-model="searchQuery" placeholder="Search"
-                        class="pl-10 font-normal rounded border-gray-300 w-72" />
+                        class="pl-10 font-normal rounded-lg border-gray-300 w-72" />
                 </span>
                 <Button icon="pi pi-sliders-v" label="Filter" outlined severity="surface-600"
                     class="h-9 text-surface-500 border-surface-300" />
             </div>
 
             <div class="mt-5 mb-10">
-                <p class="font-medium text-surface-600 font-poppins text-xl my-8">All Integrations</p>
+                <!-- <p class="font-medium text-surface-600 font-poppins text-xl my-8">All Integrations</p> -->
                 <div class="flex flex-wrap mb-10">
                     <div v-for="integration in filteredIntegrations"
                         class="card w-72 h-44 shadow-sm space-y-6 ml-2">
