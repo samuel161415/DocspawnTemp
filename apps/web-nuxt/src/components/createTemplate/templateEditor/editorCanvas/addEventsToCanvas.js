@@ -108,6 +108,14 @@ export default function addEventsToCanvas() {
       canvas.renderAll()
     })
     canvas.on('object:scaling', (e) => {
+      /** *updating last scaled options */
+
+      if (e.target instanceof fabric.Text)
+        templateEditorStore.lastScaledTextOptions = { x: e.target.scaleX, y: e.target.scaleY }
+
+      // if(e.target.fieldType==='Form text'||e.target.fieldType==='Data field'||e.target.)
+
+      /** */
       canvas._objects.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
           return
@@ -260,6 +268,9 @@ export default function addEventsToCanvas() {
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
+
+            scaleX: templateEditorStore?.lastScaledTextOptions?.x,
+            scaleY: templateEditorStore?.lastScaledTextOptions?.y,
           },
           )
         }
@@ -603,6 +614,9 @@ export default function addEventsToCanvas() {
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
 
+            scaleX: templateEditorStore?.lastScaledTextOptions?.x,
+            scaleY: templateEditorStore?.lastScaledTextOptions?.y,
+
           },
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
@@ -709,6 +723,7 @@ export default function addEventsToCanvas() {
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
             editable: false,
+
           },
         )
         textEle.setControlsVisibility({

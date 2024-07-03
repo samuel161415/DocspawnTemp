@@ -36,6 +36,7 @@ const initialTemplateEditorStore = {
   showPreview: false,
   watermarkImage: {},
   templateToEdit: {},
+  lastScaledTextOptions: { x: 1, y: 1 },
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })
