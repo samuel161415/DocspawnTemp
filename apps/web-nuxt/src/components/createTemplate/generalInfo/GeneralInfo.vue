@@ -6,7 +6,7 @@
 
     <div class="flex mx-8 mt-4">
       <div class="flex-auto flex py-2">
-        <div class="w-full space-y-4">
+        <!-- <div class="w-full space-y-4">
           <p class="font-medium text-surface-600 text-lg font-poppins">
             Template name <span class="text-error">*</span>
           </p>
@@ -14,7 +14,7 @@
             {{ templateName ? templateName : templateGeneralInformation?.name }}
           </p>
           <InputText v-else v-model="templateName" type="text" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name" />
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -81,7 +81,7 @@ const emit = defineEmits()
 
 const currentData = ref('Content I')
 // const selectedTemplate = ref('')
-const templateName = ref('')
+// const templateName = ref('')
 const useCase = ref('')
 const templateFile = ref()
 const datasetFile = ref()
@@ -99,14 +99,14 @@ onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id) {
     isEditing.value = true
     useCase.value = templateGeneralInformation?.useCase
-    templateName.value = templateGeneralInformation?.name
+    // templateName.value = templateGeneralInformation?.name
     templateFile.value = templateGeneralInformation?.backgroundFileUrl
     datasetFile.value = templateGeneralInformation?.datasetFileUrl
   }
   else {
     isEditing.value = false
     useCase.value = ''
-    templateName.value = ''
+    // templateName.value = ''
     templateFile.value = ''
     datasetFile.value = ''
   }
@@ -166,14 +166,13 @@ watch(isUploading, (val) => {
   }
 })
 
-watch([templateName, templateFile, datasetFile], () => {
-  templateGeneralInformation.name = templateName.value
+watch([templateFile, datasetFile], () => {
+  // templateGeneralInformation.name = templateName.value
   // templateGeneralInformation.useCase = selectedTemplate.value
   templateGeneralInformation.backgroundFileUrl = templateFile.value
   templateGeneralInformation.datasetFileUrl = datasetFile.value
   const isValid
-  = templateName.value !== ''
-  && templateGeneralInformation.useCase !== ''
+  = templateGeneralInformation.useCase !== ''
   // && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
 
   emit('updateData', { isValid, step: 1 })

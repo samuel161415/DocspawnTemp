@@ -345,9 +345,9 @@
         </Dialog> -->
         <FinalPreview :show-preview="showPreview" :mobile="mobile" :all-form-fields="allFormFields" @change-preview="(val) => { showPreview = val }" />
       </DataTable>
-      <div class="w-full flex justify-center mt-5">
+      <!-- <div class="w-full flex justify-center mt-5">
         <Button label="Save & Continue" autofocus @click="" />
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -362,6 +362,7 @@ import SearchField from '../../shared/searchField.vue'
 import MobilePreviewDialog from './MobilePreviewDialog.vue'
 import FinalPreview from './FinalPreview'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 
 const emit = defineEmits()
 
@@ -473,6 +474,8 @@ function handleDragLeave(id) {
 onMounted(() => {
   if (templateEditorStore.addedFields?.length > 0)
     allFormFields.value = templateEditorStore.addedFields?.filter(f => f?.isFormField)
+  if (templateGeneralInformation?.name)
+    templateTitle.value = templateGeneralInformation?.name
   // formFieldservice.getformFieldsMini().then((data) => (formFields.value = data));
   // formFields.value = FormFieldsData
   // for (let i = 0; i < formFields.value.length; i++)

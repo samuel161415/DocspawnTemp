@@ -41,7 +41,7 @@
               Checkbox group {{ field?.groupPosition }} - <span class="text-primaryBlue">p.{{ field.page }}</span>
             </p>
             <p v-else class="font-poppins text-surface-600 text-sm">
-              {{ field?.fieldType }} - <span class="text-primaryBlue">p.{{ field.page }}</span>
+              {{ field?.fieldType === 'Form list' ? 'List selection' : 'Form list' }} - <span class="text-primaryBlue">p.{{ field.page }}</span>
             </p>
           </div>
 

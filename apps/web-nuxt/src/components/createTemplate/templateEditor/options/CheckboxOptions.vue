@@ -109,6 +109,7 @@ function addCheckboxToGroup() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     let activeObject = canvas.getActiveObject()
+
     if (activeObject?._objects?.length > 0) {
       const rev = activeObject?._objects?.reverse()
       rev?.forEach((r) => {
@@ -134,21 +135,21 @@ function addCheckboxToGroup() {
 
           left: activeObject?.left + (activeObject?.width * activeObject?.scaleX),
           top: activeObject?.top,
-          scaleX: activeObject.scaleX,
-          scaleY: activeObject.scaleY,
+          scaleX: activeObject?.scaleX,
+          scaleY: activeObject?.scaleY,
           width: activeObject?.width,
           height: activeObject?.height,
-          id: activeObject.id,
-          hash: activeObject.hash,
+          id: activeObject?.id,
+          hash: activeObject?.hash,
           checkboxIdentifierHash: uniqueHashForEle,
-          fieldType: activeObject.fieldType,
-          pageNo: templateEditorStore.activePageForCanvas,
+          fieldType: activeObject?.fieldType,
+          pageNo: templateEditorStore?.activePageForCanvas,
           displayGuide: false,
         })
         myImg.setControlsVisibility({ mtr: false })
 
         templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
-          if (f?.hash === activeObject.hash)
+          if (f?.hash === activeObject?.hash)
             return { ...f, checkboxes: [...f?.checkboxes, { text: '', id: f?.checkboxes.length + 1, checkboxIdentifierHash: uniqueHashForEle }] }
 
           else return f

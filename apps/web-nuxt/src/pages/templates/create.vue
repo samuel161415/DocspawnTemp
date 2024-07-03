@@ -56,7 +56,8 @@
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
                 <div class=" mx-6">
-                  <TemplateEditor v-if="active === index" />
+                  <TemplateEditor v-if="active === index || canvasService.getCanvas()" />
+                  <!-- v-if="active === index" -->
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
                   <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
@@ -169,7 +170,7 @@ async function saveTemplate() {
   const objects = canvas?.getObjects()
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
-    return obj.toObject(['id', 'hash', '_controlsVisibility', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo'])
+    return obj.toObject(['id', 'hash', '_controlsVisibility', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
   })
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
@@ -206,6 +207,7 @@ async function saveTemplate() {
         setTimeout(() => {
           resetAllTemplateCreationValues()
           resetAllTemplateEditorValues()
+          canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
         }, 1000)
@@ -237,6 +239,7 @@ async function saveTemplate() {
         setTimeout(() => {
           resetAllTemplateCreationValues()
           resetAllTemplateEditorValues()
+          canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
         }, 1000)

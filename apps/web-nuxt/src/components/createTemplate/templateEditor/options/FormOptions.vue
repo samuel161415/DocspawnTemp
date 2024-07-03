@@ -13,7 +13,7 @@
         </p>
         <Textarea v-model="fieldDescription" rows="3" />
         <p id="username-help" class="font-poppins text-xs mt-2">
-          It is an optional. But using it will replace field name in final form view.
+          The final form view will show the field description instead of the field name.
         </p>
       </div>
     </div>

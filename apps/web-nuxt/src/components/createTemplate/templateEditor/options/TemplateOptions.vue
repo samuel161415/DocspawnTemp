@@ -6,7 +6,13 @@
 
 <template>
   <div class="mt-4 ">
-    <p class="font-poppins text-lg text-surface-600">
+    <div class="mb-4">
+      <p class="font-poppins text-md text-surface-600 ">
+        Template name
+      </p>
+      <InputText v-model="templateName" class="w-full md:w-full mt-2" />
+    </div>
+    <p class="font-poppins text-md text-surface-600">
       Watermark
     </p>
     <p class="font-poppins text-xs text-surface-500">
@@ -34,13 +40,20 @@
 
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import canvasService from '@/composables/useTemplateCanvas'
 
+const templateName = ref('')
 const disableWatermark = ref(false)
 const watermarkImages = ref([{ id: 1, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/494a88a1-edeb-4652-b190-c0ad775b9c80_DS watermark 1 (1).png.png' }, { id: 2, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/84c85464-5815-4414-bd71-b70695ed0af3_DS watermark 2 (1).png.png' }])
 onMounted(() => {
   if (!templateEditorStore?.watermarkImage?.src)
     templateEditorStore.watermarkImage = watermarkImages.value[0]
+  if (templateGeneralInformation?.name)
+    templateName.value = templateGeneralInformation?.name
+})
+watch(templateName, (newVal) => {
+  templateGeneralInformation.name = newVal
 })
 watch(() => templateEditorStore.watermarkImage, (newVal) => {
   const canvas = canvasService.getCanvas()

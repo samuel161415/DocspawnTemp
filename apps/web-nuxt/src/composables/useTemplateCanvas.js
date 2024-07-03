@@ -80,6 +80,10 @@ class CanvasService {
       console.error('Error loading canvas data:', error)
     }
   }
+
+  refreshCanvas() {
+    this.canvas = null
+  }
 }
 
 const canvasService = new CanvasService()
