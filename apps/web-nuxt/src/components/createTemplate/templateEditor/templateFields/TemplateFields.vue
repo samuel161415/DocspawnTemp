@@ -26,6 +26,9 @@
             <p v-else-if="(field.name === 'Add text' || field.name === 'Lorem ipsum') && field?.fieldType === 'Static text'" class="font-poppins text-red-400 text-lg mt-1 ">
               Add text
             </p>
+            <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Static image')" class="font-poppins text-red-400 text-lg mt-1 ">
+              Select image
+            </p>
             <p v-else-if="(field.name === 'Add field name' || field.name === 'Lorem ipsum') && (field?.fieldType === 'Form text' || field?.fieldType === 'Form image' || field?.fieldType === 'Form date' || field?.fieldType === 'Form time' || field?.fieldType === 'Form long text' || field?.fieldType === 'Form list')" class="font-poppins text-red-400 text-lg mt-1 ">
               Add field name
             </p>
@@ -116,7 +119,7 @@
             <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showDatasetOptions2 }" />
           </div>
           <div v-if="showDatasetOptions2" class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50">
-            <Dropdown v-model="selectedDatasetOption2" :options="templateEditorStore.datasetData.selectedKeys" filter placeholder="Select data field" class="w-full md:w-full">
+            <Dropdown v-model="selectedDatasetOption2" :options="templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d)) " filter placeholder="Select data field" class="w-full md:w-full">
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -153,7 +156,7 @@
               Text
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Fixed image' }" @click="selectField('Fixed image')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Fixed image' }" @click="selectField('Static image')">
             <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
@@ -607,6 +610,8 @@ function selectField(field, option) {
       templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
     else if (field === 'Static time')
       templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
+    else if (field === 'Static image')
+      templateEditorStore.fieldToAdd = { name: 'Select image', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form text')
       templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form long text')

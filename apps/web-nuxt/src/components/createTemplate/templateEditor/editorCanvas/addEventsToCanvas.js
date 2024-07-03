@@ -397,7 +397,7 @@ export default function addEventsToCanvas() {
 
         canvas.renderAll()
       }
-      if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image') {
+      if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image' || templateEditorStore.fieldToAdd.type === 'Static image') {
         if (currentHoveredEle && currentHoveredEle?._element) {
           currentHoveredEle.set({
             left: event.absolutePointer.x,
@@ -793,7 +793,7 @@ export default function addEventsToCanvas() {
         const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
         templateEditorStore.addedFields = remainingFields
       }
-      if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image') {
+      if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image' || templateEditorStore.fieldToAdd.type === 'Static image') {
         const ftoadd = templateEditorStore.fieldToAdd
 
         templateEditorStore.fieldToAdd = {}
@@ -1018,6 +1018,8 @@ export default function addEventsToCanvas() {
       // for showing options when click
       const activeObj = canvas.getActiveObject()
       // console.log('active object', activeObj)
+      if (activeObj instanceof fabric.Text)
+        templateEditorStore.lastScaledTextOptions = { x: activeObj.scaleX, y: activeObj.scaleY }
 
       if (activeObj && activeObj?.id !== 'watermark-docspawn') {
         templateEditorStore.showOptionsBar = true

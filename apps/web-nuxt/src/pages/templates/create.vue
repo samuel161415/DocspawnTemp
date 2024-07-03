@@ -275,6 +275,13 @@ function isObjectEmpty(obj) {
   }
   return true
 }
+function isURL(str) {
+  // Regular expression to match URL pattern
+  const urlPattern = /^(https?:\/\/)?([\w.-]+)\.([a-z]{2,})(\/\S*)?$/i
+
+  // Test the string against the regex pattern
+  return urlPattern.test(str)
+}
 async function readDataset() {
   const datasetUrl = templateGeneralInformation?.datasetFileUrl ? templateGeneralInformation?.datasetFileUrl : 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/51b2ee2b-f2d3-4fc4-8c6e-8be78fd0a482_template_canvas_dataset.xlsx'
   try {
@@ -308,9 +315,21 @@ async function readDataset() {
           jsonData.push(rowData)
         }
       })
+      const urlKeys = []
+      headers?.forEach((key) => {
+        let i = 0
+        while (i < 100 && i < jsonData?.length) {
+          // console.log('jsonData[i][key])', isURL(jsonData[i][key]), jsonData[i][key])
+          if (isURL(jsonData[i][key]) || isURL(jsonData[i][key]?.text)) {
+            urlKeys.push(key)
+            i = jsonData?.length + 1
+          }
+          i++
+        }
+      })
 
       // Store the formatted data in the templateEditorStore
-      templateEditorStore.datasetData = templateEditorStore?.templateToEdit?.id ? templateEditorStore?.templateToEdit?.dataset_data : { keys: headers, allEntries: jsonData, selectedKeys: headers }
+      templateEditorStore.datasetData = templateEditorStore?.templateToEdit?.id ? templateEditorStore?.templateToEdit?.dataset_data : { keys: headers, allEntries: jsonData, selectedKeys: headers, urlKeys }
     }
     if (fileType === 'csv') {
       // Dynamically import PapaParse
@@ -329,7 +348,21 @@ async function readDataset() {
 
           // Assuming similar structure as for XLSX
           const headers = filteredData.length > 0 ? Object.keys(filteredData[0]) : []
-          templateEditorStore.datasetData = { keys: headers, allEntries: filteredData, selectedKeys: headers }
+          // keys which are url
+          const urlKeys = []
+          headers?.forEach((key) => {
+            let i = 0
+
+            while (i < 100 && i < filteredData?.length) {
+              // console.log('isURL(filteredData[i][key])', isURL(filteredData[i][key]), filteredData[i][key])
+              if (isURL(filteredData[i][key]) || isURL(filteredData[i][key]?.text)) {
+                urlKeys.push(key)
+                i = filteredData?.length + 1
+              }
+              i++
+            }
+          })
+          templateEditorStore.datasetData = { keys: headers, allEntries: filteredData, selectedKeys: headers, urlKeys }
         },
         header: true,
       })
@@ -339,6 +372,19 @@ async function readDataset() {
     console.error('Error fetching or processing file:', error)
   }
 }
+
+// watch(() => templateEditorStore?.datasetData, (data) => {
+//   console.log('change in dataset data', data)
+//   // this is fort finding those dataset keys which are url
+//   const urlKeys = []
+//   data?.keys?.forEach((key) => {
+//     for (let i = 0; i < 300 && i < data?.allEntries?.length; i++) {
+//       if (isURL(data?.allEntries[i][key]))
+//         urlKeys.push(key)
+//     }
+//   })
+//   templateEditorStore?.datasetData = { ...templateEditorStore?.datasetData, urlKeys }
+// })
 
 onMounted(() => {
   // templateEditorStore.templateToEdit = {}

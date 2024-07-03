@@ -69,7 +69,6 @@ class CanvasService {
       return
 
     try {
-      console.log('canvas data before parsing', canvasData)
       const parsedData = canvasData
       // JSON.parse(canvasData)
       this.canvas.loadFromJSON(parsedData, () => {

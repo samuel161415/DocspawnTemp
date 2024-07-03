@@ -57,7 +57,7 @@
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.datasetData.selectedKeys" filter placeholder="Select data field" class="w-full md:w-full">
+            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType === 'Data field' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d)) " filter placeholder="Select data field" class="w-full md:w-full">
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -78,6 +78,21 @@
               </template>
             </Dropdown>
           </div>
+          <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="mb-6">
+            <p class="font-poppins text-surface-500 mt-4 mb-2">
+              Image proportion
+            </p>
+            <div class="flex flex-col flex-wrap gap-4 mt-2">
+              <div v-tooltip.top="'Image height will be fixed but width will adapt the proportion'" class="flex items-center">
+                <RadioButton v-model="datasetImageProportionOption" input-id="ingredient1" name="imageProprtion" value="fitToHeight" />
+                <label for="ingredient1" class="ml-2 font-poppins">Fit to height</label>
+              </div>
+              <div v-tooltip.top="'Width will be fixed but height will adapt the proportion'" class="flex items-center">
+                <RadioButton v-model="datasetImageProportionOption" input-id="ingredient2" name="imageProprtion" value="fitToWidth" />
+                <label for="ingredient2" class="ml-2 font-poppins">Fit to width</label>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== 'Static text'" class="w-full pt-4">
@@ -91,7 +106,7 @@
           <FormOptions />
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'image'" class="">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static image'" class="">
           <div class="mt-4 ">
             <h1 class="font-poppins">
               Upload image
@@ -115,6 +130,9 @@
             </p>
           </div>
         </div>
+        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text'" class="">
+          <ImageOptions />
+        </div> -->
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static time'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
@@ -169,8 +187,10 @@ import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
 import ElementRotation from './ElementRotation.vue'
 import TemplateOptions from './TemplateOptions.vue'
+import ImageOptions from './ImageOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()
@@ -179,10 +199,70 @@ const constantTextValue = ref(null)
 const fileUrl = ref()
 const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
+const datasetImageProportionOption = ref('fitToHeight')
 
-function getFile(e) {
+onMounted(() => {
+  // updating dataset image proportion
+  const canvas = canvasService.getCanvas()
+  const activeObj = canvas?.getActiveObject()
+  if (canvas && activeObj) {
+    const spfield = templateEditorStore?.addedFields?.filter(a => a?.hash === activeObj?.hash)[0]
+    if (spfield) {
+      if (spfield?.imageProportionMethod) {
+        datasetImageProportionOption.value = spfield?.imageProportionMethod
+      }
+      else {
+        datasetImageProportionOption.value = 'fitToHeight'
+        const fields = templateEditorStore?.addedFields?.map((a) => {
+          if (a?.hash === activeObj?.hash)
+            return { ...a, imageProportionMethod: 'fitToHeight' }
+          else
+            return a
+        })
+        templateEditorStore.addedFields = fields
+      }
+    }
+  }
+})
+watch(datasetImageProportionOption, (newVal) => {
+  const canvas = canvasService.getCanvas()
+  const activeObj = canvas?.getActiveObject()
+  if (canvas && activeObj) {
+    const fields = templateEditorStore?.addedFields?.map((a) => {
+      if (a?.hash === activeObj?.hash)
+        return { ...a, imageProportionMethod: newVal }
+      else
+        return a
+    })
+    templateEditorStore.addedFields = fields
+    console.log('fields', fields)
+  }
+})
+
+async function getFile(e) {
   const file = e.target.files[0]
-  fileUrl.value = URL.createObjectURL(file)
+  const url = await uploadFileToBackend(file)
+  fileUrl.value = url
+  const canvas = canvasService.getCanvas()
+  const activeObj = canvas.getActiveObject()
+  if (canvas) {
+    const objs = canvas._objects
+    canvas.objects = objs.map((obj) => {
+      if (obj.hash === activeObj.hash) {
+        const originalHeight = obj.height * obj.scaleY
+        const originalWidth = obj.width * obj.scaleX
+
+        obj.setSrc(url, () => {
+          obj.scaleToWidth(originalWidth)
+          obj.scaleToHeight(originalHeight)
+          canvas.renderAll()
+        })
+      }
+      return obj
+    })
+    canvas.renderAll()
+  }
+  // fileUrl.value = URL.createObjectURL(file)
 }
 
 watch(constantTextValue, () => {

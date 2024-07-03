@@ -284,20 +284,25 @@ watch(currentPreviewNo, (newVal) => {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingData = data[newVal - 1][obj?.id]
+          let correspondingData = data[newVal - 1][obj?.id]
+          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingData = data[newVal - 1][obj?.id]
+          let correspondingData = data[newVal - 1][obj?.id]
+          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+
+          const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
             obj.setSrc(correspondingData, () => {
-              obj.scaleToWidth(originalWidth)
-              obj.scaleToHeight(originalHeight)
+              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                ? obj.scaleToWidth(originalWidth)
+                : obj.scaleToHeight(originalHeight)
               canvas.renderAll()
             })
           }
@@ -320,22 +325,27 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           return obj
         if (obj.stroke || obj.isAlertIcon)
           return obj
+        if (obj?.fieldType === 'Static image')
+          return obj
 
         if (!obj._element && obj?.id !== 'Lorem ipsum') {
-          const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+          let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }
         else if (obj?.id !== 'Lorem ipsum') {
-          const correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-
+          let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
             obj.setSrc(correspondingData, () => {
-              obj.scaleToWidth(originalWidth)
-              obj.scaleToHeight(originalHeight)
+              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                ? obj.scaleToWidth(originalWidth)
+                : obj.scaleToHeight(originalHeight)
               canvas.renderAll()
             })
           }
