@@ -315,7 +315,7 @@ function duplicateField(field) {
       if (obj.hash === field.hash) {
         if (obj?._element && !obj.stroke && !obj.isAlertIcon) {
           fabric.Image.fromURL(
-            'https://placehold.co/300x200?text=DocSpawn'
+            'https://placehold.co/300x200?text=Image'
             , (myImg) => {
               myImg.set({
                 cornerStyle: 'circle',

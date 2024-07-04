@@ -293,6 +293,8 @@ export default function addEventsToCanvas() {
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
+            scaleX: templateEditorStore?.lastScaledTextOptions?.x,
+            scaleY: templateEditorStore?.lastScaledTextOptions?.y,
           },
           )
           canvas.add(currentHoveredEle)
@@ -301,7 +303,9 @@ export default function addEventsToCanvas() {
         if (templateEditorStore.activeAdvancedPointer) {
           if (tempXMargin && tempYMargin) {
             tempXMargin.set({ left: event.absolutePointer.x })
-            tempYMargin.set({ top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10) })
+            tempYMargin.set({ top: currentHoveredEle.top + (Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) - (1 * ((Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) / 5)),
+              // event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10)
+            })
           }
           else {
             tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
@@ -314,7 +318,7 @@ export default function addEventsToCanvas() {
             canvas.add(tempXMargin)
             tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
               left: 0, // event.absolutePointer.x,
-              top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10),
+              top: currentHoveredEle.top + (Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) - (1 * ((Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) / 5)), // event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10) ,
               stroke: '#3978eb',
               selectable: false,
 
@@ -437,7 +441,7 @@ export default function addEventsToCanvas() {
         }
         else {
           fabric.Image.fromURL(
-            'https://placehold.co/300x200?text=DocSpawn'
+            'https://placehold.co/300x200?text=Image'
             , (myImg) => {
               if (currentHoveredEle)
                 canvas.remove(currentHoveredEle)
@@ -798,7 +802,7 @@ export default function addEventsToCanvas() {
 
         templateEditorStore.fieldToAdd = {}
         fabric.Image.fromURL(
-          'https://placehold.co/300x200?text=DocSpawn'
+          'https://placehold.co/300x200?text=Image'
           , (myImg) => {
             if (currentHoveredEle)
               canvas.remove(currentHoveredEle)

@@ -366,7 +366,7 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingData = 'https://placehold.co/300x200?text=DocSpawn'
+          const correspondingData = 'https://placehold.co/300x200?text=Image'
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
