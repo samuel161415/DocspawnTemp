@@ -75,8 +75,6 @@
             class="px-5 h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions, 'border-surface-100 bg-surface-50': !showDatasetOptions }"
             @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true"
           >
-            <!-- @click="selectField('Data field')" -->
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <div class="flex gap-2  items-center ">
               <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
@@ -111,7 +109,6 @@
             class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions2, 'border-surface-100 bg-surface-50': !showDatasetOptions2 }"
             @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true"
           >
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Image
@@ -142,7 +139,6 @@
           </div>
         </div>
         <div class="px-5 h-[62px] flex  items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showStaticFields ? showStaticFields = false : showStaticFields = true">
-          <!-- <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" /> -->
           <p class="font-poppins text-surface-600 text-lg">
             Static fields
           </p>
@@ -150,21 +146,18 @@
         </div>
         <div v-if="showStaticFields" class="flex flex-col gap-2">
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Static text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Static text' }" @click="selectField('Static text')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Text
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Fixed image' }" @click="selectField('Static image')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Image
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showTimestamp ? showTimestamp = false : showTimestamp = true">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-calendar-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Timestamp
@@ -174,14 +167,12 @@
           </div>
           <div v-if="showTimestamp" class="flex flex-col gap-2">
             <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Static date', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Static date' }" @click="selectField('Static date')">
-              <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
               <font-awesome-icon icon="fa-light fa-calendar" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Date
               </p>
             </div>
             <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Static time', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Static time' }" @click="selectField('Static time')">
-              <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
               <font-awesome-icon icon="fa-light fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Time
@@ -191,7 +182,6 @@
         </div>
 
         <div v-if="templateGeneralInformation?.useCase === 'Form to doc'" class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showFormFields ? showFormFields = false : showFormFields = true">
-          <!-- <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" /> -->
           <p class="font-poppins text-surface-600 text-lg">
             Form fields
           </p>
@@ -199,14 +189,12 @@
         </div>
         <div v-if="showFormFields" class="flex flex-col gap-2">
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form text' }" @click="selectField('Form text')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Text
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form long text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form long text' }" @click="selectField('Form long text')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-paragraph" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Long Text
@@ -214,14 +202,12 @@
           </div>
 
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form image' }" @click="selectField('Form image')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Image
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showFormTimestamp ? showFormTimestamp = false : showFormTimestamp = true">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-calendar-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Timestamp
@@ -230,14 +216,12 @@
           </div>
           <div v-if="showFormTimestamp" class="flex flex-col gap-2">
             <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form date', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form date' }" @click="selectField('Form date')">
-              <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
               <font-awesome-icon icon="fa-light fa-calendar" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Date
               </p>
             </div>
             <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form time', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form time' }" @click="selectField('Form time')">
-              <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
               <font-awesome-icon icon="fa-light fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Time
@@ -245,21 +229,18 @@
             </div>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form list', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form list' }" @click="selectField('Form list')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               List
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form checkbox group', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form checkbox group' }" @click="selectField('Form checkbox group')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Checkbox
             </p>
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form radio' }" @click="selectField('Form radio')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Radio
@@ -267,7 +248,6 @@
           </div>
 
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form signature' }" @click="selectField('Form signature')">
-            <!-- <font-awesome-icon icon="fa-light fa-arrow-turn-down-right" size="lg" class="text-surface-400 text-xs" /> -->
             <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Signature

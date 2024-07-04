@@ -153,7 +153,7 @@
       <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
         <Button
           label="Save"
-          autofocus @click=""
+          autofocus
         />
       </div>
     </template>

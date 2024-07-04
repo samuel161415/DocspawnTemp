@@ -24,11 +24,7 @@
         Required
       </p>
     </div>
-    <!-- <Accordion unstyled="true" class="mt-4 font-poppins ">
-      <AccordionTab
-        header-class="text-surface-500 "
-        header="Advanced options"
-      > -->
+
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surface-500 mb-2">
         Select list
@@ -74,10 +70,6 @@
           </p>
         </div>
 
-        <!-- <p class="font-poppins text-md text-surface-600 ">
-          Field validations
-        </p> -->
-
         <div class="flex flex-col  mt-6">
           <div class="mb-2 flex items-center gap-2">
             <p class="font-poppins text-md text-surface-600 ">
@@ -103,8 +95,6 @@
           <InputNumber v-model="maxFieldLength" input-id="integeronly2" :use-grouping="false" @input="changeMaxLength" />
         </div>
       </div>
-    <!-- </AccordionTab>
-    </Accordion> -->
     </div>
 
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="w-full pt-0">

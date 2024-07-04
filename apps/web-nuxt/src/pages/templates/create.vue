@@ -65,7 +65,6 @@
                     label="Next" icon="pi pi-arrow-right"
                     icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback"
                   />
-                  <!-- :disabled="!isStep2Valid" -->
                 </div>
               </template>
             </StepperPanel>
@@ -372,19 +371,6 @@ async function readDataset() {
     console.error('Error fetching or processing file:', error)
   }
 }
-
-// watch(() => templateEditorStore?.datasetData, (data) => {
-//   console.log('change in dataset data', data)
-//   // this is fort finding those dataset keys which are url
-//   const urlKeys = []
-//   data?.keys?.forEach((key) => {
-//     for (let i = 0; i < 300 && i < data?.allEntries?.length; i++) {
-//       if (isURL(data?.allEntries[i][key]))
-//         urlKeys.push(key)
-//     }
-//   })
-//   templateEditorStore?.datasetData = { ...templateEditorStore?.datasetData, urlKeys }
-// })
 
 onMounted(() => {
   // templateEditorStore.templateToEdit = {}

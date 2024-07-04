@@ -1,16 +1,6 @@
 <template>
   <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
     <div class=" flex justify-content-center  gap-6 ml-8 ">
-      <!-- <div
-        v-tooltip.top="'Display guide'"
-      >
-        <div v-if="!templateEditorStore.activeDisplayGuide" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeDisplayGuide = true;toggleMargins() ">
-          <font-awesome-icon icon="fa-thin fa-ruler-triangle" size="xl" />
-        </div>
-        <div v-else class="cursor-pointer text-primary-500 " @click="templateEditorStore.activeDisplayGuide = false;toggleMargins() ">
-          <font-awesome-icon icon="fa-duotone fa-ruler-triangle" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
-        </div>
-      </div> -->
       <div
         v-tooltip.top="'Advanced pointer'"
       >
@@ -73,66 +63,6 @@ function changePreviewNo(dir) {
   }
 }
 
-// function toggleMargins() {
-//   const activeObject = templateEditorStore.canvas.getActiveObject()
-
-//   if (activeObject) {
-//     if (templateEditorStore.activeDisplayGuide) {
-//       const objs = templateEditorStore.canvas._objects
-//       objs.forEach((obj) => {
-//         if (obj === activeObject) {
-//           templateEditorStore.canvas.add(new fabric.Line([100, 1000, 100, 5000], {
-//             left: obj.left,
-//             top: 0,
-//             stroke: '#3978eb',
-//             id: obj.hash,
-//             selectable: false,
-//             fieldType: obj.fieldType,
-//             pageNo: templateEditorStore.activePageForCanvas,
-//             selectable: false,
-//           }))
-
-//           if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image'||obj.fieldType==='Form multiline') {
-//             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-//               left: 0,
-//               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
-//               stroke: '#3978eb',
-//               id: obj.hash,
-//               selectable: false,
-//               fieldType: obj.fieldType,
-//               pageNo: templateEditorStore.activePageForCanvas,
-//               selectable: false,
-//             }))
-//           }
-//           else {
-//             templateEditorStore.canvas.add(new fabric.Line([1000, 100, 2000, 100], {
-//               left: 0,
-//               top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
-//               stroke: '#3978eb',
-//               id: obj.hash,
-//               selectable: false,
-//               fieldType: obj.fieldType,
-//               pageNo: templateEditorStore.activePageForCanvas,
-//               selectable: false,
-//             }))
-//           }
-//         }
-//       })
-//       templateEditorStore.canvas.renderAll()
-//     }
-//     else {
-//       const objs = templateEditorStore.canvas._objects
-//       templateEditorStore.canvas._objects = objs.filter((obj) => {
-//         if (obj.stroke === '#3978eb' && obj.id === activeObject.hash)
-//           return false
-//         else
-//           return true
-//       })
-
-//       templateEditorStore.canvas.renderAll()
-//     }
-//   }
-// }
 function showMargins() {
   const canvas = canvasService.getCanvas()
   if (canvas) {

@@ -46,7 +46,7 @@ onMounted(async () => {
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
-    console.log('templates', data)
+
     if (data?.length > 0) {
       templateData.value = data?.map((d) => {
         return { ...d, image_preview_hash: uuid.v1() }

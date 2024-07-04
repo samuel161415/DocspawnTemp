@@ -74,9 +74,6 @@
               </template>
             </Dropdown>
           </template>
-          <!-- <template #body="slotProps">
-            <p>{{ slotProps.data.type }}</p>
-          </template> -->
         </Column>
 
         <Column field="isRequired" header="Mandatory?" style="width: 1%">
@@ -153,196 +150,6 @@
           }"
         />
 
-        <!-- <Dialog
-          v-model:visible="showPreview" modal :draggable="false"
-          :style="mobile ? { width: '25rem' } : { width: '100rem' }" :pt="{
-            header: {
-              class: ['flex items-center justify-between',
-                      'shrink-0', 'p-6', `pb-${mobile ? '0' : ''}`, 'border-t-0', 'rounded-tl-lg', 'rounded-tr-lg', 'bg-surface-0 dark:bg-surface-800',
-                      'text-surface-700 dark:text-surface-0/80'],
-            },
-          }"
-        >
-          <template #header>
-            <div :class="`${mobile ? '' : 'pl-16'}`" class="flex flex-row gap-3 w-full">
-              <div class="flex flex-col">
-                <i class="pi pi-mobile"></i>
-                <RadioButton v-model="mobile" class="pl-0.5" input-id="mobile1" name="pizza" :value="true" />
-              </div>
-              <div class="flex flex-col">
-                <i class="pi pi-desktop"></i>
-                <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
-              </div>
-              <div class="mx-auto place-self-center flex flex-row">
-                <img src="../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
-                <img v-if="!isCollapsed" src="../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
-              </div>
-            </div>
-          </template>
-          <template #default>
-            <div :class="`flex flex-col gap-4 ${mobile ? '' : 'pl-16'}`">
-              <p :class="` place-self-${mobile ? 'center' : 'start'} text-xl font-semibold form-title-preview`">
-                {{
-                  formTitle }}
-              </p>
-              <div class="w-80 place-self-center text-justify mb-4">
-                {{ formDescription }}
-              </div>
-
-              <div :class="`${mobile ? 'w-80' : 'w-full pr-96'} place-self-start flex flex-col gap-5`">
-                <div v-for="(formField, index) in formFields" :key="formField.id">
-                  <div v-if="formField.type === 'text'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <InputText
-                      :id="`${formField.name}-${index}`"
-                      v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
-                    />
-                    <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                      Field is required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'multiline-text'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <Textarea
-                      :id="`${formField.name}-${index}`"
-                      v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" rows="4" cols="30"
-                    />
-                    <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                      Field is required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'number'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-
-                    <InputNumber
-                      v-model="formField.state" increment-button-class="bg-none"
-                      :input-id="`${formField.name}-${index}`" mode="decimal" show-buttons
-                    />
-                    <small v-if="formField.mandatory && formField.state === 0" class="text-red-600">This Field is
-                      required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'date'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <Calendar
-                      v-model="formField.state" show-icon icon-display="input"
-                      :input-id="`${formField.name}-${index}`"
-                    />
-                  </div>
-
-                  <div v-else-if="formField.type === 'time'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <Calendar
-                      :id="`${formField.name}-${index}`" v-model="formField.state" time-only hour-format="12" show-icon
-                      icon-display="input" icon="pi pi-clock"
-                    />
-                  </div>
-
-                  <div v-else-if="formField.type === 'email'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <InputText
-                      :id="`${formField.name}-${index}`"
-                      v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" class="border-red-500"
-                    />
-                    <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                      Field is required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'image'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <FileUpload
-                      :id="`${formField.name}-${index}`" v-model="formField.state" mode="basic" name="demo[]"
-                      accept="image/*" @upload="onUpload"
-                    />
-                  </div>
-
-                  <div v-else-if="formField.type === 'list'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <InputText
-                      :id="`${formField.name}-${index}`"
-                      v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" class="border-red-500"
-                    />
-                    <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                      Field is required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'checkbox'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <InputText
-                      :id="`${formField.name}-${index}`"
-                      v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" class="border-red-500"
-                    />
-                    <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                      Field is required</small>
-                  </div>
-
-                  <div v-else-if="formField.type === 'signature'" class="flex flex-col gap-2">
-                    <label :for="`${formField.name}-${index}`">
-                      <div class="flex flex-row gap-2">
-                        <div>{{ formField.name }}</div>
-                        <div v-if="formField.mandatory" class="text-red-500">*</div>
-                      </div>
-                    </label>
-                    <InputText :id="`${formField.name}-${index}`" v-model="formField.state" class="border-red-500" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template #footer>
-            <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
-              <Button
-                label="Save"
-                autofocus @click=""
-              />
-            </div>
-          </template>
-        </Dialog> -->
         <FinalPreview :show-preview="showPreview" :mobile="mobile" :all-form-fields="allFormFields" @change-preview="(val) => { showPreview = val }" />
       </DataTable>
       <!-- <div class="w-full flex justify-center mt-5">
@@ -384,13 +191,9 @@ const templateTitle = ref('')
 const templateDescription = ref('')
 const allFormFields = ref([])
 
-watch(() => templateEditorStore.addedFields, (newVal) => {
-  console.log('added fields', templateEditorStore.addedFields)
+watch(() => templateEditorStore.addedFields, () => {
   if (templateEditorStore.addedFields?.length > 0)
     allFormFields.value = templateEditorStore.addedFields?.filter(f => f?.isFormField)
-})
-watch(allFormFields, (newVal) => {
-  console.log('form fields in form editor', allFormFields.value)
 })
 
 watch([templateTitle, templateDescription], () => {

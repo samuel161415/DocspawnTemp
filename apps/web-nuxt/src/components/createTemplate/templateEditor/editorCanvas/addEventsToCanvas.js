@@ -137,35 +137,6 @@ export default function addEventsToCanvas() {
           obj.set({ left: e.target?.left + (e.target?.width * e.target?.scaleX) - 13, top: e.target?.top + (e.target.height * e.target?.scaleY) - 13 })
 
         if (obj?.fieldType === 'Form long text') {
-          // Adjust height by adding sample text
-          // const lineHeight = obj.fontSize * obj.lineHeight
-          // const currentHeight = obj.height
-          // const targetHeight = obj.height * obj.scaleY
-          // const additionalLines = Math.floor((targetHeight - currentHeight) / lineHeight)
-          // console.log('aditional lines', additionalLines)
-          // if (additionalLines > 0) {
-          //   let sampleText = obj.text
-          //   for (let i = 0; i < additionalLines; i++)
-          //     sampleText += '\n'
-
-          //   obj.set('text', sampleText)
-          // }
-
-          // const newWidth = obj.width * obj.scaleX
-
-          // // Reset width and scaling factors
-          // obj.set({
-          //   width: newWidth,
-          //   scaleX: 1,
-          //   scaleY: 1,
-          // })
-
-          // // Clear cache and recalculate dimensions
-          // obj._clearCache()
-          // obj.initDimensions()
-
-          // obj.setCoords()
-          // canvas.renderAll()
           const lineHeight = obj.fontSize * obj.lineHeight
           const currentHeight = obj.height
           const targetHeight = obj.height * obj.scaleY
@@ -179,7 +150,6 @@ export default function addEventsToCanvas() {
                 sampleText.push('')
             }
             else {
-              // // Remove lines if scaling down
               // sampleText = sampleText.slice(0, lineDifference)
               // Remove lines if scaling down, but keep at least one line
               sampleText = sampleText.slice(0, Math.max(sampleText.length + lineDifference, 1))
@@ -203,42 +173,6 @@ export default function addEventsToCanvas() {
 
           obj.setCoords()
           canvas.renderAll()
-          // const newWidth = obj.width * obj.scaleX
-          // const targetHeight = obj.height * obj.scaleY
-
-          // // Calculate the required number of lines
-          // const lineHeight = obj.fontSize * obj.lineHeight
-          // const requiredLines = Math.floor(targetHeight / lineHeight)
-          // const currentLines = obj.text.split('\n').length
-
-          // if (requiredLines > currentLines) {
-          //   // Add lines
-          //   let sampleText = obj.text
-          //   for (let i = 0; i < (requiredLines - currentLines); i++)
-          //     sampleText += '\nSample'
-
-          //   obj.set('text', sampleText)
-          // }
-          // else if (requiredLines < currentLines) {
-          //   // Remove lines
-          //   let lines = obj.text.split('\n')
-          //   lines = lines.slice(0, requiredLines)
-          //   obj.set('text', lines.join('\n'))
-          // }
-
-          // // Reset width and scaling factors
-          // obj.set({
-          //   width: newWidth,
-          //   scaleX: 1,
-          //   scaleY: 1,
-          // })
-
-          // // Clear cache and recalculate dimensions
-          // obj._clearCache()
-          // obj.initDimensions()
-
-          // obj.setCoords()
-          // canvas.renderAll()
         }
       })
 
@@ -249,9 +183,7 @@ export default function addEventsToCanvas() {
     let tempYMargin = null
     let currentHoveredEle = null
     canvas.on('mouse:move', (event) => {
-      // console.log('field to add', templateEditorStore.fieldToAdd)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
-        // canvas.renderAll()
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time'
           currentHoveredEle.set({
@@ -330,7 +262,6 @@ export default function addEventsToCanvas() {
         canvas.renderAll()
       }
       if (templateEditorStore.fieldToAdd.type === 'Form long text') {
-        // canvas.renderAll()
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
           currentHoveredEle.set({

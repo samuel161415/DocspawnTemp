@@ -42,9 +42,7 @@
             Styles will be applied once you add field name
           </p>
         </div>
-        <!-- /**************************** */ -->
-        <!-- <ElementRotation /> -->
-        <!-- /*************************************************************/ -->
+
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
           <p class="mb-1 font-poppins text-surface-500">
             Datafield
@@ -95,13 +93,6 @@
           </div>
         </div>
 
-        <!-- <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== 'Static text'" class="w-full pt-4">
-          <p class="mb-1 font-poppins">
-            Field name
-          </p>
-          <InputText v-model="fieldName" :value="fieldName" class="h-11 w-full" type="text" />
-        </div> -->
-
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="">
           <FormOptions />
         </div>
@@ -130,9 +121,6 @@
             </p>
           </div>
         </div>
-        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text'" class="">
-          <ImageOptions />
-        </div> -->
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static time'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
@@ -235,7 +223,6 @@ watch(datasetImageProportionOption, (newVal) => {
         return a
     })
     templateEditorStore.addedFields = fields
-    console.log('fields', fields)
   }
 })
 
@@ -262,7 +249,6 @@ async function getFile(e) {
     })
     canvas.renderAll()
   }
-  // fileUrl.value = URL.createObjectURL(file)
 }
 
 watch(constantTextValue, () => {

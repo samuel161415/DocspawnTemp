@@ -1,9 +1,3 @@
-//Watermark image 1
-//https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/494a88a1-edeb-4652-b190-c0ad775b9c80_DS watermark 1 (1).png.png
-
-//Watermark image 2
-//https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/84c85464-5815-4414-bd71-b70695ed0af3_DS watermark 2 (1).png.png
-
 <template>
   <div class="mt-4 ">
     <div class="mb-4">
@@ -28,7 +22,7 @@
     <div v-for="image in watermarkImages" :key="image.id" class="flex items-center mt-4 ">
       <RadioButton v-model="templateEditorStore.watermarkImage" :input-id="image.id" name="dynamic" :value="image" />
       <label :for="image.id" class="ml-2">
-        <!-- {{ image.id }} -->
+
         <div class="w-full h-max ">
           <img id="output" accept="image/*" class=" object-cover h-auto w-3/4 " :src="image.src" />
         </div>

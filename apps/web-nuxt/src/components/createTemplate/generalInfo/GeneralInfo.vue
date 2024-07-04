@@ -4,20 +4,6 @@
       General information
     </p>
 
-    <div class="flex mx-8 mt-4">
-      <div class="flex-auto flex py-2">
-        <!-- <div class="w-full space-y-4">
-          <p class="font-medium text-surface-600 text-lg font-poppins">
-            Template name <span class="text-error">*</span>
-          </p>
-          <p v-if="isEditing" class="font-poppins text-lg text-surface-600">
-            {{ templateName ? templateName : templateGeneralInformation?.name }}
-          </p>
-          <InputText v-else v-model="templateName" type="text" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name" />
-        </div> -->
-      </div>
-    </div>
-
     <p class="font-medium text-surface-600 text-lg font-poppins mx-8 mt-4">
       Select your use case
     </p>
@@ -80,8 +66,6 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 const emit = defineEmits()
 
 const currentData = ref('Content I')
-// const selectedTemplate = ref('')
-// const templateName = ref('')
 const useCase = ref('')
 const templateFile = ref()
 const datasetFile = ref()
@@ -92,21 +76,18 @@ const isUploading = ref(false)
 const options = ref([
   { label: 'Data to doc' },
   { label: 'Form to doc' },
-  // { label: 'Table to doc' },
 ])
 
 onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id) {
     isEditing.value = true
     useCase.value = templateGeneralInformation?.useCase
-    // templateName.value = templateGeneralInformation?.name
     templateFile.value = templateGeneralInformation?.backgroundFileUrl
     datasetFile.value = templateGeneralInformation?.datasetFileUrl
   }
   else {
     isEditing.value = false
     useCase.value = ''
-    // templateName.value = ''
     templateFile.value = ''
     datasetFile.value = ''
   }
@@ -167,8 +148,6 @@ watch(isUploading, (val) => {
 })
 
 watch([templateFile, datasetFile], () => {
-  // templateGeneralInformation.name = templateName.value
-  // templateGeneralInformation.useCase = selectedTemplate.value
   templateGeneralInformation.backgroundFileUrl = templateFile.value
   templateGeneralInformation.datasetFileUrl = datasetFile.value
   const isValid

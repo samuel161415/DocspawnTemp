@@ -51,11 +51,9 @@ function rotateClockwise() {
     const activeObject = canvas.getActiveObject()
     const ang = activeObject?.angle ? activeObject?.angle + 45 : 0 + 45
 
-    // activeObject.set({ angle: ang })
     activeObject.rotate(ang)
     rotationVal.value = ang
 
-    /** */
     canvas._objects.forEach((obj) => {
       if (obj.id === 'watermark-docspawn')
         return
