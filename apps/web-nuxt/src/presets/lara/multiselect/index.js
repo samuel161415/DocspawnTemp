@@ -5,7 +5,7 @@ export default {
           "inline-flex",
           "relative",
           // Shape
-          "rounded-md",
+          "rounded-lg",
           // Color and Background
           "bg-surface-0 dark:bg-surface-900",
           "border border-surface-300 dark:border-surface-700",
@@ -28,7 +28,7 @@ export default {
         var _a, _b;
         return {
           class: [
-            "leading-none",
+            "leading-none font-poppins mt-1",
             "block ",
             // Spacing
             {
@@ -37,7 +37,7 @@ export default {
               "py-1.5 px-3": props.display === "chip" && ((_b = props == null ? void 0 : props.modelValue) == null ? void 0 : _b.length) > 0
             },
             // Color
-            { "text-surface-800 dark:text-white/80": props.modelValue, "text-surface-400 dark:text-surface-500": !props.modelValue },
+            { "text-surface-600 dark:text-white/80": props.modelValue, "text-surface-500 dark:text-surface-500": !props.modelValue },
             "placeholder:text-surface-400 dark:placeholder:text-surface-500",
             // Transitions
             "transition duration-200",
@@ -159,7 +159,7 @@ export default {
     item: ({ context }) => ({
         class: [
           // Font
-          "font-normal",
+          "font-normal font-poppins",
           "leading-none",
           // Flexbox
           "flex items-center",
@@ -172,8 +172,8 @@ export default {
           "m-0",
           "py-3 px-5",
           // Color
-          { "text-surface-700 dark:text-white/80": !context.focused && !context.selected },
-          { "bg-surface-200 dark:bg-surface-600/60 text-surface-700 dark:text-white/80": context.focused && !context.selected },
+          { "text-surface-600 dark:text-white/80": !context.focused && !context.selected },
+          { "bg-surface-200 dark:bg-surface-600/60 text-surface-600 dark:text-white/80": context.focused && !context.selected },
           { "bg-primary-100 dark:bg-primary-400/40 text-primary-700 dark:text-white/80": context.focused && context.selected },
           { "bg-primary-50 dark:bg-primary-400/40 text-primary-700 dark:text-white/80": !context.focused && context.selected },
           //States
@@ -195,7 +195,7 @@ export default {
       class: "relative w-full mx-2"
     },
     filterinput: {
-      class: ["font-sans", "leading-none", "pr-7 py-3 px-3", "-mr-7", "w-full", "text-surface-700 dark:text-white/80", "bg-surface-0 dark:bg-surface-900", "border-surface-200 dark:border-surface-700", "placeholder:text-surface-400 dark:placeholder:text-surface-500", "border", "rounded-lg", "appearance-none", "transition", "duration-200", "hover:border-primary-500 dark:hover:border-primary-300", "focus:ring focus:outline-none focus:outline-offset-0", "focus:ring-primary-400/50 dark:focus:ring-primary-300/50", "appearance-none"]
+      class: ["font-poppins", "leading-none", "pr-7 py-3 px-3", "-mr-7", "w-full", "text-surface-700 dark:text-white/80", "bg-surface-0 dark:bg-surface-900", "border-surface-200 dark:border-surface-700", "placeholder:text-surface-400 dark:placeholder:text-surface-500", "border", "rounded-lg", "appearance-none", "transition", "duration-200", "hover:border-primary-500 dark:hover:border-primary-300", "focus:ring focus:outline-none focus:outline-offset-0", "focus:ring-primary-400/50 dark:focus:ring-primary-300/50", "appearance-none"]
     },
     filtericon: {
       class: ["absolute", "top-1/2 right-3", "-mt-2"]

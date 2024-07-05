@@ -1,31 +1,33 @@
 <template>
-  <div class="w-full h-full ml-4 bg-white overflow-scroll no-scrollbar">
-    <div class="px-8 py-8 rounded-lg">
-      <p class="font-semibold text-surface-600 text-2xl py-2">
+  <div class="w-full h-full  bg-white overflow-scroll no-scrollbar ">
+    <div class=" py-8 rounded-lg">
+      <p class="font-semibold text-surface-600 text-xl py-2">
         Data source
       </p>
-      <div class="flex flex-col">
-        <!-- left side menu -->
-        <div class="w-full  flex">
-          <Button
-            icon="pi pi-plus"
-            label="Create new data source"
-            outlined
-            class="text-success border-success hover:bg-green-50 hover:border-success w-max ml-auto"
-            severity="success"
-            @click="visible = true"
-          />
-        </div>
-
-        <!-- right section -->
-        <div class="w-full py-5">
-          <!-- table -->
-          <div class="mt-4 mb-12 ml-2 ">
-            <DataTableComponent
-              :table-data="tableData" :filters="filters" @row-reorder="onRowReorder"
-              @edit-item="handleEditItem" @open-delete="handleOpenDelete"
+      <div>
+        <div class="flex flex-col">
+          <!-- left side menu -->
+          <div class="w-full  flex ">
+            <Button
+              icon="pi pi-plus"
+              label="Create new data source"
+              outlined
+              class="text-success border-success hover:bg-green-50 hover:border-success w-max ml-auto"
+              severity="success"
+              @click="visible = true"
             />
-            <Toast />
+          </div>
+
+          <!-- right section -->
+          <div class="w-full py-5">
+            <!-- table -->
+            <div class="mt-4 mb-12 ml-2 ">
+              <DataTableComponent
+                :table-data="tableData" :filters="filters" @row-reorder="onRowReorder"
+                @edit-item="handleEditItem" @open-delete="handleOpenDelete"
+              />
+              <Toast />
+            </div>
           </div>
         </div>
       </div>

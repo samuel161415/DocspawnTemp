@@ -1,51 +1,47 @@
 <template>
-  <div class="h-full w-full flex bg-white overflow-scroll no-scrollbar ml-4">
-    <div class="px-8 py-8 mb-10">
-      <div class="py-2 ml-3">
-        <p class="font-semibold text-surface-600 text-2xl mb-5">
-          Integration
-        </p>
+  <div class="mb-10">
+    <div class="py-2 ml-1">
+      <p class="font-medium text-surface-600 font-poppins text-xl mb-5 ml-2">
+        Integration
+      </p>
 
-        <div class="flex justify-between mt-5">
-          <span class="relative flex">
-            <i
-              class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
-              style="color: rgb(117, 119, 120);"
-            ></i>
-            <InputText
-              v-model="searchQuery" placeholder="Search"
-              class="pl-10 font-normal rounded border-gray-300 w-72"
-            />
-          </span>
-          <Button
-            icon="pi pi-sliders-v" label="Filter" outlined severity="surface-600"
-            class="h-9 text-surface-500 border-surface-300"
+      <div class="flex justify-between mt-5 ml-2">
+        <span class="relative flex">
+          <i
+            class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
+            style="color: rgb(117, 119, 120);"
+          ></i>
+          <InputText
+            v-model="searchQuery" placeholder="Search"
+            class="pl-10 font-normal rounded-lg border-gray-300 w-72"
           />
-        </div>
+        </span>
+        <Button
+          icon="pi pi-sliders-v" label="Filter" outlined severity="surface-600"
+          class="h-9 text-surface-500 border-surface-300"
+        />
+      </div>
 
-        <div class="mt-5 mb-10">
-          <p class="text-lg font-semibold my-8">
-            All Integrations
-          </p>
-          <div class="flex flex-wrap mb-10">
-            <div
-              v-for="integration in filteredIntegrations"
-              class="card w-72 h-44 shadow-sm space-y-6 ml-2"
-            >
-              <div class="flex space-x-3">
-                <img :src="integration.img" alt="integration" class="w-10 h-10 rounded-md" />
-                <p class="text-lg font-semibold pt-2">
-                  {{ integration.title }}
-                </p>
-              </div>
-              <Button
-                label="Connect" severity="surface-500"
-                class="bg-surface-100 w-4/5 h-10 text-surface-500 font-thin btn"
-              />
-              <p class="text-surface-500 text-sm desc pr-2">
-                {{ integration.description }}
+      <div class="mt-5 mb-10">
+        <!-- <p class="font-medium text-surface-600 font-poppins text-xl my-8">All Integrations</p> -->
+        <div class="flex flex-wrap mb-10">
+          <div
+            v-for="integration in filteredIntegrations"
+            class="card w-72 h-44 shadow-sm space-y-6 ml-2"
+          >
+            <div class="flex space-x-3">
+              <img :src="integration.img" alt="integration" class="w-10 h-10 rounded-md" />
+              <p class="text-lg font-medium font-poppins pt-2 text-surface-600">
+                {{ integration.title }}
               </p>
             </div>
+            <Button
+              label="Connect" severity="surface-500"
+              class="bg-surface-100 w-4/5 h-10 text-surface-500 font-thin btn"
+            />
+            <p class="text-surface-500 text-sm font-poppins desc pr-1">
+              {{ integration.description }}
+            </p>
           </div>
         </div>
       </div>

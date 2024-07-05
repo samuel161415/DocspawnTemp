@@ -16,34 +16,35 @@
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :export-file="props.exportFile" @export-c-s-v="exportCSVHandler" />
 
     <div class="mt-10">
-      <DataTable
-        ref="dataTableRef"
-        v-model:filters="filters"
-        :value="filteredData"
-        show-gridlines
-        paginator
-        responsive-layout="scroll"
-        :rows="25"
-        :row-hover="true"
-        data-key="id"
-        filter-display="menu"
-        overlay-visible
-        striped-rows
-        csv-separator
-        :global-filter-fields="['filled_on', 'text_filled']"
-        paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-        :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
-        :rows-per-page-options="[25, 50, 100]"
-        @update:filters="onFilterChange"
-      >
-        <template #header>
-          <DataTableFilters
-            :filters="filters"
-            :has-filter-actions="props.hasFilterActions"
-            :typefilter="typefilter"
-            @filter-data="filterData"
-            @clear-filter="clearFilter"
-          />
+        <DataTable
+            ref="dataTableRef"
+            v-model:filters="filters"
+            :value="filteredData"
+            show-gridlines
+            :paginator="filteredData.length > 0"
+            responsive-layout="scroll"
+            :rows="25"
+            :row-hover="true"
+            data-key="id"
+            filter-display="menu"
+            overlay-visible
+            striped-rows
+            csv-separator
+            :global-filter-fields="['filled_on', 'text_filled']"
+            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+            :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
+            :rowsPerPageOptions="[25, 50, 100]"
+            @update:filters="onFilterChange"
+        >
+          <template #header>
+       
+            <DataTableFilters
+              :filters="filters"
+              :hasFilterActions="props.hasFilterActions"
+              :typefilter="typefilter"
+              @filterData="filterData"
+              @clearFilter="clearFilter"
+            />
 
           <div class="text-left mt-7 w-3/4 sm:w-full text-sm">
             <MultiSelect

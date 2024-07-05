@@ -2,7 +2,7 @@
     <!-- Groups Table -->
     <Card class="shadow-none -ml-5" id="user-groups">
         <template #title>
-            <p class="text-xl">
+            <p class="text-surface-600 font-poppins text-xl font-medium">
                 Groups
             </p>  
         </template>

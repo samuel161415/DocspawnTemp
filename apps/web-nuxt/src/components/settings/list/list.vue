@@ -1,7 +1,7 @@
 <template>
-    <div class="w-full h-full ml-4 bg-white overflow-scroll no-scrollbar">
-        <div class="px-8 py-8 rounded-lg">
-            <p class="font-semibold text-surface-600 text-2xl py-2">List</p>
+    <div >
+        <div class="">
+            <p class="font-medium text-surface-600 font-poppins text-xl mt-5">List</p>
             <div class="flex">
                 <!-- left side menu -->
                 <div class="flex flex-col justify-between h-full overflow-y-scroll w-64 pt-5 no-scrollbar">
@@ -48,7 +48,7 @@
                                     <div v-if="subItem?.sublists && subItem.sublists.length > 0" :key="subItem.id"
                                         class="flex py-2 pl-1 hover:bg-surface-100 items-center ml-4 font-poppins"
                                         @click="handleopensubmenu(subItem)">
-                                        <i class=" text-gray-500"
+                                        <i class="text-gray-500"
                                             :class="{ 'pi pi-chevron-down': subItem.opensubmenu, 'text-primaryBlue': subItem.title === tableData.title, 'pi pi-chevron-right': !subItem.opensubmenu }"
                                             @click="subItem.opensubmenu = !subItem.opensubmenu"></i>
 
@@ -60,17 +60,17 @@
 
                                     <ul v-if="subItem.opensubmenu" class="ml-3" >
                                         <li v-for="subsubItem in subItem.sublists" :key="subsubItem.title">
-                                            <div  v-if="subsubItem?.sublists && subsubItem.sublists.length > 0" :key="subsubItem.title" 
+                                            <div v-if="subsubItem?.sublists && subsubItem.sublists.length > 0" :key="subsubItem.title" 
                                                 class="ml-5 font-poppins flex py-2 pl-1 hover:bg-surface-100 items-center" 
                                                 @click="handleopensubmenu(subsubItem)">
                                                 
-                                                    <i class=" text-gray-500"
-                                                        :class="{ 'pi pi-chevron-down': subsubItem.opensubmenu, 'text-primaryBlue': subsubItem.title === tableData.title, 'pi pi-chevron-right': !subsubItem.opensubmenu }"
-                                                        @click="subsubItem.opensubmenu = !subsubItem.opensubmenu"></i>
-                                                    <p class="text-base font-normal ml-4 text-gray-500"
-                                                        :class="{ 'text-primaryBlue': subsubItem.title === tableData.title }"
-                                                        v-html="highlight(subsubItem.title) || subsubItem.title">
-                                                    </p>
+                                                <i class=" text-gray-500"
+                                                    :class="{ 'pi pi-chevron-down': subsubItem.opensubmenu, 'text-primaryBlue': subsubItem.title === tableData.title, 'pi pi-chevron-right': !subsubItem.opensubmenu }"
+                                                    @click="subsubItem.opensubmenu = !subsubItem.opensubmenu"></i>
+                                                <p class="text-base font-normal ml-4 text-gray-500"
+                                                    :class="{ 'text-primaryBlue': subsubItem.title === tableData.title }"
+                                                    v-html="highlight(subsubItem.title) || subsubItem.title">
+                                                </p>
                                             
                                             </div>
                                         </li>
@@ -114,13 +114,14 @@
             v-model:tableData="tableData" />
 
         <EditItemOptionModal v-if="editableItem" v-model:visible="openItemOptions" @editItem="handleEditItem"
-            v-model:editableItem="editableItem" @cancel="openItemOptions = false"
+            v-model:editableItem="editableItem" v-model:containsublist="containsublist" @cancel="openItemOptions = false"
             @openCreateListModal="createSubList" />
 
         <!-- delete -->
         <Dialog v-model:visible="openDeleteModal" header="Delete" modal :style="{ width: '25rem' }">
-            <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-error mr-2"></i>Are you
-                sure you want to delete this Item?</span>
+            <span class="p-text-secondary block mb-5"><i class="pi pi-exclamation-triangle text-error mr-2"></i>
+                Are you sure you want to delete this Item?
+            </span>
 
             <div class="flex justify-end gap-2">
                 <Button type="button" label="Cancel" outlined @click="openDeleteModal = false"></Button>
@@ -136,6 +137,7 @@
 import { ref, watch } from "vue";
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useToast } from "primevue/usetoast";
+import { useConfirm } from "primevue/useconfirm";
 import DataTableComponent from '~/components/settings/list/Table.vue';
 import CreateListModal from '~/components/settings/list/CreateListModal.vue';
 import AddItemsModal from '~/components/settings/list/AddItemsModal.vue';
@@ -147,6 +149,7 @@ import { addNewListItem } from '~/services/newListData.js';
 const copiedList = ref(JSON.parse(JSON.stringify(addNewListItem.value)));
 
 const toast = useToast();
+const confirm = useConfirm();
 const visible = ref(false);
 const openAddItems = ref(false);
 const openListOptions = ref(false);
@@ -156,7 +159,9 @@ const editableItem = ref();
 const tableData = ref({});
 const deleteItem = ref();
 const openCreateSubList = ref(false);
-const currentListLevel = ref()
+const currentListLevel = ref();
+const containsublist = ref(false);
+
 // sublist id
 const sublistId = ref();
 const searchQuery = ref('');
@@ -199,6 +204,7 @@ const highlight = (data) => {
 };
 
 const handleopensubmenu = (clickedItem) => {
+    clickedItem.opensubmenu = !clickedItem.opensubmenu
     tableData.value = clickedItem;
 };
 
@@ -280,13 +286,15 @@ const handleAddItems = (data) => {
 }
 
 const handleEditItem = (data) => {
-
+   
     editableItem.value = data;
     openItemOptions.value = true;
 
     tableData.value.sublists.map((sublist) => {
         if (sublist.id === data.id) {
             sublist.title = data.title;
+            sublist.sublists = data.sublists;
+
         }
     });
 }
@@ -308,6 +316,15 @@ const onRowReorder = (event) => {
 const showSuccess = () => {
     toast.add({ severity: 'success', summary: 'Success Message', detail: 'List successfully created.', life: 3000 });
 };
+
+watch(openItemOptions, (newValue, oldValue) => {
+    
+    if (openItemOptions.value === false) {
+        containsublist.value = false;
+        editableItem.value = null;
+    }
+});
+
 
 </script>
 

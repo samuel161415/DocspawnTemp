@@ -37,11 +37,10 @@
           v-for="item in menuItems"
           :key="item.title"
           v-tooltip.right="isCollapsed ? `${item.title}` : ''"
-          class="w-full cursor-pointer ml-1 font-poppins"
           :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }"
         >
           <div
-            :key="item.title"
+            v-if="item.title != 'Settings'" :key="item.title"
             class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 py-1 px-5 font-poppins"
             @click="navigate(item.route)" @mouseenter="setIsHovered(item, true)"
             @mouseleave="setIsHovered(item, false)"
@@ -71,27 +70,66 @@
 
       <ul>
         <!-- avatar -->
-        <div class="px-3 ">
+        <hr />
+        <div>
           <!-- <LanguageDropDown /> -->
-          <NuxtLink to="/signin">
+          <li
+            v-for="item in menuItems"
+            :key="item.title"
+            v-tooltip.right="isCollapsed ? `${item.title}` : ''"
+            class="w-full cursor-pointer ml-1 font-poppins mb-8"
+            :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }"
+          >
             <div
-              class="flex mt-auto "
-              :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'pl-2': !isCollapsed }"
+              v-if="item.title === 'Settings'"
+              class="hover:bg-primaryBlue hover:text-white flex text-center items-center my-1 py-1 px-5 font-poppins"
+              @click="navigate(item.route)" @mouseenter="setIsHovered(item, true)"
+              @mouseleave="setIsHovered(item, false)"
             >
-              <span class="relative inline-block">
-                <img
-                  class="h-8 w-8 rounded-full"
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  alt=""
-                />
-                <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
-              </span>
+              <i
+                style="font-size: 1.2rem" class="py-3 ml-1" :class="[
+                  item.icon,
+                  {
+                    'text-white': item.isHovered,
+                    'text-primaryBlue': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
+                    'text-gray-500': !item.isHovered,
+                  }]"
+              >
+              </i>
 
-              <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-7 font-poppins">
-                John Doe
-              </p>
+              <span
+                v-if="!isCollapsed" class="text-lg font-normal text-gray-500 ml-6" :class="{
+                  'text-white': item.isHovered,
+                  'text-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
+                  'text-gray-500': !item.isHovered }"
+              >
+                {{ item.title }}
+              </span>
             </div>
-          </NuxtLink>
+          </li>
+          <!--  -->
+
+          <div class="px-3">
+            <NuxtLink to="/signin">
+              <div
+                class="flex mt-auto "
+                :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'pl-2': !isCollapsed }"
+              >
+                <span class="relative inline-block">
+                  <img
+                    class="h-8 w-8 rounded-full"
+                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    alt=""
+                  />
+                  <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
+                </span>
+
+                <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-5 font-poppins">
+                  John Doe
+                </p>
+              </div>
+            </NuxtLink>
+          </div>
         </div>
       </ul>
     </div>
