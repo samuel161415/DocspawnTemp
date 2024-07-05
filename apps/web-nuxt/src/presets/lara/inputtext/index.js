@@ -2,7 +2,7 @@ export default {
   root: ({ props, context, parent }) => ({
     class: [
       // Font
-
+      'font-poppins',
       // Spacing
       "m-0",
       {
@@ -28,7 +28,7 @@ export default {
 
       // Colors
       'text-surface-600 dark:text-surface-200',
-        'placeholder:text-surface-400 dark:placeholder:text-surface-500',
+        'placeholder:text-surface-500 dark:placeholder:text-surface-500',
         'bg-surface-0 dark:bg-surface-900',
         'border',
         { 'border-surface-300 dark:border-surface-600': !props.invalid },

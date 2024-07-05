@@ -32,6 +32,6 @@ export default {
         ]
     }),
     image: {
-        class: 'h-full w-full'
+        class: 'h-full w-full rounded-full'
     }
 };

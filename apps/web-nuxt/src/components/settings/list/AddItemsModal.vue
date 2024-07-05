@@ -10,7 +10,7 @@
         <div class="flex flex-col align-items-center gap-2 mb-3">
           <label for="listitems" class="font-semibold w-6rem text-lg ">List items<span class="text-red-400">*</span></label>
           <span class="text-sm text-surface-500">Multiple entries are allowed </span>
-          <Textarea id="listItems" v-model="listItem" rows="10" cols="20" placeholder="List item"/>
+          <Textarea id="listItems" v-model="listItem" rows="10" cols="20" placeholder="List item" :invalid="isInvalid"/>
         </div>
       </div>
 
@@ -29,10 +29,18 @@
   const visible = ref(false);
   const listItem = ref('');
   const listItems = ref([]);
- 
+
+  const isInvalid = ref(false);
+
   const emit = defineEmits()
 
   const handleAddItems = () => {
+
+    isInvalid.value = listItem.value === '';
+    
+    if (listItem.value === '') {
+      return;
+    }
     const items = listItem.value.split(/[\n,]+/)
                 .map(item => item.trim())
                 .filter(item => item !== '')
@@ -44,6 +52,7 @@
     listItem.value = '';
     listItems.value = [];
     emit('cancel')
+    
   };
 
 </script>

@@ -31,7 +31,7 @@ export default {
                 'text-blue-700 dark:text-blue-300': props.message.severity == 'info',
                 'text-green-700 dark:text-green-300': props.message.severity == 'success',
                 'text-orange-700 dark:text-orange-300': props.message.severity == 'warn',
-                'text-red-700 dark:text-red-300': props.message.severity == 'error'
+                'text-error dark:text-red-300': props.message.severity == 'error'
             }
         ]
     }),
@@ -48,7 +48,7 @@ export default {
     text: {
         class: [
             // Font and Text
-            'text-base leading-none',
+            'text-lg leading-none',
             'ml-2',
             'flex-1'
         ]

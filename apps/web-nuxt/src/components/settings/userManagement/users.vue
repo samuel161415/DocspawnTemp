@@ -1,9 +1,11 @@
 <template>
     <Card class="shadow-none -ml-5" id="users">
         <template #title> 
-            <p class="text-xl">
-                Users 
-            </p>
+            <div>  
+                <p class="text-surface-600 font-poppins text-xl font-medium">
+                    Users 
+                </p>
+            </div>
         </template>
         <template #subtitle>
             <div class="flex flex-col gap-5">

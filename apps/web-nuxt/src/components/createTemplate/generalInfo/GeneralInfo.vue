@@ -1,15 +1,6 @@
 <template>
   <div class="w-full h-full items-center mx-8">
     <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">General information</p>
-   
-    <div class="flex mx-8 mt-4">
-      <div class="flex-auto flex py-2">
-        <div class="w-full space-y-4">
-          <p class="font-medium text-surface-600 text-lg font-poppins">Template name <span class="text-error">*</span></p>
-          <InputText type="text" v-model="templateName" class="w-80 font-poppins text-surface-600 text-lg pl-5 rounded-lg" placeholder="Template name"/>
-        </div>
-      </div>
-    </div>
 
     <p class="font-medium text-surface-600 text-lg font-poppins mx-8 mt-4">Select your use case</p>
     <div class="flex mx-8 mt-3">
@@ -80,7 +71,8 @@ const handleTemplateUpload = (event) => {
 
 // Watch for changes in variables and emit data
 watch([templateName, selectedTemplate], () => {
-  const isValid = templateName.value !== '' && selectedTemplate.value !== '';
+  // const isValid = templateName.value !== '' && selectedTemplate.value !== '';
+  const isValid = selectedTemplate.value !== '';
 
   emit('updateData', {isValid, step: 1});
 });
