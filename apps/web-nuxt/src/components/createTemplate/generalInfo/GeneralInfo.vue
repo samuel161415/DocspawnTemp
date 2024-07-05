@@ -77,11 +77,8 @@ const options = ref([
   { label: 'Data to doc' },
   { label: 'Form to doc' },
 ])
-watch(() => templateEditorStore.templateToEdit, () => {
-  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
-})
+
 onMounted(() => {
-  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
   if (templateEditorStore?.templateToEdit?.id) {
     isEditing.value = true
     useCase.value = templateGeneralInformation?.useCase
