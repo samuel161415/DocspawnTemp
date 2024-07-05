@@ -54,7 +54,7 @@
       <template #list="slotProps">
         <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
-            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2"
+            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
             @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
@@ -108,7 +108,7 @@
         <div v-show="!templatesLoading" class="flex flex-wrap ">
           <div
             v-for="(item, index) in slotProps.items" :key="index"
-            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4"
+            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent"
             @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
@@ -343,22 +343,59 @@ function editTemplate(temp) {
   }, 200)
 }
 
+// const entered = []
+// function handleDragEnter(item, index) {
+//   // console.log('entering', index, entered)
+//   if (!entered.includes(index))
+//     entered.push(index)
+
+//   if (!isDragging.value[index]) {
+//     isDragging.value.fill(false)
+//     isDragging.value[index] = true
+//   }
+// }
+
+// let timeout
+// function handleDragLeave(event, index) {
+//   // Check if the related target is still within the current element
+//   // console.log('leaving', index)
+
+//   clearInterval(timeout)
+//   timeout = setInterval(() => {
+//     console.log('running timeout')
+//     console.log('entered', entered)
+//     console.log('entered.includes(index)', entered.includes(index))
+
+//     if (entered.includes(index)) {
+//       isDragging.value[index] = true
+//       entered.pop(index)
+//     }
+//     else {
+//       isDragging.value[index] = false
+//       clearInterval(timeout)
+//     }
+//     // clearTimeout(timeout)
+
+//     // entered.pop(index)
+//   }, 200)
+//   // isDragging.value[index] = false
+// }
+
 function handleDragEnter(item, index) {
-  if (!isDragging.value[index])
+  // console.log('entering', index, entered)
+
+  if (!isDragging.value[index]) {
+    isDragging.value.fill(false)
     isDragging.value[index] = true
+  }
 }
 
 function handleDragLeave(event, index) {
   // Check if the related target is still within the current element
-  try {
-    if (!event.currentTarget.contains(event.relatedTarget))
-      isDragging.value[index] = false
-      // console.log(`Truly left the drag area at index ${index}`)
-  }
-  catch (err) {
-    // console.log('err', err)
-  }
+  // console.log('leaving', index)
+  isDragging.value[index] = false
 }
+
 function handleDragOver(item, index) {
   // You could simply set isDragging to true again if needed, or do nothing
   isDragging.value[index] = true
@@ -481,3 +518,10 @@ function uploadFile() {
   fileInput.click()
 }
 </script>
+
+<style>
+.pointer-parent *{
+
+  pointer-events: none;
+}
+</style>
