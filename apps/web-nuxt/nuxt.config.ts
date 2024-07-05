@@ -2,17 +2,34 @@
 import path from 'node:path'
 
 export default defineNuxtConfig({
+  vite: {
+    build: {
+      target: ['esnext', 'es2022'],
+    },
+    esbuild: {
+      target: 'es2022',
+    },
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'es2022',
+      },
+    },
+
+  },
   srcDir: './src',
   modules: [
     'nuxt-primevue',
     'nuxt-gtag',
+
   ],
+
   primevue: {
     options: {
       unstyled: false,
     },
     importPT: {
-      from: path.resolve(__dirname, './src/presets/lara/'),
+      // from: path.resolve(__dirname, './src/presets/lara/'),
+      from: '../src/presets/lara/',
       as: 'TailwindLara',
     },
     components: {
@@ -26,7 +43,7 @@ export default defineNuxtConfig({
     },
   },
   plugins: [
-    '~/plugins/fontawesome.js'
+    '~/plugins/fontawesome.js',
   ],
   app: {
     layoutTransition: {
@@ -36,7 +53,12 @@ export default defineNuxtConfig({
   },
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
-    '~/assets/scss/main.scss'
+    '~/assets/scss/main.scss',
   ],
+  runtimeConfig: {
+    public: {
+      BASE_URL: process.env.NUXT_API_BASE_URL,
+    },
+  },
 
 })

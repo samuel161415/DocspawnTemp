@@ -16,15 +16,7 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
-  "devDependencies": {
-    "@antfu/eslint-config": "^2.6.2",
-    "@commitlint/cli": "^18.4.4",
-    "@commitlint/config-conventional": "^18.4.4",
-    "@package/typescript-config": "workspace:*",
-    "eslint": "^8.56.0",
-    "husky": "^8.0.3",
-    "turbo": "latest"
-  },
+
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
@@ -35,5 +27,14 @@
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "prismjs": "^1.29.0",
     "quill": "^2.0.1"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.6.2",
+    "@commitlint/cli": "^18.4.4",
+    "@commitlint/config-conventional": "^18.4.4",
+    "@package/typescript-config": "workspace:*",
+    "eslint": "^8.56.0",
+    "husky": "^8.0.3",
+    "turbo": "latest"
   }
 }

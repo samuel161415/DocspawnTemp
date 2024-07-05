@@ -1,16 +1,21 @@
 <template>
   <div class="w-full h-full items-center mx-8">
-    <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">General information</p>
+    <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">
+      General information
+    </p>
 
-    <p class="font-medium text-surface-600 text-lg font-poppins mx-8 mt-4">Select your use case</p>
+    <p class="font-medium text-surface-600 text-lg font-poppins mx-8 mt-4">
+      Select your use case
+    </p>
     <div class="flex mx-8 mt-3">
       <div class="flex flex-col gap-4">
         <TemplateOption
           v-for="option in options"
           :key="option.label"
+          :is-editing="isEditing"
           :label="option.label"
           :is-current="currentData === option.label"
-          :is-selected="selectedTemplate === option.label"
+          :is-selected="templateGeneralInformation.useCase === option.label"
           @select="handleSelectTemplate"
           @hover="setIsHovered"
         />
@@ -18,65 +23,142 @@
 
       <div class="border surface-border rounded-lg flex-auto flex p-6 ml-4">
         <p class="font-poppins text-surface-600 text-lg font-medium">
-          {{ currentData !== ''? currentData: selectedTemplate }}
+          {{ currentData !== '' ? currentData : templateGeneralInformation.useCase }}
         </p>
       </div>
     </div>
 
     <!-- uploads -->
-    <div :class="selectedTemplate === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
-      <UploadSection v-if="selectedTemplate !== ''" title="Upload your template"  @upload="handleTemplateUpload"/>
-      <UploadSection v-if="selectedTemplate !== '' && isTableToDoc" title="Upload your data source" />
+    <div v-if="isEditing" :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex  mx-8 flex-col gap-8'" class="mt-8">
+      <div v-if="templateGeneralInformation.useCase !== '' && templateFile">
+        <p class="font-medium text-surface-600 text-lg font-poppins">
+          Background file
+        </p>
+        <Button outlined class="w-max px-6 font-poppins mt-2">
+          view file
+        </Button>
+      </div>
+      <div v-if="templateGeneralInformation.useCase !== '' && isDataToDoc && datasetFile">
+        <p class="font-medium text-surface-600 text-lg font-poppins">
+          Dataset file
+        </p>
+        <Button outlined class="w-max px-6 font-poppins mt-2">
+          view file
+        </Button>
+      </div>
     </div>
-  
+    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
+      <UploadSection v-if="templateGeneralInformation.useCase !== ''" title="Upload your template" :is-background="true" @upload="handleTemplateUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" title="Upload your data source" @upload="handleDatasetUpload" />
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue'
 
-import TemplateOption from './Options.vue';
-import UploadSection from './UploadSection.vue';
+import TemplateOption from './Options.vue'
+import UploadSection from './UploadSection.vue'
+import uploadFileToBackend from '~/services/uploadFileToBackend'
+import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
-const currentData = ref("Content I");
-const selectedTemplate = ref('');
-const templateName = ref('');
-const useCase = ref('');
-const templateFile= ref();
-const dataSourceFile = ref();
+const emit = defineEmits()
 
-const emit = defineEmits();
+const currentData = ref('Content I')
+const useCase = ref('')
+const templateFile = ref()
+const datasetFile = ref()
+
+const isEditing = ref(false)
+const isUploading = ref(false)
 
 const options = ref([
   { label: 'Data to doc' },
   { label: 'Form to doc' },
-  { label: 'Table to doc' }
-]);
-
-const setIsHovered = (label, hovered) => {
-  currentData.value = hovered ? label : '';
-};
-
-const handleSelectTemplate = (label) => {
-  if (label === selectedTemplate.value) {
-    selectedTemplate.value = ''; 
-  } else {
-    selectedTemplate.value = label;
+])
+watch(() => templateEditorStore.templateToEdit, () => {
+  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
+})
+onMounted(() => {
+  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
+  if (templateEditorStore?.templateToEdit?.id) {
+    isEditing.value = true
+    useCase.value = templateGeneralInformation?.useCase
+    templateFile.value = templateGeneralInformation?.backgroundFileUrl
+    datasetFile.value = templateGeneralInformation?.datasetFileUrl
   }
-};
+  else {
+    isEditing.value = false
+    useCase.value = ''
+    templateFile.value = ''
+    datasetFile.value = ''
+  }
+})
+function setIsHovered(label, hovered) {
+  currentData.value = hovered ? label : ''
+}
 
-const handleTemplateUpload = (event) => {
-  templateFile.value = event;
-};
+function handleSelectTemplate(label) {
+  // console.log('to select', label, selectedTemplate.value)
+  // // if (label === selectedTemplate.value)
+  // //   selectedTemplate.value = ''
+  // // else
+  // selectedTemplate.value = label
+  templateGeneralInformation.useCase = label
+}
 
-// Watch for changes in variables and emit data
-watch([templateName, selectedTemplate], () => {
-  // const isValid = templateName.value !== '' && selectedTemplate.value !== '';
-  const isValid = selectedTemplate.value !== '';
+async function handleTemplateUpload(file) {
+  if (!file) {
+    templateFile.value = ''
+    return
+  }
+  isUploading.value = true
+  const url = await uploadFileToBackend(file)
+  if (url) {
+    templateFile.value = url
+    isUploading.value = false
+  }
+  else {
+    isUploading.value = false
+  }
+}
 
-  emit('updateData', {isValid, step: 1});
-});
+async function handleDatasetUpload(file) {
+  if (!file) {
+    datasetFile.value = ''
+    return
+  }
+  isUploading.value = true
+  const url = await uploadFileToBackend(file)
+  if (url) {
+    datasetFile.value = url
+    isUploading.value = false
+  }
+  else {
+    isUploading.value = false
+  }
+}
+watch(isUploading, (val) => {
+  if (val) {
+    const isValid = false
+    emit('updateData', { isValid, step: 1 })
+  }
+  else {
+    const isValid = true
+    emit('updateData', { isValid, step: 1 })
+  }
+})
 
+watch([templateFile, datasetFile], () => {
+  templateGeneralInformation.backgroundFileUrl = templateFile.value
+  templateGeneralInformation.datasetFileUrl = datasetFile.value
+  const isValid
+  = templateGeneralInformation.useCase !== ''
+  // && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
 
-const isTableToDoc = computed(() => selectedTemplate.value === 'Table to doc');
+  emit('updateData', { isValid, step: 1 })
+})
+
+const isDataToDoc = computed(() => templateGeneralInformation.useCase === 'Data to doc')
 </script>
