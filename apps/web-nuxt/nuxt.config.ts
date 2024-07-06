@@ -58,6 +58,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       BASE_URL: process.env.NUXT_API_BASE_URL,
+      ADMIN_PASSWORD: process.env.NUXT_APP_ADMIN_PASSWORD,
     },
   },
 
