@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-14 rounded-lg pb-2">
+  <div class="mt-14 rounded-lg pb-2 ">
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
         <div class="flex justify-between space-x-2">
@@ -42,17 +42,25 @@
           </div>
         </div>
       </template>
+      <template #empty>
+        <div v-show="!templatesLoading" class="flex   py-8">
+          <!-- Adjust styling as needed -->
+          <p class="text-lg text-surface-500 font-poppins ">
+            No templates available.
+          </p>
+        </div>
+      </template>
 
       <template #list="slotProps">
-        <div class="flex flex-wrap">
+        <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
-            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2"
+            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
             @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
             @drop.prevent="item.use_case !== 'form to doc' && handleFileDrop(item, $event)"
           >
-            <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[113px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50 ">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">
                 Drop your data here
@@ -62,7 +70,7 @@
               </p>
             </div>
 
-            <div v-else class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-50">
+            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-50">
               <div class="md:w-[10rem] relative cursor-pointer" @click="handleTemplatePreview(item)">
                 <!-- <img class="block xl:block mx-auto rounded-md w-32 h-28" :src="`${item.image}`" :alt="item.name" /> -->
                 <div class="h-max w-32 flex justify-center py-1">
@@ -87,7 +95,7 @@
 
                   <div class="flex flex-row-reverse md:flex-row">
                     <Button v-if="item.templateType === 'form to doc'" label="Fill form" class="flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm" />
-                    <Button v-else label="Select or drop file" class="flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="uploadFile" />
+                    <Button v-else label="Select or drop file" class="flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="(e) => { templateSelectedForUploadingFile = item ;uploadFile(e); }" />
                   </div>
                 </div>
               </div>
@@ -97,16 +105,16 @@
       </template>
 
       <template #grid="slotProps">
-        <div class="flex flex-wrap ">
+        <div v-show="!templatesLoading" class="flex flex-wrap ">
           <div
             v-for="(item, index) in slotProps.items" :key="index"
-            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4"
+            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent"
             @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
             @drop.prevent="item.use_case !== 'form to doc' && handleFileDrop(item, $event)"
           >
-            <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
+            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
                 Drop your data here
@@ -116,7 +124,7 @@
               </p>
             </div>
 
-            <div v-else class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+            <div v-show="!isDragging[index]" class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex pt-4" :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
                 <i v-if="favoriteStates[index]" class="cursor-pointer" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
                 <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer" @click="(e) => { toggle(e);opItem = item }"></i>
@@ -135,7 +143,13 @@
                 </div>
                 <div class="flex flex-col">
                   <Button v-if="item.use_case === 'Form to doc'" label="Fill form" class="flex-auto cursor-pointer font-poppins" @click="handleFillForm" />
-                  <Button v-else label="Select or drop file" class="flex-auto white-space-nowrap font-poppins cursor-pointer" @click="uploadFile" />
+                  <Button
+                    v-else label="Select or drop file" class="flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
+                      templateSelectedForUploadingFile = item
+                      uploadFile(e) ;
+
+                    }"
+                  />
                 </div>
               </div>
             </div>
@@ -143,6 +157,14 @@
         </div>
       </template>
     </DataView>
+    <template v-if="templatesLoading">
+      <div v-if="layout === 'grid'" class=" flex flex-wrap">
+        <GridSkeleton v-for="n in 3" :key="n" class=" " />
+      </div>
+      <div v-else class=" w-full">
+        <ListSkeleton v-for="n in 3" :key="n" />
+      </div>
+    </template>
 
     <FormEditorPreview
       v-model:visible="previewFormVisible"
@@ -197,8 +219,12 @@ import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 import { useToast } from 'primevue/usetoast'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import { fal } from '@fortawesome/pro-light-svg-icons'
+import ExcelJS from 'exceljs'
+import Papa from 'papaparse'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
+import GridSkeleton from './skeletons/GridSkeleton.vue'
+import ListSkeleton from './skeletons/ListSkeleton.vue'
 import FormEditorPreview from '~/components/createTemplate/formEditor/FormEditorPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
@@ -214,6 +240,7 @@ const toast = useToast()
 
 const router = useRouter()
 
+const templatesLoading = ref(true)
 const layout = ref('grid')
 const hoverStates = reactive({})
 const favoriteStates = reactive({})
@@ -225,6 +252,15 @@ const isDragging = ref(Array.from({ length: props.templates.length }).fill(false
 const filterOption = ref('')
 const searchQuery = ref('')
 const fileTypeCheck = ref(false)
+
+// template selected while manual file uploading
+const templateSelectedForUploadingFile = ref()
+
+onMounted(() => {
+  setTimeout(() => {
+    templatesLoading.value = false
+  }, 2000)
+})
 
 // default favorite state
 props.templates.forEach((template, index) => {
@@ -283,7 +319,7 @@ function handleOutsideClick() {
 }
 
 function editTemplate(temp) {
-  console.log('running edit')
+  // console.log('running edit', temp)
   templateEditorStore.templateToEdit = temp
   if (temp?.id) {
     templateEditorStore.addedFields = temp?.added_fields
@@ -307,17 +343,62 @@ function editTemplate(temp) {
   }, 200)
 }
 
-function handleDragOver(item, index) {
-  isDragging.value.splice(index, 1, true) // Update drag state for the specific card
-}
+// const entered = []
+// function handleDragEnter(item, index) {
+//   // console.log('entering', index, entered)
+//   if (!entered.includes(index))
+//     entered.push(index)
+
+//   if (!isDragging.value[index]) {
+//     isDragging.value.fill(false)
+//     isDragging.value[index] = true
+//   }
+// }
+
+// let timeout
+// function handleDragLeave(event, index) {
+//   // Check if the related target is still within the current element
+//   // console.log('leaving', index)
+
+//   clearInterval(timeout)
+//   timeout = setInterval(() => {
+//     console.log('running timeout')
+//     console.log('entered', entered)
+//     console.log('entered.includes(index)', entered.includes(index))
+
+//     if (entered.includes(index)) {
+//       isDragging.value[index] = true
+//       entered.pop(index)
+//     }
+//     else {
+//       isDragging.value[index] = false
+//       clearInterval(timeout)
+//     }
+//     // clearTimeout(timeout)
+
+//     // entered.pop(index)
+//   }, 200)
+//   // isDragging.value[index] = false
+// }
 
 function handleDragEnter(item, index) {
-  isDragging.value.splice(index, 1, true)
+  // console.log('entering', index, entered)
+
+  if (!isDragging.value[index]) {
+    isDragging.value.fill(false)
+    isDragging.value[index] = true
+  }
 }
 
-function handleDragLeave(item, index) {
-  event.preventDefault() // Might be used to change some visual feedback
-  isDragging.value.splice(index, 1, false)
+function handleDragLeave(event, index) {
+  // Check if the related target is still within the current element
+  // console.log('leaving', index)
+  isDragging.value[index] = false
+}
+
+function handleDragOver(item, index) {
+  // You could simply set isDragging to true again if needed, or do nothing
+  isDragging.value[index] = true
 }
 function showError() {
   toast.add({ severity: 'error', summary: 'Invalid file format', detail: 'Please upload a .csv, .xls or .xlsx file', life: 3000 })
@@ -335,7 +416,7 @@ function handleFileDrop(template, event) {
 
     if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
       fileTypeCheck.value = true
-      handleFileUpload(files)
+      handleFileUpload(files[0], template)
     }
     else {
       fileTypeCheck.value = false
@@ -344,13 +425,76 @@ function handleFileDrop(template, event) {
     isDragging.value.fill(false)
   }
 }
+function handleFileUpload(file, template) {
+  const keysToCheck = template?.dataset_data?.selectedKeys
 
-function handleFileUpload(files) {
-  // file upload logic here
-  console.log('Uploading files', files)
+  if (!file) {
+    console.error('No file provided')
+    return
+  }
+
+  const reader = new FileReader()
+
+  reader.onload = async (e) => {
+    const arrayBuffer = e.target.result
+    let headers = []
+
+    if (file.type.includes('sheet') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+      // Handling Excel file using ExcelJS
+      const workbook = new ExcelJS.Workbook()
+      await workbook.xlsx.load(arrayBuffer)
+      const worksheet = workbook.worksheets[0]
+
+      worksheet.eachRow({ includeEmpty: true }, (row, rowNumber) => {
+        if (rowNumber === 1) { // assuming first row is headers
+          row.eachCell({ includeEmpty: true }, (cell) => {
+            headers.push(cell.value)
+          })
+        }
+      })
+    }
+    else if (file.type.includes('csv') || file.name.endsWith('.csv')) {
+      // Handling CSV file using PapaParse
+      Papa.parse(file, {
+        complete(results) {
+          headers = results.data[0]
+          compareAndNotify(headers, keysToCheck)
+        },
+        header: false,
+      })
+      return
+    }
+    else {
+      console.error('Unsupported file type')
+      return
+    }
+
+    compareAndNotify(headers, keysToCheck)
+  }
+
+  // Reading data accordingly
+  if (file.type.includes('sheet') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx'))
+    reader.readAsArrayBuffer(file)
+  else if (file.type.includes('csv') || file.name.endsWith('.csv'))
+    reader.readAsText(file)
+  else
+    console.error('Unsupported file type')
+}
+function compareAndNotify(headers, keysToCheck) {
+  const isAllKeysPresent = keysToCheck.every(key => headers.includes(key))
+
+  if (isAllKeysPresent) {
+    // You can use a toast or some UI element to notify the user
+    toast.add({ severity: 'success', summary: 'Congrats', detail: 'All keys present', life: 3000 })
+  }
+  else {
+    toast.add({ severity: 'error', summary: 'Oops', detail: 'Not all keys present', life: 3000 })
+  }
 }
 
 function uploadFile() {
+  const template = templateSelectedForUploadingFile.value
+  templateSelectedForUploadingFile.value = null
   const fileInput = document.createElement('input')
   fileInput.type = 'file'
   fileInput.accept = '.csv, application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -358,17 +502,26 @@ function uploadFile() {
 
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0]
-    const reader = new FileReader()
+    file
+    && handleFileUpload(file, template)
+    // const reader = new FileReader()
 
     // reader.onload = () => {
     //   avatarImage.value = reader.result
     // }
 
-    if (file)
-      reader.readAsDataURL(file)
+    // if (file)
+    //   reader.readAsDataURL(file)
   })
 
   document.body.appendChild(fileInput)
   fileInput.click()
 }
 </script>
+
+<style>
+.pointer-parent *{
+
+  pointer-events: none;
+}
+</style>
