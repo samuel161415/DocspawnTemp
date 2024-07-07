@@ -166,7 +166,17 @@ function handleUpdateData({ isValid, step }) {
 async function saveTemplate() {
   const canvas = canvasService.getCanvas()
 
-  const objects = canvas?.getObjects()
+  // map is for- when it will be loaded first page will be visible
+  const objects = canvas?.getObjects().map((obj) => {
+    if (obj?.id === 'watermark-docspawn')
+      return obj
+
+    if (obj.pageNo === 1)
+      obj.set({ visible: true, opacity: 1 })
+    else obj.set({ visible: false, opacity: 0 })
+    return obj
+  })
+
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
     return obj.toObject(['id', 'hash', '_controlsVisibility', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])

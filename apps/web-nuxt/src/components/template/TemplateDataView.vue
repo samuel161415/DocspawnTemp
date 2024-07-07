@@ -193,6 +193,7 @@
     </OverlayPanel>
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
+  <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
   <!-- <Toast /> -->
   <Toast position="top-right">
     <template #message="slotProps">
@@ -225,6 +226,7 @@ import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
+import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
 import FormEditorPreview from '~/components/createTemplate/formEditor/FormEditorPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
@@ -246,6 +248,7 @@ const hoverStates = reactive({})
 const favoriteStates = reactive({})
 const currentTemplate = ref()
 const visible = ref(false)
+const visibleDataToDoc = ref(false)
 const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
 
@@ -282,6 +285,10 @@ function handleTemplatePreview(template) {
   visible.value = true
   currentTemplate.value = template
 }
+function handleDataToDocGenerationPreview(template) {
+  visibleDataToDoc.value = true
+  currentTemplate.value = template
+}
 
 const op = ref()
 
@@ -316,6 +323,7 @@ const filteredTemplates = computed(() => {
 
 function handleOutsideClick() {
   visible.value = false
+  visibleDataToDoc.value = false
 }
 
 function editTemplate(temp) {
@@ -458,7 +466,7 @@ function handleFileUpload(file, template) {
       Papa.parse(file, {
         complete(results) {
           headers = results.data[0]
-          compareAndNotify(headers, keysToCheck)
+          compareAndNotify(headers, keysToCheck, template)
         },
         header: false,
       })
@@ -469,7 +477,7 @@ function handleFileUpload(file, template) {
       return
     }
 
-    compareAndNotify(headers, keysToCheck)
+    compareAndNotify(headers, keysToCheck, template)
   }
 
   // Reading data accordingly
@@ -480,12 +488,13 @@ function handleFileUpload(file, template) {
   else
     console.error('Unsupported file type')
 }
-function compareAndNotify(headers, keysToCheck) {
+function compareAndNotify(headers, keysToCheck, template) {
   const isAllKeysPresent = keysToCheck.every(key => headers.includes(key))
 
   if (isAllKeysPresent) {
     // You can use a toast or some UI element to notify the user
     toast.add({ severity: 'success', summary: 'Congrats', detail: 'All keys present', life: 3000 })
+    handleDataToDocGenerationPreview(template)
   }
   else {
     toast.add({ severity: 'error', summary: 'Oops', detail: 'Not all keys present', life: 3000 })

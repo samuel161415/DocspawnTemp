@@ -21,6 +21,8 @@ import { activeTextStyles, templateEditorStore } from '~/composables/useTemplate
 import canvasService from '~/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
+const props = defineProps(['isGeneratingPreview', 'template'])
+
 function selectPageFromThumbnail(page) {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -36,7 +38,7 @@ async function changeCurrentPageOnCanvas(pageNo) {
   const canvas = canvasService.getCanvas()
 
   if (canvas) {
-    const response = await fetch(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(props?.isGeneratingPreview ? props?.template?.background_file_url : templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
