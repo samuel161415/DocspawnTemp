@@ -141,13 +141,15 @@ export default function addEventsToCanvas() {
            */
           if (obj.top === 0)
             obj.set({ top: 0, left: e.target.left })
-          if (obj.left === 0)
-            e.target.set({ top: obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)) })
-            // if (
-            //   obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
-            //   obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
-            // else
-            //   obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+          if (obj.left === 0) {
+            if (
+              obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
+              obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+            else
+              e.target.set({ top: obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)) })
+
+            // obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+          }
         }
         // if (obj.id === e.target.hash && obj.stroke) {
         //   if (obj.top === 0)
