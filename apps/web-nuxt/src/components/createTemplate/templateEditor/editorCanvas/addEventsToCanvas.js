@@ -119,18 +119,48 @@ export default function addEventsToCanvas() {
       canvas._objects.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
           return
-
+        /** */
         if (obj.id === e.target.hash && obj.stroke) {
+          // console.log('e.pointe', e.pointer)
+          // console.log('e.target', e.target)
+          // console.log('obj', obj)
+          // console.log('e arget lineheight', e.target.lineHeight)
+          // console.log('e target font sze', e.target.fontSize)
+          // console.log('e.target.lineHeight*e.target.fontSize', e.target.lineHeight * e.target.fontSize)
+          // console.log('e.target.lineHeight*e.target.fontSize*e.target.scaleY', e.target.lineHeight * e.target.fontSize * e.target.scaleY)
+          // console.log('Total height', e.target.height * e.target.scaleY)
+
+          // console.log('obj.top', obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)))
+          /****
+           * first clculation of bottom margi, bottom of element=
+           * top: e.target.top + (e.target.fontSize * e.target.scaleY)
+           * second calculation of bottom margin, bottm f text in element=
+           * top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5))
+           *
+           *
+           */
           if (obj.top === 0)
             obj.set({ top: 0, left: e.target.left })
-          if (obj.left === 0) {
-            if (
-              obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
-              obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
-            else
-              obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
-          }
+          if (obj.left === 0)
+            e.target.set({ top: obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)) })
+            // if (
+            //   obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
+            //   obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+            // else
+            //   obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
         }
+        // if (obj.id === e.target.hash && obj.stroke) {
+        //   if (obj.top === 0)
+        //     obj.set({ top: 0, left: e.target.left })
+        //   if (obj.left === 0) {
+        //     if (
+        //       obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
+        //       obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+        //     else
+        //       obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+        //   }
+        // }
+        /** */
         if (obj.isAlertIcon && obj.id === e.target.hash)
           obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
         if (obj.id === 'checkboxIdNoIcon' && obj.checkboxHash === e.target.checkboxIdentifierHash)
@@ -183,6 +213,7 @@ export default function addEventsToCanvas() {
     let tempYMargin = null
     let currentHoveredEle = null
     canvas.on('mouse:move', (event) => {
+      // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time'
@@ -952,7 +983,7 @@ export default function addEventsToCanvas() {
       }
       // for showing options when click
       const activeObj = canvas.getActiveObject()
-      console.log('active object', activeObj)
+      // console.log('active object', activeObj)
       if (activeObj instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: activeObj.scaleX, y: activeObj.scaleY }
 
