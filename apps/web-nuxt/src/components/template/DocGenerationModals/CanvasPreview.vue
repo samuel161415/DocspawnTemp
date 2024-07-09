@@ -70,7 +70,7 @@ const props = defineProps({
 const selectedData = ref([])
 
 onMounted(() => {
-  templateEditorStore.templateToEdit = props?.template
+  templateEditorStore.templateToGenerateDocs = props?.template
   selectedData.value = props?.selectedRows
   if (props?.template)
     callCreateCanvas()
@@ -104,7 +104,7 @@ function renderOriginalData() {
   if (selectedData.value?.length > 0) {
     if (canvas) {
       const data = selectedData.value
-      const objs = canvas._objects
+      const objs = canvas?.getObjects()
 
       canvas.objects = objs.map((obj) => {
         if (obj.stroke || obj.isAlertIcon)
@@ -139,29 +139,32 @@ function renderOriginalData() {
     }
   }
   else {
-    const objs = canvas._objects
-    canvas.objects = objs.map((obj) => {
-      if (obj?.id === 'watermark-docspawn')
-        return obj
-      if (obj.stroke || obj.isAlertIcon)
-        return obj
-      if (!obj._element && obj.id !== 'Lorem ipsum') {
-        obj.set({ text: obj?.id })
-      }
-      else if (obj._element && obj.id !== 'Lorem ipsum') {
-        const correspondingData = 'https://placehold.co/300x200?text=Image'
-        const originalHeight = obj.height * obj.scaleY
-        const originalWidth = obj.width * obj.scaleX
+    if (canvas) {
+      const objs = canvas?.getObjects()
+      canvas._objects = objs.map((obj) => {
+        if (obj?.id === 'watermark-docspawn')
+          return obj
+        if (obj.stroke || obj.isAlertIcon)
+          return obj
+        if (!obj._element && obj.id !== 'Lorem ipsum') {
+          obj.set({ text: obj?.id })
+        }
+        else if (obj._element && obj.id !== 'Lorem ipsum') {
+          const correspondingData = 'https://placehold.co/300x200?text=Image'
+          const originalHeight = obj.height * obj.scaleY
+          const originalWidth = obj.width * obj.scaleX
 
-        obj.setSrc(correspondingData, () => {
-          obj.scaleToWidth(originalWidth)
-          obj.scaleToHeight(originalHeight)
-          canvas.renderAll()
-        })
-      }
-      return obj
-    })
-    canvas.renderAll()
+          obj.setSrc(correspondingData, () => {
+            obj.scaleToWidth(originalWidth)
+            obj.scaleToHeight(originalHeight)
+            canvas.renderAll()
+          })
+        }
+        return obj
+      })
+      canvas.renderAll()
+    }
+
     currentPreviewNo.value = 0
   }
 }
@@ -170,12 +173,8 @@ const templateCanvas = ref()
 const isCanvasLoaded = ref(false)
 
 function callCreateCanvas() {
-  console.log('call create canvas')
   // using this function to resolve error- canvas wrapper is loading later than createcanvas function
-  const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
-  console.log('document?.getElementById', document?.getElementById('template-canvas'))
-  console.log('canvasWrapper.value?.clientWidth', canvasWrapper.value?.clientWidth)
-  console.log('parent widt', parentWidth)
+  // const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
   //   if (parentWidth && parentWidth > 0)
   createCanvas()
   // setTimeout(() => isCanvasLoaded.value = true, 1000)
@@ -184,7 +183,6 @@ function callCreateCanvas() {
 }
 
 async function createCanvas() {
-  console.log('running create canvas')
   const { fabric } = await import('fabric')
 
   const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900

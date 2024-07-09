@@ -11,10 +11,17 @@ class CanvasService {
     if (typeof window !== 'undefined') {
       const { fabric } = await import('fabric')
       this.canvas = new fabric.Canvas(canvasElement, options)
-
+      console.log('templateEditorStore?.templateToEdit?.canvas_data', templateEditorStore?.templateToEdit?.canvas_data)
+      console.log(
+        'templateEditorStore?.templateToGenerateDocs?.canvas_data',
+        templateEditorStore?.templateToGenerateDocs?.canvas_data,
+      )
       // Load template if canvas data exists
-      if (templateEditorStore?.templateToEdit?.canvas_data)
-        await this.loadCanvasFromData(templateEditorStore.templateToEdit.canvas_data)
+      if (templateEditorStore?.templateToEdit?.canvas_data || templateEditorStore?.templateToGenerateDocs?.canvas_data) {
+        await this.loadCanvasFromData(templateEditorStore?.templateToEdit?.canvas_data
+          ? templateEditorStore?.templateToEdit?.canvas_data
+          : templateEditorStore?.templateToGenerateDocs?.canvas_data)
+      }
     }
 
     return this.canvas

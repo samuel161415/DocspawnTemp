@@ -595,7 +595,7 @@ export default function addEventsToCanvas() {
 
           const objs = canvas._objects
           canvas._objects = objs.filter((obj) => {
-            if (obj.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+            if (obj.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
               return false
             else
               return true
@@ -952,7 +952,7 @@ export default function addEventsToCanvas() {
       }
       // for showing options when click
       const activeObj = canvas.getActiveObject()
-      // console.log('active object', activeObj)
+      console.log('active object', activeObj)
       if (activeObj instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: activeObj.scaleX, y: activeObj.scaleY }
 

@@ -182,6 +182,94 @@ async function createCanvas() {
         templateEditorStore.activeDisplayGuide = false
       }
     })
+    if (templateEditorStore?.templateToEdit?.id) {
+      canvas.getObjects()?.forEach((obj) => {
+        if (obj.type === 'textbox') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        if (obj.type === 'text') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        if (obj.type === 'image') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        obj.on('mouseout', (e) => {
+          if (!templateEditorStore.activeAdvancedPointer)
+            return
+
+          const objs = canvas._objects
+          canvas._objects = objs.filter((obj) => {
+            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
+              return false
+            else
+              return true
+          })
+
+          canvas.renderAll()
+        })
+      })
+      canvas.renderAll()
+    }
   }
 }
 async function showThumbnail() {

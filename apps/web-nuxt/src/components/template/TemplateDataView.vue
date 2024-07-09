@@ -327,7 +327,6 @@ function handleOutsideClick() {
 }
 
 function editTemplate(temp) {
-  // console.log('running edit', temp)
   templateEditorStore.templateToEdit = temp
   if (temp?.id) {
     templateEditorStore.addedFields = temp?.added_fields

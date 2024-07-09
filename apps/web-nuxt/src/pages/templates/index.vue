@@ -31,7 +31,9 @@ import { ref } from 'vue'
 import { uuid } from 'vue-uuid'
 import FirstStep from '~/components/createTemplate/FirstStep.vue'
 import TemplateDataView from '~/components/template/TemplateDataView.vue'
-import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const visible = ref(false)
 const runtimeConfig = useRuntimeConfig()
@@ -40,6 +42,9 @@ const templateData = ref([])
 
 onMounted(async () => {
   templateEditorStore.templateToEdit = {}
+  resetAllTemplateCreationValues()
+  resetAllTemplateEditorValues()
+  canvasService.refreshCanvas()
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`)
