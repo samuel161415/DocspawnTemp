@@ -26,12 +26,29 @@
       </div>
       <CanvasPreview :template="template" :selected-rows="selectedRows" />
     </div>
+    <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
+      <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
+        <p>currently generating</p>
+        <ProgressSpinner />
+      </div>
+      <div v-else>
+        <p>Generated:</p>
+        <div v-for="(doc, i) in allGeneratedDocs" :key="i" class="flex gap-6 items-center py-2">
+          <p>{{ i }}</p>
+          <Button class="w-max px-3">
+            <a :href="doc" target="_blank">Download</a>
+          </Button>
+          <!-- <p>{{ doc }}</p> -->
+        </div>
+      </div>
+    </Dialog>
   </Dialog>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import ProgressSpinner from 'primevue/progressspinner'
 import CanvasPreview from './CanvasPreview'
 import EditDatasetTable from './DatasetTable'
 
@@ -43,11 +60,23 @@ const props = defineProps({
   },
 })
 
+const runtimeConfig = useRuntimeConfig()
+
+const router = useRouter()
+const toast = useToast()
+
 const template = ref()
 const visible = ref(false)
 const selectedRows = ref([])
 const selectedColumns = ref([])
 const allData = ref([])
+const isGeneratingDoc = ref(false)
+const showGeneratedDocsModal = ref(false)
+const allGeneratedDocs = ref([])
+
+watch(allGeneratedDocs, (val) => {
+  console.log(' all enerated docs val', val)
+})
 
 onMounted(() => {
   template.value = props?.template
@@ -62,7 +91,35 @@ function handleChangeSelectedRows(data) {
   selectedRows.value = data
 }
 
-function generateDocs() {
+async function generateDocs() {
   console.log('generate docs')
+  isGeneratingDoc.value = true
+  showGeneratedDocsModal.value = true
+
+  const objToSend = {
+    finalData: selectedRows.value,
+  }
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/dataToDoc/${templateEditorStore?.templateToGenerateDocs?.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify content type as JSON
+      },
+      body: JSON.stringify(objToSend), // Serialize the object to JSON string
+    })
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    const data = await response.json()
+    console.log('generated docs', data)
+    isGeneratingDoc.value = false
+    allGeneratedDocs.value = data?.generatedDocs
+    toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
+  }
+  catch (error) {
+    console.error('Error:', error)
+    isGeneratingDoc.value = false
+    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
+  }
 }
 </script>

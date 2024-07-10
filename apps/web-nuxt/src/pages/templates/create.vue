@@ -126,6 +126,8 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import Stepper from 'primevue/stepper'
 import StepperPanel from 'primevue/stepperpanel'
 import ExcelJS from 'exceljs'
+import * as pdfjs from 'pdfjs-dist/build/pdf'
+import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
@@ -162,12 +164,41 @@ function handleUpdateData({ isValid, step }) {
   else if (step === 3)
     isStep3Valid.value = isValid
 }
+async function fetchSizes(url) {
+  if (url) {
+    const response = await fetch(url)
+    const pdfData = await response.arrayBuffer()
+
+    pdfjs.GlobalWorkerOptions.workerSrc
+      = pdfjsWorker
+    const pdf = await pdfjs.getDocument({ data: pdfData }).promise
+
+    const pageSizes = []
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i)
+      // console.log('page getSize', page.getSize())
+      const viewport = page.getViewport({ scale: 1 })
+      pageSizes.push({ height: viewport?.height, width: viewport?.width })
+    }
+    // console.log('page sizes', pageSizes)
+    return pageSizes
+    // setPdfPageSizes(pageSizes) // Assuming you have a state or function to save the page sizes array
+  }
+}
 
 async function saveTemplate() {
   const canvas = canvasService.getCanvas()
+  if (!canvas)
+    return
+  const pageSizes = await fetchSizes(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl)
+  // return
+  const canvasSize = { height: canvas.height, width: canvas.width }
 
   // map is for- when it will be loaded first page will be visible
-  const objects = canvas?.getObjects().map((obj) => {
+  const objects = canvas?.getObjects().filter(obj =>
+    obj.type !== 'line',
+  ).map((obj) => {
     if (obj?.id === 'watermark-docspawn')
       return obj
 
@@ -176,7 +207,6 @@ async function saveTemplate() {
     else obj.set({ visible: false, opacity: 0 })
     return obj
   })
-
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
     return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
@@ -190,10 +220,12 @@ async function saveTemplate() {
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+    page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),
     dataset_data: JSON.stringify(templateEditorStore?.datasetData),
     canvas_data: JSON.stringify(canvasToSend),
     delivery_options: JSON.stringify(templateDeliveryOptions),
+    canvas_size: JSON.stringify(canvasSize),
   }
 
   // return true

@@ -8,7 +8,7 @@
 
         <div class="mt-14">
           <div class="flex w-full items-center justify-between mb-4">
-            <div v-tooltip="'Total custom template availbale in your plan: 4'" class="px-5 py-4 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:scale-105 border-success hover:bg-green-50" @click="visible = true">
+            <div v-tooltip="'Total custom template availbale in your plan: 4'" class="px-5 py-4 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:scale-105 border-success hover:bg-green-50" @click="visible = true;refreshAllFirst()">
               <p class="font-poppins text-success text-lg text-center">
                 Create new template
               </p>
@@ -40,6 +40,12 @@ const runtimeConfig = useRuntimeConfig()
 
 const templateData = ref([])
 
+function refreshAllFirst() {
+  resetAllTemplateCreationValues()
+  resetAllTemplateEditorValues()
+  canvasService.refreshCanvas()
+}
+
 onMounted(async () => {
   templateEditorStore.templateToEdit = {}
   resetAllTemplateCreationValues()
@@ -51,6 +57,7 @@ onMounted(async () => {
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
+    console.log('templates', data)
 
     if (data?.length > 0) {
       templateData.value = data?.map((d) => {
