@@ -265,20 +265,24 @@
           <div v-if="formFieldForNameInput === 'Form checkbox group' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
             <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form radio' }">
-            <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-            <p class="font-poppins text-surface-600 text-lg">
-              Radio
-            </p>
-            <Chip label="Coming soon" class="bg-primary-50 text-primary-500" />
+          <div class="px-5 pl-14 min-h-[62px] flex flex-col py-2 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form radio' }">
+            <div class="flex  items-center gap-2">
+              <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <p class="font-poppins text-surface-600 text-lg">
+                Radio
+              </p>
+            </div>
+            <Chip label="Coming soon" class="bg-primary-50 text-primary-500 text-sm" />
           </div>
 
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form signature' }">
-            <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
-            <p class="font-poppins text-surface-600 text-lg">
-              Signature
-            </p>
-            <Chip label="Coming soon" class="bg-primary-50 text-primary-500" />
+          <div class="px-5 pl-14 min-h-[62px] flex flex-col py-2 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form signature' }">
+            <div class="flex  items-center gap-2">
+              <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <p class="font-poppins text-surface-600 text-lg">
+                Signature
+              </p>
+            </div>
+            <Chip label="Coming soon" class="bg-primary-50 text-primary-500 text-sm" />
           </div>
         </div>
       </div>

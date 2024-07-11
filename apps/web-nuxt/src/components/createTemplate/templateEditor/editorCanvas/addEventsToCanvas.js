@@ -24,8 +24,8 @@ export default function addEventsToCanvas() {
               transparentCorners: false,
               // left: 0,
               // top: 0,
-              left: canvas.width - (myImg.width * (80 / myImg.width)),
-              top: canvas.height - (myImg.height * (80 / myImg.height)),
+              left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
+              top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
               scaleX: 80 / myImg.width,
               scaleY: 80 / myImg.height,
               id: 'watermark-docspawn',
@@ -80,14 +80,14 @@ export default function addEventsToCanvas() {
     canvas.on('object:moving', (e) => {
       canvas._objects.forEach((obj) => {
         if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
-          if (e.target.left <= 0)
-            obj.set({ left: 0 })
-          if (e.target.top <= 0)
-            obj.set({ top: 0 })
-          if (e.target.left + (e.target.width * e.target.scaleX) >= canvas.width)
-            obj.set({ left: canvas.width - (e.target.width * e.target.scaleX) })
-          if (e.target.top + (e.target.height * e.target.scaleY) >= canvas.height)
-            obj.set({ top: canvas.height - (e.target.height * e.target.scaleY) })
+          if (e.target.left <= 10)
+            obj.set({ left: 10 })
+          if (e.target.top <= 10)
+            obj.set({ top: 10 })
+          if (e.target.left + (e.target.width * e.target.scaleX) >= canvas.width - 10)
+            obj.set({ left: canvas.width - (e.target.width * e.target.scaleX) - 10 })
+          if (e.target.top + (e.target.height * e.target.scaleY) >= canvas.height - 10)
+            obj.set({ top: canvas.height - (e.target.height * e.target.scaleY) - 10 })
         }
         else if (obj.id === e.target.hash && obj.stroke) {
           if (obj.top === 0)
