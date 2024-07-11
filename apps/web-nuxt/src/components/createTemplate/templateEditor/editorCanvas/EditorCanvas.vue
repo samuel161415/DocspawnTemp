@@ -42,6 +42,10 @@ const canvasWrapper = ref(null)
 const activeElement = ref()
 
 onMounted(() => {
+  if (templateEditorStore?.templateToEdit?.id) {
+    templateEditorStore.watermarkImage = templateEditorStore?.templateToEdit?.template_options?.watermarkImage
+    templateEditorStore.watermarkDisabled = templateEditorStore?.templateToEdit?.template_options?.watermarkDisabled
+  }
   if (typeof window !== 'undefined')
     callCreateCanvas()
 })

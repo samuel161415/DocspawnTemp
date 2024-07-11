@@ -17,7 +17,7 @@
         It will appear on every generated document, untill you disable it.
       </p>
       <div class="flex gap-2 my-6">
-        <Checkbox v-model="disableWatermark" disabled />
+        <Checkbox v-model="disableWatermark" :binary="true" />
         <p class="font-poppins text-surface-500">
           disable watermark
         </p>
@@ -53,6 +53,21 @@ import canvasService from '@/composables/useTemplateCanvas'
 const showWatermarkOptions = ref(false)
 const templateName = ref('')
 const disableWatermark = ref(false)
+watch(disableWatermark, (val) => {
+  console.log('disable watermark', val)
+  templateEditorStore.watermarkDisabled = val
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    canvas.getObjects()?.forEach((obj) => {
+      if (obj?.id === 'watermark-docspawn') {
+        if (val === true)
+          obj.set({ visible: false, opacity: 0 })
+        else obj.set({ visible: true, opacity: 1 })
+      }
+    })
+    canvas.renderAll()
+  }
+})
 const watermarkImages = ref([
   { id: 2, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/84c85464-5815-4414-bd71-b70695ed0af3_DS watermark 2 (1).png.png' },
   { id: 1, src: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/494a88a1-edeb-4652-b190-c0ad775b9c80_DS watermark 1 (1).png.png' },
@@ -62,11 +77,15 @@ onMounted(() => {
     templateEditorStore.watermarkImage = watermarkImages.value[1]
   if (templateGeneralInformation?.name)
     templateName.value = templateGeneralInformation?.name
+
+  disableWatermark.value = templateEditorStore?.watermarkDisabled
+  
 })
 watch(templateName, (newVal) => {
   templateGeneralInformation.name = newVal
 })
 watch(() => templateEditorStore.watermarkImage, (newVal) => {
+  console.log('template editor store water mark image', templateEditorStore?.watermarkImage)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     if (newVal.src) {

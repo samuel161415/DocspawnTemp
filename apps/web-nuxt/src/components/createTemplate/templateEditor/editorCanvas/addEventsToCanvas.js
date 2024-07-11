@@ -36,6 +36,9 @@ export default function addEventsToCanvas() {
               uniformScaling: false,
 
             })
+            if (templateEditorStore.watermarkDisabled)
+              myImg.set({ visible: false, opacity: 0 })
+
             myImg.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
             canvas.add(myImg)
 

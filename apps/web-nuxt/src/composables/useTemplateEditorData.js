@@ -35,6 +35,7 @@ const initialTemplateEditorStore = {
   anyObjectSelected: false,
   showPreview: false,
   watermarkImage: {},
+  watermarkDisabled: false,
   templateToEdit: {},
   templateToGenerateDocs: {},
   lastScaledTextOptions: { x: 1, y: 1 },

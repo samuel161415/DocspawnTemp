@@ -220,6 +220,7 @@ async function saveTemplate() {
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+    template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
     page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),
     dataset_data: JSON.stringify(templateEditorStore?.datasetData),
