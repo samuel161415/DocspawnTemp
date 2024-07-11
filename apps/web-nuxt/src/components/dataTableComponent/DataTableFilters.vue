@@ -18,17 +18,17 @@
 
         <Button
           type="button"
-          label="Table to doc"
+          label="Data to Doc"
           class="px-4 rounded-lg shadow-none text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:border-primaryPink hover:text-white"
-          :class="[typefilter === 'Table to doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
+          :class="[typefilter === 'Data to Doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
           :icon="dataToDoc"
-          :outlined="typefilter !== 'Table to doc'"
+          :outlined="typefilter !== 'Data to Doc'"
           raised
-          @click="filterData('Table to doc')"
+          @click="filterData('Data to Doc')"
           @mouseenter="dataToDocActive = true"
-          @mouseleave="typefilter !== 'Table to doc' ? dataToDocActive = false : dataToDocActive = true"
+          @mouseleave="typefilter !== 'Data to Doc' ? dataToDocActive = false : dataToDocActive = true"
         >
-          <img :src="dataToDocActive ? dataToDocWhiteIcon : dataToDoc" alt="Table to doc" class="w-9 h-6 mr-2" /> <p>Table to doc</p>
+          <img :src="dataToDocActive ? dataToDocWhiteIcon : dataToDoc" alt="Data to Doc" class="w-9 h-6 mr-2" /> <p>Data to Doc</p>
         </Button>
       </div>
     </div>
@@ -78,7 +78,7 @@ const currentFilter = ref('')
 
 function filterData(type) {
   formToDocActive.value = type === 'Form to Doc'
-  dataToDocActive.value = type === 'Table to doc'
+  dataToDocActive.value = type === 'Data to Doc'
 
   if (currentFilter.value !== '')
     type = ''

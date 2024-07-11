@@ -74,10 +74,6 @@ const isGeneratingDoc = ref(false)
 const showGeneratedDocsModal = ref(false)
 const allGeneratedDocs = ref([])
 
-watch(allGeneratedDocs, (val) => {
-  console.log(' all enerated docs val', val)
-})
-
 onMounted(() => {
   template.value = props?.template
   //   selectedRows.value = props?.value?.dataset_data?.allEntries
@@ -92,7 +88,6 @@ function handleChangeSelectedRows(data) {
 }
 
 async function generateDocs() {
-  console.log('generate docs')
   isGeneratingDoc.value = true
   showGeneratedDocsModal.value = true
 
@@ -111,13 +106,12 @@ async function generateDocs() {
       throw new Error(`Network response was not ok ${response.statusText}`)
 
     const data = await response.json()
-    console.log('generated docs', data)
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
     toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
   }
   catch (error) {
-    console.error('Error:', error)
+    // console.error('Error:', error)
     isGeneratingDoc.value = false
     toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
   }

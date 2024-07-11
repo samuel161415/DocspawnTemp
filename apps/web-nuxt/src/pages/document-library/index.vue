@@ -1,10 +1,10 @@
 <template>
   <div class="h-full w-full bg-white rounded-lg overflow-scroll no-scrollbar">
-    
     <div class="px-8 py-8 h-full">
+      <h2 class="font-semibold text-surface-600 text-2xl px-3 py-2">
+        Document Library
+      </h2>
 
-      <h2 class="font-semibold text-surface-600 text-2xl px-3 py-2">Document Library</h2>
-    
       <DataTableComponent
         :data="documentLibraryData"
         :filters="filters"
@@ -24,9 +24,11 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
-import { documentLibraryData } from '../../services/sampleData'
+
+// import { documentLibraryData } from '../../services/sampleData'
 
 const exportFile = ref(false)
+const documentLibraryData = ref([])
 
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -35,13 +37,14 @@ const filters = ref({
     operator: FilterOperator.AND,
     constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
   },
-  created_by: { 
+  created_by: {
     operator: FilterOperator.AND,
     constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }],
   },
-  date: { 
-    operator: FilterOperator.AND, 
-    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] },
+  date: {
+    operator: FilterOperator.AND,
+    constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+  },
   no_documents: {
     operator: FilterOperator.AND,
     constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }],
@@ -57,7 +60,33 @@ const colomnData = ref([
 ])
 
 const hasActionsColumn = ref(true)
-const hasFilterActions = ref(true);
+const hasFilterActions = ref(true)
 
 const items = ref([{ label: 'Document library', route: '/document-library' }])
+const runtimeConfig = useRuntimeConfig()
+onMounted(async () => {
+  // sample data
+  // {
+  //   id: 1,
+  //   type: "Form to Doc",
+  //   template_name: "INVOICE FORM",
+  //   no_documents: 1,
+  //   date: new Date("2024-01-01"),
+  //   created_by: "John Doe"
+  // },
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents`)
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    const data = await response.json()
+    const dataToUse = data?.generatedDocs?.map((d) => {
+      return { id: d?.batch_id, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name }
+    })
+    documentLibraryData.value = dataToUse
+  }
+  catch (error) {
+    console.error('Error fetching generated-docs:', error)
+  }
+})
 </script>
