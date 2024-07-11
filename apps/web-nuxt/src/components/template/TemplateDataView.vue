@@ -88,6 +88,7 @@
                 <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
                   <div class="flex space-x-8 mr-5 mb-3 md:mb-0">
                     <i v-tooltip.top="'Edit template'" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
+                    <i v-tooltip.top="'Delete template'" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
                     <i v-tooltip.top="'Access data'" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
                     <i v-tooltip.top="'Access document'" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
                     <i v-tooltip.top="'Set as favorites'" class="pointer-auto cursor-pointer text-surface-500" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem"></i>
@@ -176,9 +177,12 @@
     />
 
     <OverlayPanel ref="op">
-      <div class="flex flex-col justify-start w-48 h-44">
+      <div class="flex flex-col justify-start w-48 h-max">
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="editTemplate(opItem)">
           Edit template
+        </p>
+        <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="confirmDelete(opItem);">
+          Delete template
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
           Access data
@@ -194,6 +198,14 @@
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
   <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+  <ConfirmDialog group="templating">
+    <template #message="slotProps">
+      <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
+        <i :class="slotProps.message.icon" class="!text-6xl text-primary-500"></i>
+        <p>{{ slotProps.message.message }}</p>
+      </div>
+    </template>
+  </ConfirmDialog>
   <!-- <Toast /> -->
   <Toast position="top-right">
     <template #message="slotProps">
@@ -217,7 +229,9 @@
 <script setup>
 import { ref } from 'vue'
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
+
 import { useToast } from 'primevue/usetoast'
+import { useConfirm } from 'primevue/useconfirm'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import { fal } from '@fortawesome/pro-light-svg-icons'
 import ExcelJS from 'exceljs'
@@ -237,8 +251,39 @@ const props = defineProps({
     default: () => [],
   },
 })
-
+const emit = defineEmits(['deleteTemplate'])
 const toast = useToast()
+const confirm = useConfirm()
+// const confirm = useConfirm()
+function confirmDelete(template) {
+  console.log('confirm delete called', confirm)
+  confirm.require({
+    group: 'templating',
+    header: 'Confirmation',
+    message: `Please confirm you want to delete template "${template?.name}""`,
+    icon: 'pi pi-trash',
+    rejectLabel: 'Cancel',
+    rejectProps: {
+      label: 'Cancel',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Delete',
+      severity: 'danger',
+    },
+    accept: () => {
+      // console.log('template to delete', template)
+
+      emit('deleteTemplate', template)
+
+      toast.add({ severity: 'info', summary: 'Confirmed', detail: 'Record deleted', life: 3000 })
+    },
+    reject: () => {
+      toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 })
+    },
+  })
+}
 
 const router = useRouter()
 

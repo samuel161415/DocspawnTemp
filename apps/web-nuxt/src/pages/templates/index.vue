@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <TemplateDataView :templates="templateData" />
+          <TemplateDataView :templates="templateData" @delete-template="deleteTemplate" />
         </div>
       </div>
 
@@ -70,4 +70,15 @@ onMounted(async () => {
     console.error('Error fetching templates:', error)
   }
 })
+
+async function deleteTemplate(template) {
+  const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${template?.id}`, {
+    method: 'DELETE',
+  })
+  if (!response.ok) {
+    // throw new Error(`Network response was not ok ${response.statusText}`)
+    console.log('not deleetd')
+  }
+  templateData.value = templateData.value?.filter(t => t?.id !== template?.id)
+}
 </script>
