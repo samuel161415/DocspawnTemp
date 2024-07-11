@@ -218,7 +218,7 @@ export default function addEventsToCanvas() {
       // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time'
+          const isDatafield = false
           currentHoveredEle.set({
             left: event.absolutePointer.x,
             top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (Number.parseFloat(activeTextStyles.fontSize) / 5),
@@ -241,7 +241,7 @@ export default function addEventsToCanvas() {
         }
         else {
           canvas.remove(currentHoveredEle)
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list'
+          const isDatafield = false
           currentHoveredEle = new templateEditorStore.fabric.Text(
           `${templateEditorStore.fieldToAdd.name}`,
           {
@@ -296,7 +296,7 @@ export default function addEventsToCanvas() {
       }
       if (templateEditorStore.fieldToAdd.type === 'Form long text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+          const isDatafield = false
           currentHoveredEle.set({
             width: 300,
             left: event.absolutePointer.x,
@@ -316,7 +316,7 @@ export default function addEventsToCanvas() {
         }
         else {
           canvas.remove(currentHoveredEle)
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+          const isDatafield = false
           currentHoveredEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,
           {
@@ -553,7 +553,7 @@ export default function addEventsToCanvas() {
         }
         canvas.renderAll()
 
-        const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time'
+        const isDatafield = false
 
         const textEle = new templateEditorStore.fabric.Text(
           `${templateEditorStore.fieldToAdd.name}`,
@@ -657,7 +657,7 @@ export default function addEventsToCanvas() {
         }
         canvas.renderAll()
 
-        const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+        const isDatafield = false
 
         const textEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,

@@ -211,7 +211,7 @@ function downloadDataAsPdf(data) {
         const a = document.createElement('a')
         const objectUrl = URL.createObjectURL(blob)
         a.href = objectUrl
-        a.download = `${data?.template_data?.name}_batch_${data?.batch_id}_file_${index + 1}.pdf` // Adjust the file name as needed
+        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
         document.body.appendChild(a)
         a.click()
         document.body.removeChild(a)

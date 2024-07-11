@@ -145,12 +145,16 @@
           <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showStaticFields }" />
         </div>
         <div v-if="showStaticFields" class="flex flex-col gap-2">
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Static text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Static text' }" @click="selectField('Static text')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': showStaticOption1, 'border-surface-100 bg-surface-50': !showStaticOption1 }" @click="showStaticOption1 = true">
             <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Text
             </p>
           </div>
+          <div v-if="showStaticOption1" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50  ">
+            <InputText v-model="staticOption1Val" class="w-full md:w-full" placeholder="write text to add" />
+          </div>
+          <!-- @click="selectField('Static text') -->
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Fixed image' }" @click="selectField('Static image')">
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
@@ -188,24 +192,33 @@
           <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showFormFields }" />
         </div>
         <div v-if="showFormFields" class="flex flex-col gap-2">
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form text' }" @click="selectField('Form text')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form text', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form text' }" @click="formFieldForNameInput = 'Form text';showFormFieldNameInput = true">
             <font-awesome-icon icon="fa-light   fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Text
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form long text', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form long text' }" @click="selectField('Form long text')">
+          <div v-if="formFieldForNameInput === 'Form text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+            <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+          </div>
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form long text', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form long text' }" @click="formFieldForNameInput = 'Form long text';showFormFieldNameInput = true">
             <font-awesome-icon icon="fa-light fa-paragraph" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2cc; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Long Text
             </p>
           </div>
+          <div v-if="formFieldForNameInput === 'Form long text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+            <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+          </div>
 
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form image', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form image' }" @click="selectField('Form image')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50" :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form image', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form image' }" @click="formFieldForNameInput = 'Form image';showFormFieldNameInput = true">
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Image
             </p>
+          </div>
+          <div v-if="formFieldForNameInput === 'Form image' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+            <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
           </div>
           <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showFormTimestamp ? showFormTimestamp = false : showFormTimestamp = true">
             <font-awesome-icon icon="fa-light fa-calendar-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
@@ -215,43 +228,57 @@
             <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showFormTimestamp }" />
           </div>
           <div v-if="showFormTimestamp" class="flex flex-col gap-2">
-            <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form date', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form date' }" @click="selectField('Form date')">
+            <div class="px-5 pl-20 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form date', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form date' }" @click="formFieldForNameInput = 'Form date';showFormFieldNameInput = true">
               <font-awesome-icon icon="fa-light fa-calendar" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Date
               </p>
             </div>
-            <div class="px-5 pl-24 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form time', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form time' }" @click="selectField('Form time')">
+            <div v-if="formFieldForNameInput === 'Form date' && showFormFieldNameInput" class="px-5 pl-20 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+              <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+            </div>
+            <div class="px-5 pl-20 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form time', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form time' }" @click="formFieldForNameInput = 'Form time';showFormFieldNameInput = true">
               <font-awesome-icon icon="fa-light fa-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 Time
               </p>
             </div>
+            <div v-if="formFieldForNameInput === 'Form time' && showFormFieldNameInput" class="px-5 pl-20 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+              <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+            </div>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form list', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form list' }" @click="selectField('Form list')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form list', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form list' }" @click="formFieldForNameInput = 'Form list';showFormFieldNameInput = true">
             <font-awesome-icon icon="fa-light fa-square-caret-down" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               List
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form checkbox group', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form checkbox group' }" @click="selectField('Form checkbox group')">
+          <div v-if="formFieldForNameInput === 'Form list' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+            <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+          </div>
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form checkbox group', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form checkbox group' }" @click="formFieldForNameInput = 'Form checkbox group';showFormFieldNameInput = true">
             <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Checkbox
             </p>
           </div>
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form radio' }" @click="selectField('Form radio')">
+          <div v-if="formFieldForNameInput === 'Form checkbox group' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 border-surface-100 bg-surface-50 ">
+            <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" placeholder="write field name" />
+          </div>
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50 " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form radio', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form radio' }">
             <font-awesome-icon icon="fa-light fa-circle-dot" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Radio
             </p>
+            <Chip label="Coming soon" class="bg-primary-50 text-primary-500" />
           </div>
 
-          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form signature' }" @click="selectField('Form signature')">
+          <div class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300  hover:bg-primary-50  " :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Form signature', 'border-surface-100 bg-surface-50': templateEditorStore.activeTemplateField !== 'Form signature' }">
             <font-awesome-icon icon="fa-light fa-file-signature" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
               Signature
             </p>
+            <Chip label="Coming soon" class="bg-primary-50 text-primary-500" />
           </div>
         </div>
       </div>
@@ -270,8 +297,10 @@ const showFormFields = ref(false)
 const showDataFields = ref(false)
 const showDatasetOptions = ref(false)
 const showDatasetOptions2 = ref(false)
+const showStaticOption1 = ref(false)
 const selectedDatasetOption = ref('')
 const selectedDatasetOption2 = ref('')
+const staticOption1Val = ref()
 watch(selectedDatasetOption, (val) => {
   if (val)
     selectField('Data field', val)
@@ -279,6 +308,21 @@ watch(selectedDatasetOption, (val) => {
 watch(selectedDatasetOption2, (val) => {
   if (val)
     selectField('Dataset image', val)
+})
+watch(staticOption1Val, (val) => {
+  if (val)
+    selectField('Static text', val)
+})
+const showFormFieldNameInput = ref('')
+const formFieldForNameInput = ref('')
+const formFieldNameInputValue = ref('')
+
+watch(formFieldNameInputValue, (val) => {
+  if (val && formFieldForNameInput)
+    selectField(formFieldForNameInput.value, val)
+})
+watch(formFieldForNameInput, () => {
+  formFieldNameInputValue.value = ''
 })
 const showStaticFields = ref(false)
 const showTimestamp = ref(false)
@@ -569,6 +613,8 @@ watch(() => templateEditorStore.fieldToAdd, (val) => {
     selectedDatasetOption.value = ''
     showDatasetOptions2.value = false
     selectedDatasetOption2.value = ''
+    showStaticOption1.value = false
+    staticOption1Val.value = ''
   }
 })
 
@@ -576,6 +622,8 @@ function selectField(field, option) {
   // clear refs in case of Data field
   // showDatasetOptions.value = false
   // selectedDatasetOption.value = ''
+  console.log('field', field)
+  console.log('option', option)
 
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -585,7 +633,7 @@ function selectField(field, option) {
     if (field === 'Data field' || field === 'Dataset image')
       templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Static text')
-      templateEditorStore.fieldToAdd = { name: 'Add text', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Static date')
       templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
     else if (field === 'Static time')
@@ -593,19 +641,19 @@ function selectField(field, option) {
     else if (field === 'Static image')
       templateEditorStore.fieldToAdd = { name: 'Select image', type: field, id: 'Lorem ipsum' }
     else if (field === 'Form text')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form long text')
-      templateEditorStore.fieldToAdd = { name: 'Long-text', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Long-text', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form image')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form date')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form time')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form list')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else if (field === 'Form checkbox group')
-      templateEditorStore.fieldToAdd = { name: 'Add field name', type: field, id: 'Lorem ipsum' }
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     else
       templateEditorStore.fieldToAdd = { name: field, type: field, id: field }
     templateEditorStore.showOptionsBar = true
