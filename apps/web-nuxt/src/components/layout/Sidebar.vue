@@ -124,8 +124,8 @@
                   <span class="absolute right-0 top-0 block h-2.5 w-2.5 rounded-full bg-green-400 ring-2 ring-white"></span>
                 </span>
 
-                <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-5 font-poppins">
-                  John Doe
+                <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-5 mb-8 font-poppins">
+                  {{ accountData?.accountType }}
                 </p>
               </div>
             </NuxtLink>
@@ -144,6 +144,7 @@ import ArrowLeft from '../../assets/icons/arrow-left.svg'
 import ArrowRight from '../../assets/icons/arrow-right.svg'
 import ArrowLeftWhite from '../../assets/icons/arrow-left-white.svg'
 import ArrowRightWhite from '../../assets/icons/arrow-right-white.svg'
+import { accountData } from '@/composables/useAccountData'
 
 const router = useRouter()
 

@@ -256,7 +256,6 @@ const toast = useToast()
 const confirm = useConfirm()
 // const confirm = useConfirm()
 function confirmDelete(template) {
-  console.log('confirm delete called', confirm)
   confirm.require({
     group: 'templating',
     header: 'Confirmation',
@@ -479,7 +478,7 @@ function handleFileDrop(template, event) {
 }
 function handleFileUpload(file, template) {
   const keysToCheck = template?.dataset_data?.selectedKeys
-
+  console.log('keys to check', keysToCheck)
   if (!file) {
     console.error('No file provided')
     return

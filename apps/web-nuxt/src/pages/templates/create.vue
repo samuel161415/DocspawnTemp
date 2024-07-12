@@ -135,6 +135,7 @@ import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { accountData } from '@/composables/useAccountData'
 
 import canvasService from '@/composables/useTemplateCanvas'
 
@@ -216,6 +217,7 @@ async function saveTemplate() {
   canvasToSend = { ...canvasToSend, objects: deserializedObjects }
 
   const objToSend = {
+    account_type: accountData?.accountType,
     name: templateGeneralInformation?.name || 'sample',
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,

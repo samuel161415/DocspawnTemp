@@ -34,6 +34,7 @@ import TemplateDataView from '~/components/template/TemplateDataView.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+import { accountData } from '@/composables/useAccountData'
 
 const visible = ref(false)
 const runtimeConfig = useRuntimeConfig()
@@ -53,11 +54,11 @@ onMounted(async () => {
   canvasService.refreshCanvas()
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${accountData?.accountType}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
-    console.log('templates', data)
+    // console.log('templates', data)
 
     if (data?.length > 0) {
       templateData.value = data?.map((d) => {
