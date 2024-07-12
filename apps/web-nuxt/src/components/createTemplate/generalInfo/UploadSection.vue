@@ -119,7 +119,7 @@ function validateAndEmitFile(file) {
   else {
     selectedFile.value = null
     const errorMessage = props?.isBackground ? 'Invalid file type selected. Please select a valid file. e.g .pdf' : 'Invalid file type selected. Please select a valid file. e.g .csv, .xlsx'
-    toast.add({ severity: 'error', summary: 'Invalid file format', detail: errorMessage, life: 3000 })
+    toast.add({ severity: 'error', summary: 'Invalid file format', detail: errorMessage, life: 10000 })
   }
 }
 

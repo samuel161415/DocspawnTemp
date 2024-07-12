@@ -452,7 +452,7 @@ function handleDragOver(item, index) {
   isDragging.value[index] = true
 }
 function showError() {
-  toast.add({ severity: 'error', summary: 'Invalid file format', detail: 'Please upload a .csv, .xls or .xlsx file', life: 3000 })
+  toast.add({ severity: 'error', summary: 'Invalid file format', detail: 'Please upload a .csv, .xls or .xlsx file', life: 10000 })
 }
 function handleFileDrop(template, event) {
   const files = event.dataTransfer.files
