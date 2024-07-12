@@ -233,6 +233,7 @@ watch(currentPreviewNo, (newVal) => {
               correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
                 ? obj.scaleToWidth(originalWidth)
                 : obj.scaleToHeight(originalHeight)
+              // obj.scaleToWidth(originalWidth)
               canvas.renderAll()
             })
           }
@@ -273,9 +274,13 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
             const originalWidth = obj.width * obj.scaleX
 
             obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+              if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth')
+                obj.scaleToWidth(originalWidth)
+
+              else
+                obj.scaleToHeight(originalHeight)
+
+              // console.log('obj after scaling', obj)
               canvas.renderAll()
             })
           }
@@ -300,9 +305,20 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
-          obj.setSrc(correspondingData, () => {
-            obj.scaleToWidth(originalWidth)
-            obj.scaleToHeight(originalHeight)
+          const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          obj.setSrc(`https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`, () => {
+            // if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth') {
+            //   console.log('scalin got width', originalWidth)
+            //   obj.scaleToWidth(originalWidth)
+            // }
+            // else {
+            // obj.set({ height: originalHeight, width: originalWidth, scaleX: 1, scaleY: 1 })
+
+            // obj.scaleToWidth(originalWidth)
+            // obj.scaleToHeight(originalHeight)
+            // }
+            // obj.set({ width: obj.width, height: obj.height, scaleX: obj.scaleX, scaleY: obj.scaleY })
+            console.log('obj after rc setting', obj)
             canvas.renderAll()
           })
         }
