@@ -1032,10 +1032,8 @@ export default function addEventsToCanvas() {
         || event.clientY < canvasRect.top
         || event.clientY > canvasRect.bottom
       ) {
-        if (currentHoveredEle) {
-          templateEditorStore.fieldToAdd = null
+        if (currentHoveredEle)
           canvas.remove(currentHoveredEle)
-        }
 
         canvas.renderAll()
       }
