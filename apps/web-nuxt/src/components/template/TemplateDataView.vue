@@ -95,7 +95,7 @@
                   </div>
 
                   <div class="flex flex-row-reverse md:flex-row">
-                    <Button v-if="item.templateType === 'form to doc'" label="Fill form" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm" />
+                    <Button v-if="item.templateType === 'form to doc'" label="Fill form" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm(item)" />
                     <Button v-else label="Select or drop file" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="(e) => { templateSelectedForUploadingFile = item ;uploadFile(e); }" />
                   </div>
                 </div>
@@ -143,7 +143,7 @@
                   </p>
                 </div>
                 <div class="flex flex-col">
-                  <Button v-if="item.use_case === 'Form to doc'" label="Fill form" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm" />
+                  <Button v-if="item.use_case === 'Form to doc'" label="Fill form" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm(item)" />
                   <Button
                     v-else label="Select or drop file" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
                       templateSelectedForUploadingFile = item
@@ -171,8 +171,11 @@
       v-model:visible="previewFormVisible"
       :mobile="mobile"
       :form-title="formTitle"
+      :all-form-fields="currentTemplateAllFormFields"
       :form-description="formDescription"
       :is-collapsed="isCollapsed"
+      :is-generatable="true"
+      :template-data="currentTemplate"
       @cancel="previewFormVisible = false"
     />
 
@@ -241,7 +244,7 @@ import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
 import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
-import FormEditorPreview from '~/components/createTemplate/formEditor/FormEditorPreview.vue'
+import FormEditorPreview from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const props = defineProps({
@@ -314,8 +317,12 @@ props.templates.forEach((template, index) => {
   favoriteStates[index] = template.isFavorite
 })
 
-function handleFillForm() {
+const currentTemplateAllFormFields = ref('')
+function handleFillForm(item) {
   previewFormVisible.value = true
+  // console.log('template at handle fill form', item)
+  currentTemplate.value = item
+  currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
 }
 
 // default favorite state based on template changes

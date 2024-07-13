@@ -150,7 +150,7 @@
           }"
         />
 
-        <FinalPreview :show-preview="showPreview" :mobile="mobile" :all-form-fields="allFormFields" @change-preview="(val) => { showPreview = val }" />
+        <FinalPreview :show-preview="showPreview" :mobile="mobile" :form-title="templateTitle" :form-description="templateDescription" :all-form-fields="allFormFields" @change-preview="(val) => { showPreview = val }" />
       </DataTable>
       <!-- <div class="w-full flex justify-center mt-5">
         <Button label="Save & Continue" autofocus @click="" />

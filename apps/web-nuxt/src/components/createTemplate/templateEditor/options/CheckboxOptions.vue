@@ -45,13 +45,15 @@
     Add checkbox to group
   </Button>
   <div class="mt-4">
-    <div v-for="item in Array(noOfCheckboxes).fill().map((_, index) => index + 1)" :key="item" class="my-2">
+    <div
+      v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
+    >
       <p class=" font-poppins text-surface-600">
-        Checkbox {{ item }} text
+        Checkbox {{ index + 1 }} text
       </p>
       <div class="w-full flex mt-1 border rounded-lg">
-        <InputText class="flex-1 rounded rounded-r-none border-0 " />
-        <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(item)">
+        <InputText class="flex-1 rounded rounded-r-none border-0 " :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
+        <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
           <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
         </Button>
       </div>
@@ -71,12 +73,21 @@ const noOfCheckboxes = ref(1)
 const minOptions = ref(0)
 const maxOptions = ref(1)
 const fieldDescription = ref('')
-
+const currentField = ref()
 onMounted(() => {
   noOfCheckboxes.value = templateEditorStore.selectedAddedField?.checkboxes?.length >= 1 ? templateEditorStore.selectedAddedField?.checkboxes.length : 1
   minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 0
   maxOptions.value = templateEditorStore.selectedAddedField?.maxOptions >= 0 ? templateEditorStore.selectedAddedField?.maxOptions : 0
   fieldDescription.value = templateEditorStore.selectedAddedField?.name ? templateEditorStore.selectedAddedField?.name : 0
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    console.log('templateEditorStore.selectedAddedField', templateEditorStore.selectedAddedField)
+    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
+    console.log('templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes', templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0])
+    // currentField.value = templateEditorStore.addedFields.filter(f => f?.hash === activeObject?.hash)[0]
+    console.log('current field value', currentField.value)
+  }
 })
 watch(() => templateEditorStore.selectedAddedField, (val) => {
   noOfCheckboxes.value = val?.checkboxes?.length >= 1 ? val?.checkboxes.length : 1
@@ -84,6 +95,26 @@ watch(() => templateEditorStore.selectedAddedField, (val) => {
   maxOptions.value = val?.maxOptions >= 0 ? val?.maxOptions : 0
   fieldDescription.value = val?.name ? val?.name : 0
 })
+function changeTextOfCheckboxOption(e, item) {
+  console.log('change text', item)
+  const canvas = canvasService.getCanvas()
+  if (canvas) {
+    const activeObject = canvas.getActiveObject()
+    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
+
+    templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
+      if (f?.hash === activeObject?.hash) {
+        return { ...f, checkboxes: f?.checkboxes?.map((c, i) => {
+          if (i + 1 === item)
+            return { ...c, text: e.target.value }
+          else return c
+        }) }
+      }
+
+      else { return f }
+    })
+  }
+}
 
 watch(fieldDescription, () => {
   const canvas = canvasService.getCanvas()

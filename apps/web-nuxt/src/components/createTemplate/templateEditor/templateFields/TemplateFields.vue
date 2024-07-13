@@ -636,32 +636,24 @@ function selectField(field, option) {
     canvas.discardActiveObject()
     canvas.renderAll()
     templateEditorStore.activeTemplateField = field
-    if (field === 'Data field' || field === 'Dataset image')
-      templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Static text')
-      templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Static date')
-      templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' }
-    else if (field === 'Static time')
-      templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' }
-    else if (field === 'Static image')
-      templateEditorStore.fieldToAdd = { name: 'Select image', type: field, id: 'Lorem ipsum' }
-    else if (field === 'Form text')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form long text')
-      templateEditorStore.fieldToAdd = { name: option || 'Long-text', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form image')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form date')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form time')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form list')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else if (field === 'Form checkbox group')
-      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
-    else
-      templateEditorStore.fieldToAdd = { name: field, type: field, id: field }
+    if (field === 'Data field' || field === 'Dataset image') { templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Static text') { templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Static date') { templateEditorStore.fieldToAdd = { name: 'MM/DD/YYYY', type: field, id: 'MM/DD/YYYY' } }
+    else if (field === 'Static time') { templateEditorStore.fieldToAdd = { name: 'HH:MM:SS', type: field, id: 'HH:MM:SS' } }
+    else if (field === 'Static image') { templateEditorStore.fieldToAdd = { name: 'Select image', type: field, id: 'Lorem ipsum' } }
+    else if (field === 'Form text') { templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form long text') { templateEditorStore.fieldToAdd = { name: option || 'Long-text', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form image') { templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form date') { templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form time') { templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form list') { templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' } }
+    else if (field === 'Form checkbox group') {
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum', designs: {
+        yes: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png',
+        no: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png',
+      } }
+    }
+    else { templateEditorStore.fieldToAdd = { name: field, type: field, id: field } }
     templateEditorStore.showOptionsBar = true
   }
 }
