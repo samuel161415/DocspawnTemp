@@ -1015,8 +1015,30 @@ export default function addEventsToCanvas() {
         canvas.remove(tempYMargin)
         tempYMargin = null
       }
-      if (currentHoveredEle && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
-        canvas.remove(currentHoveredEle.value)
+
+      // if (currentHoveredEle)
+      //   canvas.remove(currentHoveredEle)
+
+      canvas.renderAll()
+    })
+    document.addEventListener('click', (event) => {
+      // Get the canvas element's bounding box
+      const canvasRect = canvas.getElement().getBoundingClientRect()
+
+      // Check if the click is outside the canvas
+      if (
+        event.clientX < canvasRect.left
+        || event.clientX > canvasRect.right
+        || event.clientY < canvasRect.top
+        || event.clientY > canvasRect.bottom
+      ) {
+        if (currentHoveredEle) {
+          templateEditorStore.fieldToAdd = null
+          canvas.remove(currentHoveredEle)
+        }
+
+        canvas.renderAll()
+      }
     })
   }
 }
