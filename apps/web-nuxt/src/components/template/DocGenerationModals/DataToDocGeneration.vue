@@ -38,7 +38,6 @@
           <Button class="w-max px-3">
             <a :href="doc" target="_blank">Download</a>
           </Button>
-          <!-- <p>{{ doc }}</p> -->
         </div>
       </div>
     </Dialog>
