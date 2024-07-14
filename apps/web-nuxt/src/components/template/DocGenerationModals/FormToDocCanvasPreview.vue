@@ -2,13 +2,12 @@
   <div class="h-full  w-max overflow-auto w-7/12 ">
     <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
       <p>Live preview</p>
-      <div class=" flex items-center">
+      <!-- <div class=" flex items-center">
         <Slider v-model="scale" :step="0.01" :min="0.5" :max="1" class="w-56" @input="updateScale" />
-        <!-- <input v-model="scale" type="range" min="0.5" max="1" step="0.01" class="slider" /> -->
       </div>
       <div class="flex items-center">
         <Button label="Refresh" @click="refreshPreview" />
-      </div>
+      </div> -->
     </div>
     <div class="h-full  w-max overflow-auto ">
       <div v-show="!isCanvasLoaded " class="w-full h-full ">
@@ -73,11 +72,13 @@ onMounted(() => {
     callCreateCanvas()
 })
 function refreshPreview() {
-  console.log('refreshing preview')
-  console.log('form firlds', props.formValues)
   selectedData.value = props.formValues
   renderOriginalData()
 }
+watch(props?.formValues, (val) => {
+  selectedData.value = val
+  renderOriginalData()
+})
 // watch(() => props?.selectedRows, (newVal) => {
 //   console.log('selected rows', props?.selectedRows)
 //   selectedData.value = newVal
@@ -90,16 +91,7 @@ watch(selectedData, (newVal) => {
   else currentPreviewNo.value = 0
   renderOriginalData()
 })
-function changePreviewNo(dir) {
-  if (dir === 'prev') {
-    if (currentPreviewNo.value > 1)
-      currentPreviewNo.value = currentPreviewNo.value - 1
-  }
-  if (dir === 'next') {
-    if (currentPreviewNo.value < selectedData?.value?.length)
-      currentPreviewNo.value = currentPreviewNo.value + 1
-  }
-}
+
 watch(currentPreviewNo, () => {
   renderOriginalData()
 })
