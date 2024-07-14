@@ -198,7 +198,7 @@ async function saveTemplate() {
 
   // map is for- when it will be loaded first page will be visible
   const objects = canvas?.getObjects().filter(obj =>
-    obj.type !== 'line',
+    obj.type !== 'line' && obj?.fieldType !== 'checkboxIdNoIcon',
   ).map((obj) => {
     if (obj?.id === 'watermark-docspawn')
       return obj

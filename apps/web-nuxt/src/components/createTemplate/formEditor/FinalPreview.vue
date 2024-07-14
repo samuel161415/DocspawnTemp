@@ -1,7 +1,8 @@
 <template>
   <Dialog
     v-model:visible="showPreview" modal :draggable="false"
-    :style="mobile ? { width: '25rem' } : { maxWidth: '90vw', width: 'max-content' }" :pt="{
+    :style="mobile ? { width: '25rem' } : { maxWidth: '90vw', width: 'max-content' }"
+    :pt="{
       header: {
         class: ['flex items-center justify-between',
                 'shrink-0', 'p-6', `pb-${mobile ? '0' : ''}`, 'border-t-0', 'rounded-tl-lg', 'rounded-tr-lg', 'bg-surface-0 dark:bg-surface-800',
@@ -11,15 +12,18 @@
   >
     <template #header>
       <div :class="`${mobile ? '' : 'pl-4'}`" class="flex flex-row gap-3 w-full">
-        <div class="flex flex-col">
+        <p v-if="props?.isGeneratable" :class="` place-self-${mobile ? 'center' : 'start'} text-surface-600 capitalize text-[21px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview`">
+          {{ formTitle ? formTitle : templateData?.name }}
+        </p>
+        <div v-if="!props?.isGeneratable" class="flex flex-col">
           <i class="pi pi-mobile"></i>
           <RadioButton v-model="mobile" class="pl-0.5" input-id="mobile1" name="pizza" :value="true" />
         </div>
-        <div class="flex flex-col">
+        <div v-if="!props?.isGeneratable" class="flex flex-col">
           <i class="pi pi-desktop"></i>
           <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
         </div>
-        <div class="mx-auto place-self-center flex flex-row">
+        <div v-if="!props?.isGeneratable" class="mx-auto place-self-center flex flex-row">
           <img src="../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
           <img v-if="!isCollapsed" src="../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
         </div>
@@ -28,10 +32,9 @@
     <template #default>
       <div class="flex">
         <div :class="`flex flex-col gap-4 w-96 ${mobile ? '' : 'pl-4'}`">
-          <p :class="` place-self-${mobile ? 'center' : 'start'} text-xl font-semibold form-title-preview`">
-            {{
-              formTitle }}
-          </p>
+          <!-- <p :class="` place-self-${mobile ? 'center' : 'start'} text-surface-600 capitalize text-[21px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview`">
+            {{ templateData.name }}
+          </p> -->
           <div class="w-80 place-self-center text-justify mb-4">
             {{ formDescription }}
           </div>
@@ -41,7 +44,7 @@
               <div v-if="formField.fieldType === 'Form text'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -56,7 +59,7 @@
               <div v-else-if="formField.fieldType === 'Form long text'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -71,7 +74,7 @@
               <div v-else-if="formField.fieldType === 'Form date'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -84,7 +87,7 @@
               <div v-else-if="formField.fieldType === 'Form time'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -97,7 +100,7 @@
               <div v-else-if="formField.fieldType === 'Form image'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -110,7 +113,7 @@
               <div v-else-if="formField.fieldType === 'Form list'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -125,13 +128,17 @@
               <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
-                <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-4">
-                  <Checkbox v-model="checkbox.state" :binary="true" />
-                  <p>{{ checkbox?.text }}</p>
+                <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-2">
+                  <div class="w-12 h-12  flex items-center">
+                    <Checkbox v-model="checkbox.state" :binary="true" class="scale-150 m-2" />
+                  </div>
+                  <p class="font-poppins font-normal text-[rgb(107,114,128)] text-[16px] leading-[25px] ">
+                    {{ checkbox?.text }}
+                  </p>
                 </div>
                 <!-- <InputText
                   :id="`${formField.name}-${index}`"
@@ -144,17 +151,27 @@
               <div v-else-if="formField.fieldType === 'signature'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div>{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] capitalize">{{ formField.name }}</div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
                 <InputText :id="`${formField.name}-${index}`" v-model="formField.state" class="border-red-500" />
               </div>
             </div>
+            <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
+              <Button
+                class="font-poppins"
+                severity="success"
+                :disabled="!props?.isGeneratable"
+                label="Spawn document"
+                autofocus
+                @click="generateDocument"
+              />
+            </div>
           </div>
         </div>
-        <div v-if="!mobile" class="w-max md:w-max min-h-full  bg-primary-50 flex-1 ml-12 border  flex justify-center items-center">
-          <div v-if="props.isGeneratable" class="w-max md:w-max">
+        <div v-if="!mobile" class=" min-h-full  bg-primary-50 flex-1 ml-12   flex justify-center items-center" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }">
+          <div v-if="props.isGeneratable" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }">
             <CanvasPreview :template="props.templateData" :form-values="fields" :selected-rows="fields" :refresh="refresherNumber" />
           </div>
           <p v-else class="font-poppins text-lg">
@@ -164,14 +181,14 @@
       </div>
     </template>
     <template #footer>
-      <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
+      <!-- <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
         <Button
           :disabled="!props?.isGeneratable"
           label="Generate Document"
           autofocus
           @click="generateDocument"
         />
-      </div>
+      </div> -->
       <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
         <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
           <p>currently generating</p>
@@ -188,6 +205,40 @@
           </div>
         </div>
       </Dialog>
+      <Toast position="top-right" group="bc" @close="onClose">
+        <template #message="slotProps">
+          <div class="flex flex-col items-start flex-auto">
+            <div class="flex items-center gap-2">
+              <font-awesome-icon icon="fa-bold fa-check" size="lg" />
+              <span class="font-bold">Operation complete</span>
+            </div>
+            <!-- <div class="font-medium text-lg my-4">
+              {{ slotProps.message.summary }}
+            </div> -->
+            <div class="flex gap-2 mt-4">
+              <Button size="small" label="Download All" severity="success" @click="downlaodAllDocuments()" />
+              <Button outlined size="small" label="Open Doument library" severity="success" @click="navigateDocumentLibrary()" />
+            </div>
+          </div>
+        </template>
+      </Toast>
+      <Toast position="top-right" group="ac" @close="onClose">
+        <template #message="slotProps">
+          <div class="flex flex-col items-start flex-auto">
+            <div class="flex items-center gap-2">
+              <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
+              <div>
+                <p class="font-bold">
+                  {{ slotProps?.message?.summary }}
+                </p>
+                <p class="font-normal">
+                  {{ slotProps?.message?.detail }}
+                </p>
+              </div>
+            </div>
+          </div>
+        </template>
+      </Toast>
     </template>
   </Dialog>
 </template>
@@ -195,12 +246,14 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import { useRouter } from 'vue-router'
 import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCanvasPreview'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview'])
 const toast = useToast()
+const router = useRouter()
 const fields = ref([])
 const showPreview = ref(false)
 const mobile = ref(false)
@@ -243,8 +296,9 @@ async function onImageUpload(e, formField) {
 }
 // Function to collect all form data
 async function generateDocument() {
-  isGeneratingDoc.value = true
-  showGeneratedDocsModal.value = true
+  // isGeneratingDoc.value = true
+  // showGeneratedDocsModal.value = true
+  toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 10000, group: 'ac' })
   const formData = fields.value.map(field => ({
     ...field,
     // value: field.state,
@@ -269,13 +323,56 @@ async function generateDocument() {
     const data = await response.json()
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
-    toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
+    showGeneratedDocToast()
+    // toast.add({ severity: 'success', summary: 'Operation complete', detail: 'Docs Generated successfully', life: 4000 })
   }
   catch (error) {
     // console.error('Error:', error)
     isGeneratingDoc.value = false
-    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
+    toast.add({ severity: 'error', summary: 'Operation failed', detail: 'Unable to generate the docs', life: 5000 })
   }
+}
+
+const visible = ref(false)
+
+function showGeneratedDocToast() {
+  if (!visible.value) {
+    toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
+    visible.value = true
+  }
+}
+
+function onReply() {
+  toast.removeGroup('bc')
+  visible.value = false
+}
+
+function onClose() {
+  visible.value = false
+}
+
+function downlaodAllDocuments() {
+  // console.log('all generated docs', allGeneratedDocs.value)
+  allGeneratedDocs.value?.forEach((url, index) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then((blob) => {
+        const a = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+        a.href = objectUrl
+        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(objectUrl)
+      })
+      .catch((error) => {
+        console.error(`Error downloading file ${index + 1}:`, error)
+      })
+  })
+}
+function navigateDocumentLibrary() {
+  router.push('document-library')
 }
 </script>
 

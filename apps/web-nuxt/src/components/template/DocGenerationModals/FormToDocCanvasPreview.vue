@@ -1,7 +1,9 @@
 <template>
   <div class="h-full  w-max overflow-auto w-7/12 ">
     <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
-      <p>Live preview</p>
+      <p class="font-poppins font-normal text-surface-400 text-[rgb(107,114,128)] text-[16px] leading-6 text-center w-full  ">
+        Live preview
+      </p>
       <!-- <div class=" flex items-center">
         <Slider v-model="scale" :step="0.01" :min="0.5" :max="1" class="w-56" @input="updateScale" />
       </div>
