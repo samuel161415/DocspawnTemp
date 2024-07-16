@@ -6,11 +6,13 @@
       </div>
     </template>
 
-    <div class="flex justify-center  space-x-8 h-3/4  w-[92vw]">
-      <div class=" w-5/12 h-full mt-4">
-        <p class="font-poppins text-surface-600 text-lg font-semibold">
-          Data selection
-        </p>
+    <div class="flex justify-center  space-x-8 h-3/4  w-[92vw] ">
+      <div class=" w-6/12 h-full mt-0">
+        <div class="mb-0 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50  ">
+          <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full  ">
+            {{ template?.name }} - selected data
+          </p>
+        </div>
         <div class="w-full ">
           <EditDatasetTable
             v-if="template?.dataset_data?.keys?.length > 0"
@@ -20,13 +22,13 @@
             @change-selected-rows="handleChangeSelectedRows"
           />
         </div>
-        <Button contained class="w-full" :disabled="selectedRows?.length < 1" @click="generateDocs">
-          Generate Documents
-        </Button>
+        <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
+          <Button contained severity="success" label="Spawn documents" class="w-max font-poppins font-normal  text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
+        </div>
       </div>
       <CanvasPreview :template="template" :selected-rows="selectedRows" />
     </div>
-    <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
+    <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
       <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
         <p>currently generating</p>
         <ProgressSpinner />
@@ -40,7 +42,41 @@
           </Button>
         </div>
       </div>
-    </Dialog>
+    </Dialog> -->
+    <Toast position="top-right" group="bc" @close="onClose">
+      <template #message="slotProps">
+        <div class="flex flex-col items-start flex-auto">
+          <div class="flex items-center gap-2">
+            <font-awesome-icon icon="fa-bold fa-check" size="lg" />
+            <span class="font-bold">Operation complete</span>
+          </div>
+          <!-- <div class="font-medium text-lg my-4">
+              {{ slotProps.message.summary }}
+            </div> -->
+          <div class="flex gap-2 mt-4">
+            <Button size="small" label="Download All" severity="success" @click="downlaodAllDocuments()" />
+            <Button outlined size="small" label="Open Doument library" severity="success" @click="navigateDocumentLibrary()" />
+          </div>
+        </div>
+      </template>
+    </Toast>
+    <Toast position="top-right" group="ac" @close="onClose">
+      <template #message="slotProps">
+        <div class="flex flex-col items-start flex-auto">
+          <div class="flex items-center gap-2">
+            <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
+            <div>
+              <p class="font-bold">
+                {{ slotProps?.message?.summary }}
+              </p>
+              <p class="font-normal">
+                {{ slotProps?.message?.detail }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </template>
+    </Toast>
   </Dialog>
 </template>
 
@@ -89,6 +125,7 @@ function handleChangeSelectedRows(data) {
 async function generateDocs() {
   isGeneratingDoc.value = true
   showGeneratedDocsModal.value = true
+  toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 10000, group: 'ac' })
 
   const objToSend = {
     finalData: selectedRows.value,
@@ -107,12 +144,53 @@ async function generateDocs() {
     const data = await response.json()
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
-    toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
+    // toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
+    showGeneratedDocToast()
   }
   catch (error) {
     // console.error('Error:', error)
     isGeneratingDoc.value = false
     toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
   }
+}
+
+function showGeneratedDocToast() {
+  if (!visible.value) {
+    toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
+    visible.value = true
+  }
+}
+
+function onReply() {
+  toast.removeGroup('bc')
+  visible.value = false
+}
+
+function onClose() {
+  visible.value = false
+}
+
+function downlaodAllDocuments() {
+  // console.log('all generated docs', allGeneratedDocs.value)
+  allGeneratedDocs.value?.forEach((url, index) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then((blob) => {
+        const a = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+        a.href = objectUrl
+        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(objectUrl)
+      })
+      .catch((error) => {
+        console.error(`Error downloading file ${index + 1}:`, error)
+      })
+  })
+}
+function navigateDocumentLibrary() {
+  router.push('document-library')
 }
 </script>

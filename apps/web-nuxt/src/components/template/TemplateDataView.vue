@@ -55,10 +55,10 @@
         <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
             v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
-            @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
-            @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
-            @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'form to doc' && handleFileDrop(item, $event)"
+            @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
+            @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
+            @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50 ">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
@@ -110,15 +110,16 @@
           <div
             v-for="(item, index) in slotProps.items" :key="index"
             class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent"
-            @dragover.prevent="item.use_case !== 'form to doc' && handleDragOver(item, index)"
-            @dragenter.prevent="item.use_case !== 'form to doc' && handleDragEnter(item, index)"
-            @dragleave.prevent="item.use_case !== 'form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'form to doc' && handleFileDrop(item, $event)"
+            @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
+            @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
+            @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
                 Drop your data here
+                {{ console.log('item', item) }}
               </p>
               <p class="text-black font-poppins text-base text-center mt-2">
                 Supported file formats: <br /> .csv, .xls, .xlsx
@@ -547,7 +548,7 @@ function compareAndNotify(headers, keysToCheck, template) {
     handleDataToDocGenerationPreview(template)
   }
   else {
-    toast.add({ severity: 'error', summary: 'Oops', detail: 'Not all keys present', life: 3000 })
+    toast.add({ severity: 'error', summary: 'Oops', detail: 'Not all keys present', life: 10000 })
   }
 }
 

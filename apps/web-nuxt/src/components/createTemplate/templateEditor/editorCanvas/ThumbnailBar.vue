@@ -111,20 +111,3 @@ watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
   changeCurrentPageOnCanvas(newVal)
 })
 </script>
-
-  <style lang="scss" scoped>
-::-webkit-scrollbar {
-    width: 10px;
-    height:10px;
-    }
-    ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-    background: #009ee299;
-    border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-    background: #009ee2;
-    }
-  </style>

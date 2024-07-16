@@ -81,13 +81,13 @@
           <Column header="Actions">
             <template #body="{ data }">
               <div class="flex space-x-2">
-                <Button
+                <!-- <Button
                   rounded
                   text
                   :icon="props.icon1"
                   class="text-primaryBlue mr-2 text-xl rounded-xl"
                   @click="showDataInModal"
-                />
+                /> -->
                 <Button
                   rounded
                   :icon="props.icon2"

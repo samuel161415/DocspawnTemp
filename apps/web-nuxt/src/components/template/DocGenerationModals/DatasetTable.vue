@@ -2,12 +2,12 @@
   <div class="flex flex-col flex-wrap gap-4 mt-7">
     <div class="flex items-center">
       <RadioButton v-model="rowSelectionType" input-id="rowSelectionType2" name="pizza" value="manual" />
-      <label for="rowSelectionType2" class="ml-2 font-poppins text-surface-600">Manual data entry</label>
+      <label for="rowSelectionType2" class="ml-2 font-poppins text-surface-600 font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px]">Manual data entry</label>
       <InputText v-model="dataEntryText" class="ml-2 h-8" placeholder="e.g. 1-10,15 etc" :disabled="rowSelectionType === 'data-selection'" />
     </div>
     <div class="flex items-center">
       <RadioButton v-model="rowSelectionType" input-id="rowSelectionType1" name="pizza" value="data-selection" />
-      <label for="rowSelectionType1" class="ml-2 font-poppins text-surface-600">Mark data for document creation</label>
+      <label for="rowSelectionType1" class="ml-2 font-poppins text-surface-600 font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px]">Mark data for document creation</label>
     </div>
   </div>
   <div class="card p-fluid mt-7">

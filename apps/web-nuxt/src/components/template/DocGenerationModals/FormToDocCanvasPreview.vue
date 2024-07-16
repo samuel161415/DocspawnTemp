@@ -1,7 +1,7 @@
 <template>
-  <div class="h-full  w-max overflow-auto w-7/12 ">
+  <div class="h-full  w-max overflow-auto w-7/12 ml-4 ">
     <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
-      <p class="font-poppins font-normal text-surface-400 text-[rgb(107,114,128)] text-[16px] leading-6 text-center w-full  ">
+      <p class="font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6 text-center w-full  ">
         Live preview
       </p>
       <!-- <div class=" flex items-center">
@@ -11,7 +11,7 @@
         <Button label="Refresh" @click="refreshPreview" />
       </div> -->
     </div>
-    <div class="h-full  w-max overflow-auto ">
+    <div class="h-full  w-max overflow-auto  ">
       <div v-show="!isCanvasLoaded " class="w-full h-full ">
         <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8 ">
           <div class="flex mb-4">
@@ -29,8 +29,8 @@
           </div>
         </div>
       </div>
-      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   border">
-        <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  data-to-doc-canvas" :style="canvasStyle">
+      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  h-[70vh] overflow-y-scroll  ">
+        <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 border data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
           class="pointer-auto" :is-generating-preview="true" :template="template"
@@ -98,7 +98,7 @@ watch(currentPreviewNo, () => {
   renderOriginalData()
 })
 function renderOriginalData() {
-  console.log('renderOriginalData', selectedData.value)
+  // console.log('renderOriginalData', selectedData.value)
   const canvas = canvasService.getCanvas()
   if (selectedData.value?.length > 0) {
     if (canvas) {
@@ -116,7 +116,6 @@ function renderOriginalData() {
               correspondingData = formatDateForInput(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.dateFormat)
           }
           else if (obj?.fieldType === 'Form time') {
-            console.log('formatTimeForInput(data?.filter(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.timeFormat)', formatTimeForInput(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.timeFormat))
             if (data?.filter(d => d?.hash === obj?.hash)[0]?.state)
             //  correspondingData = new Date(data?.filter(d => d?.hash === obj?.hash)[0]?.state)?.getTime()
               correspondingData = formatTimeForInput(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.timeFormat)
@@ -129,20 +128,16 @@ function renderOriginalData() {
             obj.set({ text: correspondingData?.toString() })
         }
         else if (obj?.fieldType === 'Form checkbox group') {
-          console.log('obj', obj)
           const specificCheck = data?.filter(d => d?.hash === obj?.hash)[0]?.checkboxes?.filter(c => c?.checkboxIdentifierHash === obj?.checkboxIdentifierHash)[0]
           const isChecked = specificCheck.state === true
-          console.log('ischecked', isChecked)
           const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
           if (correspondingField?.designs) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
             const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-            console.log('src to set', srcToSet)
             obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, () => {
             //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
             //     ?
-              console.log('src set to', isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no)
               obj.scaleToWidth(originalWidth)
               // : obj.scaleToHeight(originalHeight)
               canvas.renderAll()

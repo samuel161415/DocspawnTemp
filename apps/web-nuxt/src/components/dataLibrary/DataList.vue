@@ -5,7 +5,7 @@
         Select a template to display data.
       </p>
       <TreeSelect
-        v-model="selectedValue"
+        v-model="selectedTemplate"
         :options="NodeData"
         placeholder="Select Template"
         class="md:w-[20rem] w-full"
@@ -16,35 +16,34 @@
     <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :export-file="props.exportFile" @export-c-s-v="exportCSVHandler" />
 
     <div class="mt-10">
-        <DataTable
-            ref="dataTableRef"
-            v-model:filters="filters"
-            :value="filteredData"
-            show-gridlines
-            :paginator="filteredData.length > 0"
-            responsive-layout="scroll"
-            :rows="25"
-            :row-hover="true"
-            data-key="id"
-            filter-display="menu"
-            overlay-visible
-            striped-rows
-            csv-separator
-            :global-filter-fields="['filled_on', 'text_filled']"
-            paginatorTemplate="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-            :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
-            :rowsPerPageOptions="[25, 50, 100]"
-            @update:filters="onFilterChange"
-        >
-          <template #header>
-       
-            <DataTableFilters
-              :filters="filters"
-              :hasFilterActions="props.hasFilterActions"
-              :typefilter="typefilter"
-              @filterData="filterData"
-              @clearFilter="clearFilter"
-            />
+      <DataTable
+        ref="dataTableRef"
+        v-model:filters="filters"
+        :value="filteredData"
+        show-gridlines
+        :paginator="filteredData.length > 0"
+        responsive-layout="scroll"
+        :rows="25"
+        :row-hover="true"
+        data-key="id"
+        filter-display="menu"
+        overlay-visible
+        striped-rows
+        csv-separator
+        :global-filter-fields="['filled_on', 'text_filled']"
+        paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
+        :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
+        :rows-per-page-options="[25, 50, 100]"
+        @update:filters="onFilterChange"
+      >
+        <template #header>
+          <DataTableFilters
+            :filters="filters"
+            :has-filter-actions="props.hasFilterActions"
+            :typefilter="typefilter"
+            @filter-data="filterData"
+            @clear-filter="clearFilter"
+          />
 
           <div class="text-left mt-7 w-3/4 sm:w-full text-sm">
             <MultiSelect
@@ -127,6 +126,7 @@ import { ref } from 'vue'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
+import { accountData } from '@/composables/useAccountData'
 
 const props = defineProps({
   data: {
@@ -173,6 +173,8 @@ const props = defineProps({
 
 const emit = defineEmits()
 
+const runtimeConfig = useRuntimeConfig()
+
 const typefilter = ref('')
 
 const dataTableRef = ref()
@@ -183,45 +185,96 @@ const dialogVisible = ref(false)
 
 const selectedRowData = ref(null)
 
-const selectedValue = ref()
+const selectedTemplate = ref()
 
 const templatefiltered = ref([])
 
 const filteredData = ref(templatefiltered)
 
-const NodeData = [
-  {
-    key: 'Form to doc',
-    label: 'Form to doc',
-    data: 'Form to doc',
-    icon: 'pi pi-fw pi-inbox',
-    selectable: false,
-    children: [
-      {
-        key: 'FORM',
-        label: 'FORM',
-        data: 'FORM',
-      },
-      {
-        key: 'APPLICATION FORM',
-        label: 'APPLICATION FORM',
-        data: 'APPLICATION FORM',
-      },
-    ],
-  },
-  {
-    key: 'Table to doc',
-    label: 'Table to doc',
-    data: 'Table to doc',
-    icon: 'pi pi-fw pi-calendar',
-    selectable: false,
-    children: [
-      { key: 'INVOICE FORM', label: 'INVOICE FORM', data: 'INVOICE FORM' },
-      { key: 'PDF FORM', label: 'PDF FORM', data: 'PDF FORM' },
-    ],
-  },
-]
+// const NodeData = [
+//   {
+//     key: 'Form to doc',
+//     label: 'Form to doc',
+//     data: 'Form to doc',
+//     icon: 'pi pi-fw pi-inbox',
+//     selectable: false,
+//     children: [
+//       {
+//         key: 'FORM',
+//         label: 'FORM',
+//         data: 'FORM',
+//       },
+//       {
+//         key: 'APPLICATION FORM',
+//         label: 'APPLICATION FORM',
+//         data: 'APPLICATION FORM',
+//       },
+//     ],
+//   },
+//   {
+//     key: 'Table to doc',
+//     label: 'Table to doc',
+//     data: 'Table to doc',
+//     icon: 'pi pi-fw pi-calendar',
+//     selectable: false,
+//     children: [
+//       { key: 'INVOICE FORM', label: 'INVOICE FORM', data: 'INVOICE FORM' },
+//       { key: 'PDF FORM', label: 'PDF FORM', data: 'PDF FORM' },
+//     ],
+//   },
+// ]
+const NodeData = ref()
+const templates = ref([])
+watch(NodeData, () => {
+  console.log('Node Data', NodeData.value)
+})
 
+onMounted(async () => {
+  try {
+    // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${accountData?.accountType}`)
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+    console.log('templates', data)
+
+    if (data?.length > 0) {
+      templates.value = data
+      const templateData = data
+      const formToDoc = []
+      const dataToDoc = []
+      templateData?.forEach((d) => {
+        if (d?.use_case === 'Data to doc')
+          dataToDoc.push({ key: d?.id, label: d?.name, data: d?.name })
+        else
+          formToDoc.push({ key: d?.id, label: d?.name, data: d?.name })
+      })
+      console.log('template  data at data library', templateData)
+      NodeData.value = [
+        {
+          key: 'Form to doc',
+          label: 'Form to doc',
+          data: 'Form to doc',
+          icon: 'pi pi-fw pi-inbox',
+          selectable: false,
+          children: formToDoc,
+        },
+        {
+          key: 'Table to doc',
+          label: 'Table to doc',
+          data: 'Table to doc',
+          icon: 'pi pi-fw pi-calendar',
+          selectable: false,
+          children: dataToDoc,
+        },
+      ]
+    }
+    // console.log('response of fetching templates', data)
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
+})
 const filters = ref(props.filters)
 
 const selectedColumns = ref(props.columns)
@@ -230,11 +283,34 @@ function onToggle(val) {
   selectedColumns.value = props.columns.filter(col => val.includes(col))
 }
 
-watch(selectedValue, (selectedValue) => {
-  templatefiltered.value = props.data.filter((item) => {
-    const templateName = item.templateName
-    return selectedValue[templateName]
+watch(selectedTemplate, (selectedTemplate) => {
+  console.log('selecte dtemplate', selectedTemplate)
+  // here in template filter data objects of selected template will be present
+  //   {
+  //   "id": 6,
+  //   "image": "https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg",
+  //   "templateName": "FORM",
+  //   "text_filled": "Sed Do Eiusmod",
+  //   "type": "Form to Doc",
+  //   "filled_on": "Mon Apr 22 2024 05:00:00 GMT+0500 (Pakistan Standard Time)"
+  // }
+
+  // templatefiltered.value = props.data.filter((item) => {
+  //   const templateName = item.templateName
+  //   console.log('templateName', templateName)
+  //   console.log('selectedTemplate[templateName]', selectedTemplate[templateName])
+  //   return selectedTemplate[templateName]
+  // })
+  templatefiltered.value = templates.value.filter((item) => {
+    const key = item.id
+    console.log('key', key)
+    console.log('selectedTemplate[key]', selectedTemplate[key])
+    return selectedTemplate[key]
   })
+  console.log('template filtered', templatefiltered.value)
+})
+watch(templatefiltered, (val) => {
+  console.log('template filtered', templatefiltered.value)
 })
 
 function toggleDialog(data, img) {
