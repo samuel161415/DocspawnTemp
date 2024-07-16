@@ -50,12 +50,12 @@
             <font-awesome-icon icon="fa-bold fa-check" size="lg" />
             <span class="font-bold">Operation complete</span>
           </div>
-          <!-- <div class="font-medium text-lg my-4">
-              {{ slotProps.message.summary }}
-            </div> -->
+          <div class="font-normal text-lg mt-1 font-poppins text-md">
+            {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} generated successfully
+          </div>
           <div class="flex gap-2 mt-4">
-            <Button size="small" label="Download All" severity="success" @click="downlaodAllDocuments()" />
-            <Button outlined size="small" label="Open Doument library" severity="success" @click="navigateDocumentLibrary()" />
+            <Button size="small" label="Download All" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
+            <Button outlined size="small" class="font-poppins whitespace-nowrap" label="Open Document Library" severity="success" @click="navigateDocumentLibrary()" />
           </div>
         </div>
       </template>

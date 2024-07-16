@@ -226,19 +226,19 @@
           <div class="flex flex-col items-start flex-auto">
             <div class="flex items-center gap-2">
               <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-              <span class="font-bold">Operation complete</span>
+              <span class="font-bold font-poppins">Operation complete</span>
             </div>
-            <!-- <div class="font-medium text-lg my-4">
-              {{ slotProps.message.summary }}
-            </div> -->
+            <div class="font-normal text-lg mt-1 font-poppins text-md">
+              Document generated successfully
+            </div>
             <div class="flex gap-2 mt-4">
-              <Button size="small" label="Download All" severity="success" @click="downlaodAllDocuments()" />
-              <Button outlined size="small" label="Open Doument library" severity="success" @click="navigateDocumentLibrary()" />
+              <Button size="small" label="Download " severity="success" class="font-poppins" @click="downlaodAllDocuments()" />
+              <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
             </div>
           </div>
         </template>
       </Toast>
-      <Toast position="center" group="ac" @close="onClose">
+      <Toast position="top-right" group="ac" @close="onClose">
         <template #message="slotProps">
           <div class="flex flex-col items-start flex-auto">
             <div class="flex items-center gap-2">
@@ -357,10 +357,10 @@ async function generateDocument() {
 const visible = ref(false)
 
 function showGeneratedDocToast() {
-  if (!visible.value) {
-    toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
-    visible.value = true
-  }
+  // if (!visible.value) {
+  toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
+  visible.value = true
+  // }
 }
 
 function onReply() {
