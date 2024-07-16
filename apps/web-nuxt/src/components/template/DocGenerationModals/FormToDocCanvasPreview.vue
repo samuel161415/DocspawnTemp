@@ -11,7 +11,7 @@
         <Button label="Refresh" @click="refreshPreview" />
       </div> -->
     </div>
-    <div class="h-full  w-max overflow-auto  ">
+    <div class="h-full  w-max overflow-auto   h-[70vh] overflow-y-scroll">
       <div v-show="!isCanvasLoaded " class="w-full h-full ">
         <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8 ">
           <div class="flex mb-4">
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  h-[70vh] overflow-y-scroll  ">
+      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   ">
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 border data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar

@@ -17,7 +17,7 @@
         <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />
       </div>
     </div>
-    <div class="h-full  w-max overflow-auto  ">
+    <div class="h-full  w-max overflow-auto  h-[70vh] overflow-y-auto">
       <div v-show="!isCanvasLoaded " class="w-full h-full ">
         <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8 ">
           <div class="flex mb-4">
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   border h-[70vh] overflow-y-auto">
+      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   border ">
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
