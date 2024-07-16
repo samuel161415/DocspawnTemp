@@ -48,7 +48,7 @@
         >
           <template #body="{ data }">
             <div v-if="column.header === 'Date'">
-              {{ formatDateForInput(data[column.field], 'DD/MM/YYYY') }}
+              {{ formatDateForInput(data[column.field], 'DD/MM/YYYY') }}   &nbsp;  {{ formatTimeForInput(data[column.field], 'HH:MM:SS XM') }}
             </div>
             <div v-else-if="column.header === 'Items'">
               <Dropdown v-model="selectedItem" :options="data[column.field]" option-label="name" placeholder="" class="w-full md:w-[14rem]" />
