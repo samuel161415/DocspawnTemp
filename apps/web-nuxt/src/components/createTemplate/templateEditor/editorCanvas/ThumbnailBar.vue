@@ -2,7 +2,8 @@
   <div class="h-max p-2  flex items-center justify-between px-3  mb-6 rounded-md bg-primary-50 mt-4 ">
     <div class="w-full  h-max p-2">
       <p class="px-2 mb-1 ">
-        Current page: <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> out of <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
+        Current page: <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> out of
+        <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
       </p>
       <div v-if="templateEditorStore.activePageForCanvas !== 0" class="flex gap-4 w-full overflow-x-auto overflow-y-hidden p-3">
         <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="selectPageFromThumbnail(item)">
@@ -111,3 +112,5 @@ watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
   changeCurrentPageOnCanvas(newVal)
 })
 </script>
+
+<style lang="scss" scoped></style>

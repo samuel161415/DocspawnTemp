@@ -460,7 +460,7 @@ function handleDragOver(item, index) {
   isDragging.value[index] = true
 }
 function showError() {
-  toast.add({ severity: 'error', summary: 'Invalid file format', detail: 'Please upload a .csv, .xls or .xlsx file', life: 10000 })
+  toast.add({ severity: 'error', summary: 'Invalid file', detail: 'Please upload a .csv, .xls or .xlsx file', life: 10000 })
 }
 function handleFileDrop(template, event) {
   const files = event.dataTransfer.files
@@ -548,7 +548,7 @@ function compareAndNotify(headers, keysToCheck, template) {
     handleDataToDocGenerationPreview(template)
   }
   else {
-    toast.add({ severity: 'error', summary: 'Oops', detail: 'Not all keys present', life: 10000 })
+    toast.add({ severity: 'error', summary: 'Invalid file', detail: 'This file doesn\'t match the template data', life: 10000 })
   }
 }
 

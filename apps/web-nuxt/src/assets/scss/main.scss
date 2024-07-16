@@ -167,22 +167,52 @@ body {
 
 /* assets/global.scss */
 
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
+// *::-webkit-scrollbar {
+//   width: 10px;
+//   height: 10px;
+// }
+
+// *::-webkit-scrollbar-track {
+//   background: #f1f1f1;
+// }
+
+// *::-webkit-scrollbar-thumb {
+//   background: #009ee233;
+//   border-radius: 8px;
+// }
+
+// *::-webkit-scrollbar-thumb:hover {
+//   background: #009ee288;
+// }
+/* assets/global.scss */
+
+* {
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #009ee233;
+    border-radius: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #009ee288;
+  }
+
+  /* Hide scrollbar for Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #009ee233 #f1f1f1;
 }
 
-*::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-*::-webkit-scrollbar-thumb {
-  background: #009ee233;
-  border-radius: 8px;
-}
-
-*::-webkit-scrollbar-thumb:hover {
-  background: #009ee288;
+/* Hide scrollbar for Internet Explorer and Edge */
+* {
+  -ms-overflow-style: none;
 }
 // *::-webkit-scrollbar {
 //   width: 0; /* Remove scrollbar space */

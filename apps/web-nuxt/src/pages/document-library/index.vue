@@ -83,7 +83,7 @@ onMounted(async () => {
     const data = await response.json()
     const dataToUse = data?.generatedDocs?.map((d) => {
       return { id: d?.batch_id, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name }
-    })
+    })?.sort((a, b) => b.date - a.date)
     documentLibraryData.value = dataToUse
   }
   catch (error) {

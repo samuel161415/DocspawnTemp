@@ -48,7 +48,7 @@
         >
           <template #body="{ data }">
             <div v-if="column.header === 'Date'">
-              {{ formatDate(data[column.field]) }}
+              {{ formatDateForInput(data[column.field], 'DD/MM/YYYY') }}
             </div>
             <div v-else-if="column.header === 'Items'">
               <Dropdown v-model="selectedItem" :options="data[column.field]" option-label="name" placeholder="" class="w-full md:w-[14rem]" />
@@ -61,8 +61,8 @@
           <template v-if="column.header === 'Date'" #filter="{ filterModel }">
             <Calendar
               v-model="filterModel.value"
-              date-format="mm/dd/yy"
-              placeholder="mm/dd/yyyy"
+              date-format="dd/mm/yyyy"
+              placeholder="dd/mm/yyyy"
               mask="99/99/9999"
             />
           </template>
@@ -110,6 +110,7 @@ import { useToast } from 'primevue/usetoast'
 import DataTableHeader from './DataTableHeader.vue'
 import DataTableFilters from './DataTableFilters.vue'
 import formatDate from '~/utils'
+import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
 
 const props = defineProps({
   data: {
