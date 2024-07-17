@@ -258,15 +258,17 @@ watch(selectedTemplate, async (selectedTemplate) => {
   const formFields = temp?.added_fields?.filter(f => f?.isFormField)
 
   const columnsToAdd = [{ field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
+    console.log('k', k)
     if (k?.fieldType === 'Form image')
-      return { field: k.id, header: k.id, data_type: 'image' }
+      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
-      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else if (k?.fieldType === 'Form time')
-      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else
-      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
+  console.log('columns to add', columnsToAdd)
   selectedColumns.value = columnsToAdd
   allColumns.value = columnsToAdd
 
@@ -282,10 +284,10 @@ watch(selectedTemplate, async (selectedTemplate) => {
     if (k?.fieldType === 'Form image')
       console.log('is form image', k)
     else if (k?.fieldType === 'Form date')
-      filterToAdd[k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
+      filterToAdd[k?.name ? k?.name : k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
     else if (k?.fieldType === 'Form time')
-      filterToAdd[k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.TIME_IS }] }
-    else filterToAdd[k?.id] = { value: null, matchMode: FilterMatchMode.CONTAINS }
+      filterToAdd[k?.name ? k?.name : k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.TIME_IS }] }
+    else filterToAdd[k?.name ? k?.name : k?.id] = { value: null, matchMode: FilterMatchMode.CONTAINS }
   })
   filters.value = filterToAdd
 
@@ -307,9 +309,9 @@ watch(selectedTemplate, async (selectedTemplate) => {
             entry.checkboxes.forEach((e) => {
               state = `${state}${e.text}: ${e.state ? '1' : '0'}; `
             })
-            obj = { ...obj, [entry.id]: state }
+            obj = { ...obj, [entry?.name ? entry?.name : entry?.id]: state }
           }
-          else { obj = { ...obj, [entry.id]: entry.state } }
+          else { obj = { ...obj, [entry?.name ? entry?.name : entry?.id]: entry.state } }
         })
         return {
           id: e.id,
@@ -332,6 +334,12 @@ watch(selectedTemplate, async (selectedTemplate) => {
   }
 })
 
+watch(selectedColumns, (val) => {
+  console.log('selected columns', val)
+})
+watch(templatefiltered, (val) => {
+  console.log('template filtered', val)
+})
 function toggleDialog(data, img) {
   currentImage.value = img
   selectedRowData.value = data
