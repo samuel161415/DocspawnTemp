@@ -1,14 +1,14 @@
 <template>
   <div class="box overflow-hidden z-1 px-3 py-5 table-container">
     <div class="flex flex-col  gap-2 left-0 md:mb-14">
-      <p class="text-surface-600 text-left text-lg mb-2">
+      <p class="font-poppins text-surface-600 text-left text-lg mb-2">
         Select a template to display data.
       </p>
       <TreeSelect
         v-model="selectedTemplate"
         :options="NodeData"
         placeholder="Select Template"
-        class="md:w-[20rem] w-full"
+        class="md:w-[20rem] w-full font-poppins"
         selection-mode="single"
       />
     </div>
@@ -48,20 +48,21 @@
           <div class="text-left mt-7 w-3/4 sm:w-full text-sm">
             <MultiSelect
               v-model="selectedColumns"
-              :options="columns"
+              :options="allColumns"
               option-label="header"
               display="chip"
               placeholder="Select Columns"
+              class="font-poppins"
             />
           </div>
         </template>
         <template #empty>
-          <div class="flex justify-center">
+          <div class=" font-poppins flex justify-center">
             Select a template to display data.
           </div>
         </template>
         <template #loading>
-          <div class="flex justify-center">
+          <div class="font-poppins flex justify-center">
             Loading data. Please wait.
           </div>
         </template>
@@ -75,18 +76,23 @@
           :filter-field="column.filterField"
           :show-filter-match-modes="column.showFilterMatchModes"
           :filter-menu-style="{ width: '14rem' }"
+          header-class="font-poppins"
         >
           <template #body="{ data }">
-            <div v-if="column.header === 'Image'">
+            <div v-if="column.data_type === 'image'">
               <div class=" flex justify-content-center">
                 <Button icon="pi pi-eye" outlined text @click="toggleDialog(index, data[column.field])" />
               </div>
             </div>
-            <div v-else-if="column.field === 'filled_on'">
+            <div v-else-if="column.field === 'filled_on' || column.data_type === 'date'" class="font-poppins">
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
-              {{ formatDate(data[column.field]) }}
+              {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
             </div>
-            <div v-else class="flex ">
+            <div v-else-if=" column.data_type === 'time'" class="font-poppins">
+              <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
+              {{ formatTimeForInput(data[column.field], column?.format || 'HH:MM:SS XM') }}
+            </div>
+            <div v-else class="flex font-poppins">
               {{ data[column.field] }}
             </div>
           </template>
@@ -123,9 +129,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
+import { formatDateForInput, formatTimeForInput } from '~/utils/dateFunctions'
 import { accountData } from '@/composables/useAccountData'
 
 const props = defineProps({
@@ -137,10 +145,7 @@ const props = defineProps({
     type: Object,
     required: true,
   },
-  columns: {
-    type: Array,
-    required: true,
-  },
+
   hasActionsColumn: {
     type: Boolean,
     required: true,
@@ -191,43 +196,8 @@ const templatefiltered = ref([])
 
 const filteredData = ref(templatefiltered)
 
-// const NodeData = [
-//   {
-//     key: 'Form to doc',
-//     label: 'Form to doc',
-//     data: 'Form to doc',
-//     icon: 'pi pi-fw pi-inbox',
-//     selectable: false,
-//     children: [
-//       {
-//         key: 'FORM',
-//         label: 'FORM',
-//         data: 'FORM',
-//       },
-//       {
-//         key: 'APPLICATION FORM',
-//         label: 'APPLICATION FORM',
-//         data: 'APPLICATION FORM',
-//       },
-//     ],
-//   },
-//   {
-//     key: 'Table to doc',
-//     label: 'Table to doc',
-//     data: 'Table to doc',
-//     icon: 'pi pi-fw pi-calendar',
-//     selectable: false,
-//     children: [
-//       { key: 'INVOICE FORM', label: 'INVOICE FORM', data: 'INVOICE FORM' },
-//       { key: 'PDF FORM', label: 'PDF FORM', data: 'PDF FORM' },
-//     ],
-//   },
-// ]
 const NodeData = ref()
 const templates = ref([])
-watch(NodeData, () => {
-  console.log('Node Data', NodeData.value)
-})
 
 onMounted(async () => {
   try {
@@ -236,7 +206,6 @@ onMounted(async () => {
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
-    console.log('templates', data)
 
     if (data?.length > 0) {
       templates.value = data
@@ -249,7 +218,6 @@ onMounted(async () => {
         else
           formToDoc.push({ key: d?.id, label: d?.name, data: d?.name })
       })
-      console.log('template  data at data library', templateData)
       NodeData.value = [
         {
           key: 'Form to doc',
@@ -260,9 +228,9 @@ onMounted(async () => {
           children: formToDoc,
         },
         {
-          key: 'Table to doc',
-          label: 'Table to doc',
-          data: 'Table to doc',
+          key: 'Data to doc',
+          label: 'Data to doc',
+          data: 'Data to doc',
           icon: 'pi pi-fw pi-calendar',
           selectable: false,
           children: dataToDoc,
@@ -276,41 +244,92 @@ onMounted(async () => {
   }
 })
 const filters = ref(props.filters)
-
-const selectedColumns = ref(props.columns)
+const allColumns = ref()
+const selectedColumns = ref()
 
 function onToggle(val) {
-  selectedColumns.value = props.columns.filter(col => val.includes(col))
+  selectedColumns.value = allColumns.value.filter(col => val.includes(col))
 }
-
-watch(selectedTemplate, (selectedTemplate) => {
-  console.log('selecte dtemplate', selectedTemplate)
-  // here in template filter data objects of selected template will be present
-  //   {
-  //   "id": 6,
-  //   "image": "https://cdn1.vectorstock.com/i/1000x1000/73/95/clean-application-form-for-admission-document-vector-31097395.jpg",
-  //   "templateName": "FORM",
-  //   "text_filled": "Sed Do Eiusmod",
-  //   "type": "Form to Doc",
-  //   "filled_on": "Mon Apr 22 2024 05:00:00 GMT+0500 (Pakistan Standard Time)"
-  // }
-
-  // templatefiltered.value = props.data.filter((item) => {
-  //   const templateName = item.templateName
-  //   console.log('templateName', templateName)
-  //   console.log('selectedTemplate[templateName]', selectedTemplate[templateName])
-  //   return selectedTemplate[templateName]
-  // })
-  templatefiltered.value = templates.value.filter((item) => {
+watch(selectedTemplate, async (selectedTemplate) => {
+  const temp = templates.value.filter((item) => {
     const key = item.id
-    console.log('key', key)
-    console.log('selectedTemplate[key]', selectedTemplate[key])
     return selectedTemplate[key]
+  })[0]
+  const formFields = temp?.added_fields?.filter(f => f?.isFormField)
+
+  const columnsToAdd = [{ field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
+    if (k?.fieldType === 'Form image')
+      return { field: k.id, header: k.id, data_type: 'image' }
+    else if (k?.fieldType === 'Form date')
+      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+    else if (k?.fieldType === 'Form time')
+      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+    else
+      return { field: k.id, header: k.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+  })]
+  selectedColumns.value = columnsToAdd
+  allColumns.value = columnsToAdd
+
+  /** ************ set filters */
+  const filterToAdd = {
+    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+    filled_on: {
+      operator: FilterOperator.AND,
+      constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
+    },
+  }
+  temp?.added_fields?.filter(f => f?.isFormField)?.forEach((k) => {
+    if (k?.fieldType === 'Form image')
+      console.log('is form image', k)
+    else if (k?.fieldType === 'Form date')
+      filterToAdd[k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
+    else if (k?.fieldType === 'Form time')
+      filterToAdd[k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.TIME_IS }] }
+    else filterToAdd[k?.id] = { value: null, matchMode: FilterMatchMode.CONTAINS }
   })
-  console.log('template filtered', templatefiltered.value)
-})
-watch(templatefiltered, (val) => {
-  console.log('template filtered', templatefiltered.value)
+  filters.value = filterToAdd
+
+  /** *** fetch form entries value */
+  try {
+    // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/form-entries/${temp?.id}`)
+
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+
+    if (data?.length > 0) {
+      const dataForTemplateEntries = data?.map((e, i) => {
+        let obj = {}
+        e?.entries?.forEach((entry) => {
+          if (entry.fieldType === 'Form checkbox group') {
+            let state = ''
+            entry.checkboxes.forEach((e) => {
+              state = `${state}${e.text}: ${e.state ? '1' : '0'}; `
+            })
+            obj = { ...obj, [entry.id]: state }
+          }
+          else { obj = { ...obj, [entry.id]: entry.state } }
+        })
+        return {
+          id: e.id,
+          image: '',
+          templateName: temp.name,
+          filled_on: new Date(e?.created_at).toDateString(),
+          type: 'Form to Doc',
+          ...obj,
+
+        }
+      })
+
+      templatefiltered.value = dataForTemplateEntries
+    }
+
+    // console.log('response of fetching templates', data)
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
 })
 
 function toggleDialog(data, img) {
