@@ -258,7 +258,6 @@ watch(selectedTemplate, async (selectedTemplate) => {
   const formFields = temp?.added_fields?.filter(f => f?.isFormField)
 
   const columnsToAdd = [{ field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
-    console.log('k', k)
     if (k?.fieldType === 'Form image')
       return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
@@ -268,7 +267,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
     else
       return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
-  console.log('columns to add', columnsToAdd)
+
   selectedColumns.value = columnsToAdd
   allColumns.value = columnsToAdd
 
@@ -282,7 +281,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
   }
   temp?.added_fields?.filter(f => f?.isFormField)?.forEach((k) => {
     if (k?.fieldType === 'Form image')
-      console.log('is form image', k)
+      console.log()
     else if (k?.fieldType === 'Form date')
       filterToAdd[k?.name ? k?.name : k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
     else if (k?.fieldType === 'Form time')
@@ -334,12 +333,6 @@ watch(selectedTemplate, async (selectedTemplate) => {
   }
 })
 
-watch(selectedColumns, (val) => {
-  console.log('selected columns', val)
-})
-watch(templatefiltered, (val) => {
-  console.log('template filtered', val)
-})
 function toggleDialog(data, img) {
   currentImage.value = img
   selectedRowData.value = data

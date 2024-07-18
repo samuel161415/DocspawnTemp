@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full  w-max overflow-auto  ">
-    <CanvasOptionsTopBar />
+  <div class="h-full  w-max overflow-auto ">
+    <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
@@ -18,11 +18,12 @@
         </div>
       </div>
     </div>
-    <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
-      <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  ">
+    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex flex-col w-[900px]  relative   ">
+      <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
-      <ThumbnailBar />
     </div>
+
+    <ThumbnailBar :style="thumbnailCoverStyle" />
   </div>
 </template>
 
@@ -40,6 +41,38 @@ const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
 const canvasWrapper = ref(null)
 const activeElement = ref()
+
+const scale = ref(1)
+function updateScale(value) {
+  console.log('emitted canvas zoom')
+  console.log('scale at canvas', value)
+  scale.value = value
+}
+// const canvasStyle = computed(() => ({
+//   transform: `scale(${scale.value}) `,
+// }))
+const canvasWrapperHeight = ref(1)
+const canvasWrapperStyle = computed(() => ({
+  overflow: 'auto',
+  position: 'relative',
+  width: '900px',
+  height: `${canvasWrapperHeight.value}px`,
+  minHeight: '100%',
+  transform: `scale(${scale.value})`,
+  transformOrigin: '0 0',
+  width: '900px',
+  // height: 'auto',
+  height: `${canvasWrapperHeight.value}px`,
+}))
+watch(canvasWrapperHeight, (val) => {
+  console.log('canvas wrapper height', val)
+})
+const thumbnailCoverStyle = computed(() => ({
+  marginTop: `${(canvasWrapperHeight.value * scale.value) - canvasWrapperHeight.value + 10}px`,
+  position: 'sticky',
+  top: '0',
+  left: '0',
+}))
 
 onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id) {
@@ -99,6 +132,8 @@ async function createCanvas() {
 
   const canvasWidth = viewport.width * scale
   const canvasHeight = viewport.height * scale
+  // for zooming purpose
+  canvasWrapperHeight.value = canvasHeight
 
   // Set the canvas dimensions
   canvas.width = canvasWidth

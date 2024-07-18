@@ -22,6 +22,18 @@
         </div>
       </div>
     </div>
+    <!-- <div class=" flex items-center">
+      <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
+    </div> -->
+    <div class="flex items-center mt-4 gap-2">
+      <button class="p-button p-component p-button-rounded p-button-icon-only" @click="decreaseScale">
+        <span class="pi pi-minus"></span>
+      </button>
+      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border -mt-1" @change="updateScale" />
+      <button class="p-button p-component p-button-rounded p-button-icon-only" @click="increaseScale">
+        <span class="pi pi-plus"></span>
+      </button>
+    </div>
 
     <div class="flex flex-row-reverse ">
       <Button
@@ -49,6 +61,22 @@
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+
+const emit = defineEmits(['updateScale'])
+const scale = ref(1)
+function decreaseScale() {
+  if (scale.value > 0.5)
+    scale.value -= 0.1
+}
+
+function increaseScale() {
+  if (scale.value < 2)
+    scale.value += 0.1
+}
+
+watch(scale, (val) => {
+  emit('updateScale', val)
+})
 
 const currentPreviewNo = ref(1)
 
