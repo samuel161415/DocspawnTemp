@@ -988,6 +988,7 @@ export default function addEventsToCanvas() {
       }
       // for showing options when click
       const activeObj = canvas.getActiveObject()
+
       // console.log('active object', activeObj)
       if (activeObj instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: activeObj.scaleX, y: activeObj.scaleY }

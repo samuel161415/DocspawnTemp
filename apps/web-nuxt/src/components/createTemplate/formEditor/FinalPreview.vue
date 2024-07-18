@@ -120,10 +120,11 @@
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
-                <FileUpload
-                  :id="`${formField.name}-${index}`" v-model="formField.state" mode="basic" name="demo[]"
+                <!-- <FileUpload
+                  :id="`${formField.name}-${index}`" mode="basic" name="demo[]"
                   accept="image/*" @input="(e) => onImageUpload(e, formField)"
-                />
+                /> -->
+                <Input type="file" accept="image/*" class="font-poppins p-2" @input="(e) => onImageUpload(e, formField)" />
               </div>
 
               <div v-else-if="formField.fieldType === 'Form list'" class="flex flex-col gap-2">

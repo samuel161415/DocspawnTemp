@@ -150,14 +150,25 @@ function renderOriginalData() {
 
           const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
 
-          if (correspondingData) {
-            const originalHeight = obj.height * obj.scaleY
-            const originalWidth = obj.width * obj.scaleX
+          const originalHeight = obj.height * obj.scaleY
+          const originalWidth = obj.width * obj.scaleX
 
+          if (correspondingData) {
             obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+              // correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+              //   ? obj.scaleToWidth(originalWidth)
+              //   : obj.scaleToHeight(originalHeight)
+
+              // Conditional scaling logic
+              if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth') {
+                const scaleFactor = originalWidth / obj.width
+                obj.set({ scaleX: scaleFactor, scaleY: scaleFactor })
+              }
+              else {
+                const scaleFactor = originalHeight / obj.height
+                obj.set({ scaleX: scaleFactor, scaleY: scaleFactor })
+              }
+
               canvas.renderAll()
             })
           }
@@ -168,6 +179,7 @@ function renderOriginalData() {
     }
   }
   else {
+    // alert('problem problem')
     if (canvas) {
       const objs = canvas?.getObjects()
       canvas._objects = objs.map((obj) => {
@@ -179,13 +191,15 @@ function renderOriginalData() {
           obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
+          const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
           const correspondingData = 'https://placehold.co/300x200?text=Image'
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
           obj.setSrc(correspondingData, () => {
-            obj.scaleToWidth(originalWidth)
-            obj.scaleToHeight(originalHeight)
+            correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+              ? obj.scaleToWidth(originalWidth)
+              : obj.scaleToHeight(originalHeight)
             canvas.renderAll()
           })
         }

@@ -76,25 +76,26 @@
               </template>
             </Dropdown>
           </div>
-          <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="mb-6">
-            <p class="font-poppins text-surface-500 mt-4 mb-2">
-              Image proportion
-            </p>
-            <div class="flex flex-col flex-wrap gap-4 mt-2">
-              <div v-tooltip.top="'Image height will be fixed but width will adapt the proportion'" class="flex items-center">
-                <RadioButton v-model="datasetImageProportionOption" input-id="ingredient1" name="imageProprtion" value="fitToHeight" />
-                <label for="ingredient1" class="ml-2 font-poppins">Fit to height</label>
-              </div>
-              <div v-tooltip.top="'Width will be fixed but height will adapt the proportion'" class="flex items-center">
-                <RadioButton v-model="datasetImageProportionOption" input-id="ingredient2" name="imageProprtion" value="fitToWidth" />
-                <label for="ingredient2" class="ml-2 font-poppins">Fit to width</label>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="">
           <FormOptions />
+        </div>
+
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image' || templateEditorStore.selectedAddedField?.fieldType === 'Form image'" class="mb-6">
+          <p class="font-poppins text-surface-500 mt-4 mb-2">
+            Image proportion
+          </p>
+          <div class="flex flex-col flex-wrap gap-4 mt-2">
+            <div v-tooltip.top="'Image height will be fixed but width will adapt the proportion'" class="flex items-center">
+              <RadioButton v-model="datasetImageProportionOption" input-id="ingredient1" name="imageProprtion" value="fitToHeight" />
+              <label for="ingredient1" class="ml-2 font-poppins">Fit to height</label>
+            </div>
+            <div v-tooltip.top="'Width will be fixed but height will adapt the proportion'" class="flex items-center">
+              <RadioButton v-model="datasetImageProportionOption" input-id="ingredient2" name="imageProprtion" value="fitToWidth" />
+              <label for="ingredient2" class="ml-2 font-poppins">Fit to width</label>
+            </div>
+          </div>
         </div>
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static image'" class="">
@@ -189,12 +190,16 @@ const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
 const datasetImageProportionOption = ref('fitToHeight')
 
-onMounted(() => {
+// onMounted(() => {
+
+// })
+watch(() => templateEditorStore.showOptionsBar, () => {
   // updating dataset image proportion
   const canvas = canvasService.getCanvas()
   const activeObj = canvas?.getActiveObject()
-  if (canvas && activeObj) {
+  if (canvas && activeObj?.hash) {
     const spfield = templateEditorStore?.addedFields?.filter(a => a?.hash === activeObj?.hash)[0]
+
     if (spfield) {
       if (spfield?.imageProportionMethod) {
         datasetImageProportionOption.value = spfield?.imageProportionMethod
@@ -219,8 +224,8 @@ watch(datasetImageProportionOption, (newVal) => {
     const fields = templateEditorStore?.addedFields?.map((a) => {
       if (a?.hash === activeObj?.hash)
         return { ...a, imageProportionMethod: newVal }
-      else
-        return a
+
+      else return a
     })
     templateEditorStore.addedFields = fields
   }

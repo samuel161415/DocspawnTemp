@@ -123,7 +123,8 @@ function renderOriginalData() {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
-          const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
@@ -154,12 +155,15 @@ function renderOriginalData() {
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
           const correspondingData = 'https://placehold.co/300x200?text=Image'
+          const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
           obj.setSrc(correspondingData, () => {
-            obj.scaleToWidth(originalWidth)
-            obj.scaleToHeight(originalHeight)
+            correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+              ? obj.scaleToWidth(originalWidth)
+              : obj.scaleToHeight(originalHeight)
             canvas.renderAll()
           })
         }

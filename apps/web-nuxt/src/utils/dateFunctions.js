@@ -436,7 +436,7 @@ export function formatDateForInput(dateValue, format) {
 }
 
 function formatTimeInternal(timeValue, format) {
-  console.log('formatting time', timeValue, format)
+  // console.log('formatting time', timeValue, format)
   if (!timeValue)
     return ''
 
@@ -446,7 +446,7 @@ function formatTimeInternal(timeValue, format) {
     console.log('Invalid date', date)
     throw new RangeError('Invalid time value')
   }
-  console.log('date', date)
+  // console.log('date', date)
 
   switch (format) {
     case 'HH:MM:SS':
