@@ -181,6 +181,7 @@ function renderOriginalData() {
   else {
     // alert('problem problem')
     if (canvas) {
+      const data = selectedData.value
       const objs = canvas?.getObjects()
       canvas._objects = objs.map((obj) => {
         if (obj?.id === 'watermark-docspawn')

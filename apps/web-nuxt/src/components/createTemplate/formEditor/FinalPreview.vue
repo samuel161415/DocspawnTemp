@@ -268,7 +268,7 @@ import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCa
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
-const emit = defineEmits(['changePreview'])
+const emit = defineEmits(['changePreview', 'cancel'])
 const toast = useToast()
 const router = useRouter()
 const fields = ref([])
@@ -286,7 +286,11 @@ function generateRandom() {
 onMounted(() => {
   showPreview.value = props.showPreview
   mobile.value = props.mobile
-  fields.value = props?.allFormFields
+  if (props?.allFormFields?.length < 1)
+    return
+  fields.value = props?.allFormFields?.map((m) => {
+    return { ...m, state: '' }
+  })
 })
 
 watch(() => props?.showPreview, (newVal, oldVal) => {
@@ -295,10 +299,15 @@ watch(() => props?.showPreview, (newVal, oldVal) => {
   showPreview.value = newVal
 })
 
-watch(() => props?.allFormFields, (newVal, oldVal) => {
-  if (newVal === oldVal)
+watch(() => props?.allFormFields, (newVal) => {
+  if (newVal?.length < 1)
     return
-  fields.value = newVal
+  fields.value = newVal?.map((m) => {
+    return { ...m, state: '' }
+  })
+})
+watch(fields, (val) => {
+  console.log('form fields', val)
 })
 
 watch(showPreview, (newVal) => {
@@ -346,6 +355,7 @@ async function generateDocument() {
     }
     ))
     showGeneratedDocToast()
+    // emit('cancel')
     // toast.add({ severity: 'success', summary: 'Operation complete', detail: 'Docs Generated successfully', life: 4000 })
   }
   catch (error) {

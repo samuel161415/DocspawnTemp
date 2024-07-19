@@ -325,7 +325,9 @@ function handleFillForm(item) {
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
 }
-
+watch(currentTemplateAllFormFields, (val) => {
+  console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)
+})
 // default favorite state based on template changes
 watch(() => props.templates, (newVal) => {
   newVal.forEach((template, index) => {
