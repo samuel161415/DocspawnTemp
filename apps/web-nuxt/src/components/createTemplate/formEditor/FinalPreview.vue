@@ -268,7 +268,7 @@ import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCa
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
-const emit = defineEmits(['changePreview', 'cancel'])
+const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
 const toast = useToast()
 const router = useRouter()
 const fields = ref([])
@@ -384,28 +384,32 @@ function onReply() {
 function onClose() {
   visible.value = false
 }
+watch(allGeneratedDocs, (val) => {
+  emit('updateGeneratedDocs', val)
+})
 
-function downlaodAllDocuments() {
+function downloadAllDocuments() {
   // console.log('all generated docs', allGeneratedDocs.value)
-  allGeneratedDocs.value?.forEach((url, index) => {
-    fetch(url)
-      .then(response => response.blob())
-      .then((blob) => {
-        const a = document.createElement('a')
-        const objectUrl = URL.createObjectURL(blob)
-        a.href = objectUrl
-        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(objectUrl)
-      })
-      .catch((error) => {
-        console.error(`Error downloading file ${index + 1}:`, error)
-      })
-  })
+
+  // allGeneratedDocs.value?.forEach((url, index) => {
+  //   fetch(url)
+  //     .then(response => response.blob())
+  //     .then((blob) => {
+  //       const a = document.createElement('a')
+  //       const objectUrl = URL.createObjectURL(blob)
+  //       a.href = objectUrl
+  //       a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+  //       document.body.appendChild(a)
+  //       a.click()
+  //       document.body.removeChild(a)
+  //       URL.revokeObjectURL(objectUrl)
+  //     })
+  //     .catch((error) => {
+  //       console.error(`Error downloading file ${index + 1}:`, error)
+  //     })
+  // })
 }
-function navigateDocumentLibrary() {
-  router.push('document-library')
-}
+// function navigateDocumentLibrary() {
+//   router.push('document-library')
+// }
 </script>

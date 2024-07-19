@@ -178,6 +178,7 @@
       :is-generatable="true"
       :template-data="currentTemplate"
       @cancel="previewFormVisible = false"
+      @update-generated-docs="updateGeneratedDocs"
     />
 
     <OverlayPanel ref="op">
@@ -239,7 +240,7 @@
           Document generated successfully
         </div>
         <div class="flex gap-2 mt-4">
-          <Button size="small" label="Download " severity="success" class="font-poppins" @click="downlaodAllDocuments()" />
+          <Button size="small" label="Download " severity="success" class="font-poppins" @click="downloadAllDocuments()" />
           <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
         </div>
       </div>
@@ -274,6 +275,7 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import { fal } from '@fortawesome/pro-light-svg-icons'
 import ExcelJS from 'exceljs'
 import Papa from 'papaparse'
+import { useRouter } from 'vue-router'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
@@ -292,6 +294,34 @@ const props = defineProps({
 const emit = defineEmits(['deleteTemplate'])
 const toast = useToast()
 const confirm = useConfirm()
+const router = useRouter()
+
+function navigateDocumentLibrary() {
+  router.push('document-library')
+}
+const allGeneratedDocs = ref([])
+function updateGeneratedDocs(val) {
+  allGeneratedDocs.value = val
+}
+function downloadAllDocuments() {
+  allGeneratedDocs?.value?.forEach((url, index) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then((blob) => {
+        const a = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+        a.href = objectUrl
+        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(objectUrl)
+      })
+      .catch((error) => {
+        console.error(`Error downloading file ${index + 1}:`, error)
+      })
+  })
+}
 // const confirm = useConfirm()
 function confirmDelete(template) {
   confirm.require({
@@ -321,8 +351,6 @@ function confirmDelete(template) {
     },
   })
 }
-
-const router = useRouter()
 
 const templatesLoading = ref(true)
 const layout = ref('grid')
