@@ -109,6 +109,40 @@
             </div>
           </template>
         </Toast>
+        <Toast position="top-right" group="bc" @close="onClose">
+          <template #message="slotProps">
+            <div class="flex flex-col items-start flex-auto">
+              <div class="flex items-center gap-2">
+                <font-awesome-icon icon="fa-bold fa-check" size="lg" />
+                <span class="font-bold font-poppins">Operation complete</span>
+              </div>
+              <div class="font-normal text-lg mt-1 font-poppins text-md">
+                Document generated successfully
+              </div>
+              <div class="flex gap-2 mt-4">
+                <Button size="small" label="Download " severity="success" class="font-poppins" @click="downloadAllDocuments()" />
+                <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
+              </div>
+            </div>
+          </template>
+        </Toast>
+        <Toast position="top-right" group="ac" @close="onClose">
+          <template #message="slotProps">
+            <div class="flex flex-col items-start flex-auto">
+              <div class="flex items-center gap-2">
+                <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
+                <div>
+                  <p class="font-bold">
+                    {{ slotProps?.message?.summary }}
+                  </p>
+                  <p class="font-normal">
+                    {{ slotProps?.message?.detail }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </template>
+        </Toast>
       </div>
     </div>
   </div>
@@ -119,13 +153,16 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import { fal } from '@fortawesome/pro-light-svg-icons'
+import { useRouter } from 'vue-router'
 import TemplateGridView from '~/components/template/TemplateGridView.vue'
 import TemplateDataView from '~/components/template/TemplateDataView.vue'
 import { templateData } from '~/services/templates.js'
 import FormEditorPreview from '~/components/createTemplate/formEditor/FormEditorPreview.vue'
 import TemplatePreview from '~/components/template/TemplatePreview.vue'
+import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const toast = useToast()
+const router = useRouter()
 const favoritedTemplates = templateData.filter(template => template.isFavorite === true)
 const searchQuery = ref('')
 const favoriteStates = reactive({})
@@ -138,6 +175,30 @@ const fileTypeCheck = ref(false)
 const filteredTemplates = computed(() => {
   return favoritedTemplates.filter(template => template.name.toLowerCase().includes(searchQuery.value.toLowerCase()))
 })
+function navigateDocumentLibrary() {
+  router.push('document-library')
+}
+function downloadAllDocuments() {
+  if (docGenerationData?.generatedDocs?.length < 1)
+    return
+  docGenerationData?.generatedDocs?.forEach((url, index) => {
+    fetch(url)
+      .then(response => response.blob())
+      .then((blob) => {
+        const a = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+        a.href = objectUrl
+        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        URL.revokeObjectURL(objectUrl)
+      })
+      .catch((error) => {
+        console.error(`Error downloading file ${index + 1}:`, error)
+      })
+  })
+}
 
 function handleTemplatePreview(template) {
   visible.value = true

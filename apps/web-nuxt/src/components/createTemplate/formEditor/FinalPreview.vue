@@ -198,64 +198,6 @@
       </div>
     </template>
     <template #footer>
-      <!-- <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-start pl-16'} mt-5`">
-        <Button
-          :disabled="!props?.isGeneratable"
-          label="Generate Document"
-          autofocus
-          @click="generateDocument"
-        />
-      </div> -->
-      <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
-        <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
-          <p>currently generating</p>
-          <ProgressSpinner />
-        </div>
-        <div v-else>
-          <p>Generated:</p>
-          <div v-for="(doc, i) in allGeneratedDocs" :key="i" class="flex gap-6 items-center py-2">
-            <p>{{ i }}</p>
-            <Button class="w-max px-3">
-              <a :href="doc" target="_blank">Download</a>
-            </Button>
-
-          </div>
-        </div>
-      </Dialog> -->
-      <!-- <Toast position="top-right" group="bc" @close="onClose">
-        <template #message="slotProps">
-          <div class="flex flex-col items-start flex-auto">
-            <div class="flex items-center gap-2">
-              <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-              <span class="font-bold font-poppins">Operation complete</span>
-            </div>
-            <div class="font-normal text-lg mt-1 font-poppins text-md">
-              Document generated successfully
-            </div>
-            <div class="flex gap-2 mt-4">
-              <Button size="small" label="Download " severity="success" class="font-poppins" @click="downlaodAllDocuments()" />
-              <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
-            </div>
-          </div>
-        </template>
-      </Toast>
-      <Toast position="top-right" group="ac" @close="onClose">
-        <template #message="slotProps">
-          <div class="flex flex-col items-start flex-auto">
-            <div class="flex items-center gap-2">
-              <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
-              <div>
-                <p class="font-bold">
-                  {{ slotProps?.message?.summary }}
-                </p>
-                <p class="font-normal">
-                  {{ slotProps?.message?.detail }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </template>
-      </Toast> -->
     </template>
   </Dialog>
 </template>
@@ -266,6 +208,7 @@ import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCanvasPreview'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
+import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
@@ -275,14 +218,10 @@ const fields = ref([])
 const showPreview = ref(false)
 const mobile = ref(false)
 const isGeneratingDoc = ref(false)
-const showGeneratedDocsModal = ref(false)
 const allGeneratedDocs = ref([])
 const runtimeConfig = useRuntimeConfig()
 const refresherNumber = ref(0)
-function generateRandom() {
-  const random = Math.floor(Math.random() * 1000) + 1
-  refresherNumber.value = random
-}
+
 onMounted(() => {
   showPreview.value = props.showPreview
   mobile.value = props.mobile
@@ -306,9 +245,6 @@ watch(() => props?.allFormFields, (newVal) => {
     return { ...m, state: '' }
   })
 })
-watch(fields, (val) => {
-  console.log('form fields', val)
-})
 
 watch(showPreview, (newVal) => {
   emit('changePreview', newVal)
@@ -326,12 +262,16 @@ async function generateDocument() {
 
   // showGeneratedDocsModal.value = true
   toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 4000, group: 'ac' })
-  emit('cancel')
+
   const formData = fields.value.map(field => ({
     ...field,
     // value: field.state,
   }
   ))
+  setTimeout(() => {
+    // emit('cancel')
+    router.push('/')
+  }, 2000)
 
   // Add additional logic to handle form data if necessary
   const objToSend = {
@@ -351,6 +291,7 @@ async function generateDocument() {
     const data = await response.json()
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
+    docGenerationData.generatedDocs = data?.generatedDocs
     fields.value = fields.value.map(field => ({
       ...field,
       state: null,
@@ -376,40 +317,7 @@ function showGeneratedDocToast() {
   // }
 }
 
-function onReply() {
-  toast.removeGroup('bc')
-  visible.value = false
-}
-
-function onClose() {
-  visible.value = false
-}
 watch(allGeneratedDocs, (val) => {
   emit('updateGeneratedDocs', val)
 })
-
-function downloadAllDocuments() {
-  // console.log('all generated docs', allGeneratedDocs.value)
-
-  // allGeneratedDocs.value?.forEach((url, index) => {
-  //   fetch(url)
-  //     .then(response => response.blob())
-  //     .then((blob) => {
-  //       const a = document.createElement('a')
-  //       const objectUrl = URL.createObjectURL(blob)
-  //       a.href = objectUrl
-  //       a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
-  //       document.body.appendChild(a)
-  //       a.click()
-  //       document.body.removeChild(a)
-  //       URL.revokeObjectURL(objectUrl)
-  //     })
-  //     .catch((error) => {
-  //       console.error(`Error downloading file ${index + 1}:`, error)
-  //     })
-  // })
-}
-// function navigateDocumentLibrary() {
-//   router.push('document-library')
-// }
 </script>

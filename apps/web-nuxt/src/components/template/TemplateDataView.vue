@@ -229,7 +229,7 @@
       </div>
     </template>
   </Toast>
-  <Toast position="top-right" group="bc" @close="onClose">
+  <!-- <Toast position="top-right" group="bc" @close="onClose">
     <template #message="slotProps">
       <div class="flex flex-col items-start flex-auto">
         <div class="flex items-center gap-2">
@@ -245,7 +245,7 @@
         </div>
       </div>
     </template>
-  </Toast>
+  </Toast> -->
   <Toast position="top-right" group="ac" @close="onClose">
     <template #message="slotProps">
       <div class="flex flex-col items-start flex-auto">
@@ -283,6 +283,7 @@ import ListSkeleton from './skeletons/ListSkeleton.vue'
 import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
 import FormEditorPreview from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const props = defineProps({
   templates: {
@@ -296,32 +297,33 @@ const toast = useToast()
 const confirm = useConfirm()
 const router = useRouter()
 
-function navigateDocumentLibrary() {
-  router.push('document-library')
-}
-const allGeneratedDocs = ref([])
+// function navigateDocumentLibrary() {
+//   router.push('document-library')
+// }
+
 function updateGeneratedDocs(val) {
   allGeneratedDocs.value = val
 }
-function downloadAllDocuments() {
-  allGeneratedDocs?.value?.forEach((url, index) => {
-    fetch(url)
-      .then(response => response.blob())
-      .then((blob) => {
-        const a = document.createElement('a')
-        const objectUrl = URL.createObjectURL(blob)
-        a.href = objectUrl
-        a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
-        document.body.appendChild(a)
-        a.click()
-        document.body.removeChild(a)
-        URL.revokeObjectURL(objectUrl)
-      })
-      .catch((error) => {
-        console.error(`Error downloading file ${index + 1}:`, error)
-      })
-  })
-}
+// function downloadAllDocuments() {
+// allGeneratedDocs=docGenerationData.generatedDocs
+//   allGeneratedDocs?.value?.forEach((url, index) => {
+//     fetch(url)
+//       .then(response => response.blob())
+//       .then((blob) => {
+//         const a = document.createElement('a')
+//         const objectUrl = URL.createObjectURL(blob)
+//         a.href = objectUrl
+//         a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
+//         document.body.appendChild(a)
+//         a.click()
+//         document.body.removeChild(a)
+//         URL.revokeObjectURL(objectUrl)
+//       })
+//       .catch((error) => {
+//         console.error(`Error downloading file ${index + 1}:`, error)
+//       })
+//   })
+// }
 // const confirm = useConfirm()
 function confirmDelete(template) {
   confirm.require({
