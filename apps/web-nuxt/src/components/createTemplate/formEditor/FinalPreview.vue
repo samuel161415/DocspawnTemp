@@ -222,7 +222,7 @@
           </div>
         </div>
       </Dialog> -->
-      <Toast position="top-right" group="bc" @close="onClose">
+      <!-- <Toast position="top-right" group="bc" @close="onClose">
         <template #message="slotProps">
           <div class="flex flex-col items-start flex-auto">
             <div class="flex items-center gap-2">
@@ -255,7 +255,7 @@
             </div>
           </div>
         </template>
-      </Toast>
+      </Toast> -->
     </template>
   </Dialog>
 </template>
@@ -323,14 +323,16 @@ async function onImageUpload(e, formField) {
 // Function to collect all form data
 async function generateDocument() {
   isGeneratingDoc.value = true
+
   // showGeneratedDocsModal.value = true
   toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 4000, group: 'ac' })
+  emit('cancel')
   const formData = fields.value.map(field => ({
     ...field,
     // value: field.state,
   }
   ))
-  console.log('Form Data:', formData)
+
   // Add additional logic to handle form data if necessary
   const objToSend = {
     finalData: formData,
@@ -355,7 +357,7 @@ async function generateDocument() {
     }
     ))
     showGeneratedDocToast()
-    // emit('cancel')
+
     // toast.add({ severity: 'success', summary: 'Operation complete', detail: 'Docs Generated successfully', life: 4000 })
   }
   catch (error) {
