@@ -300,6 +300,7 @@ const router = useRouter()
 // function navigateDocumentLibrary() {
 //   router.push('document-library')
 // }
+const allGeneratedDocs = ref()
 
 function updateGeneratedDocs(val) {
   allGeneratedDocs.value = val
