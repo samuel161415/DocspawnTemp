@@ -25,13 +25,13 @@
     <!-- <div class=" flex items-center">
       <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
     </div> -->
-    <div class="flex items-center mt-4 gap-2">
-      <button class="p-button p-component p-button-rounded p-button-icon-only" @click="decreaseScale">
-        <span class="pi pi-minus"></span>
+    <div class="flex items-center  gap-2">
+      <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="decreaseScale">
+        <font-awesome-icon icon="fa-light  fa-magnifying-glass-minus" size="xl" />
       </button>
-      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border -mt-1" @change="updateScale" />
-      <button class="p-button p-component p-button-rounded p-button-icon-only" @click="increaseScale">
-        <span class="pi pi-plus"></span>
+      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border " @change="updateScale" />
+      <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="increaseScale">
+        <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
     </div>
 

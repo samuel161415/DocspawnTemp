@@ -22,7 +22,7 @@
     <template #header :style="{ borderRadius: '1.5rem' }">
       <div class="flex flex-row ">
         <p class="font-poppins font-semibold text-lg self-center">
-          <span class="text-primary-500 mr-2 font-normal ">{{ props?.fromTemplateEditor && 'Selected List: ' }}</span>{{ tableData.title ? tableData.title : 'Not selected' }}
+          <span class="text-primary-500 mr-2 font-normal ">{{ props?.fromTemplateEditor ? 'Selected List: ' : '' }}</span>{{ tableData.title ? tableData.title : 'Not selected' }}
         </p>
         <div class="ms-auto">
           <span class="relative flex">
