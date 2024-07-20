@@ -3,7 +3,7 @@
     v-model:visible="showPreview"
     modal
     :draggable="false"
-    :style="mobile ? { width: '25rem' } : { maxWidth: '90vw', width: 'max-content' }"
+    :style="mobile ? { width: '28rem' } : { maxWidth: '90vw', width: 'max-content' }"
     :pt="{
       header: {
         class: [
@@ -44,8 +44,8 @@
     </template>
     <template #default>
       <div class="flex">
-        <div :class="`flex flex-col gap-4 min-w-[400px] rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
-          <div class="mb-0 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50  ">
+        <div :class="`flex flex-col gap-4 ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
+          <div class="mb-0 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50   " :class="{ 'mt-4': !props?.isGeneratable }">
             <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full  ">
               {{ formTitle ? formTitle : templateData?.name }}
             </p>
@@ -55,7 +55,8 @@
             {{ formDescription }}
           </div>
 
-          <div class="w-full place-self-start flex flex-col gap-5 bg-surface-50 p-4  h-[70vh] overflow-y-auto">
+          <div class="w-full place-self-start flex flex-col gap-5 bg-surface-50 p-4  ">
+            <!-- h-[70vh] overflow-y-auto -->
             <div v-for="(formField, index) in fields" :key="formField.id" class="">
               <div v-if="formField.fieldType === 'Form text'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
@@ -134,10 +135,20 @@
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
-                <InputText
+                <!-- <InputText
                   :id="`${formField.name}-${index}`"
                   v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" class="border-red-500"
+                /> -->
+                <Dropdown
+                  :id="`${formField.name}-${index}`"
+                  v-model="formField.state"
+                  :options="formField?.selectedList?.sublists?.map(f => f?.title)"
+
+                  :class="`${formField.mandatory && formField.state === null ? 'border-red-700' : ''}`"
+                  class="border-red-500 w-full md:w-full py-1"
+                  placeholder="Select "
                 />
+                <!-- option-label="title" -->
                 <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
                   Field is required</small>
               </div>
@@ -191,7 +202,7 @@
           <div v-if="props.isGeneratable" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }"> -->
         <CanvasPreview v-if="props.isGeneratable" :template="props.templateData" :form-values="fields" :selected-rows="fields" :refresh="refresherNumber" />
         <!-- </div> -->
-        <p v-else class="font-poppins text-lg">
+        <p v-else-if="!mobile" class="font-poppins text-lg w-[40vw] flex justify-center items-center">
           Template Live preview
         </p>
         <!-- </div> -->
@@ -237,8 +248,9 @@ watch(() => props?.showPreview, (newVal, oldVal) => {
     return
   showPreview.value = newVal
 })
-
+console.log('all form fields', props?.allFormFields)
 watch(() => props?.allFormFields, (newVal) => {
+  console.log('all form fields', props?.allFormFields)
   if (newVal?.length < 1)
     return
   fields.value = newVal?.map((m) => {

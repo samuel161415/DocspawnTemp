@@ -18,7 +18,7 @@
             />
           </div>
 
-          <div class="mt-4">
+          <div v-if="addNewListItem?.length > 0" class="mt-4">
             <span class="relative flex h-10 ml-1">
               <i
                 class="pi pi-search absolute top-2/4 -mt-2  left-2 text-surface-400 dark:text-surface-600 text-sm"
@@ -31,7 +31,7 @@
             </span>
           </div>
 
-          <ul>
+          <ul v-if="addNewListItem?.length > 0">
             <li
               v-for="items in filteredLists" :key="items.title"
               class="cursor-pointer flex flex-col mt-4 w-full mr-4"
@@ -43,13 +43,13 @@
               >
                 <i
                   class="pt-1 text-gray-500"
-                  :class="{ 'pi pi-chevron-down': items.opensubmenu, 'text-primaryBlue': items.title === tableData.title, 'pi pi-chevron-right': !items.opensubmenu }"
+                  :class="{ 'pi pi-chevron-down': items?.opensubmenu, 'text-primaryBlue': items?.title === tableData?.title, 'pi pi-chevron-right': !items?.opensubmenu }"
                   @click="items.opensubmenu = !items.opensubmenu"
                 ></i>
                 <span
                   class="text-lg font-normal ml-3 "
-                  :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': items.title === tableData.title, 'text-gray-500': !items.isHovered }"
-                  v-html="highlight(items.title) || items.title"
+                  :class="{ 'text-surface-600': items?.isHovered, 'text-primaryBlue': items?.title === tableData?.title, 'text-gray-500': !items?.isHovered }"
+                  v-html="highlight(items?.title) || items?.title"
                 ></span>
               </div>
 
@@ -105,10 +105,12 @@
         <div class="w-full py-5">
           <div class="flex flex-col md:flex-row justify-end gap-2">
             <Button
+              disabled
               icon="pi pi-plus" label="Add item(s)" outlined severity="success" class="text-success border-success hover:bg-green-50"
               @click="openAddItems = true"
             />
             <Button
+              disabled
               icon="pi pi-cog" label="List options" class="p-button-success" outlined
               @click="openListOptions = true"
             />
@@ -117,13 +119,14 @@
           <!-- table -->
           <div class="mt-4 mb-12 ml-2 ">
             <DataTableComponent
-              :table-data="tableData" :filters="filters" @row-reorder="onRowReorder"
-              @edit-item="handleEditItem" @open-delete="handleOpenDelete"
+              :table-data="tableData ? tableData : {}" :filters="filters" :from-template-editor="props?.fromTemplateEditor ? true : false"
+              @row-reorder="onRowReorder" @edit-item="handleEditItem" @open-delete="handleOpenDelete"
             />
             <Toast />
           </div>
         </div>
       </div>
+      <Button v-if="props?.fromTemplateEditor" label="Save & Close" class="ml-[50%] translate-x-[-50%]" @click="() => emit('closeTemplateEditorPopup')" />
     </div>
 
     <!-- components -->
@@ -142,7 +145,7 @@
 
     <ListOptionModal
       v-if="openListOptions" v-model:visible="openListOptions" v-model:tableData="tableData"
-      @cancel="openListOptions = false"
+      @cancel="openListOptions = false" @delete-list="handleDeleteList"
     />
 
     <EditItemOptionModal
@@ -179,9 +182,16 @@ import AddItemsModal from '~/components/settings/list/AddItemsModal.vue'
 import EditItemOptionModal from '~/components/settings/list/EditItemOptionModal.vue'
 import ListOptionModal from '~/components/settings/list/ListOptionModal.vue'
 import CreateSublistModal from '~/components/settings/list/CreateSublistModal.vue'
-import { addNewListItem } from '~/services/newListData.js'
 
-const copiedList = ref(JSON.parse(JSON.stringify(addNewListItem.value)))
+// import { addNewListItem } from '~/services/newListData.js'
+import { accountData } from '@/composables/useAccountData'
+import canvasService from '@/composables/useTemplateCanvas'
+
+const props = defineProps(['fromTemplateEditor', 'selectedListForTemplateEditor'])
+const emit = defineEmits(['closeTemplateEditorPopup', 'handleSelectList'])
+const addNewListItem = ref()
+const runtimeConfig = useRuntimeConfig()
+const copiedList = ref()
 
 const toast = useToast()
 const confirm = useConfirm()
@@ -201,7 +211,11 @@ const containsublist = ref(false)
 const sublistId = ref()
 const searchQuery = ref('')
 const filteredLists = ref(addNewListItem.value)
-
+watch(() => props.fromTemplateEditor, (val) => {
+  console.log('value', val)
+  if (val)
+    tableData.value = {}
+})
 const filteredList = computed(() => {
   const filterItems = (items, fn) => {
     return items.reduce((r, o) => {
@@ -242,8 +256,39 @@ function handleopensubmenu(clickedItem) {
   tableData.value = clickedItem
 }
 
-onMounted(() => {
-  tableData.value = addNewListItem.value[0]
+onMounted(async () => {
+  /** */
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists/${accountData?.accountType}`)
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    const data = await response.json()
+
+    const arrayToUse = data?.map((d) => {
+      return { ...d?.list_data, id: d?.id }
+    })
+
+    addNewListItem.value = arrayToUse
+    copiedList.value = JSON.parse(JSON.stringify(arrayToUse))
+    filteredLists.value = arrayToUse
+    // toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
+  }
+  catch (error) {
+    console.error('Error:', error)
+    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
+  }
+  /** */
+  console.log('props', props)
+  if (!props?.fromTemplateEditor)
+    tableData.value = addNewListItem.value[0]
+  else
+    tableData.value = props?.selectedListForTemplateEditor ? props?.selectedListForTemplateEditor : {}
+})
+watch(addNewListItem, (val) => {
+  console.log('all lists', val)
+  if (!tableData.value)
+    tableData.value = val[0]
 })
 
 const filters = ref({
@@ -270,8 +315,11 @@ function handleCreateSubSublist(data) {
       list.sublists = data.sublistItems
   })
 }
+function handleDeleteList(id) {
+  console.log('list id to delete', id)
+}
 
-function handleCreateList(data) {
+async function handleCreateList(data) {
   // data is new list created from createListModal
   const { listName, listItems } = data
   const newSubitems = []
@@ -283,6 +331,8 @@ function handleCreateList(data) {
       isHovered: false,
       opensubmenu: false,
       sublists: [],
+      parentId: addNewListItem.value.length + 1,
+      level: 1,
     }
     newSubitems.push(newsubitem)
   })
@@ -295,17 +345,48 @@ function handleCreateList(data) {
     level: 0,
     sublists: newSubitems,
   }
-
   addNewListItem.value.push(newList)
+  /** **** saving list */
+  const objToSend = {
+    list_data: JSON.stringify(newList),
+    account_type: accountData?.accountType,
+  }
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify content type as JSON
+      },
+      body: JSON.stringify(objToSend), // Serialize the object to JSON string
+    })
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    const data = await response.json()
+    console.log('response data', data)
+    tableData.value = data[0]?.list_data
+    // toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
+  }
+  catch (error) {
+    console.error('Error:', error)
+    // toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
+  }
+
+  /** */
+
+  // addNewListItem.value.push(newList)
 }
 
 function handleAddItems(data) {
   const lastid = addNewListItem.value.length
+  console.log('data', data)
+  console.log('table data value at handle add items', tableData?.value)
   data.map((item, index) => {
     const newItem = {
       id: lastid + index + 1,
       title: item.name,
       isHovered: false,
+      parentId: tableData.value?.id,
       level: tableData.value.level + 1,
       sublists: [],
     }
@@ -313,18 +394,27 @@ function handleAddItems(data) {
     tableData.value.sublists.push(newItem)
   })
 }
-
+watch(tableData, (val) => {
+  if (val?.id)
+    emit('handleSelectList', val)
+})
 function handleEditItem(data) {
+  console.log('running handle edit item lits data', data)
   editableItem.value = data
   openItemOptions.value = true
 
   tableData.value.sublists.map((sublist) => {
+    console.log('sublist', sublist)
     if (sublist.id === data.id) {
       sublist.title = data.title
       sublist.sublists = data.sublists
     }
   })
+  console.log('table data value after edit', tableData.value)
 }
+watch(tableData, (val) => {
+  console.log('table data', val)
+})
 
 function handleOpenDelete(data) {
   deleteItem.value = data
@@ -349,13 +439,6 @@ watch(openItemOptions, (newValue, oldValue) => {
     containsublist.value = false
     editableItem.value = null
   }
-})
-
-watch(tableData, (val) => {
-  console.log('table data>>>>', val)
-})
-watch(filteredList, (val) => {
-  console.log('filtered list', filteredList)
 })
 </script>
 

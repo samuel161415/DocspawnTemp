@@ -26,13 +26,24 @@
     </div>
 
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="w-full pt-4 mb-4">
-      <p class="font-poppins text-md text-surface-500 mb-2">
+      <p class="font-poppins text-md text-surface-500 mb-2 mt-4">
         Select list
       </p>
-      <CascadeSelect
+      <p class="my-2 font-poppins">
+        Selected list: <span class="text-primary-500">{{ selectedList?.id ? selectedList?.title : 'Not selected' }}<span>
+        </span></span>
+      </p>
+      <Button label="Click to Select" contained class="btn px-2" @click="visibleListSelection = true" />
+      <Dialog v-model:visible="visibleListSelection" modal header="List selection" :style="{ width: '50vw' }">
+        <div class="w-full h-200">
+          <list :from-template-editor="true" :selected-list-for-template-editor="selectedList" @close-template-editor-popup="visibleListSelection = false" @handle-select-list="(list) => selectedList = list" />
+        </div>
+      </Dialog>
+
+      <!-- <CascadeSelect
         v-model="selectedCity" :options="countries" option-label="cname" option-group-label="name" class="w-full md:w-full"
         :option-group-children="['states', 'cities']" style="min-width: 14rem" placeholder="Select list"
-      />
+      /> -->
     </div>
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form time'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surface-500 mb-2">
@@ -120,6 +131,7 @@ import CheckboxOptions from '../../../../components/createTemplate/templateEdito
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+import list from '@/components/settings/list/list.vue'
 
 const showAdvancedOptions = ref(false)
 const fieldName = ref('')
@@ -131,6 +143,16 @@ const maxFieldLength = ref(50)
 const { timeFormats, dateFormats } = useTimestampFormats()
 const selectedTimeFormat = ref()
 const selectedDateFormat = ref()
+const visibleListSelection = ref(false)
+const selectedList = ref()
+watch(selectedList, () => {
+  const allFs = templateEditorStore.addedFields
+  templateEditorStore.addedFields = allFs.map((f) => {
+    if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
+      return { ...f, selectedList: selectedList.value }
+    else return f
+  })
+})
 
 const selectedCharacterAcception = ref('Text')
 const characterAcceptionOptions = ref([
@@ -165,6 +187,8 @@ function fillUpOptions() {
     selectedDateFormat.value = sF?.dateFormat ? sF?.dateFormat : 'MM/DD/YYYY'
   if (sF?.fieldType === 'Form time')
     selectedTimeFormat.value = sF?.timeFormat ? sF?.timeFormat : 'HH:MM:SS'
+  if (sF?.fieldType === 'Form list')
+    selectedList.value = sF?.selectedList ? sF?.selectedList : {}
 }
 
 onMounted(() => {

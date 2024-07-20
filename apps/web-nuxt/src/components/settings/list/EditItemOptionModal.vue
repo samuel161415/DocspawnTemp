@@ -17,7 +17,7 @@
         </div>
 
         <div v-if="props.editableItem?.level != 3" class="flex align-items-center px-5 mt-5 ">
-          <Checkbox v-model="containsublist" input-id="containsublist" name="sublist" value="sublist" :binary="true" />
+          <Checkbox v-model="containsublist" disabled input-id="containsublist" name="sublist" value="sublist" :binary="true" />
           <label for="containsublist" class="ml-2">Contains sublist</label>
         </div>
 

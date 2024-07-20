@@ -84,7 +84,10 @@ function handleAdd() {
 }
 
 function handleCreateList() {
+  console.log('handleCreateList')
   isInvalid.value = listName.value === '' || listItems.value.length === 0
+  console.log('listName.value', listName.value)
+  console.log('listItems.value.length === 0', listItems.value.length === 0)
   if (listName.value === '' || listItems.value.length === 0) {
     emit('error')
   }
