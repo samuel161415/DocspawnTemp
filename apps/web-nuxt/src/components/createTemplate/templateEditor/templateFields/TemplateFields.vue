@@ -104,7 +104,7 @@
           <div
             class="px-5 h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions, 'border-surface-100 bg-green-50': !showDatasetOptions }"
-            @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true"
+            @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true;showDatasetOptions2 = false;"
           >
             <div class="flex gap-2 items-center">
               <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
@@ -138,7 +138,7 @@
           <div
             class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions2, 'border-surface-100 bg-green-50': !showDatasetOptions2 }"
-            @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true"
+            @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true;showDatasetOptions = false;"
           >
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
@@ -325,7 +325,7 @@
           <!-- @click="selectField('Static text') -->
           <div
             class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
-            :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Fixed image', 'border-surface-100 bg-yellow-50': templateEditorStore.activeTemplateField !== 'Fixed image' }"
+            :class="{ 'border-primaryBlue bg-primary-50': templateEditorStore.activeTemplateField === 'Static image', 'border-surface-100 bg-yellow-50': templateEditorStore.activeTemplateField !== 'Static image' }"
             @click="selectField('Static image')"
           >
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
@@ -416,6 +416,25 @@ const showFormTimestamp = ref(false)
 const fieldToDelete = ref(false)
 const deleteText = ref('')
 const confirm = useConfirm()
+
+watch(showFormFields, (val) => {
+  if (val) {
+    showStaticFields.value = false
+    showDataFields.value = false
+  }
+})
+watch(showStaticFields, (val) => {
+  if (val) {
+    showFormFields.value = false
+    showDataFields.value = false
+  }
+})
+watch(showDataFields, (val) => {
+  if (val) {
+    showStaticFields.value = false
+    showFormFields.value = false
+  }
+})
 
 function duplicateField(field) {
   const canvas = canvasService.getCanvas()
@@ -701,6 +720,8 @@ watch(() => templateEditorStore.fieldToAdd, (val) => {
     selectedDatasetOption2.value = ''
     showStaticOption1.value = false
     staticOption1Val.value = ''
+    formFieldForNameInput.value = ''
+    showFormFieldNameInput.value = false
   }
 })
 

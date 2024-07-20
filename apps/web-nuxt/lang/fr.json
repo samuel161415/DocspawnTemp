@@ -108,6 +108,7 @@
     "delete": "Supprimer",
     "data_fields": "Champs de données",
     "text": "Texte",
+    "long_text": "Texte long",
     "image": "Image",
     "form_fields": "Champs de formulaire",
     "timestamp": "Horodatage",

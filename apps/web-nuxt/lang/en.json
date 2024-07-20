@@ -108,6 +108,7 @@
     "delete": "Delete",
     "data_fields": "Data fields",
     "text": "Text",
+    "long_text": "Long text",
     "image": "Image",
     "form_fields": "Form fields",
     "timestamp": "Timestamp",
