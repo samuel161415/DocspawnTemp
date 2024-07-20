@@ -18,7 +18,7 @@
     </div>
 
     <div
-      class="flex flex-col justify-between  overflow-y-scroll overflow-x-hidden no-scrollbar h-full  py-5"
+      class="flex flex-col justify-between overflow-y-scroll overflow-x-hidden no-scrollbar h-full py-5"
       :class="{ 'w-18 justify-center ': isCollapsed, 'w-64': !isCollapsed }"
     >
       <ul class="mt-0">
@@ -36,7 +36,7 @@
         <li
           v-for="item in menuItems"
           :key="item.title"
-          v-tooltip.right="isCollapsed ? `${item.title}` : ''"
+          v-tooltip.right="isCollapsed ? $t(`Cp_sidebar.${item.title.toLowerCase().replace(' ', '_')}`) : ''"
           :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }"
         >
           <div
@@ -62,7 +62,7 @@
                 'text-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                 'text-gray-500': !item.isHovered }"
             >
-              {{ item.title }}
+              {{ $t(`Cp_sidebar.${item.title.toLowerCase().replace(' ', '_')}`) }}
             </span>
           </div>
         </li>
@@ -72,11 +72,10 @@
         <!-- avatar -->
         <hr />
         <div>
-          <!-- <LanguageDropDown /> -->
           <li
             v-for="item in menuItems"
             :key="item.title"
-            v-tooltip.right="isCollapsed ? `${item.title}` : ''"
+            v-tooltip.right="isCollapsed ? $t(`Cp_sidebar.${item.title.toLowerCase().replace(' ', '_')}`) : ''"
             class="w-full cursor-pointer ml-1 font-poppins mb-8"
             :class="{ 'border-l text-primaryBlue border-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings') }"
           >
@@ -103,12 +102,17 @@
                   'text-primaryBlue ': baseRoute === item.route || isSettingsRoute && item.route.startsWith('/settings'),
                   'text-gray-500': !item.isHovered }"
               >
-                {{ item.title }}
+                {{ $t(`Cp_sidebar.${item.title.toLowerCase().replace(' ', '_')}`) }}
               </span>
             </div>
           </li>
           <!--  -->
-
+          <div class="px-3 flex items-center mb-4 gap-2">
+            <LanguageDropDown />
+            <p v-if="!isCollapsed" class="font-poppins text-lg text-surface-600 ">
+              {{ $t('Cp_sidebar.language') }}
+            </p>
+          </div>
           <div class="px-3">
             <NuxtLink to="/signin">
               <div
@@ -139,12 +143,16 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useMenuItems } from '../../composables/useMenuItems'
 import ArrowLeft from '../../assets/icons/arrow-left.svg'
 import ArrowRight from '../../assets/icons/arrow-right.svg'
 import ArrowLeftWhite from '../../assets/icons/arrow-left-white.svg'
 import ArrowRightWhite from '../../assets/icons/arrow-right-white.svg'
+import LanguageDropDown from './LanguageDropDown'
 import { accountData } from '@/composables/useAccountData'
+
+const { locale } = useI18n()
 
 const router = useRouter()
 
@@ -158,7 +166,14 @@ watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
     isCollapsed.value = true
 
   baseRoute.value = newValue
+  refreshLocale()
 })
+
+function refreshLocale() {
+  const savedLocale = localStorage.getItem('locale')
+  if (savedLocale)
+    locale.value = savedLocale
+}
 
 const isMinimizebtnHovered = ref(false)
 
@@ -194,6 +209,7 @@ function handleResize() {
 
 onMounted(() => {
   handleResize()
+  refreshLocale()
   // window.addEventListener("resize", handleResize);
 })
 

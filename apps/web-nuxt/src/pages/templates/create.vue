@@ -1,15 +1,15 @@
 <template>
-  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar">
-    <div class="px-4 py-7 flex flex-col gap-2 bg-white ">
+  <div class="w-full bg-secondary overflow-y-scroll no-scrollbar">
+    <div class="px-4 py-7 flex flex-col gap-2 bg-white">
       <div class="">
         <h2 class="font-semibold text-surface-600 text-2xl mt-2 px-5">
-          Template creation
+          {{ $t('Pg_template_create.template_creation') }}
         </h2>
         <div class="flex items-center justify-center -mt-2 rounded-lg border-none">
           <Stepper v-model:activeStep="active">
             <StepperPanel>
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'General information'" class="bg-transparent border-none inline-flex flex-column gap-2 " @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.general_information')" class="bg-transparent border-none inline-flex flex-column gap-2 " @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -20,15 +20,15 @@
                     <GeneralInfo v-if="active === index" @update-data="handleUpdateData" />
                   </div>
                   <div class="flex justify-center mb-6 space-x-8 mt-4">
-                    <Button label="Cancel" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)" />
-                    <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                    <Button :label="$t('Pg_template_create.cancel')" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)" />
+                    <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep1Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                   </div>
                 </div>
               </template>
             </StepperPanel>
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="Data selection">
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="$t('Pg_template_create.data_selection')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -38,40 +38,34 @@
                   <DataSelection v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button
-                    label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
-                    @click="prevCallback"
-                  />
-                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel header="Template editor">
+            <StepperPanel header="$t('Pg_template_create.template_editor')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Template editor'" :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.template_editor')" :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
-                <div class=" mx-6">
+                <div class="mx-6">
                   <TemplateEditor v-if="active === index || canvasService.getCanvas()" />
                   <!-- v-if="active === index" -->
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
-                  <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button
-                    label="Next" icon="pi pi-arrow-right"
-                    icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback"
-                  />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="Form editor">
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -81,20 +75,17 @@
                   <FormEditor v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button
-                    label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
-                    @click="prevCallback"
-                  />
-                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel header="Delivery options">
+            <StepperPanel header="$t('Pg_template_create.delivery_options')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Delivery options'" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                <button v-tooltip.top="$t('Pg_template_create.delivery_options')" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faSliders" class="w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class="w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ index, prevCallback }">
@@ -102,16 +93,14 @@
                   <DeliveryOptions v-if="active === index" />
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
-                  <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button class="px-4 w-max  font-poppins ml-2" @click="saveTemplate()">
-                    Save Template
-                  </Button>
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
                 </div>
               </template>
             </StepperPanel>
           </Stepper>
         </div>
-        <div class="flex justify-center ">
+        <div class="flex justify-center">
         </div>
       </div>
     </div>

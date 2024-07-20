@@ -1,18 +1,16 @@
-<!-- This is the Form Editor compenent -->
-
 <template>
   <div>
     <p class="font-semibold text-surface-600 text-2xl mb-5 flex text-center justify-center">
-      Form editor
+      {{ $t('Cp_createTemplate_formEditor.form_editor') }}
     </p>
-    <div class="flex flex-row  my-2 items-center">
+    <div class="flex flex-row my-2 items-center">
       <div class="flex flex-row items-center">
         <div class="flex flex-col gap-2">
-          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">Template name <span class="text-red-500">*</span></label>
+          <label for="username" class="font-medium text-surface-600 text-lg font-poppins">{{ $t('Cp_createTemplate_formEditor.template_name') }} <span class="text-red-500">*</span></label>
           <InputText id="formTitle" v-model="templateTitle" class="w-80 font-poppins text-surface-600 text-lg pl-5" aria-describedby="FormTitle-help" />
         </div>
         <div class="ml-14 flex flex-col gap-2">
-          <label for="username" class="text-surface-600 font-poppins font-medium text-lg">Template description</label>
+          <label for="username" class="text-surface-600 font-poppins font-medium text-lg">{{ $t('Cp_createTemplate_formEditor.template_description') }}</label>
           <Textarea v-model="templateDescription" class="w-96 h-[47px] font-poppins text-surface-600 text-lg pl-5" cols="30" />
         </div>
       </div>
@@ -23,7 +21,7 @@
           @click="handlePreview()"
         ></i>
         <p class="text-justify text-lg">
-          See preview
+          {{ $t('Cp_createTemplate_formEditor.see_preview') }}
         </p>
       </div>
     </div>
@@ -41,7 +39,7 @@
         <template #header>
           <div class="flex flex-row">
             <p class="font-semibold text-lg self-center">
-              Form fields
+              {{ $t('Cp_createTemplate_formEditor.form_fields') }}
             </p>
             <div class="ms-auto">
               <SearchField v-model:filters="filters" />
@@ -57,17 +55,17 @@
           </template>
         </Column>
 
-        <Column field="name" header="Name" style="width: 10%" :header-style="{ height: '4.5rem' }">
+        <Column field="name" header="{{ $t('Cp_createTemplate_formEditor.name') }}" style="width: 10%" :header-style="{ height: '4.5rem' }">
           <template #editor="{ data, field }">
             <InputText v-model="data[field]" />
           </template>
         </Column>
 
-        <Column field="fieldType" header="Type" style="width: 9%">
+        <Column field="fieldType" header="{{ $t('Cp_createTemplate_formEditor.type') }}" style="width: 9%">
           <template #editor="{ data, field }">
             <Dropdown
               v-model="data[field]" class="max-w-44" :options="fieldTypes" option-label="label" option-value="value"
-              placeholder="Select data type"
+              placeholder="{{ $t('Cp_createTemplate_formEditor.select_format') }}"
             >
               <template #option="slotProps">
                 <p>{{ slotProps.option.label }}</p>
@@ -76,11 +74,11 @@
           </template>
         </Column>
 
-        <Column field="isRequired" header="Mandatory?" style="width: 1%">
+        <Column field="isRequired" header="{{ $t('Cp_createTemplate_formEditor.mandatory') }}" style="width: 1%">
           <template #editor="{ data, field }">
             <Dropdown
               v-model="data[field]" class="max-w-28" :options="requiredOptions" option-label="label"
-              option-value="value" placeholder="Select necessity"
+              option-value="value" placeholder="{{ $t('Cp_createTemplate_formEditor.select_format') }}"
             >
               <template #option="slotProps">
                 <p>{{ slotProps.option.label }}</p>
@@ -88,16 +86,16 @@
             </Dropdown>
           </template>
           <template #body="slotProps">
-            <p>{{ slotProps.data.isRequired ? 'Yes' : 'No' }}</p>
+            <p>{{ slotProps.data.isRequired ? $t('Cp_createTemplate_formEditor.yes') : $t('Cp_createTemplate_formEditor.no') }}</p>
           </template>
         </Column>
 
-        <Column field="fieldFormat" header="Field format" class="min-w-40 " style="width: 7%">
+        <Column field="fieldFormat" header="{{ $t('Cp_createTemplate_formEditor.field_format') }}" class="min-w-40 " style="width: 7%">
           <template #editor="{ data, field }">
             <Dropdown
               v-if="data.fieldType === 'Form date' || data.type === 'Form time'" v-model="data[field]" class="max-w-48"
               :options="data.type === 'date' ? dateFormats : timeFormats" option-label="label" option-value="value"
-              placehlder="Select Format"
+              placehlder="{{ $t('Cp_createTemplate_formEditor.select_format') }}"
             >
               <template #option="slotProps">
                 <p>{{ slotProps.option.value }}</p>
@@ -119,7 +117,7 @@
           </template>
         </Column>
 
-        <Column field="fieldDescription" header="Description" style="width: 30%">
+        <Column field="fieldDescription" header="{{ $t('Cp_createTemplate_formEditor.description') }}" style="width: 30%">
           <template #editor="{ data, field }">
             <InputText v-model="data[field]" class="w-96" />
           </template>
@@ -137,7 +135,7 @@
             <i disabled class="pi pi-pencil" style="color: rgb(0 158 226);"></i>
           </template>
         </Column> -->
-        <Column header="Delete" style="width: 4%;" body-style="text-align:center" header-style="text-center">
+        <Column header="{{ $t('Cp_createTemplate_formEditor.delete') }}" style="width: 4%;" body-style="text-align:center" header-style="text-center">
           <template #body="{ data }">
             <i class="pi pi-trash text-red-700 text-lg custom-icon" @click="handleDelete($event, data)"></i>
           </template>

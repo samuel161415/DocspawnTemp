@@ -3,14 +3,14 @@
     <div class="px-8 py-8 flex flex-col gap-2 ">
       <div class="px-3 py-2">
         <h2 class="font-semibold text-surface-600 text-2xl">
-          Templates
+          {{ $t('Pg_template_index.templates') }}
         </h2>
 
         <div class="mt-14">
           <div class="flex w-full items-center justify-between mb-4">
-            <div v-tooltip="'Total custom template availbale in your plan: 4'" class="px-5 py-4 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:scale-105 border-success hover:bg-green-50" @click="visible = true;refreshAllFirst()">
+            <div v-tooltip="$t('Pg_template_index.total_custom_templates')" class="px-5 py-4 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:scale-105 border-success hover:bg-green-50" @click="visible = true;refreshAllFirst()">
               <p class="font-poppins text-success text-lg text-center">
-                Create new template
+                {{ $t('Pg_template_index.create_new_template') }}
               </p>
             </div>
           </div>
@@ -78,7 +78,7 @@ async function deleteTemplate(template) {
   })
   if (!response.ok) {
     // throw new Error(`Network response was not ok ${response.statusText}`)
-    console.log('not deleetd')
+    // console.log('not deleetd')
   }
   templateData.value = templateData.value?.filter(t => t?.id !== template?.id)
 }

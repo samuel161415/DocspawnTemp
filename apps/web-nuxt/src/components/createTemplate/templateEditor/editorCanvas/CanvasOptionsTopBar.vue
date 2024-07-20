@@ -1,19 +1,15 @@
 <template>
-  <div class="h-[62px]  flex items-center justify-between px-3 z-10   mb-6 rounded-md bg-primary-50 sticky top-0 left-0  ">
-    <div class=" flex justify-content-center  gap-6 ml-8 ">
-      <div
-        v-tooltip.top="'Advanced pointer'"
-      >
+  <div class="h-[62px] flex items-center justify-between px-3 z-10 mb-6 rounded-md bg-primary-50 sticky top-0 left-0">
+    <div class="flex justify-content-center gap-6 ml-8">
+      <div v-tooltip.top="$t('Cp_templateEditor_topbar.advanced_pointer')">
         <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeAdvancedPointer = true">
-          <font-awesome-icon icon="fa-thin fa-arrow-pointer " size="xl" />
+          <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" />
         </div>
         <div v-else class="cursor-pointer text-primary-500" @click="templateEditorStore.activeAdvancedPointer = false">
           <font-awesome-icon icon="fa-solid fa-arrow-pointer" size="xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; --fa-secondary-opacity: 1;" />
         </div>
       </div>
-      <div
-        v-tooltip.top="templateEditorStore.activeDisplayGuideForAll ? 'Remove all guides' : 'Display all guides'"
-      >
+      <div v-tooltip.top="templateEditorStore.activeDisplayGuideForAll ? $t('Cp_templateEditor_topbar.remove_all_guides') : $t('Cp_templateEditor_topbar.display_all_guides')">
         <div v-if="!templateEditorStore.activeDisplayGuideForAll" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeDisplayGuideForAll = true;showMargins()">
           <font-awesome-icon icon="fa-thin fa-ruler-combined" size="xl" />
         </div>
@@ -25,30 +21,30 @@
     <!-- <div class=" flex items-center">
       <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
     </div> -->
-    <div class="flex items-center  gap-2">
+    <div class="flex items-center gap-2">
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="decreaseScale">
-        <font-awesome-icon icon="fa-light  fa-magnifying-glass-minus" size="xl" />
+        <font-awesome-icon icon="fa-light fa-magnifying-glass-minus" size="xl" />
       </button>
-      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border " @change="updateScale" />
+      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border" @change="updateScale" />
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="increaseScale">
         <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
     </div>
 
-    <div class="flex flex-row-reverse ">
+    <div class="flex flex-row-reverse">
       <Button
-        v-if="!templateEditorStore.showPreview" v-tooltip.top="'Show preview'" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
+        v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
       >
-        <font-awesome-icon icon=" fa-solid fa-eye" size="xl" />
+        <font-awesome-icon icon="fa-solid fa-eye" size="xl" />
       </Button>
       <Button
-        v-else v-tooltip.top="'Hide preview'" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = false"
+        v-else v-tooltip.top="$t('Cp_templateEditor_topbar.hide_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = false"
       >
         <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" />
       </Button>
 
       <div v-if="templateEditorStore.showPreview" class="flex items-center">
-        <Button text icon="pi pi-chevron-left text-primary-500 " @click="changePreviewNo('prev')" />
+        <Button text icon="pi pi-chevron-left text-primary-500" @click="changePreviewNo('prev')" />
         <p class="font-poppins text-black">
           {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
         </p>

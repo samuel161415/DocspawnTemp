@@ -5,61 +5,63 @@
 
 <template>
   <div class="mt-8">
-    <div class="flex justify-between items-center ">
+    <div class="flex justify-between items-center">
       <p class="font-poppins text-surface-600">
-        Checked design
+        {{ $t('Cp_templateEditor_checkboxOptions.checked_design') }}
       </p>
       <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" />
     </div>
     <div class="flex justify-between items-center mt-2">
       <p class="font-poppins text-surface-600">
-        Unchecked design
+        {{ $t('Cp_templateEditor_checkboxOptions.unchecked_design') }}
       </p>
       <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" />
     </div>
   </div>
-  <div class="flex flex-col  mt-4">
+  <div class="flex flex-col mt-4">
     <p class="font-poppins text-md text-surface-600 mb-2">
-      Checkbox description
+      {{ $t('Cp_templateEditor_checkboxOptions.checkbox_description') }}
     </p>
     <Textarea v-model="fieldDescription" rows="3" />
   </div>
   <div class="mt-4">
     <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600"> Min no. of options </label>
+      <label class="font-poppins my-2 text-surface-600">
+        {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
+      </label>
       <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
     </div>
     <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600"> Max no. of options </label>
+      <label class="font-poppins my-2 text-surface-600">
+        {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
+      </label>
       <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
     </div>
     <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600 mt-8"> No. of Checkboxes: <span class="text-primary-600">{{ noOfCheckboxes }}</span> </label>
-      <!-- <InputNumber v-model="noOfCheckboxes" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" /> -->
+      <label class="font-poppins my-2 text-surface-600 mt-8">
+        {{ $t('Cp_templateEditor_checkboxOptions.no_of_checkboxes') }}: <span class="text-primary-600">{{ noOfCheckboxes }}</span>
+      </label>
     </div>
   </div>
   <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
-    Select all checkboxes
+    {{ $t('Cp_templateEditor_checkboxOptions.select_all_checkboxes') }}
   </Button>
   <Button class="w-full mt-2" @click="addCheckboxToGroup">
-    Add checkbox to group
+    {{ $t('Cp_templateEditor_checkboxOptions.add_checkbox_to_group') }}
   </Button>
   <div class="mt-4">
     <div
       v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
     >
-      <p class=" font-poppins text-surface-600">
-        Checkbox {{ index + 1 }} text
+      <p class="font-poppins text-surface-600">
+        {{ $t('Cp_templateEditor_checkboxOptions.checkbox_text', { index: index + 1 }) }}
       </p>
       <div class="w-full flex mt-1 border rounded-lg">
-        <InputText class="flex-1 rounded rounded-r-none border-0 " :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
+        <InputText class="flex-1 rounded rounded-r-none border-0" :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
         <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
           <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
         </Button>
       </div>
-      <!-- <p v-if="noOfCheckboxes === 1" class="font-poppins text-surface-600 text-sm mt-2">
-        Deletion disabled: Checkbox group must have atleast one checkbox
-      </p> -->
     </div>
   </div>
 </template>

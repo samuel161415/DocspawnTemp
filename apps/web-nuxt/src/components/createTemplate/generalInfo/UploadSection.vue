@@ -1,49 +1,43 @@
 <template>
   <div class="w-full space-y-4">
     <p class="font-medium text-surface-600 text-lg font-poppins">
-      {{ title }}
+      {{ $t('Cp_createTemplate_generalUpload.title') }}
     </p>
     <div
       class="py-12 px-8 cursor-pointer rounded-lg border border-dashed hover:border-primary-600 max-w-lg mb-8 relative h-64"
       :class="dragging ? 'border-primary-600' : 'border-dashed'"
       @click="!selectedFile && triggerFileInput()"
-      @drop.prevent=" handleDrop"
-      @dragover.prevent=" handleDragOver"
-      @dragenter.prevent=" handleDragEnter"
-      @dragleave.prevent=" handleDragLeave"
+      @drop.prevent="handleDrop"
+      @dragover.prevent="handleDragOver"
+      @dragenter.prevent="handleDragEnter"
+      @dragleave.prevent="handleDragLeave"
     >
-      <div v-if="selectedFile && !dragging" class="pointer-parent  index-10 h-full flex flex-col items-center justify-center gap-4 ">
+      <div v-if="selectedFile && !dragging" class="pointer-parent index-10 h-full flex flex-col items-center justify-center gap-4">
         <p class="text-surface-500 font-poppins text-lg">
-          Selected file:  {{ selectedFile.name }}
+          {{ $t('Cp_createTemplate_generalUpload.selected_file') }}: {{ selectedFile.name }}
         </p>
         <Button text label="Remove File" severity="danger" class="mt-2 pointer-auto font-poppins text-lg" @click="clearFile" />
       </div>
 
-      <div v-else-if="!dragging" class="flex flex-col items-center justify-center gap-4  h-full">
+      <div v-else-if="!dragging" class="flex flex-col items-center justify-center gap-4 h-full">
         <FontAwesomeIcon :icon="fad.faAdd" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
 
         <p class="flex justify-center text-lg text-center font-poppins text-surface-500">
-          Drag and drop file here to upload or click to select a file.
+          {{ $t('Cp_createTemplate_generalUpload.drag_drop') }}
         </p>
       </div>
 
       <div v-else-if="dragging" class="pointer-parent absolute inset-0 flex flex-col justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-full h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg bg-white">
         <FontAwesomeIcon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
         <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
-          Drop your data here
+          {{ $t('Cp_createTemplate_generalUpload.drop_data_here') }}
         </p>
         <p class="text-black font-poppins text-base text-center mt-2">
-          Supported file formats: <br /> .csv, .xls, .xlsx
+          {{ $t('Cp_createTemplate_generalUpload.supported_file_formats', { file_formats: '.csv, .xls, .xlsx' }) }}
         </p>
       </div>
       <input ref="fileInput" type="file" :accept="acceptedFileTypes" class="hidden" @change="handleFileSelect" />
     </div>
-    <!-- <div v-if="selectedFile" class="file-info">
-      <p class="text-surface-600">
-        {{ selectedFile.name }}
-      </p>
-      <Button label="Remove File" severity="danger" class="mt-2" @click="clearFile" />
-    </div> -->
     <div v-if="error" class="error-message">
       <p class="text-red-600">
         {{ error }}

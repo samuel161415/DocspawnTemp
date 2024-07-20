@@ -1,7 +1,7 @@
 <template>
   <div class="rounded-lg bg-white mb-0 border-r border-surface-100">
     <h2 class="font-semibold text-surface-600 text-2xl pl-11 pt-10 pb-2">
-      Settings
+      {{ $t('Cp_settings.settings') }}
     </h2>
 
     <div class="flex flex-col justify-between  h-full overflow-y-scroll w-64 pb-5 no-scrollbar">
@@ -19,9 +19,7 @@
             <span
               class="text-lg font-normal ml-2 font-poppins"
               :class="{ 'text-surface-600': items.isHovered, 'text-primaryBlue': currentTitle === items.title || settingsBaseRoute === items.route, 'text-gray-500': !items.isHovered }"
-            >{{
-              items.title }}
-            </span>
+            >{{ $t(`Cp_settings.${items.translationKey}`) }}</span>
           </div>
           <div class="mt-1">
             <ul>
@@ -35,7 +33,7 @@
                       class="text-base font-normal ml-3 text-gray-500"
                       :class="{ 'text-primaryBlue ': currentTitle === subItem.title }"
                     >
-                      {{ subItem.title }}
+                      {{ $t(`Cp_settings.${subItem.translationKey}`) }}
                     </p>
                   </a>
 
@@ -53,7 +51,7 @@
                           class="text-base font-normal ml-2 text-gray-500"
                           :class="{ 'text-primaryBlue ': currentTitle === subSubItem.title }"
                         >
-                          {{ subSubItem?.title }}
+                          {{ $t(`Cp_settings.${subSubItem.translationKey}`) }}
                         </p>
                       </div>
                     </li>

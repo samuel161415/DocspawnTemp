@@ -2,7 +2,7 @@
   <div class="w-full flex flex-col items-center justify-center">
     <div class="flex justify-center items-center ml-5">
       <p class="font-semibold text-xl flex justify-center text-center font-poppins">
-        Select columns
+        {{ $t('Cp_createTemplate_dataSelection.select_columns') }}
       </p>
     </div>
 

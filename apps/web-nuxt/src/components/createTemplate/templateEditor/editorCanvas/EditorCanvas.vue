@@ -44,8 +44,6 @@ const activeElement = ref()
 
 const scale = ref(1)
 function updateScale(value) {
-  console.log('emitted canvas zoom')
-  console.log('scale at canvas', value)
   scale.value = value
 }
 // const canvasStyle = computed(() => ({
@@ -65,9 +63,7 @@ const canvasWrapperStyle = computed(() => ({
   // height: 'auto',
   height: `${canvasWrapperHeight.value}px`,
 }))
-watch(canvasWrapperHeight, (val) => {
-  console.log('canvas wrapper height', val)
-})
+
 const thumbnailCoverStyle = computed(() => ({
   marginTop: `${(canvasWrapperHeight.value * scale.value) - canvasWrapperHeight.value + 10}px`,
   position: 'sticky',

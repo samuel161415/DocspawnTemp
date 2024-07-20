@@ -1,61 +1,57 @@
 <template>
-  <div class="flex-1 h-full overflow-auto  ">
-    <div v-if="templateEditorStore.showOptionsBar " icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500  bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
-      <p class="font-poppins  ">
-        Field options
+  <div class="flex-1 h-full overflow-auto">
+    <div v-if="templateEditorStore.showOptionsBar" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
+      <p class="font-poppins">
+        {{ $t('Cp_templateEditor_options.field_options') }}
       </p>
     </div>
-    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500  bg-primary-50   flex items-center justify-center gap-2  transition-all ease-linear duration-75 ">
-      <p class="font-poppins ">
-        Template options
+    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
+      <p class="font-poppins">
+        {{ $t('Cp_templateEditor_options.template_options') }}
       </p>
     </div>
-    <div
-      class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6   bg-surface-50 px-5 py-2  overflow-hidden"
-    >
+    <div class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6 bg-surface-50 px-5 py-2 overflow-hidden">
       <div v-if="templateEditorStore.showOptionsBar === false">
         <TemplateOptions />
       </div>
       <div v-else-if="templateEditorStore.showOptionsBar === true && templateEditorStore.selectedAddedField?.fieldType !== ''">
         <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
-          No template field is selected
+          {{ $t('Cp_templateEditor_options.no_template_field_selected') }}
         </p>
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class=" font-poppins text-lg justify-center  text-center text-gray-400 text-primaryBlue font-thin my-3">
+        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class="font-poppins text-lg justify-center text-center text-gray-400 text-primaryBlue font-thin my-3">
           <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time' || templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' ">
-            {{ templateEditorStore?.selectedAddedField?.fieldType }}
+            {{ $t(`Cp_templateEditor_options.${templateEditorStore?.selectedAddedField?.fieldType.replace(' ', '_').toLowerCase()}`) }}
           </span>
           <span v-else-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'">
-            Checkbox group {{ templateEditorStore?.selectedAddedField?.groupPosition }}
-
+            {{ $t('Cp_templateEditor_options.checkbox_group') }} {{ templateEditorStore?.selectedAddedField?.groupPosition }}
           </span>
           <span v-else>
             {{ templateEditorStore?.selectedAddedField?.name }}
-
           </span>
         </p>
         <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'" class="mb-6">
           <TextFormatting />
-          <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field') " class="font-poppins text-sm text-red-500 mt-2">
-            Styles will be applied once you select a data field
+          <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field')" class="font-poppins text-sm text-red-500 mt-2">
+            {{ $t('Cp_templateEditor_options.styles_applied_on_select') }}
           </p>
-          <p v-if="((templateEditorStore.selectedAddedField?.name === 'Lorem ipsum' || templateEditorStore.selectedAddedField?.name === 'Add field name') && (['Form text', 'Form long text', 'Form date', 'Form time']?.includes(templateEditorStore?.selectedAddedField?.fieldType))) " class="font-poppins text-sm text-red-500 mt-2">
-            Styles will be applied once you add field name
+          <p v-if="((templateEditorStore.selectedAddedField?.name === 'Lorem ipsum' || templateEditorStore.selectedAddedField?.name === 'Add field name') && (['Form text', 'Form long text', 'Form date', 'Form time']?.includes(templateEditorStore?.selectedAddedField?.fieldType)))" class="font-poppins text-sm text-red-500 mt-2">
+            {{ $t('Cp_templateEditor_options.styles_applied_on_add_name') }}
           </p>
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full ">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full">
           <p class="mb-1 font-poppins text-surface-500">
-            Datafield
+            {{ $t('Cp_templateEditor_options.select_field') }}
           </p>
 
           <div v-if="!activeDataField || activeDataField === 'Lorem ipsum'" class="my-3 flex text-red gap-2">
             <font-awesome-icon icon="fa-duotone fa-triangle-exclamation" size="lg" style="--fa-primary-color: #ffffff; --fa-secondary-color: #ff0000; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins">
-              Select a field
+              {{ $t('Cp_templateEditor_options.select_field') }}
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType === 'Data field' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d)) " filter placeholder="Select data field" class="w-full md:w-full">
+            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType === 'Data field' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter :placeholder="$t('Cp_templateEditor_options.select_data_field')" class="w-full md:w-full">
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -64,7 +60,6 @@
                 </div>
                 <span v-else>
                   <p class="font-poppins">{{ slotProps.placeholder }}</p>
-
                 </span>
               </template>
               <template #option="slotProps">
@@ -84,86 +79,79 @@
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image' || templateEditorStore.selectedAddedField?.fieldType === 'Form image'" class="mb-6">
           <p class="font-poppins text-surface-500 mt-4 mb-2">
-            Image proportion
+            {{ $t('Cp_templateEditor_options.image_proportion') }}
           </p>
           <div class="flex flex-col flex-wrap gap-4 mt-2">
             <div v-tooltip.top="'Image height will be fixed but width will adapt the proportion'" class="flex items-center">
               <RadioButton v-model="datasetImageProportionOption" input-id="ingredient1" name="imageProprtion" value="fitToHeight" />
-              <label for="ingredient1" class="ml-2 font-poppins">Fit to height</label>
+              <label for="ingredient1" class="ml-2 font-poppins">{{ $t('Cp_templateEditor_options.fit_to_height') }}</label>
             </div>
             <div v-tooltip.top="'Width will be fixed but height will adapt the proportion'" class="flex items-center">
               <RadioButton v-model="datasetImageProportionOption" input-id="ingredient2" name="imageProprtion" value="fitToWidth" />
-              <label for="ingredient2" class="ml-2 font-poppins">Fit to width</label>
+              <label for="ingredient2" class="ml-2 font-poppins">{{ $t('Cp_templateEditor_options.fit_to_width') }}</label>
             </div>
           </div>
         </div>
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static image'" class="">
-          <div class="mt-4 ">
+          <div class="mt-4">
             <h1 class="font-poppins">
-              Upload image
+              {{ $t('Cp_templateEditor_options.upload_image') }}
             </h1>
-            <input
-              class="border border-gray-300 p-1 mt-2 w-full text-sm"
-              type="file"
-              @change="getFile"
-            />
+            <input class="border border-gray-300 p-1 mt-2 w-full text-sm" type="file" @change="getFile" />
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text'" class="">
-          <div class="flex flex-col  mt-4">
+          <div class="flex flex-col mt-4">
             <p class="font-poppins text-md text-surface-600 mb-2">
-              Add text
+              {{ $t('Cp_templateEditor_options.add_text') }}
             </p>
             <InputText id="username" v-model="constantTextValue" aria-describedby="username-help" />
             <p id="username-help" class="font-poppins text-xs mt-2">
-              Static text that will appear on all future documents
+              {{ $t('Cp_templateEditor_options.static_text_help') }}
             </p>
           </div>
         </div>
 
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static time'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
-            Select Format
+            {{ $t('Cp_templateEditor_options.select_format') }}
           </p>
-          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full" />
+          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_options.select_format')" class="w-full md:w-full" />
           <p id="username-help" class="font-poppins text-xs mt-2">
-            Time of document generation that will appear on each future document
+            {{ $t('Cp_templateEditor_options.static_time_help') }}
           </p>
         </div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static date'" class="w-full pt-4">
           <p class="font-poppins text-md text-surafce-600 mb-2">
-            Select Format
+            {{ $t('Cp_templateEditor_options.select_format') }}
           </p>
-          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-full" />
+          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_options.select_format')" class="w-full md:w-full" />
           <p id="username-help" class="font-poppins text-xs mt-2">
-            Date of document generation that will appear on each future document
+            {{ $t('Cp_templateEditor_options.static_date_help') }}
           </p>
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'checkbox'" class="">
-        </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'radio'" class="">
-        </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'dropdown'" class="">
-        </div>
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'checkbox'" class=""></div>
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'radio'" class=""></div>
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'dropdown'" class=""></div>
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="">
           <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="w-full pt-4 font-poppins">
-            Draw signature
+            {{ $t('Cp_templateEditor_options.draw_signature') }}
             <div class="mt-3 bg-white h-32 w-full border border-blue-300 rounded-md"></div>
-            <Button text class="mt-2 w-full font-poppins ">
-              Save signature
+            <Button text class="mt-2 w-full font-poppins">
+              {{ $t('Cp_templateEditor_options.save_signature') }}
             </Button>
           </div>
         </div>
       </div>
       <div v-else>
         <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
-          Field options
+          {{ $t('Cp_templateEditor_options.field_options') }}
         </p>
         <p class="font-poppins mt-3">
-          No field is selected.
+          {{ $t('Cp_templateEditor_options.no_field_selected') }}
         </p>
       </div>
     </div>

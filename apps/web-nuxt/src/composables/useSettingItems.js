@@ -4,12 +4,14 @@ export function useSettingItems() {
   const settingItems = ref([
     {
       title: 'General settings',
+      translationKey: 'general_settings',
       icon: 'pi pi-user',
       route: '/settings',
       isHovered: false,
       subitems: [
         {
           title: 'My profile',
+          translationKey: 'my_profile',
           icon: 'pi pi-calendar',
           fontawesome: 'faUserVneck',
           route: '/#my-profile',
@@ -21,6 +23,7 @@ export function useSettingItems() {
         },
         {
           title: 'Language & Region',
+          translationKey: 'language_region',
           icon: 'pi pi-language',
           fontawesome: 'faLanguage',
           route: '#language-region',
@@ -32,6 +35,7 @@ export function useSettingItems() {
         },
         {
           title: 'Time & date format',
+          translationKey: 'time_date_format',
           icon: 'pi pi-clock',
           fontawesome: 'faCalendar',
           route: '/#time-date-format',
@@ -45,12 +49,14 @@ export function useSettingItems() {
     },
     {
       title: 'Workspace',
+      translationKey: 'workspace',
       icon: 'pi pi-home',
       route: '/settings/workspace',
       isHovered: false,
       subitems: [
         {
           title: 'Info',
+          translationKey: 'info',
           icon: 'pi pi-info-circle',
           fontawesome: 'faCircleInfo',
           route: '/#info',
@@ -61,6 +67,7 @@ export function useSettingItems() {
         },
         {
           title: 'User administration',
+          translationKey: 'user_administration',
           icon: 'pi pi-users',
           fontawesome: 'faUsers',
           route: '#members',
@@ -69,6 +76,7 @@ export function useSettingItems() {
           subitems: [
             {
               title: 'User directory',
+              translationKey: 'user_directory',
               icon: 'pi pi-user',
               fontawesome: 'faUser',
               route: '/#users',
@@ -78,6 +86,7 @@ export function useSettingItems() {
             },
             {
               title: 'Group directory',
+              translationKey: 'group_directory',
               icon: 'pi pi-user',
               fontawesome: 'faUser',
               route: '#user-groups',
@@ -90,6 +99,7 @@ export function useSettingItems() {
         },
         {
           title: 'Formatting options',
+          translationKey: 'formatting_options',
           icon: 'pi pi-table',
           fontawesome: 'faSwatchbook',
           route: '/#field-options',
@@ -98,6 +108,7 @@ export function useSettingItems() {
           subitems: [
             {
               title: 'Time',
+              translationKey: 'time',
               icon: 'pi pi-clock',
               fontawesome: 'faTimer',
               route: '#time',
@@ -107,6 +118,7 @@ export function useSettingItems() {
             },
             {
               title: 'Date',
+              translationKey: 'date',
               icon: 'pi pi-calendar',
               fontawesome: 'faCalendar',
               route: '/#date',
@@ -116,6 +128,7 @@ export function useSettingItems() {
             },
             {
               title: 'Checkboxes',
+              translationKey: 'checkboxes',
               icon: 'pi pi-check-square',
               fontawesome: 'faSquareCheck',
               route: '#checkbox-formats',
@@ -128,6 +141,7 @@ export function useSettingItems() {
         },
         {
           title: 'Billing',
+          translationKey: 'billing',
           icon: 'pi pi-credit-card',
           fontawesome: 'faMoneyBill',
           route: '/#billing',
@@ -140,6 +154,7 @@ export function useSettingItems() {
     },
     {
       title: 'Data sources',
+      translationKey: 'data_sources',
       icon: 'pi pi-users',
       fontawesome: 'faCalendar',
       route: '/settings/data_source',
@@ -147,6 +162,7 @@ export function useSettingItems() {
       subitems: [
         {
           title: 'Lists',
+          translationKey: 'lists',
           icon: 'pi pi-user',
           fontawesome: 'faList',
           route: '/#lists',
@@ -157,6 +173,7 @@ export function useSettingItems() {
         },
         {
           title: 'Databases',
+          translationKey: 'databases',
           icon: 'pi pi-users',
           fontawesome: 'faDatabase',
           route: '#databases',
@@ -167,6 +184,7 @@ export function useSettingItems() {
         },
         {
           title: 'Integrations',
+          translationKey: 'integrations',
           icon: 'pi pi-link',
           fontawesome: 'faLinkSimple',
           route: '#integration',

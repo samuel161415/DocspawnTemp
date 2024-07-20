@@ -29,11 +29,11 @@
 
         <template #empty>
           <div class="flex justify-center text-center py-5">
-            No data found.
+            {{ $t('Cp_dataTable.no_data_found') }}
           </div>
         </template>
         <template #loading>
-          Loading data. Please wait.
+          {{ $t('Cp_dataTable.loading_data') }}
         </template>
         <Column
           v-for="column in props.columns"

@@ -1,27 +1,27 @@
 <template>
-  <div class="mt-14 rounded-lg pb-2 ">
+  <div class="mt-14 rounded-lg pb-2">
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
         <div class="flex justify-between space-x-2">
           <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
             <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
-              All
+              {{ $t('Cp_templateDataview.all') }}
             </p>
             <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
             <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'favorites' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'favorites'">
-              Favorites
+              {{ $t('Cp_templateDataview.favorites') }}
             </p>
             <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class=" filterOption === 'form to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'form to doc'">
-              Form to doc
+            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'form to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'form to doc'">
+              {{ $t('Cp_templateDataview.form_to_doc') }}
             </p>
             <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
             <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'data to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'data to doc'">
-              Data to doc
+              {{ $t('Cp_templateDataview.data_to_doc') }}
             </p>
             <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'table to doc' ? 'text-primaryBlue' : 'text-surface-500' " @click="filterOption = 'table to doc'">
-              Table to doc
+            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'table to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'table to doc'">
+              {{ $t('Cp_templateDataview.table_to_doc') }}
             </p>
           </div>
           <div class="flex space-y-2 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
@@ -33,7 +33,7 @@
                 ></i>
                 <InputText
                   v-model="searchQuery"
-                  placeholder="Search"
+                  :placeholder="$t('Cp_templateDataview.search')"
                   class="pl-10 font-normal font-poppins rounded-lg text-surface-500 border-gray-300 w-64"
                 />
               </span>
@@ -43,10 +43,9 @@
         </div>
       </template>
       <template #empty>
-        <div v-show="!templatesLoading" class="flex   py-8">
-          <!-- Adjust styling as needed -->
-          <p class="text-lg text-surface-500 font-poppins ">
-            No templates available.
+        <div v-show="!templatesLoading" class="flex py-8">
+          <p class="text-lg text-surface-500 font-poppins">
+            {{ $t('Cp_templateDataview.no_templates') }}
           </p>
         </div>
       </template>
@@ -60,19 +59,18 @@
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
             @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
           >
-            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50 ">
+            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">
-                Drop your data here
+                {{ $t('Cp_templateDataview.drop_data') }}
               </p>
               <p class="text-black font-poppins text-base text-center">
-                Supported file formats: .csv, .xls, .xlsx
+                {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
 
-            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2  rounded-lg bg-surface-5050">
+            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
               <div class="md:w-[10rem] relative cursor-pointer" @click="handleTemplatePreview(item)">
-                <!-- <img class="block xl:block mx-auto rounded-md w-32 h-28" :src="`${item.image}`" :alt="item.name" /> -->
                 <div class="h-max w-32 flex justify-center py-1">
                   <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
                 </div>
@@ -80,23 +78,23 @@
               <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
                 <div class="flex flex-row md:flex-col justify-between items-start gap-2">
                   <div class="ml-2">
-                    <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-600 mt-1 ">
+                    <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-600 mt-1">
                       {{ item.name }}
                     </p>
                   </div>
                 </div>
                 <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
                   <div class="flex space-x-8 mr-5 mb-3 md:mb-0">
-                    <i v-tooltip.top="'Edit template'" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
-                    <i v-tooltip.top="'Delete template'" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
-                    <i v-tooltip.top="'Access data'" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
-                    <i v-tooltip.top="'Access document'" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
-                    <i v-tooltip.top="'Set as favorites'" class="pointer-auto cursor-pointer text-surface-500" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.edit_template')" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.set_as_favorites')" class="pointer-auto cursor-pointer text-surface-500" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem"></i>
                   </div>
 
                   <div class="flex flex-row-reverse md:flex-row">
-                    <Button v-if="item.templateType === 'form to doc'" label="Fill form" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm(item)" />
-                    <Button v-else label="Select or drop file" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="(e) => { templateSelectedForUploadingFile = item ;uploadFile(e); }" />
+                    <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm(item)" />
+                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e); }" />
                   </div>
                 </div>
               </div>
@@ -106,7 +104,7 @@
       </template>
 
       <template #grid="slotProps">
-        <div v-show="!templatesLoading" class="flex flex-wrap ">
+        <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
             v-for="(item, index) in slotProps.items" :key="index"
             class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent"
@@ -118,18 +116,18 @@
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
-                Drop your data here
-                {{ console.log('item', item) }}
+                {{ $t('Cp_templateDataview.drop_data') }}
+                <!-- {{ console.log('item', item) }} -->
               </p>
               <p class="text-black font-poppins text-base text-center mt-2">
-                Supported file formats: <br /> .csv, .xls, .xlsx
+                {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
 
             <div v-show="!isDragging[index]" class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
-              <div class="flex pt-4 " :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
+              <div class="flex pt-4" :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
                 <i v-if="favoriteStates[index]" class="cursor-pointer" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
-                <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e);opItem = item }"></i>
+                <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
               </div>
               <div class="surface-50 flex justify-center rounded-md px-3">
                 <div class="relative mx-auto cursor-pointer" @click="handleTemplatePreview(item)">
@@ -138,18 +136,17 @@
               </div>
 
               <div class="mt-auto mb-3">
-                <div class="flex flex-row text-center justify-center items-center gap-2 h-16 ">
+                <div class="flex flex-row text-center justify-center items-center gap-2 h-16">
                   <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-500 truncate">
                     {{ item.name }}
                   </p>
                 </div>
                 <div class="flex flex-col">
-                  <Button v-if="item.use_case === 'Form to doc'" label="Fill form" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm(item)" />
+                  <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm(item)" />
                   <Button
-                    v-else label="Select or drop file" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
-                      templateSelectedForUploadingFile = item
-                      uploadFile(e) ;
-
+                    v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
+                      templateSelectedForUploadingFile = item;
+                      uploadFile(e);
                     }"
                   />
                 </div>
@@ -160,10 +157,10 @@
       </template>
     </DataView>
     <template v-if="templatesLoading">
-      <div v-if="layout === 'grid'" class=" flex flex-wrap">
+      <div v-if="layout === 'grid'" class="flex flex-wrap">
         <GridSkeleton v-for="n in 3" :key="n" class=" " />
       </div>
-      <div v-else class=" w-full">
+      <div v-else class="w-full">
         <ListSkeleton v-for="n in 3" :key="n" />
       </div>
     </template>
@@ -184,19 +181,19 @@
     <OverlayPanel ref="op">
       <div class="flex flex-col justify-start w-48 h-max">
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="editTemplate(opItem)">
-          Edit template
+          {{ $t('Cp_templateDataview.edit_template') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="confirmDelete(opItem);">
-          Delete template
+          {{ $t('Cp_templateDataview.delete_template') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-          Access data
+          {{ $t('Cp_templateDataview.access_data') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-          Access document
+          {{ $t('Cp_templateDataview.access_document') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-          Set as favorites
+          {{ $t('Cp_templateDataview.set_as_favorites') }}
         </p>
       </div>
     </OverlayPanel>
@@ -211,15 +208,14 @@
       </div>
     </template>
   </ConfirmDialog>
-  <!-- <Toast /> -->
   <Toast position="top-right">
     <template #message="slotProps">
-      <div class="flex  items-start space-x-2">
+      <div class="flex items-start space-x-2">
         <div class="mt-1">
           <font-awesome-icon :icon="fal.faFileCircleXmark" size="lg" style="color: #c8432f;" />
         </div>
         <div class="">
-          <div class="font-bold text-lg font-poppins text-error ">
+          <div class="font-bold text-lg font-poppins text-error">
             {{ slotProps.message.summary }}
           </div>
           <div class="font-normal text-base font-poppins text-error">
@@ -229,23 +225,6 @@
       </div>
     </template>
   </Toast>
-  <!-- <Toast position="top-right" group="bc" @close="onClose">
-    <template #message="slotProps">
-      <div class="flex flex-col items-start flex-auto">
-        <div class="flex items-center gap-2">
-          <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-          <span class="font-bold font-poppins">Operation complete</span>
-        </div>
-        <div class="font-normal text-lg mt-1 font-poppins text-md">
-          Document generated successfully
-        </div>
-        <div class="flex gap-2 mt-4">
-          <Button size="small" label="Download " severity="success" class="font-poppins" @click="downloadAllDocuments()" />
-          <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
-        </div>
-      </div>
-    </template>
-  </Toast> -->
   <Toast position="top-right" group="ac" @close="onClose">
     <template #message="slotProps">
       <div class="flex flex-col items-start flex-auto">

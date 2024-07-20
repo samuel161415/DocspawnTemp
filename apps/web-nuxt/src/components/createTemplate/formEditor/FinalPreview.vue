@@ -26,7 +26,7 @@
 
         </p> -->
         <div v-if="isGeneratable" class="inline-flex align-items-center justify-content-center gap-2">
-          <span class="text-lg text-primary-600 font-poppins font-normal">Form To Doc generation</span>
+          <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_formEditor_finalPreview.form_to_doc_generation') }}</span>
         </div>
         <div v-if="!props?.isGeneratable" class="flex flex-col">
           <i class="pi pi-mobile"></i>
@@ -45,8 +45,8 @@
     <template #default>
       <div class="flex">
         <div :class="`flex flex-col gap-4 ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
-          <div class="mb-0 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50   " :class="{ 'mt-4': !props?.isGeneratable }">
-            <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full  ">
+          <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }">
+            <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
               {{ formTitle ? formTitle : templateData?.name }}
             </p>
           </div>
@@ -55,7 +55,7 @@
             {{ formDescription }}
           </div>
 
-          <div class="w-full place-self-start flex flex-col gap-5 bg-surface-50 p-4  ">
+          <div class="w-full place-self-start flex flex-col gap-5 bg-surface-50 p-4">
             <!-- h-[70vh] overflow-y-auto -->
             <div v-for="(formField, index) in fields" :key="formField.id" class="">
               <div v-if="formField.fieldType === 'Form text'" class="flex flex-col gap-2">
@@ -69,8 +69,7 @@
                   :id="`${formField.name}-${index}`"
                   v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
                 />
-                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                  Field is required</small>
+                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
 
               <div v-else-if="formField.fieldType === 'Form long text'" class="flex flex-col gap-2">
@@ -84,8 +83,7 @@
                   :id="`${formField.name}-${index}`"
                   v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" rows="4" cols="30"
                 />
-                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                  Field is required</small>
+                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
 
               <div v-else-if="formField.fieldType === 'Form date'" class="flex flex-col gap-2">
@@ -149,8 +147,7 @@
                   placeholder="Select "
                 />
                 <!-- option-label="title" -->
-                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                  Field is required</small>
+                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
 
               <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
@@ -161,7 +158,7 @@
                   </div>
                 </label>
                 <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-2">
-                  <div class="w-12 h-12  flex items-center">
+                  <div class="w-12 h-12 flex items-center">
                     <Checkbox v-model="checkbox.state" :binary="true" class="scale-150 m-2" />
                   </div>
                   <p class="font-poppins font-normal text-[rgb(107,114,128)] text-[16px] leading-[25px] ">
@@ -172,8 +169,7 @@
                   :id="`${formField.name}-${index}`"
                   v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" class="border-red-500"
                 /> -->
-                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">This
-                  Field is required</small>
+                <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
 
               <div v-else-if="formField.fieldType === 'signature'" class="flex flex-col gap-2">
@@ -188,22 +184,22 @@
             </div>
             <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
               <Button
-                class=" font-poppins font-normal  text-[16px] leading-[25px]"
+                class="font-poppins font-normal text-[16px] leading-[25px]"
                 severity="success"
                 :disabled="!props?.isGeneratable || isGeneratingDoc"
-                label="Spawn document"
+                :label="$t('Cp_formEditor_finalPreview.spawn_document')"
                 autofocus
                 @click="generateDocument"
               />
             </div>
           </div>
         </div>
-        <!-- <div v-if="!mobile" class=" min-h-full  flex-1 ml-12   flex justify-center items-center" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }">
+        <!-- <div v-if="!mobile" class=" min-h-full flex-1 ml-12 flex justify-center items-center" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }">
           <div v-if="props.isGeneratable" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }"> -->
         <CanvasPreview v-if="props.isGeneratable" :template="props.templateData" :form-values="fields" :selected-rows="fields" :refresh="refresherNumber" />
         <!-- </div> -->
         <p v-else-if="!mobile" class="font-poppins text-lg w-[40vw] flex justify-center items-center">
-          Template Live preview
+          {{ $t('Cp_formEditor_finalPreview.template_live_preview') }}
         </p>
         <!-- </div> -->
       </div>
@@ -248,9 +244,8 @@ watch(() => props?.showPreview, (newVal, oldVal) => {
     return
   showPreview.value = newVal
 })
-console.log('all form fields', props?.allFormFields)
+
 watch(() => props?.allFormFields, (newVal) => {
-  console.log('all form fields', props?.allFormFields)
   if (newVal?.length < 1)
     return
   fields.value = newVal?.map((m) => {

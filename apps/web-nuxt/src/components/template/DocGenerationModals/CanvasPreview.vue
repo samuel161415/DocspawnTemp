@@ -6,7 +6,7 @@
         <input v-model="scale" type="range" min="0.5" max="1" step="0.01" class="slider" />
       </div> -->
       <p class="ml-[50%] translate-x-[-50%] font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6">
-        Live preview
+        {{ $t('Cp_canvasPreview.live_preview') }}
       </p>
 
       <div class="flex items-center">

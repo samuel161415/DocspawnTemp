@@ -1,72 +1,69 @@
 <template>
   <div>
     <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'">
-      <div class="flex flex-col  mt-4">
+      <div class="flex flex-col mt-4">
         <p class="font-poppins text-md text-surface-600 mb-2">
-          Field name
+          {{ $t('Cp_templateEditor_formOptions.field_name') }}
         </p>
         <InputText v-model="fieldName" />
       </div>
-      <div class="flex flex-col  mt-4">
+      <div class="flex flex-col mt-4">
         <p class="font-poppins text-md text-surface-600 mb-2">
-          Field description
+          {{ $t('Cp_templateEditor_formOptions.field_description') }}
         </p>
         <Textarea v-model="fieldDescription" rows="3" />
         <p id="username-help" class="font-poppins text-xs mt-2">
-          The final form view will show the field description instead of the field name.
+          {{ $t('Cp_templateEditor_formOptions.field_description_note') }}
         </p>
       </div>
     </div>
 
     <div class="flex items-center mt-6 gap-4">
       <Checkbox v-model="isRequired" :binary="true" />
-      <p class="font-poppins text-md text-surface-600 ">
-        Required
+      <p class="font-poppins text-md text-surface-600">
+        {{ $t('Cp_templateEditor_formOptions.required') }}
       </p>
     </div>
 
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form list'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surface-500 mb-2 mt-4">
-        Select list
+        {{ $t('Cp_templateEditor_formOptions.select_list') }}
       </p>
       <p class="my-2 font-poppins">
-        Selected list: <span class="text-primary-500">{{ selectedList?.id ? selectedList?.title : 'Not selected' }}<span>
-        </span></span>
+        {{ $t('Cp_templateEditor_formOptions.selected_list', { selectedList: selectedList?.id ? selectedList?.title : $t('Cp_templateEditor_formOptions.not_selected') }) }}
       </p>
-      <Button label="Click to Select" contained class="btn px-2" @click="visibleListSelection = true" />
-      <Dialog v-model:visible="visibleListSelection" modal header="List selection" :style="{ width: '50vw' }">
+      <Button label="{{ $t('Cp_templateEditor_formOptions.click_to_select') }}" contained class="btn px-2" @click="visibleListSelection = true" />
+      <Dialog v-model:visible="visibleListSelection" modal :header="$t('Cp_templateEditor_formOptions.list_selection')" :style="{ width: '50vw' }">
         <div class="w-full h-200">
           <list :from-template-editor="true" :selected-list-for-template-editor="selectedList" @close-template-editor-popup="visibleListSelection = false" @handle-select-list="(list) => selectedList = list" />
         </div>
       </Dialog>
-
-      <!-- <CascadeSelect
-        v-model="selectedCity" :options="countries" option-label="cname" option-group-label="name" class="w-full md:w-full"
-        :option-group-children="['states', 'cities']" style="min-width: 14rem" placeholder="Select list"
-      /> -->
     </div>
+
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form time'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surface-500 mb-2">
-        Select Format
+        {{ $t('Cp_templateEditor_formOptions.select_format') }}
       </p>
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
     </div>
+
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form date'" class="w-full pt-4 mb-4">
       <p class="font-poppins text-md text-surafce-500 mb-2">
-        Select Format
+        {{ $t('Cp_templateEditor_formOptions.select_format') }}
       </p>
-      <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-full" />
+      <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
     </div>
+
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text'" class="mt-4">
-      <div class="flex items-center gap-2  cursor-pointer text-primary-600 mt-6" @click="showAdvancedOptions = !showAdvancedOptions">
-        <p class=" font-poppins text-md ">
-          Advanced options
+      <div class="flex items-center gap-2 cursor-pointer text-primary-600 mt-6" @click="showAdvancedOptions = !showAdvancedOptions">
+        <p class="font-poppins text-md">
+          {{ $t('Cp_templateEditor_formOptions.advanced_options') }}
         </p>
         <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
       </div>
       <div v-if="showAdvancedOptions">
-        <p class="font-poppins text-md text-surface-600 mt-4 mb-2 ">
-          Accepted characters
+        <p class="font-poppins text-md text-surface-600 mt-4 mb-2">
+          {{ $t('Cp_templateEditor_formOptions.accepted_characters') }}
         </p>
         <div class="flex flex-col gap-3">
           <div v-for="option in characterAcceptionOptions" :key="option" class="flex items-center">
@@ -76,33 +73,32 @@
         </div>
         <div v-if="selectedCharacterAcception === 'Numbers'" class="flex items-center mt-6 gap-4">
           <Checkbox v-model="allowDecimals" :binary="true" />
-          <p class="font-poppins text-md text-surface-600 ">
-            Allow decimals
+          <p class="font-poppins text-md text-surface-600">
+            {{ $t('Cp_templateEditor_formOptions.allow_decimals') }}
           </p>
         </div>
 
-        <div class="flex flex-col  mt-6">
+        <div class="flex flex-col mt-6">
           <div class="mb-2 flex items-center gap-2">
-            <p class="font-poppins text-md text-surface-600 ">
-              Min. field length
+            <p class="font-poppins text-md text-surface-600">
+              {{ $t('Cp_templateEditor_formOptions.min_field_length') }}
             </p>
-            <div v-tooltip.top="'Minimum character length'">
+            <div v-tooltip.top="$t('Cp_templateEditor_formOptions.min_character_length_tooltip')">
               <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
             </div>
           </div>
-
           <InputNumber v-model="minFieldLength" input-id="integeronly1" :use-grouping="false" @input="changeMinLength" />
         </div>
-        <div class="flex flex-col  mt-4">
+
+        <div class="flex flex-col mt-4">
           <div class="mb-2 flex items-center gap-2">
-            <p class="font-poppins text-md text-surface-600 ">
-              Max. field length
+            <p class="font-poppins text-md text-surface-600">
+              {{ $t('Cp_templateEditor_formOptions.max_field_length') }}
             </p>
-            <div v-tooltip.top="'Maximum character length'">
+            <div v-tooltip.top="$t('Cp_templateEditor_formOptions.max_character_length_tooltip')">
               <font-awesome-icon icon="fa-duotone fa-square-question" size="lg" />
             </div>
           </div>
-
           <InputNumber v-model="maxFieldLength" input-id="integeronly2" :use-grouping="false" @input="changeMaxLength" />
         </div>
       </div>
@@ -111,12 +107,13 @@
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="w-full pt-0">
       <CheckboxOptions />
     </div>
+
     <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" placeholder="Select time format" class="w-full md:w-full p-1" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'date'" class="w-full pt-4 mt-2">
-      <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" placeholder="Select date format" class="w-full md:w-full p-1" />
+      <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'image'" class="w-full pt-4">

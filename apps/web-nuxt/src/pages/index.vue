@@ -3,7 +3,7 @@
     <div class="px-8 py-8 flex flex-col gap-2 ">
       <div class="flex justify-between px-3 pt-2">
         <h2 class="font-semibold text-surface-600 text-2xl">
-          Favorite templates
+          {{ $t('Pg_home.favorite_templates') }}
         </h2>
         <span class="relative flex ">
           <i
@@ -12,7 +12,7 @@
           ></i>
           <InputText
             v-model="searchQuery"
-            placeholder="Search"
+            :placeholder="$t('Pg_home.search')"
             class="pl-10 font-normal rounded-lg border-gray-300 w-64"
           />
         </span>
@@ -31,10 +31,10 @@
             <div v-if="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
-                Drop your data here
+                {{ $t('Pg_home.drop_data_here') }}
               </p>
               <p class="text-black font-poppins text-base text-center mt-2">
-                Supported file formats: <br /> .csv, .xls, .xlsx
+                {{ $t('Pg_home.supported_file_formats') }}
               </p>
             </div>
 
@@ -56,8 +56,8 @@
                   </p>
                 </div>
                 <div class="flex flex-col">
-                  <Button v-if="item.templateType === 'form to doc'" label="Fill form" class="flex-auto cursor-pointer font-poppins" @click="handleFillForm" />
-                  <Button v-else label="Select or drop file" class="flex-auto white-space-nowrap font-poppins cursor-pointer" @click="uploadFile" />
+                  <Button v-if="item.templateType === 'form to doc'" :label="$t('Pg_home.fill_form')" class="flex-auto cursor-pointer font-poppins" @click="handleFillForm" />
+                  <Button v-else :label="$t('Pg_home.select_or_drop_file')" class="flex-auto white-space-nowrap font-poppins cursor-pointer" @click="uploadFile" />
                 </div>
               </div>
             </div>
@@ -76,16 +76,16 @@
         <OverlayPanel ref="op">
           <div class="flex flex-col justify-start w-48 h-44">
             <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-              Edit template
+              {{ $t('Pg_home.edit_template') }}
             </p>
             <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-              Access data
+              {{ $t('Pg_home.access_data') }}
             </p>
             <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-              Access document
+              {{ $t('Pg_home.access_document') }}
             </p>
             <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
-              Set as favorites
+              {{ $t('Pg_home.set_as_favorites') }}
             </p>
           </div>
         </OverlayPanel>
@@ -114,14 +114,14 @@
             <div class="flex flex-col items-start flex-auto">
               <div class="flex items-center gap-2">
                 <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-                <span class="font-bold font-poppins">Operation complete</span>
+                <span class="font-bold font-poppins">{{ $t('Pg_home.operation_complete') }}</span>
               </div>
               <div class="font-normal text-lg mt-1 font-poppins text-md">
-                Document generated successfully
+                {{ $t('Pg_home.document_generated_successfully') }}
               </div>
               <div class="flex gap-2 mt-4">
-                <Button size="small" label="Download " severity="success" class="font-poppins" @click="downloadAllDocuments()" />
-                <Button outlined size="small" label="Open Document Library" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
+                <Button size="small" :label="$t('Pg_home.download')" severity="success" class="font-poppins" @click="downloadAllDocuments()" />
+                <Button outlined size="small" :label="$t('Pg_home.open_document_library')" class="font-poppins" severity="success" @click="navigateDocumentLibrary()" />
               </div>
             </div>
           </template>

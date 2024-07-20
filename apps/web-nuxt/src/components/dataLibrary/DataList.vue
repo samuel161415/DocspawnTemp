@@ -1,19 +1,25 @@
 <template>
   <div class="box overflow-hidden z-1 px-3 py-5 table-container">
-    <div class="flex flex-col  gap-2 left-0 md:mb-14">
+    <div class="flex flex-col gap-2 left-0 md:mb-14">
       <p class="font-poppins text-surface-600 text-left text-lg mb-2">
-        Select a template to display data.
+        {{ $t('Cp_dataLibraryList.select_template') }}
       </p>
       <TreeSelect
         v-model="selectedTemplate"
         :options="NodeData"
-        placeholder="Select Template"
+        :placeholder="$t('Cp_dataLibraryList.select_template')"
         class="md:w-[20rem] w-full font-poppins"
         selection-mode="single"
       />
     </div>
 
-    <DataTableHeader v-if="filteredData.length > 0 " :title="props.title" :info="props.info" :export-file="props.exportFile" @export-c-s-v="exportCSVHandler" />
+    <DataTableHeader
+      v-if="filteredData.length > 0"
+      :title="props.title"
+      :info="props.info"
+      :export-file="props.exportFile"
+      @export-c-s-v="exportCSVHandler"
+    />
 
     <div class="mt-10">
       <DataTable
@@ -32,7 +38,7 @@
         csv-separator
         :global-filter-fields="['filled_on', 'text_filled']"
         paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-        :current-page-report-template="`p. {first} /  ${Math.ceil(filteredData.length / 25)}`"
+        :current-page-report-template="`p. {first} / ${Math.ceil(filteredData.length / 25)}`"
         :rows-per-page-options="[25, 50, 100]"
         @update:filters="onFilterChange"
       >
@@ -51,19 +57,19 @@
               :options="allColumns"
               option-label="header"
               display="chip"
-              placeholder="Select Columns"
+              :placeholder="$t('Cp_dataLibraryList.select_columns')"
               class="font-poppins"
             />
           </div>
         </template>
         <template #empty>
-          <div class=" font-poppins flex justify-center">
-            Select a template to display data.
+          <div class="font-poppins flex justify-center">
+            {{ $t('Cp_dataLibraryList.select_template') }}
           </div>
         </template>
         <template #loading>
           <div class="font-poppins flex justify-center">
-            Loading data. Please wait.
+            {{ $t('Cp_dataLibraryList.loading_data') }}
           </div>
         </template>
         <Column
@@ -80,7 +86,7 @@
         >
           <template #body="{ data }">
             <div v-if="column.data_type === 'image'">
-              <div class=" flex justify-content-center">
+              <div class="flex justify-content-center">
                 <Button icon="pi pi-eye" outlined text @click="toggleDialog(index, data[column.field])" />
               </div>
             </div>
@@ -88,7 +94,7 @@
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
             </div>
-            <div v-else-if=" column.data_type === 'time'" class="font-poppins">
+            <div v-else-if="column.data_type === 'time'" class="font-poppins">
               <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatTimeForInput(data[column.field], column?.format || 'HH:MM:SS XM') }}
             </div>

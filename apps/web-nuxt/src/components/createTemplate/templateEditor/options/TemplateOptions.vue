@@ -1,44 +1,42 @@
 <template>
-  <div class="mt-4 ">
+  <div class="mt-4">
     <div class="mb-4">
-      <p class="font-poppins text-md text-surface-600 ">
-        Template name
+      <p class="font-poppins text-md text-surface-600">
+        {{ $t('Cp_templateEditor_templateOptions.template_name') }}
       </p>
       <InputText v-model="templateName" class="w-full md:w-full mt-2" />
     </div>
-    <div class="flex items-center gap-2  cursor-pointer text-surface-600 mt-6" @click="showWatermarkOptions = !showWatermarkOptions">
-      <p class=" font-poppins text-md ">
-        Watermark
+    <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showWatermarkOptions = !showWatermarkOptions">
+      <p class="font-poppins text-md">
+        {{ $t('Cp_templateEditor_templateOptions.watermark') }}
       </p>
       <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showWatermarkOptions }" />
     </div>
     <div v-if="showWatermarkOptions" class="mt-4">
       <p class="font-poppins text-sm text-surface-400">
-        It will appear on every generated document, untill you disable it.
+        {{ $t('Cp_templateEditor_templateOptions.watermark_description') }}
       </p>
       <div class="flex gap-2 my-6">
         <Checkbox v-model="disableWatermark" :binary="true" />
         <p class="font-poppins text-surface-500">
-          disable watermark
+          {{ $t('Cp_templateEditor_templateOptions.disable_watermark') }}
         </p>
-        <div v-tooltip.top="'Available for paid users only'">
-          <font-awesome-icon v-tooltip.top="'Only for paid users'" icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+        <div v-tooltip.top="tooltipText">
+          <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
         </div>
       </div>
       <p class="font-poppins italic text-surface-400 text-sm mb-4">
-        Tip: Keep the watermark on the paid plans to get 20% extra credits per month
+        {{ $t('Cp_templateEditor_templateOptions.tip') }}
       </p>
       <p class="font-poppins text-md text-surface-600">
-        Select watermark design
+        {{ $t('Cp_templateEditor_templateOptions.select_watermark_design') }}
       </p>
-      <div v-for="image in watermarkImages" :key="image.id" class="flex items-center mt-4 ">
+      <div v-for="image in watermarkImages" :key="image.id" class="flex items-center mt-4">
         <RadioButton v-model="templateEditorStore.watermarkImage" :input-id="image.id" name="dynamic" :value="image" />
         <label :for="image.id" class="ml-2">
-
-          <div class="w-full h-max ">
-            <img id="output" accept="image/*" class=" object-cover h-auto  " :class="{ 'w-9/12': image.id === 2, 'w-5/12': image.id === 1 }" :src="image.src" />
+          <div class="w-full h-max">
+            <img id="output" accept="image/*" class="object-cover h-auto" :class="{ 'w-9/12': image.id === 2, 'w-5/12': image.id === 1 }" :src="image.src" />
           </div>
-
         </label>
       </div>
     </div>
@@ -46,9 +44,13 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import canvasService from '@/composables/useTemplateCanvas'
+
+const { t } = useI18n()
+const tooltipText = computed(() => t('Cp_templateEditor_templateOptions.tooltip_paid_users'))
 
 const showWatermarkOptions = ref(false)
 const templateName = ref('')
@@ -79,13 +81,11 @@ onMounted(() => {
     templateName.value = templateGeneralInformation?.name
 
   disableWatermark.value = templateEditorStore?.watermarkDisabled
-  
 })
 watch(templateName, (newVal) => {
   templateGeneralInformation.name = newVal
 })
 watch(() => templateEditorStore.watermarkImage, (newVal) => {
-  console.log('template editor store water mark image', templateEditorStore?.watermarkImage)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     if (newVal.src) {

@@ -1,19 +1,19 @@
 <template>
-  <Dialog v-model:visible="visible" :draggable="false" modal header="Edit Profile" class="w-max">
+  <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max">
     <template #header>
       <div class="inline-flex align-items-center justify-content-center gap-2">
-        <span class="text-lg text-primary-600 font-poppins font-normal">Data To Doc generation</span>
+        <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_dataToDoc_generation.header') }}</span>
       </div>
     </template>
 
-    <div class="flex justify-center  space-x-8 h-3/4  w-[92vw] ">
-      <div class=" w-6/12 h-full mt-0">
-        <div class="mb-0 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50  ">
-          <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full  ">
-            {{ template?.name }} - selected data
+    <div class="flex justify-center space-x-8 h-3/4 w-[92vw]">
+      <div class="w-6/12 h-full mt-0">
+        <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50">
+          <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
+            {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
           </p>
         </div>
-        <div class="w-full ">
+        <div class="w-full">
           <EditDatasetTable
             v-if="template?.dataset_data?.keys?.length > 0"
             :data-source-file-complete-j-s-o-n="allData"
@@ -23,11 +23,12 @@
           />
         </div>
         <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
-          <Button contained severity="success" label="Spawn documents" class="w-max font-poppins font-normal  text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
+          <Button contained severity="success" :label="$t('Cp_dataToDoc_generation.spawn_documents')" class="w-max font-poppins font-normal text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
         </div>
       </div>
       <CanvasPreview :template="template" :selected-rows="selectedRows" />
     </div>
+    <!-- Commented out for future use -->
     <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
       <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
         <p>currently generating</p>
@@ -43,19 +44,19 @@
         </div>
       </div>
     </Dialog> -->
-    <Toast position="top-right" group="bc" @close="onClose">
+    <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
       <template #message="slotProps">
-        <div class="flex flex-col items-start flex-auto">
+        <div class="flex flex-col items-start flex-auto w-max ">
           <div class="flex items-center gap-2">
             <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-            <span class="font-bold">Operation complete</span>
+            <span class="font-bold">{{ $t('Cp_dataToDoc_generation.operation_complete') }}</span>
           </div>
           <div class="font-normal text-lg mt-1 font-poppins text-md">
-            {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} generated successfully
+            {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} {{ $t('Cp_dataToDoc_generation.documents_generated') }}
           </div>
           <div class="flex gap-2 mt-4">
-            <Button size="small" label="Download All" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
-            <Button outlined size="small" class="font-poppins whitespace-nowrap" label="Open Document Library" severity="success" @click="navigateDocumentLibrary()" />
+            <Button size="small" :label="$t('Cp_dataToDoc_generation.download_all')" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
+            <Button outlined size="small" class="font-poppins whitespace-nowrap" :label="$t('Cp_dataToDoc_generation.open_document_library')" severity="success" @click="navigateDocumentLibrary()" />
           </div>
         </div>
       </template>
