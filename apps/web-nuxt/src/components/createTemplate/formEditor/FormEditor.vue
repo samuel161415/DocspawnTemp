@@ -55,13 +55,13 @@
           </template>
         </Column>
 
-        <Column field="name" header="{{ $t('Cp_createTemplate_formEditor.name') }}" style="width: 10%" :header-style="{ height: '4.5rem' }">
+        <Column field="name" :header="$t('Cp_createTemplate_formEditor.name') " style="width: 10%" :header-style="{ height: '4.5rem' }">
           <template #editor="{ data, field }">
             <InputText v-model="data[field]" />
           </template>
         </Column>
 
-        <Column field="fieldType" header="{{ $t('Cp_createTemplate_formEditor.type') }}" style="width: 9%">
+        <Column field="fieldType" :header="$t('Cp_createTemplate_formEditor.type') " style="width: 9%">
           <template #editor="{ data, field }">
             <Dropdown
               v-model="data[field]" class="max-w-44" :options="fieldTypes" option-label="label" option-value="value"
@@ -74,7 +74,7 @@
           </template>
         </Column>
 
-        <Column field="isRequired" header="{{ $t('Cp_createTemplate_formEditor.mandatory') }}" style="width: 1%">
+        <Column field="isRequired" :header="$t('Cp_createTemplate_formEditor.mandatory') " style="width: 1%">
           <template #editor="{ data, field }">
             <Dropdown
               v-model="data[field]" class="max-w-28" :options="requiredOptions" option-label="label"
@@ -90,7 +90,7 @@
           </template>
         </Column>
 
-        <Column field="fieldFormat" header="{{ $t('Cp_createTemplate_formEditor.field_format') }}" class="min-w-40 " style="width: 7%">
+        <Column field="fieldFormat" :header="$t('Cp_createTemplate_formEditor.field_format') " class="min-w-40 " style="width: 7%">
           <template #editor="{ data, field }">
             <Dropdown
               v-if="data.fieldType === 'Form date' || data.type === 'Form time'" v-model="data[field]" class="max-w-48"
@@ -117,7 +117,7 @@
           </template>
         </Column>
 
-        <Column field="fieldDescription" header="{{ $t('Cp_createTemplate_formEditor.description') }}" style="width: 30%">
+        <Column field="fieldDescription" :header="$t('Cp_createTemplate_formEditor.description') " style="width: 30%">
           <template #editor="{ data, field }">
             <InputText v-model="data[field]" class="w-96" />
           </template>
@@ -135,7 +135,7 @@
             <i disabled class="pi pi-pencil" style="color: rgb(0 158 226);"></i>
           </template>
         </Column> -->
-        <Column header="{{ $t('Cp_createTemplate_formEditor.delete') }}" style="width: 4%;" body-style="text-align:center" header-style="text-center">
+        <Column :header=" $t('Cp_createTemplate_formEditor.delete') " style="width: 4%;" body-style="text-align:center" header-style="text-center">
           <template #body="{ data }">
             <i class="pi pi-trash text-red-700 text-lg custom-icon" @click="handleDelete($event, data)"></i>
           </template>
