@@ -32,7 +32,7 @@
       <p class="my-2 font-poppins">
         {{ $t('Cp_templateEditor_formOptions.selected_list', { selectedList: selectedList?.id ? selectedList?.title : $t('Cp_templateEditor_formOptions.not_selected') }) }}
       </p>
-      <Button label="{{ $t('Cp_templateEditor_formOptions.click_to_select') }}" contained class="btn px-2" @click="visibleListSelection = true" />
+      <Button :label="$t('Cp_templateEditor_formOptions.click_to_select')" contained class="btn px-2" @click="visibleListSelection = true" />
       <Dialog v-model:visible="visibleListSelection" modal :header="$t('Cp_templateEditor_formOptions.list_selection')" :style="{ width: '50vw' }">
         <div class="w-full h-200">
           <list :from-template-editor="true" :selected-list-for-template-editor="selectedList" @close-template-editor-popup="visibleListSelection = false" @handle-select-list="(list) => selectedList = list" />
