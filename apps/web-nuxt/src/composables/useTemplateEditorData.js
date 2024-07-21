@@ -14,6 +14,7 @@ const initialActiveTextStyles = {
 
 const initialTemplateEditorStore = {
   accountType: '',
+  datasetStartAtLine: 1,
   templateBackgroundUrl: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/96205cfa-09dc-46c9-bef5-aa9c2a9c868f_DS demo 1 - Delivery notice - template.pdf',
   showOptionsBar: false,
   ShowAddedFieldsinTemplateFields: false,

@@ -42,7 +42,10 @@
     "save_template": "Enregistrer le modèle"
   },
   "Cp_createTemplate_dataSelection": {
-    "select_columns": "Sélectionner des colonnes"
+    "select_columns": "Sélectionner les colonnes",
+    "data_field_selection": "Sélection des champs de données",
+    "select_columns_to_display": "Sélectionnez les colonnes à afficher dans la sélection des champs de données",
+    "data_starts_on_line": "Les données commencent à la ligne :"
   },
   "Cp_formEditor_finalPreview": {
     "form_to_doc_generation": "Génération de formulaire en document",

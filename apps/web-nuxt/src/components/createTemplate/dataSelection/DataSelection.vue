@@ -1,9 +1,26 @@
 <template>
   <div class="w-full flex flex-col items-center justify-center">
-    <div class="flex justify-center items-center ml-5">
+    <div class="flex flex-col justify-center items-center ml-5 mb-3 gap-2">
       <p class="font-semibold text-xl flex justify-center text-center font-poppins">
-        {{ $t('Cp_createTemplate_dataSelection.select_columns') }}
+        <!-- {{ $t('Cp_createTemplate_dataSelection.select_columns') }} -->
       </p>
+      <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">
+        {{ $t('Cp_createTemplate_dataSelection.data_field_selection') }}
+      </p>
+      <p class="font-normal text-lg text-surface-500   font-poppins">
+        {{ $t('Cp_createTemplate_dataSelection.select_columns_to_display') }}
+      </p>
+    </div>
+    <div class="w-[70vw] flex flex-col ">
+      <p class="font-semibold text-lg text-surface-600   font-poppins mt-3">
+        {{ $t('Cp_createTemplate_dataSelection.data_starts_on_line') }}
+      </p>
+      <Dropdown
+        v-model="dataStartLine"
+        :options="dropdownOptions"
+        placeholder="Select number"
+        class="mt-2"
+      />
     </div>
 
     <div class="w-[70vw] flex flex-col items-center justify-center">
@@ -20,17 +37,31 @@
             :total-records="totalRecords"
             :loading="loading"
             table-style="min-width: 75rem"
+            class="h-[400px] overflow-scroll"
             @page="onPage($event)"
             @sort="onSort($event)"
           >
+            <!-- Auto Index Column -->
+            <Column field="auto_index_by_docspawn" header="">
+              <template #body="{ data, field }">
+                <p class="font-poppins whitespace-nowrap">
+                  {{ data[field] }}
+                  <!-- {{ field }} -->
+                </p>
+              </template>
+            </Column>
             <Column v-for="(columnName, index) in dataSourceColumnNames" :key="index" :field="columnName">
               <template #header>
                 <div class="flex flex-col items-center gap-2">
-                  <input
+                  <!-- <input
                     type="checkbox"
                     :value="dataSourceSelectedColumns.includes(columnName)"
                     :checked="dataSourceSelectedColumns.includes(columnName)"
                     @change="toggleColumnSelection(columnName)"
+                  /> -->
+                  <CheckboxSp
+                    :key-s="index" :val="dataSourceSelectedColumns.includes(columnName)"
+                    :column-name="columnName" @change-d-s="toggleColumnSelection(columnName)"
                   />
                   <p class="font-poppins whitespace-nowrap">
                     {{ columnName }}
@@ -53,6 +84,7 @@
 <script setup>
 import { onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import CheckboxSp from './CheckboxSp'
 
 // Define props and emit for parent-child communication
 
@@ -70,12 +102,19 @@ const loading = ref(false)
 const totalRecords = ref(0)
 const first = ref(0)
 const lazyParams = ref({})
+// Create dropdown options based on the length of dataSourceFileCompleteJSON
+const dropdownOptions = ref([])
 
 // Watchers to handle data changes
 watch(dataStartLine, (newVal) => {
   if (newVal > dataSourceFileCompleteJSON.value?.length)
     newVal = dataSourceFileCompleteJSON.value?.length
+  templateEditorStore.datasetStartAtLine = dataStartLine.value
 })
+// Function to update dropdown options
+function updateDropdownOptions() {
+  dropdownOptions.value = Array.from({ length: dataSourceFileCompleteJSON.value.length }, (_, i) => (i + 1))
+}
 
 watch(dataSourceSelectedColumns, (data) => {
   const valid = data.length > 0
@@ -90,6 +129,8 @@ watch(() => templateEditorStore.datasetData, (newVal) => {
   })
   dataSourceColumnNames.value = [...newVal?.keys] // Spread operator to avoid direct mutation
   dataSourceSelectedColumns.value = [...newVal?.selectedKeys]
+
+  updateDropdownOptions()
 })
 
 // Functions for data loading and pagination
@@ -127,6 +168,7 @@ function toggleColumnSelection(columnName) {
     selectedColumns.push(columnName) // Add column
 
   dataSourceSelectedColumns.value = selectedColumns
+
   templateEditorStore.datasetData.selectedKeys = [...selectedColumns] // Ensure reactive update
 }
 
@@ -147,6 +189,13 @@ onMounted(() => {
   })
   dataSourceColumnNames.value = [...templateEditorStore.datasetData.keys] // Spread operator to avoid direct mutation
   dataSourceSelectedColumns.value = [...templateEditorStore.datasetData.selectedKeys] // Spread operator to avoid direct mutation
+  dataStartLine.value = templateEditorStore.datasetStartAtLine ? templateEditorStore.datasetStartAtLine : 1
+  if (templateEditorStore?.templateToEdit?.id) {
+    dataStartLine.value = templateEditorStore?.templateToEdit?.dataset_start_line ? templateEditorStore?.templateToEdit?.dataset_start_line : 1
+    templateEditorStore.datasetStartAtLine = templateEditorStore?.templateToEdit?.dataset_start_line ? templateEditorStore?.templateToEdit?.dataset_start_line : 1
+  }
+
+  updateDropdownOptions()
 })
 </script>
 

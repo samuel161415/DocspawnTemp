@@ -28,7 +28,7 @@
             </StepperPanel>
             <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="$t('Pg_template_create.data_selection')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.data_selection')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -211,6 +211,7 @@ async function saveTemplate() {
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+    dataset_start_line: templateEditorStore.datasetStartAtLine,
     template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
     page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),

@@ -42,7 +42,10 @@
     "save_template": "Save Template"
   },
   "Cp_createTemplate_dataSelection": {
-    "select_columns": "Select columns"
+    "select_columns": "Select columns",
+    "data_field_selection": "Data field selection",
+    "select_columns_to_display": "Select the columns to display in data field selection",
+    "data_starts_on_line": "Data starts on line:"
   },
   "Cp_formEditor_finalPreview": {
     "form_to_doc_generation": "Form To Doc generation",

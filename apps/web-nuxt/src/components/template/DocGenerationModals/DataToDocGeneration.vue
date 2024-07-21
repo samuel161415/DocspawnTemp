@@ -112,11 +112,16 @@ const allGeneratedDocs = ref([])
 
 onMounted(() => {
   template.value = props?.template
+  console.log('template', template.value)
   //   selectedRows.value = props?.value?.dataset_data?.allEntries
   selectedColumns.value = props?.template?.dataset_data?.selectedKeys
-  allData.value = props?.template?.dataset_data?.allEntries?.map((f, i) => {
+  let dataToSet = props?.template?.dataset_data?.allEntries?.map((f, i) => {
     return { ...f, auto_index_by_docspawn: i + 1 }
   })
+  if (template.value?.dataset_start_line > 1)
+    dataToSet = dataToSet?.filter((_, i) => i >= template.value?.dataset_start_line)
+
+  allData.value = dataToSet
 })
 
 function handleChangeSelectedRows(data) {
