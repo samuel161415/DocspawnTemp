@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full  w-max overflow-auto  ">
+  <div ref="parentContainer" class="h-full  w-[900px] overflow-auto  ">
     <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -18,6 +18,7 @@
         </div>
       </div>
     </div>
+
     <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col w-[900px]  relative   ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
@@ -41,15 +42,37 @@ const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
 const canvasWrapper = ref(null)
 const activeElement = ref()
+const parentContainer = ref()
 
 const scale = ref(1)
+// function updateScale(value) {
+//   scale.value = value
+// }
 function updateScale(value) {
   scale.value = value
+  updateScrollPosition()
+  console.log('marginLeft', `${((900 * scale.value) - (900)) / 2}px`)
 }
+onMounted(() => {
+  updateScrollPosition()
+  watch(scale, updateScrollPosition)
+})
+function updateScrollPosition() {
+  if (parentContainer.value && canvasWrapper.value) {
+    const parentWidth = parentContainer.value.clientWidth
+    const parentHeight = parentContainer.value.clientHeight
+    const scaledWidth = canvasWrapper.value.clientWidth * scale.value
+    const scaledHeight = canvasWrapper.value.clientHeight * scale.value
+    parentContainer.value.scrollLeft = (scaledWidth - parentWidth) / 2
+    // parentContainer.value.scrollTop = (scaledHeight - parentHeight) / 2
+  }
+}
+
 // const canvasStyle = computed(() => ({
 //   transform: `scale(${scale.value}) `,
 // }))
 const canvasWrapperHeight = ref(1)
+
 const canvasWrapperStyle = computed(() => ({
   overflow: 'auto',
   position: 'relative',
@@ -57,13 +80,15 @@ const canvasWrapperStyle = computed(() => ({
   height: `${canvasWrapperHeight.value}px`,
   minHeight: '100%',
   transform: `scale(${scale.value})`,
-  // transformOrigin: '0 0',
   // transformOrigin: 'center center',
+  // transformOrigin: 'top center',
+  // transformOrigin: 'center 0',
   transformOriginY: '0',
-  transformOriginX: '0',
+  // transformOriginX: '0',
   width: '900px',
+  marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
   // // height: 'auto',
-  // border: '1px solid yellow',
+
   height: `${canvasWrapperHeight.value}px`,
 }))
 
