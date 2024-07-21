@@ -80,7 +80,7 @@
     "remove_file": "Remove File",
     "drag_and_drop": "Drag and drop file here to upload or click to select a file.",
     "drop_your_data_here": "Drop your data here",
-    "supported_file_formats": "Supported file formats: {file_formats}",
+    "supported_file_formats": "Supported file formats",
     "reselect_file": "Reselect File"
   },
   "Cp_createTemplate_editorThumbnail": {

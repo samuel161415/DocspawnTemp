@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full  w-max overflow-auto ">
+  <div class="h-full  w-max overflow-auto  ">
     <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex flex-col w-[900px]  relative   ">
+    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col w-[900px]  relative   ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
     </div>
@@ -57,10 +57,13 @@ const canvasWrapperStyle = computed(() => ({
   height: `${canvasWrapperHeight.value}px`,
   minHeight: '100%',
   transform: `scale(${scale.value})`,
-  //  transformOrigin: '0 0',
+  // transformOrigin: '0 0',
+  // transformOrigin: 'center center',
   transformOriginY: '0',
+  transformOriginX: '0',
   width: '900px',
-  // height: 'auto',
+  // // height: 'auto',
+  // border: '1px solid yellow',
   height: `${canvasWrapperHeight.value}px`,
 }))
 

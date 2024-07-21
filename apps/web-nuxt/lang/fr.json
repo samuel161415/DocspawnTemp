@@ -80,7 +80,7 @@
     "remove_file": "Supprimer le fichier",
     "drag_and_drop": "Glissez et déposez le fichier ici pour le télécharger ou cliquez pour sélectionner un fichier.",
     "drop_your_data_here": "Déposez vos données ici",
-    "supported_file_formats": "Formats de fichiers pris en charge: {file_formats}",
+    "supported_file_formats": "Formats de fichiers pris en charge",
     "reselect_file": "Resélectionner le fichier"
   },
   "Cp_createTemplate_editorThumbnail": {
