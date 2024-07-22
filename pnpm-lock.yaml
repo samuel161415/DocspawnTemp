@@ -96,6 +96,9 @@ importers:
       primevue:
         specifier: ^3.49.0
         version: 3.52.0(vue@3.4.14)
+      vue-cropperjs:
+        specifier: ^5.0.0
+        version: 5.0.0(vue@3.4.14)
       vue-uuid:
         specifier: ^3.0.0
         version: 3.0.0(vue@3.4.14)
@@ -5147,6 +5150,10 @@ packages:
   /create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
+
+  /cropperjs@1.6.2:
+    resolution: {integrity: sha512-nhymn9GdnV3CqiEHJVai54TULFAE3VshJTXSqSJKa8yXAKyBKDWdhHarnlIPrshJ0WMFTGuFvG02YjLXfPiuOA==}
+    dev: false
 
   /cross-spawn@7.0.3:
     resolution: {integrity: sha512-iRDPJKUPVEND7dHPO8rkbOnPpyDygcDFtWjpeWNCgy8WP2rXcxXL8TskReQl6OrB2G7+UJrags1q15Fudc7G6w==}
@@ -12602,6 +12609,15 @@ packages:
   /vue-component-type-helpers@1.8.27:
     resolution: {integrity: sha512-0vOfAtI67UjeO1G6UiX5Kd76CqaQ67wrRZiOe7UAb9Jm6GzlUr/fC7CV90XfwapJRjpCMaZFhv1V0ajWRmE9Dg==}
     dev: true
+
+  /vue-cropperjs@5.0.0(vue@3.4.14):
+    resolution: {integrity: sha512-RhnC8O33uRZNkn74aiHZwNHnBJOXWlS4P6gsRI0lw4cZlWjKSCywZI9oSI9POlIPI6OYv30jvnHMXGch85tw7w==}
+    peerDependencies:
+      vue: '>=3.0.0'
+    dependencies:
+      cropperjs: 1.6.2
+      vue: 3.4.14(typescript@5.3.3)
+    dev: false
 
   /vue-demi@0.14.7(vue@3.4.14):
     resolution: {integrity: sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==}

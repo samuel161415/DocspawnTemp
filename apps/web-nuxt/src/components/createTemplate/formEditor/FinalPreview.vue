@@ -123,7 +123,8 @@
                   :id="`${formField.name}-${index}`" mode="basic" name="demo[]"
                   accept="image/*" @input="(e) => onImageUpload(e, formField)"
                 /> -->
-                <Input type="file" accept="image/*" class="font-poppins p-2" @input="(e) => onImageUpload(e, formField)" />
+                <ImageInput :aspect-ratio="getCanvasElementProportions(formField)" @handle-save-cropped-image="(url) => formField.state = url" />
+                <!-- <Input type="file" accept="image/*" class="font-poppins p-2" @input="(e) => onImageUpload(e, formField)" /> -->
               </div>
 
               <div v-else-if="formField.fieldType === 'Form list'" class="flex flex-col gap-2">
@@ -213,9 +214,11 @@
 import { onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
+import ImageInput from '../formEditor/cropper/ImageInput'
 import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCanvasPreview'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 import { docGenerationData } from '@/composables/useDocGenerationData'
+import canvasService from '@/composables/useTemplateCanvas'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
@@ -238,6 +241,23 @@ onMounted(() => {
     return { ...m, state: '' }
   })
 })
+
+function getCanvasElementProportions(formField) {
+  console.log('template data', props?.templateData)
+  const allObjs = props?.templateData?.canvas_data?.objects
+  let spObj = {}
+  allObjs.forEach((obj) => {
+    if (obj?.hash === formField?.hash) {
+      spObj = obj
+      console.log('canvas object', obj)
+    }
+  })
+
+  const proportions = { height: spObj?.height, width: spObj?.width, scaleX: spObj?.scaleX, scaleY: spObj?.scaleY }
+  console.log('proportions', proportions)
+  const aspectRatio = (proportions?.width * proportions?.scaleX) / (proportions?.height * proportions?.scaleY)
+  return aspectRatio
+}
 
 watch(() => props?.showPreview, (newVal, oldVal) => {
   if (newVal === oldVal)
