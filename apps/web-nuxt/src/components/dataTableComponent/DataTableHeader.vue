@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between mt-5">
+  <div class="flex justify-between mt-0">
     <div class="text-left">
       <p class="font-poppins text-lg md:text-xl font-medium text-left">
         {{ title }}
@@ -9,7 +9,7 @@
       </p>
     </div>
 
-    <div>
+    <!-- <div>
       <Button
         v-if="exportFile"
         type="button"
@@ -18,7 +18,7 @@
         class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white mb-5 text-xs md:text-sm ml-2 font-poppins"
         @click="exportCSVHandler"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 

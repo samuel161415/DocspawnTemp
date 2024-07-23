@@ -8,7 +8,7 @@
       @export-c-s-v="exportCSVHandler"
     />
 
-    <div class="mt-10">
+    <div class="mt-4">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
@@ -51,7 +51,7 @@
                 option-group-label="label"
                 option-group-children="children"
                 placeholder="Select a Template"
-                class="md:w-[20rem] w-full font-poppins ml-3 py-1"
+                class="md:w-[20rem] w-full font-poppins ml-3 py-0"
                 filter
                 filter-placeholder="Search templates"
               >
@@ -69,13 +69,15 @@
                 </template>
               </Dropdown>
             </div>
-            <DataTableFilters
-              :filters="filters"
-              :has-filter-actions="props.hasFilterActions"
-              :typefilter="typefilter"
-              @filter-data="filterData"
-              @clear-filter="clearFilter"
-            />
+            <div class="flex items-center gap-2">
+              <DataTableFilters
+                :filters="filters"
+                :has-filter-actions="props.hasFilterActions"
+                :typefilter="typefilter"
+                @filter-data="filterData"
+                @clear-filter="clearFilter"
+              />
+            </div>
           </div>
 
           <MultiSelect
@@ -84,8 +86,18 @@
             option-label="header"
             display="chip"
             :placeholder="$t('Cp_dataLibraryList.select_columns')"
-            class="font-poppins w-full md:w-full my-5 py-4 custom-multiselect "
+            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect "
           />
+          <div class="flex justify-end">
+            <Button
+              v-if="exportFile"
+              type="button"
+              icon="pi pi-download"
+              label="Export CSV"
+              class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white  text-xs md:text-sm ml-2 font-poppins"
+              @click="exportCSVHandler"
+            />
+          </div>
         </template>
         <template #empty>
           <div class="font-poppins flex justify-center">
@@ -117,14 +129,18 @@
           <template #body="{ data }">
             <div v-if="column.data_type === 'image'">
               <div class="flex justify-content-center">
-                <img :src="data[column.field]" :alt="column.field" class="h-24 rounded cursor-pointer" @click="toggleDialog(index, data[column.field])" />
+                <img v-if="data[column.field]" :src="data[column.field]" :alt="column.field" class="h-24 rounded cursor-pointer" @click="toggleDialog(index, data[column.field])" />
+                <p v-else>
+                  N/A
+                </p>
               </div>
             </div>
-            <div v-else-if="column.field === 'filled_on' || column.data_type === 'date'" class="font-poppins">
+            <div v-else-if="column.field === 'filled_on' || column.data_type === 'date'" class="font-poppins whitespace-nowrap">
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
+              {{ column.field === 'filled_on' ? formatTimeForInput(data[column.field], 'HH:MM:SS XM') : '' }}
             </div>
-            <div v-else-if="column.data_type === 'time'" class="font-poppins">
+            <div v-else-if="column.data_type === 'time'" class="font-poppins whitespace-nowrap">
               <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatTimeForInput(data[column.field], column?.format || 'HH:MM:SS XM') }}
             </div>
@@ -153,9 +169,23 @@
         </Column>
       </DataTable>
 
-      <Dialog v-model:visible="dialogVisible" maximizable draggable header=" " :style="{ width: '18rem' }">
+      <!-- <Dialog v-model:visible="dialogVisible" maximizable draggable header=" " :style="{ width: '18rem' }">
         <div class="flex flex-col justify-center items-center">
           <Image :src="currentImage" alt="Image" class="flex w-5/6 h-5/6 justify-center items-center" />
+        </div>
+      </Dialog> -->
+
+      <Dialog
+        v-model:visible="dialogVisible"
+        maximizable
+        draggable
+        header=" "
+        :modal="true"
+        :dismissable-mask="true"
+        class="custom-dialog"
+      >
+        <div class="flex flex-col justify-center items-center h-full">
+          <img :src="currentImage" alt="Image" class="w-5/6 h-5/6 object-contain" />
         </div>
       </Dialog>
     </div>
@@ -227,11 +257,6 @@ const selectedRowData = ref(null)
 
 const selectedTemplate = ref()
 // by defaul have to set the last geennrated one- just by checjing the geberated doc
-watch(selectedTemplate, (val) => {
-  console.log('selected templatye', selectedTemplate.value)
-})
-
-watch(filterData, val => console.log)
 
 const templatefiltered = ref([])
 
@@ -250,6 +275,7 @@ onMounted(async () => {
 
     if (data?.length > 0) {
       templates.value = data
+
       const templateData = data
       const formToDoc = []
       const dataToDoc = []
@@ -259,6 +285,14 @@ onMounted(async () => {
         else
           formToDoc.push({ key: d?.id, label: d?.name, data: d?.name })
       })
+      /**  setting default template */
+      // at backned when ever doc gnenerated we update template
+
+      const filtered = templateData?.filter(d => d?.use_case === 'Form to doc')
+      const sorted = filtered?.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+      if (sorted[0])
+        selectedTemplate.value = { key: sorted[0]?.id, label: sorted[0]?.name, data: sorted[0]?.name }
+      /** */
       NodeData.value = [
         {
           key: 'Form to doc',
@@ -357,14 +391,14 @@ watch(selectedTemplate, async (selectedTemplate) => {
           id: e.id,
           image: '',
           templateName: temp.name,
-          filled_on: new Date(e?.created_at).toDateString(),
+          filled_on: new Date(e?.created_at).toUTCString(),
           type: 'Form to Doc',
           ...obj,
 
         }
       })
 
-      templatefiltered.value = dataForTemplateEntries
+      templatefiltered.value = dataForTemplateEntries.sort((a, b) => new Date(b.filled_on) - new Date(a.filled_on))
     }
 
     // console.log('response of fetching templates', data)
@@ -410,8 +444,9 @@ function clearFilter() {
   background-color: #ffffff !important; /* Replace with your desired background color */
 }
 .custom-multiselect ::v-deep .p-multiselect-token {
-  background-color: #d1e7dd; /* Replace with your desired background color */
-  color: #0f5132; /* Replace with your desired text color */
+  background-color: #009ee222; /* Replace with your desired background color */
+  color: #009ee2; /* Replace with your desired text color */
+
 }
 
 .custom-multiselect ::v-deep .p-multiselect-token-label {
@@ -420,7 +455,7 @@ function clearFilter() {
 
 /* Optionally, you can also style the close icon if present */
 .custom-multiselect ::v-deep .p-multiselect-token-icon {
-  color: #0f5132; /* Replace with your desired icon color */
+  color: #009ee2; /* Replace with your desired icon color */
 }
 ::v-deep .p-datatable {
   background-color: white !important;
@@ -460,5 +495,13 @@ function clearFilter() {
 ::v-deep .p-datatable-gridlines .p-datatable-tbody > tr > td {
   /* border-right: none !important; */
   /* border-bottom: none !important; */
+}
+
+.custom-dialog .p-dialog {
+  @apply w-10/12 md:w-7/12; /* 70% width for medium and larger screens, 80% width for smaller screens */
+}
+
+.custom-dialog .p-dialog-mask {
+  @apply bg-black bg-opacity-50 backdrop-blur-sm; /* Dark and blurred background */
 }
 </style>
