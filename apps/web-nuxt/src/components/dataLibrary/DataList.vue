@@ -80,14 +80,51 @@
             </div>
           </div>
 
+          <!-- <MultiSelect
+            v-model="selectedColumns"
+            :options="allColumns"
+            option-label="header"
+            display="chip"
+            :placeholder="$t('Cp_dataLibraryList.select_columns')"
+            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect static-chip"
+          >
+            <template #chip="{ value }">
+              <div class="custom-chip" :class="[getChipClass(value)]">
+                <span class="option-label">{{ value.header }}</span>
+              </div>
+            </template>
+          </MultiSelect> -->
           <MultiSelect
             v-model="selectedColumns"
             :options="allColumns"
             option-label="header"
             display="chip"
             :placeholder="$t('Cp_dataLibraryList.select_columns')"
-            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect "
-          />
+            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect static-chip"
+          >
+            <template #chip="{ value }">
+              <div class="custom-chip" :class="[getChipClass(value)]">
+                <span>{{ value.header }}</span>
+              </div>
+              <!-- <div :class="getChipClass(value)" class="p-multiselect-token">
+                <span class="p-multiselect-token-label">{{ value.header }}</span>
+              </div> -->
+            </template>
+            <template #removetokenicon="{ class: iconClass, item, onClick, removeCallback }">
+              <span
+                :class="[iconClass, getIconWrapperClass(item)]"
+
+                @click="handleRemoveChip($event, item, onClick, removeCallback)"
+              >
+                <!-- @click="onClick($event, item) && removeCallback($event, item)" -->
+                <font-awesome-icon
+                  icon="fa-duotone fa-circle-xmark" size="lg" class="duotone-icon "
+                  :class="getIconClass(item)"
+                />
+              </span>
+            </template>
+          </MultiSelect>
+
           <div class="flex justify-end">
             <Button
               v-if="exportFile"
@@ -436,6 +473,36 @@ function clearFilter() {
     filters.value[key] = ''
   })
 }
+
+function getChipClass(chipVal) {
+  if (chipVal?.field === 'filled_on')
+    return 'gray-chip'
+  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+    return 'orange-chip'
+  else
+    return 'cyan-chip'
+}
+function getIconClass(chipVal) {
+  if (chipVal?.field === 'filled_on')
+    return 'gray-icon-duotone'
+  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+    return 'orange-icon-duotone'
+  else
+    return 'cyan-icon-duotone'
+}
+function getIconWrapperClass(chipVal) {
+  if (chipVal?.field === 'filled_on')
+    return 'gray-icon-wrapper'
+  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+    return 'orange-icon-wrapper'
+  else
+    return 'cyan-icon-wrapper'
+}
+function handleRemoveChip(event, item, onClick, removeCallback) {
+  event.stopPropagation()
+  onClick(event, item)
+  removeCallback(event, item)
+}
 </script>
 
 <style scoped>
@@ -444,7 +511,10 @@ function clearFilter() {
   background-color: #ffffff !important; /* Replace with your desired background color */
 }
 .custom-multiselect ::v-deep .p-multiselect-token {
-  background-color: #009ee222; /* Replace with your desired background color */
+  /* background-color: #009ee222; */
+  background-color: transparent;
+  padding:0px;
+  margin-right:12px;
   color: #009ee2; /* Replace with your desired text color */
 
 }
@@ -455,7 +525,76 @@ function clearFilter() {
 
 /* Optionally, you can also style the close icon if present */
 .custom-multiselect ::v-deep .p-multiselect-token-icon {
-  color: #009ee2; /* Replace with your desired icon color */
+  /* color: #009ee2;  */
+  color: #000000;
+}
+.gray-chip {
+  background-color: #e7e7e8; /* Red background */
+  color: #abadaf; /* Red text */
+  padding:6px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+.orange-chip {
+  background-color: #f1d4b1; /* Green background */
+  color: #dc9239; /* Green text */
+  padding:6px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  margin-right:-1px;
+}
+.cyan-chip{
+  background-color: #bae7f3; /* Green background */
+  color: #53c2e1; /* Green text */
+  padding:6px;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  margin-right:-1px;
+}
+.gray-icon-wrapper {
+  background-color: #e7e7e8; /* Red background */
+  padding:4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  margin-right:-1px;
+  cursor:pointer;
+
+}
+.orange-icon-wrapper {
+  background-color: #f1d4b1; /* Green background */
+  padding:4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  cursor:pointer;
+
+}
+.cyan-icon-wrapper{
+  background-color: #bae7f3; /* Green background */
+  padding:4px;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+  cursor:pointer;
+
+}
+
+.gray-icon-duotone.duotone-icon {
+  --fa-primary-color: #333;
+  /* --fa-secondary-color: #abadaf; */
+  --fa-secondary-color: #52555a;
+
+}
+.orange-icon-duotone.duotone-icon {
+  --fa-primary-color: #333;
+  /* --fa-secondary-color: #dc9239; */
+  --fa-secondary-color: #a5681e;
+
+}
+.cyan-icon-duotone.duotone-icon {
+  --fa-primary-color: #333;
+  /* --fa-secondary-color: #53c2e1; */
+  --fa-secondary-color: #24a2c4;
+
 }
 ::v-deep .p-datatable {
   background-color: white !important;
@@ -498,10 +637,10 @@ function clearFilter() {
 }
 
 .custom-dialog .p-dialog {
-  @apply w-10/12 md:w-7/12; /* 70% width for medium and larger screens, 80% width for smaller screens */
+  @apply w-10/12 md:w-7/12;
 }
 
 .custom-dialog .p-dialog-mask {
-  @apply bg-black bg-opacity-50 backdrop-blur-sm; /* Dark and blurred background */
+  @apply bg-black bg-opacity-50 backdrop-blur-sm;
 }
 </style>
