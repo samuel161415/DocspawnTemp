@@ -1,18 +1,5 @@
 <template>
   <div class="box overflow-hidden z-1 px-3 py-5 table-container">
-    <div class="flex flex-col gap-2 left-0 md:mb-14">
-      <p class="font-poppins text-surface-600 text-left text-lg mb-2">
-        {{ $t('Cp_dataLibraryList.select_template') }}
-      </p>
-      <TreeSelect
-        v-model="selectedTemplate"
-        :options="NodeData"
-        :placeholder="$t('Cp_dataLibraryList.select_template')"
-        class="md:w-[20rem] w-full font-poppins"
-        selection-mode="single"
-      />
-    </div>
-
     <DataTableHeader
       v-if="filteredData.length > 0"
       :title="props.title"
@@ -40,27 +27,65 @@
         paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
         :current-page-report-template="`p. {first} / ${Math.ceil(filteredData.length / 25)}`"
         :rows-per-page-options="[25, 50, 100]"
+        class="custom-data-table"
         @update:filters="onFilterChange"
       >
         <template #header>
-          <DataTableFilters
-            :filters="filters"
-            :has-filter-actions="props.hasFilterActions"
-            :typefilter="typefilter"
-            @filter-data="filterData"
-            @clear-filter="clearFilter"
-          />
-
-          <div class="text-left mt-7 w-3/4 sm:w-full text-sm">
-            <MultiSelect
-              v-model="selectedColumns"
-              :options="allColumns"
-              option-label="header"
-              display="chip"
-              :placeholder="$t('Cp_dataLibraryList.select_columns')"
-              class="font-poppins"
+          <div class="flex justify-between items-center  ">
+            <div class="flex items-center gap-2 left-0 ">
+              <p class="font-poppins font-normal text-surface-500 text-left text-lg ">
+                <!-- {{ $t('Cp_dataLibraryList.select_template') }} -->
+                Select what to display:
+              </p>
+              <!-- <TreeSelect
+        v-model="selectedTemplate"
+        :options="NodeData"
+        :placeholder="$t('Cp_dataLibraryList.select_template')"
+        class="md:w-[20rem] w-full font-poppins"
+        selection-mode="single"
+      /> -->
+              <Dropdown
+                v-model="selectedTemplate"
+                :options="NodeData"
+                option-label="label"
+                option-group-label="label"
+                option-group-children="children"
+                placeholder="Select a Template"
+                class="md:w-[20rem] w-full font-poppins ml-3 py-1"
+                filter
+                filter-placeholder="Search templates"
+              >
+                <template #optiongroup="slotProps">
+                  <div class="flex items-center">
+                    <font-awesome-icon icon="fa-duotone fa-folder" size="sm" class="mr-2" />
+                    <div>{{ slotProps.option.label }}</div>
+                  </div>
+                </template>
+                <template #option="slotProps">
+                  <div class="flex items-center pl-5">
+                    <font-awesome-icon icon="fa-duotone fa-file" size="sm" class="mr-2" />
+                    <div>{{ slotProps.option.label }}</div>
+                  </div>
+                </template>
+              </Dropdown>
+            </div>
+            <DataTableFilters
+              :filters="filters"
+              :has-filter-actions="props.hasFilterActions"
+              :typefilter="typefilter"
+              @filter-data="filterData"
+              @clear-filter="clearFilter"
             />
           </div>
+
+          <MultiSelect
+            v-model="selectedColumns"
+            :options="allColumns"
+            option-label="header"
+            display="chip"
+            :placeholder="$t('Cp_dataLibraryList.select_columns')"
+            class="font-poppins w-full md:w-full my-5 py-4 custom-multiselect "
+          />
         </template>
         <template #empty>
           <div class="font-poppins flex justify-center">
@@ -76,7 +101,7 @@
           v-for="(column, index) of selectedColumns"
           :key="`${column.field}_${index}`"
           :field="column.field"
-          :header="column.header"
+
           :data-type="column.data_type"
           :style="column.style"
           :filter-field="column.filterField"
@@ -84,10 +109,15 @@
           :filter-menu-style="{ width: '14rem' }"
           header-class="font-poppins"
         >
+          <template #header>
+            <p class="whitespace-nowrap font-semibold text-lg text-surface-600 ">
+              {{ column.header }}
+            </p>
+          </template>
           <template #body="{ data }">
             <div v-if="column.data_type === 'image'">
               <div class="flex justify-content-center">
-                <Button icon="pi pi-eye" outlined text @click="toggleDialog(index, data[column.field])" />
+                <img :src="data[column.field]" :alt="column.field" class="h-24 rounded cursor-pointer" @click="toggleDialog(index, data[column.field])" />
               </div>
             </div>
             <div v-else-if="column.field === 'filled_on' || column.data_type === 'date'" class="font-poppins">
@@ -123,7 +153,6 @@
         </Column>
       </DataTable>
 
-      <!-- image preview -->
       <Dialog v-model:visible="dialogVisible" maximizable draggable header=" " :style="{ width: '18rem' }">
         <div class="flex flex-col justify-center items-center">
           <Image :src="currentImage" alt="Image" class="flex w-5/6 h-5/6 justify-center items-center" />
@@ -197,6 +226,12 @@ const dialogVisible = ref(false)
 const selectedRowData = ref(null)
 
 const selectedTemplate = ref()
+// by defaul have to set the last geennrated one- just by checjing the geberated doc
+watch(selectedTemplate, (val) => {
+  console.log('selected templatye', selectedTemplate.value)
+})
+
+watch(filterData, val => console.log)
 
 const templatefiltered = ref([])
 
@@ -259,7 +294,7 @@ function onToggle(val) {
 watch(selectedTemplate, async (selectedTemplate) => {
   const temp = templates.value.filter((item) => {
     const key = item.id
-    return selectedTemplate[key]
+    return selectedTemplate.key === key
   })[0]
   const formFields = temp?.added_fields?.filter(f => f?.isFormField)
 
@@ -370,16 +405,60 @@ function clearFilter() {
 </script>
 
 <style scoped>
-::v-deep .p-datatable-header {
-    border-radius: 0.4rem 0.4rem 0 0!important;
+.custom-multiselect ::v-deep .p-multiselect-label-container {
+
+  background-color: #ffffff !important; /* Replace with your desired background color */
 }
-/* Bottom Left Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
-    border-radius:  0  0  0 0.5rem!important;
+.custom-multiselect ::v-deep .p-multiselect-token {
+  background-color: #d1e7dd; /* Replace with your desired background color */
+  color: #0f5132; /* Replace with your desired text color */
 }
 
-/* Bottom Right Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
-    border-radius:  0  0 0.5rem 0 !important;
+.custom-multiselect ::v-deep .p-multiselect-token-label {
+  color: inherit; /* Ensure the text color inherits from the parent */
+}
+
+/* Optionally, you can also style the close icon if present */
+.custom-multiselect ::v-deep .p-multiselect-token-icon {
+  color: #0f5132; /* Replace with your desired icon color */
+}
+::v-deep .p-datatable {
+  background-color: white !important;
+  border: none !important;
+}
+
+::v-deep .p-datatable-header,
+::v-deep .p-datatable-footer {
+  background-color: white !important;
+  border: none !important;
+}
+
+::v-deep .p-datatable-thead > tr > th,
+::v-deep .p-datatable-tbody > tr > td,
+::v-deep .p-datatable-tfoot > tr > td {
+  /* border: none !important; */
+  border-right:none!important;
+  border-left:none!important;
+  background-color: #ffffff !important;
+}
+::v-deep .p-datatable-thead > tr > th{
+
+  background-color: #e0f6ff !important;
+  /* background-color: #009ee233 !important; */
+  border-right:2px solid #ffffff!important;
+  border-radius: 4px;
+}
+
+::v-deep .p-datatable-tbody > tr {
+  background-color: white !important;
+}
+
+::v-deep .p-datatable-tbody > tr:nth-child(odd) {
+  background-color: #f9f9f9 !important; /* For striped rows effect */
+}
+
+::v-deep .p-datatable-gridlines .p-datatable-tbody > tr > td {
+  /* border-right: none !important; */
+  /* border-bottom: none !important; */
 }
 </style>

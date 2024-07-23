@@ -275,18 +275,20 @@ watch(allowDecimals, () => {
   })
 })
 watch(selectedTimeFormat, () => {
+  console.log('selected time format', selectedTimeFormat.value)
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, timeFormat: selectedTimeFormat.value }
+      return { ...f, timeFormat: selectedTimeFormat.value?.name ? selectedTimeFormat.value?.name : selectedTimeFormat.value }
     else return f
   })
 })
 watch(selectedDateFormat, () => {
+  console.log('selected date format', selectedDateFormat.value)
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, dateFormat: selectedDateFormat.value }
+      return { ...f, dateFormat: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : selectedDateFormat.value }
     else return f
   })
 })

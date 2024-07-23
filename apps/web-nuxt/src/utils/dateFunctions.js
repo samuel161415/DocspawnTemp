@@ -436,7 +436,7 @@ export function formatDateForInput(dateValue, format) {
 }
 
 function formatTimeInternal(timeValue, format) {
-  // console.log('formatting time', timeValue, format)
+  console.log('formatting time', timeValue, format)
   if (!timeValue)
     return ''
 
@@ -476,7 +476,11 @@ function formatTimeInternal(timeValue, format) {
         hour12: true,
       }).format(date)
     default:
-      throw new Error(`Unsupported time format: ${format}`)
+      return new Intl.DateTimeFormat('en', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }).format(date)
   }
 }
 
@@ -488,5 +492,5 @@ export function generateCurrentTime(format) {
 export function formatTimeForInput(timeValue, format) {
   if (!timeValue)
     return ''
-  return formatTimeInternal(timeValue, format)
+  return formatTimeInternal(timeValue, format?.name ? format?.name : format)
 }
