@@ -123,6 +123,12 @@
                 />
               </span>
             </template>
+            <!-- :class="getOptionClass(option)" class="custom-option" -->
+            <template #option="{ option, index }">
+              <div>
+                {{ option.header }} <span class="font-poppins text-xs font-semibold ml-1">({{ option?.isNormalField ? 'Form' : option?.isLegacyField ? 'Legacy' : 'System' }})</span>
+              </div>
+            </template>
           </MultiSelect>
 
           <div class="flex justify-end">
