@@ -436,16 +436,15 @@ export function formatDateForInput(dateValue, format) {
 }
 
 function formatTimeInternal(timeValue, format) {
-  console.log('formatting time', timeValue, format)
   if (!timeValue)
     return ''
 
   // Parse the timeValue
   const date = new Date(timeValue)
-  if (isNaN(date.getTime())) {
-    console.log('Invalid date', date)
+  if (isNaN(date.getTime()))
+
     throw new RangeError('Invalid time value')
-  }
+
   // console.log('date', date)
 
   switch (format) {

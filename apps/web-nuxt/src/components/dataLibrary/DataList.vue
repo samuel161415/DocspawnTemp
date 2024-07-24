@@ -368,20 +368,46 @@ watch(selectedTemplate, async (selectedTemplate) => {
     return selectedTemplate.key === key
   })[0]
   const formFields = temp?.added_fields?.filter(f => f?.isFormField)
+  /** * here have to found legacy fields and add those also to selectedColumns */
+  let legacyFields = []
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/legacy-fields/${temp?.id}`)
 
-  const columnsToAdd = [{ field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+
+    if (data?.length > 0)
+      legacyFields = data
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
+  /** */
+
+  const columnsToAdd = [{ isSystemField: true, field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
     if (k?.fieldType === 'Form image')
-      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
-      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else if (k?.fieldType === 'Form time')
-      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else
-      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
 
   selectedColumns.value = columnsToAdd
-  allColumns.value = columnsToAdd
+  const columsnToAddWithLegacyFields = [...columnsToAdd, ...legacyFields?.map((k) => {
+    if (k?.fieldType === 'Form image')
+      return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image', isLegacyField: true }
+    else if (k?.fieldType === 'Form date')
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+    else if (k?.fieldType === 'Form time')
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+    else
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+  })]
+  allColumns.value = columsnToAddWithLegacyFields
 
   /** ************ set filters */
   const filterToAdd = {
@@ -475,25 +501,25 @@ function clearFilter() {
 }
 
 function getChipClass(chipVal) {
-  if (chipVal?.field === 'filled_on')
+  if (chipVal?.isSystemField)
     return 'gray-chip'
-  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+  else if (chipVal?.isLegacyField)
     return 'orange-chip'
   else
     return 'cyan-chip'
 }
 function getIconClass(chipVal) {
-  if (chipVal?.field === 'filled_on')
+  if (chipVal?.isSystemField)
     return 'gray-icon-duotone'
-  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+  else if (chipVal?.isLegacyField)
     return 'orange-icon-duotone'
   else
     return 'cyan-icon-duotone'
 }
 function getIconWrapperClass(chipVal) {
-  if (chipVal?.field === 'filled_on')
+  if (chipVal?.isSystemField)
     return 'gray-icon-wrapper'
-  else if (chipVal?.field === 'name' || chipVal?.field === 'date' || chipVal?.optionType === 'legacy')
+  else if (chipVal?.isLegacyField)
     return 'orange-icon-wrapper'
   else
     return 'cyan-icon-wrapper'
