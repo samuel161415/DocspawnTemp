@@ -100,11 +100,11 @@
             option-label="header"
             display="chip"
             :placeholder="$t('Cp_dataLibraryList.select_columns')"
-            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect static-chip"
+            class="font-poppins font-normal text-surface-600 w-full md:w-full my-5 py-1 custom-multiselect static-chip"
           >
             <template #chip="{ value }">
               <div class="custom-chip" :class="[getChipClass(value)]">
-                <span>{{ value.header }}</span>
+                <span class="text-surface-600">{{ value.header }}</span>
               </div>
               <!-- <div :class="getChipClass(value)" class="p-multiselect-token">
                 <span class="p-multiselect-token-label">{{ value.header }}</span>
@@ -541,6 +541,7 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
 .custom-multiselect ::v-deep .p-multiselect-label-container {
 
   background-color: #ffffff !important; /* Replace with your desired background color */
+
 }
 .custom-multiselect ::v-deep .p-multiselect-token {
   /* background-color: #009ee222; */
@@ -561,51 +562,55 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   color: #000000;
 }
 .gray-chip {
-  background-color: #e7e7e8; /* Red background */
-  color: #abadaf; /* Red text */
+  background-color: #abadaf33; /* Red background */
+  /* color: #; */
+   /* Red text */
+
   padding:6px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
+  border-top-left-radius: 42px;
+  border-bottom-left-radius: 42px;
 }
 
 .orange-chip {
-  background-color: #f1d4b1; /* Green background */
-  color: #dc9239; /* Green text */
+  background-color: #f1d4b133; /* Green background */
+  /* color: #dc9239; */
+   /* Green text */
   padding:6px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  margin-right:-1px;
+  border-top-left-radius: 42px;
+  border-bottom-left-radius: 42px;
+
 }
 .cyan-chip{
-  background-color: #bae7f3; /* Green background */
-  color: #53c2e1; /* Green text */
+  background-color: #bae7f355; /* Green background */
+  /* color: #53c2e1; */
+   /* Green text */
   padding:6px;
-  border-top-left-radius: 4px;
-  border-bottom-left-radius: 4px;
-  margin-right:-1px;
+  border-top-left-radius: 42px;
+  border-bottom-left-radius: 42px;
+
 }
 .gray-icon-wrapper {
-  background-color: #e7e7e8; /* Red background */
+  background-color: #abadaf33; /* Red background */
   padding:4px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
-  margin-right:-1px;
+  border-top-right-radius: 42px;
+  border-bottom-right-radius: 42px;
+
   cursor:pointer;
 
 }
 .orange-icon-wrapper {
-  background-color: #f1d4b1; /* Green background */
+  background-color: #f1d4b133; /* Green background */
   padding:4px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: 42px;
+  border-bottom-right-radius: 42px;
   cursor:pointer;
 
 }
 .cyan-icon-wrapper{
-  background-color: #bae7f3; /* Green background */
+  background-color: #bae7f355; /* Green background */
   padding:4px;
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
+  border-top-right-radius: 42px;
+  border-bottom-right-radius: 42px;
   cursor:pointer;
 
 }
@@ -613,19 +618,22 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
 .gray-icon-duotone.duotone-icon {
   --fa-primary-color: #333;
   /* --fa-secondary-color: #abadaf; */
-  --fa-secondary-color: #52555a;
+  /* --fa-secondary-color: #52555a; */
+  --fa-secondary-color: transparent;
 
 }
 .orange-icon-duotone.duotone-icon {
   --fa-primary-color: #333;
   /* --fa-secondary-color: #dc9239; */
-  --fa-secondary-color: #a5681e;
+  /* --fa-secondary-color: #a5681e; */
+  --fa-secondary-color: transparent;
 
 }
 .cyan-icon-duotone.duotone-icon {
   --fa-primary-color: #333;
   /* --fa-secondary-color: #53c2e1; */
-  --fa-secondary-color: #24a2c4;
+  /* --fa-secondary-color: #24a2c4; */
+  --fa-secondary-color: transparent;
 
 }
 ::v-deep .p-datatable {

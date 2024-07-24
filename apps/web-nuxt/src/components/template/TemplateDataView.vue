@@ -3,7 +3,7 @@
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
         <div class="flex justify-between space-x-2">
-          <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
+          <!-- <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
             <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
               {{ $t('Cp_templateDataview.all') }}
             </p>
@@ -23,6 +23,16 @@
             <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'table to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'table to doc'">
               {{ $t('Cp_templateDataview.table_to_doc') }}
             </p>
+          </div> -->
+          <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 ">
+            <Dropdown
+              v-model="filterOption"
+              :options="filterOptions"
+              option-label="label"
+              :class="{ 'text-primaryBlue': filterOption !== '' }"
+              class="p-dropdown font-poppins py-1"
+              placeholder="Select a filter"
+            />
           </div>
           <div class="flex space-y-2 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
             <div class="flex space-x-2">
@@ -52,7 +62,7 @@
 
       <template #list="slotProps">
         <div v-show="!templatesLoading" class="flex flex-wrap">
-          <div
+          <!-- <div
             v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
@@ -99,13 +109,61 @@
                 </div>
               </div>
             </div>
+          </div> -->
+          <div
+            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
+            @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
+            @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
+            @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+          >
+            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+              <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
+              <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">
+                {{ $t('Cp_templateDataview.drop_data') }}
+              </p>
+              <p class="text-black font-poppins text-base text-center">
+                {{ $t('Cp_templateDataview.supported_formats') }}
+              </p>
+            </div>
+
+            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
+              <div class="min-w-[6rem] relative cursor-pointer " @click="handleTemplatePreview(item)">
+                <div class="h-max w-full flex justify-center py-1 ">
+                  <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
+                </div>
+              </div>
+              <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
+                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
+                  <div class="ml-2">
+                    <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-600 mt-1">
+                      {{ item.name }}
+                    </p>
+                  </div>
+                </div>
+                <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
+                  <div class="flex space-x-5 mr-5 mb-3 md:mb-0">
+                    <i v-tooltip.top="$t('Cp_templateDataview.edit_template')" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="$t('Cp_templateDataview.set_as_favorites')" class="pointer-auto cursor-pointer text-surface-500" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem"></i>
+                  </div>
+
+                  <div class="flex flex-row-reverse md:flex-row">
+                    <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="handleFillForm(item)" />
+                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e); }" />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </template>
 
       <template #grid="slotProps">
         <div v-show="!templatesLoading" class="flex flex-wrap">
-          <div
+          <!-- <div
             v-for="(item, index) in slotProps.items" :key="index"
             class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent"
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
@@ -117,34 +175,84 @@
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 60px; height: 50px;" />
               <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-5">
                 {{ $t('Cp_templateDataview.drop_data') }}
+
+          </p>
+          <p class="text-black font-poppins text-base text-center mt-2">
+            {{ $t('Cp_templateDataview.supported_formats') }}
+          </p>
+        </div>
+
+        <div v-show="!isDragging[index]" class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+          <div class="flex pt-4" :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
+            <i v-if="favoriteStates[index]" class="cursor-pointer" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
+            <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
+          </div>
+          <div class="surface-50 flex justify-center rounded-md px-3">
+            <div class="relative mx-auto cursor-pointer" @click="handleTemplatePreview(item)">
+              <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
+            </div>
+          </div>
+
+          <div class="mt-auto mb-3">
+            <div class="flex flex-row text-center justify-center items-center gap-2 h-16">
+              <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-500 truncate">
+                {{ item.name }}
+              </p>
+            </div>
+            <div class="flex flex-col">
+              <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm(item)" />
+              <Button
+                v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
+                  templateSelectedForUploadingFile = item;
+                  uploadFile(e);
+                }"
+              />
+            </div>
+          </div>
+        </div>
+      </template>
+    </dataview>
+  </div> -->
+          <div
+            v-for="(item, index) in slotProps.items" :key="index"
+            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent  max-w-[180px]"
+            @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
+            @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
+            @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+          >
+            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
+              <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
+              <p class="text-primaryBlue font-bold font-poppins text-sm text-center mt-5">
+                {{ $t('Cp_templateDataview.drop_data') }}
                 <!-- {{ console.log('item', item) }} -->
               </p>
-              <p class="text-black font-poppins text-base text-center mt-2">
+              <p class="text-black font-poppins text-xs text-center mt-2">
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
 
-            <div v-show="!isDragging[index]" class="px-6 sm:px-4 md:px-4 w-11/12 h-[20rem] lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
-              <div class="flex pt-4" :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
+            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+              <div class="flex pt-2" :class="favoriteStates[index] ? 'justify-between' : 'justify-end'">
                 <i v-if="favoriteStates[index]" class="cursor-pointer" :class="[favoriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
                 <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
               </div>
-              <div class="surface-50 flex justify-center rounded-md px-3">
-                <div class="relative mx-auto cursor-pointer" @click="handleTemplatePreview(item)">
+              <div class="surface-50 flex justify-center rounded-md px-3 ">
+                <div class="relative mx-auto cursor-pointer " @click="handleTemplatePreview(item)">
                   <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
                 </div>
               </div>
 
               <div class="mt-auto mb-3">
-                <div class="flex flex-row text-center justify-center items-center gap-2 h-16">
-                  <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-500 truncate">
+                <div class="flex flex-row text-center justify-center items-center gap-2 h-12">
+                  <p class="text-lg sm:text-sm md:text-base lg:text-sm font-poppins text-surface-500 truncate">
                     {{ item.name }}
                   </p>
                 </div>
                 <div class="flex flex-col">
-                  <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins" @click="handleFillForm(item)" />
+                  <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins text-xs" @click="handleFillForm(item)" />
                   <Button
-                    v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer" @click="(e) => {
+                    v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer text-xs" @click="(e) => {
                       templateSelectedForUploadingFile = item;
                       uploadFile(e);
                     }"
@@ -157,7 +265,7 @@
       </template>
     </DataView>
     <template v-if="templatesLoading">
-      <div v-if="layout === 'grid'" class="flex flex-wrap">
+      <div v-if="layout === 'grid'" class="flex flex-wrap gap-3">
         <GridSkeleton v-for="n in 3" :key="n" class=" " />
       </div>
       <div v-else class="w-full">
@@ -199,7 +307,9 @@
     </OverlayPanel>
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
+
   <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+
   <ConfirmDialog group="templating">
     <template #message="slotProps">
       <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
@@ -208,6 +318,7 @@
       </div>
     </template>
   </ConfirmDialog>
+
   <Toast position="top-right">
     <template #message="slotProps">
       <div class="flex items-start space-x-2">
@@ -225,6 +336,7 @@
       </div>
     </template>
   </Toast>
+
   <Toast position="top-right" group="ac" @close="onClose">
     <template #message="slotProps">
       <div class="flex flex-col items-start flex-auto">
@@ -255,6 +367,8 @@ import { fal } from '@fortawesome/pro-light-svg-icons'
 import ExcelJS from 'exceljs'
 import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
+import Dropdown from 'primevue/dropdown'
+import { useI18n } from 'vue-i18n'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
@@ -271,7 +385,19 @@ const props = defineProps({
     default: () => [],
   },
 })
+
 const emit = defineEmits(['deleteTemplate'])
+
+const { t } = useI18n()
+
+const filterOptions = ref([
+  { label: t('Cp_templateDataview.all'), value: '' },
+  { label: t('Cp_templateDataview.favorites'), value: 'favorites' },
+  { label: t('Cp_templateDataview.form_to_doc'), value: 'form to doc' },
+  { label: t('Cp_templateDataview.data_to_doc'), value: 'data to doc' },
+  { label: t('Cp_templateDataview.table_to_doc'), value: 'table to doc' },
+])
+
 const toast = useToast()
 const confirm = useConfirm()
 const router = useRouter()
@@ -344,7 +470,10 @@ const visibleDataToDoc = ref(false)
 const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
 
-const filterOption = ref('')
+const filterOption = ref(filterOptions.value[0])
+watch(filterOption, (val) => {
+  console.log('filter optipon', val)
+})
 const searchQuery = ref('')
 const fileTypeCheck = ref(false)
 
@@ -397,7 +526,7 @@ function toggle(event) {
 const filteredTemplates = computed(() => {
   let filtered = props.templates
 
-  switch (filterOption.value) {
+  switch (filterOption.value.value) {
     case 'favorites':
       filtered = filtered.filter(template => template.isFavorite === true)
       break
