@@ -24,8 +24,9 @@
               {{ $t('Cp_templateDataview.table_to_doc') }}
             </p>
           </div> -->
-          <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 ">
+          <div class="flex flex-col items-center md:flex-row flex-wrap justify-center space-x-5 ">
             <Dropdown
+              v-if="!props.isFavouriteView"
               v-model="filterOption"
               :options="filterOptions"
               option-label="label"
@@ -33,6 +34,9 @@
               class="p-dropdown font-poppins py-1"
               placeholder="Select a filter"
             />
+            <h2 v-else class=" text-xl font-semibold text-surface-600 ">
+              Favourite Templates
+            </h2>
           </div>
           <div class="flex space-y-2 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
             <div class="flex space-x-2">

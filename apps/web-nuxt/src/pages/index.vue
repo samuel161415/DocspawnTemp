@@ -6,12 +6,12 @@
       </h1>
     </div>
     <div class="card">
-      <div class="card-header">
+      <!-- <div class="card-header">
         <h2 class=" text-2xl font-semibold text-surface-600 -mb-10">
           Favourite Templates
         </h2>
-      </div>
-      <div class="card-content">
+      </div> -->
+      <div class="card-content -mt-12">
         <!-- <FavouriteTemplates :templates="templateData" /> -->
         <TemplateDataView :templates="templateData" :is-favourite-view="true" @update-templates-for-favourites="updateTemplateData" />
       </div>
