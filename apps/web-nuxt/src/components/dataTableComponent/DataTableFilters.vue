@@ -41,7 +41,7 @@
         :label="$t('Cp_dataTable_filter.clear')"
         outlined
         raised
-        class="p-7 shadow-none rounded-lg w-1/2 md:w-24 raised border-primaryBlue"
+        class="p-7 shadow-none rounded-lg w-1/2 md:w-24 raised border-primaryBlue h-[45px]"
         @click="clearFilter"
       />
       <span class="relative flex">
@@ -52,7 +52,7 @@
         <InputText
           v-model="filters.global.value"
           :placeholder="$t('Cp_dataTable_filter.search')"
-          class="pl-10 font-normal rounded-lg border-gray-300"
+          class="pl-10 font-normal rounded-lg border-gray-300 h-[45px]"
         />
       </span>
     </div>

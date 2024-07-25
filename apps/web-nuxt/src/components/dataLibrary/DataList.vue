@@ -1,14 +1,14 @@
 <template>
   <div class="box overflow-hidden z-1 px-3 py-5 table-container">
-    <DataTableHeader
+    <!-- <DataTableHeader
       v-if="filteredData.length > 0"
       :title="props.title"
       :info="props.info"
       :export-file="props.exportFile"
       @export-c-s-v="exportCSVHandler"
-    />
+    /> -->
 
-    <div class="mt-4">
+    <div class="mt-0">
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
@@ -23,7 +23,7 @@
         overlay-visible
         striped-rows
         csv-separator
-        :global-filter-fields="['filled_on', 'text_filled']"
+        :global-filter-fields="['date_created', 'text_filled']"
         paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
         :current-page-report-template="`p. {first} / ${Math.ceil(filteredData.length / 25)}`"
         :rows-per-page-options="[25, 50, 100]"
@@ -35,7 +35,7 @@
             <div class="flex items-center gap-2 left-0 ">
               <p class="font-poppins font-normal text-surface-500 text-left text-lg ">
                 <!-- {{ $t('Cp_dataLibraryList.select_template') }} -->
-                Select what to display:
+                Select data to display
               </p>
               <!-- <TreeSelect
         v-model="selectedTemplate"
@@ -50,10 +50,10 @@
                 option-label="label"
                 option-group-label="label"
                 option-group-children="children"
-                placeholder="Select a Template"
-                class="md:w-[20rem] w-full font-poppins ml-3 py-0"
                 filter
                 filter-placeholder="Search templates"
+                placeholder="Select a Template"
+                class="md:w-[20rem] w-full font-poppins ml-3 py-0 h-[45px] flex items-center"
               >
                 <template #optiongroup="slotProps">
                   <div class="flex items-center">
@@ -97,11 +97,23 @@
           <MultiSelect
             v-model="selectedColumns"
             :options="allColumns"
-            option-label="header"
+            option-label="label"
+            option-group-label="label"
+            option-group-children="children"
+            filter
+            filter-placeholder="Search fields"
             display="chip"
             :placeholder="$t('Cp_dataLibraryList.select_columns')"
-            class="font-poppins font-normal text-surface-600 w-full md:w-full my-5 py-1 custom-multiselect static-chip"
+            class="font-poppins font-normal text-surface-600 w-full md:w-full my-5 py-1 custom-multiselect static-chip h-[45px] flex items-center"
           >
+            <template #optiongroup="slotProps">
+              <div class="flex items-center">
+                <font-awesome-icon :icon="slotProps.option.icon" size="lg" class="mr-2 text-surface-500" />
+                <div class="font-poppins text-surface-600">
+                  {{ slotProps.option.label }}
+                </div>
+              </div>
+            </template>
             <template #chip="{ value }">
               <div class="custom-chip" :class="[getChipClass(value)]">
                 <span class="text-surface-600">{{ value.header }}</span>
@@ -126,7 +138,8 @@
             <!-- :class="getOptionClass(option)" class="custom-option" -->
             <template #option="{ option, index }">
               <div>
-                {{ option.header }} <span class="font-poppins text-xs font-semibold ml-1">({{ option?.isNormalField ? 'Form' : option?.isLegacyField ? 'Legacy' : 'System' }})</span>
+                {{ option.header }}
+                <!-- <span class="font-poppins text-xs font-semibold ml-1">({{ option?.isNormalField ? 'Form' : option?.isLegacyField ? 'Legacy' : 'System' }})</span> -->
               </div>
             </template>
           </MultiSelect>
@@ -137,7 +150,7 @@
               type="button"
               icon="pi pi-download"
               label="Export CSV"
-              class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white  text-xs md:text-sm ml-2 font-poppins"
+              class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white  text-xs md:text-sm ml-2 font-poppins h-[45px] border-none"
               @click="exportCSVHandler"
             />
           </div>
@@ -178,10 +191,10 @@
                 </p>
               </div>
             </div>
-            <div v-else-if="column.field === 'filled_on' || column.data_type === 'date'" class="font-poppins whitespace-nowrap">
+            <div v-else-if="column.field === 'date_created' || column.data_type === 'date'" class="font-poppins whitespace-nowrap">
               <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
               {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
-              {{ column.field === 'filled_on' ? formatTimeForInput(data[column.field], 'HH:MM:SS XM') : '' }}
+              {{ column.field === 'date_created' ? formatTimeForInput(data[column.field], 'HH:MM:SS XM') : '' }}
             </div>
             <div v-else-if="column.data_type === 'time'" class="font-poppins whitespace-nowrap">
               <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
@@ -283,7 +296,6 @@ const props = defineProps({
     required: false,
   },
 })
-
 const emit = defineEmits()
 
 const runtimeConfig = useRuntimeConfig()
@@ -307,6 +319,17 @@ const filteredData = ref(templatefiltered)
 
 const NodeData = ref()
 const templates = ref([])
+
+const filters = ref(props.filters)
+const allColumns = ref()
+const selectedColumns = ref()
+
+watch(NodeData, (val) => {
+  console.log('NodeData>>>>', val)
+})
+watch(allColumns, (val) => {
+  console.log('all columns>>', val)
+})
 
 onMounted(async () => {
   try {
@@ -361,9 +384,6 @@ onMounted(async () => {
     console.error('Error fetching templates:', error)
   }
 })
-const filters = ref(props.filters)
-const allColumns = ref()
-const selectedColumns = ref()
 
 function onToggle(val) {
   selectedColumns.value = allColumns.value.filter(col => val.includes(col))
@@ -391,7 +411,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
   }
   /** */
 
-  const columnsToAdd = [{ isSystemField: true, field: 'filled_on', header: 'Filled on', filterField: 'filled_on', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
+  const columnsToAdd = [{ isSystemField: true, field: 'date_created', header: 'Date created', filterField: 'date_created', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
     if (k?.fieldType === 'Form image')
       return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
@@ -414,11 +434,44 @@ watch(selectedTemplate, async (selectedTemplate) => {
       return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
   allColumns.value = columsnToAddWithLegacyFields
+  /** * experimenting with all columns to convert into a group */
+  const systemFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isSystemField)
+  const formFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isNormalField)
+  const legacyFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isLegacyField)
+  allColumns.value = [
+    {
+      key: 'Form fields',
+      label: 'Form fields',
+      data: 'Form fields',
+      icon: 'fa-light fa-file-invoice',
+      selectable: false,
+      children: formFieldsToAdd,
+    },
+    {
+      key: 'System fields',
+      label: 'System fields',
+      data: 'System fields',
+      icon: 'fa-light fa-window',
+      selectable: false,
+      children: systemFieldsToAdd,
+    },
+
+    {
+      key: 'Legacy fields',
+      label: 'Legacy fields',
+      data: 'Legacy fields',
+      icon: 'fa-light fa-server',
+      selectable: false,
+      children: legacyFieldsToAdd,
+    },
+  ]
+
+  /** */
 
   /** ************ set filters */
   const filterToAdd = {
     global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    filled_on: {
+    date_created: {
       operator: FilterOperator.AND,
       constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
     },
@@ -460,14 +513,14 @@ watch(selectedTemplate, async (selectedTemplate) => {
           id: e.id,
           image: '',
           templateName: temp.name,
-          filled_on: new Date(e?.created_at).toUTCString(),
+          date_created: new Date(e?.created_at).toUTCString(),
           type: 'Form to Doc',
           ...obj,
 
         }
       })
 
-      templatefiltered.value = dataForTemplateEntries.sort((a, b) => new Date(b.filled_on) - new Date(a.filled_on))
+      templatefiltered.value = dataForTemplateEntries.sort((a, b) => new Date(b.date_created) - new Date(a.date_created))
     }
 
     // console.log('response of fetching templates', data)
@@ -541,6 +594,8 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
 .custom-multiselect ::v-deep .p-multiselect-label-container {
 
   background-color: #ffffff !important; /* Replace with your desired background color */
+  border-radius: 4px;
+  /* height:45px; */
 
 }
 .custom-multiselect ::v-deep .p-multiselect-token {
@@ -569,6 +624,8 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   padding:6px;
   border-top-left-radius: 42px;
   border-bottom-left-radius: 42px;
+  padding-left: 10px;
+  padding-right: 0px;
 }
 
 .orange-chip {
@@ -576,6 +633,8 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   /* color: #dc9239; */
    /* Green text */
   padding:6px;
+  padding-left: 10px;
+  padding-right: 0px;
   border-top-left-radius: 42px;
   border-bottom-left-radius: 42px;
 
@@ -587,11 +646,13 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   padding:6px;
   border-top-left-radius: 42px;
   border-bottom-left-radius: 42px;
+  padding-left: 10px;
+  padding-right: 0px;
 
 }
 .gray-icon-wrapper {
   background-color: #abadaf33; /* Red background */
-  padding:4px;
+  padding:4.2px;
   border-top-right-radius: 42px;
   border-bottom-right-radius: 42px;
 
@@ -600,7 +661,7 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
 }
 .orange-icon-wrapper {
   background-color: #f1d4b133; /* Green background */
-  padding:4px;
+  padding:4.2px;
   border-top-right-radius: 42px;
   border-bottom-right-radius: 42px;
   cursor:pointer;
@@ -608,7 +669,7 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
 }
 .cyan-icon-wrapper{
   background-color: #bae7f355; /* Green background */
-  padding:4px;
+  padding:4.2px;
   border-top-right-radius: 42px;
   border-bottom-right-radius: 42px;
   cursor:pointer;
