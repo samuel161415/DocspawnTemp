@@ -108,7 +108,7 @@
           >
             <template #optiongroup="slotProps">
               <div class="flex items-center">
-                <font-awesome-icon :icon="slotProps.option.icon" size="lg" class="mr-2 text-surface-500" />
+                <!-- <font-awesome-icon :icon="slotProps.option.icon" size="lg" class="mr-2 text-surface-500" /> -->
                 <div class="font-poppins text-surface-600">
                   {{ slotProps.option.label }}
                 </div>
