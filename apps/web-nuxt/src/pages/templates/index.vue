@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <TemplateDataView :templates="templateData" @delete-template="deleteTemplate" />
+          <TemplateDataView :templates="templateData" @delete-template="deleteTemplate" @update-templates-for-favourites="updateTemplateData" />
         </div>
       </div>
 
@@ -40,6 +40,9 @@ const visible = ref(false)
 const runtimeConfig = useRuntimeConfig()
 
 const templateData = ref([])
+function updateTemplateData(data) {
+  templateData.value = data
+}
 
 function refreshAllFirst() {
   resetAllTemplateCreationValues()
