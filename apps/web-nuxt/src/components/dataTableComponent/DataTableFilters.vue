@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col md:flex-row justify-between mt-2 space-y-2 md:space-y-0">
+  <div class="flex flex-col md:flex-row justify-between  space-y-2 md:space-y-0">
     <div class="flex flex-col md:flex-row space-x-0 md:space-x-2 space-y-2 md:space-y-0">
       <div v-if="hasFilterActions" class="space-y-2 md:space-y-0">
         <Button

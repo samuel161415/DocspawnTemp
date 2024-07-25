@@ -31,19 +31,13 @@
         @update:filters="onFilterChange"
       >
         <template #header>
-          <div class="flex justify-between items-center  ">
+          <div class="flex justify-between items-center mb-4 ">
             <div class="flex items-center gap-2 left-0 ">
               <p class="font-poppins font-normal text-surface-500 text-left text-lg ">
                 <!-- {{ $t('Cp_dataLibraryList.select_template') }} -->
                 Select data to display
               </p>
-              <!-- <TreeSelect
-        v-model="selectedTemplate"
-        :options="NodeData"
-        :placeholder="$t('Cp_dataLibraryList.select_template')"
-        class="md:w-[20rem] w-full font-poppins"
-        selection-mode="single"
-      /> -->
+
               <Dropdown
                 v-model="selectedTemplate"
                 :options="NodeData"
@@ -70,6 +64,22 @@
               </Dropdown>
             </div>
             <div class="flex items-center gap-2">
+              <Button
+                v-if="exportFile"
+                type="button"
+                icon="pi pi-bookmark"
+                label="Save view"
+                class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
+              />
+              <Button
+                v-if="exportFile"
+                type="button"
+                icon="pi pi-download"
+                label="Export CSV"
+                class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
+                @click="exportCSVHandler"
+              />
+
               <DataTableFilters
                 :filters="filters"
                 :has-filter-actions="props.hasFilterActions"
@@ -144,7 +154,7 @@
             </template>
           </MultiSelect>
 
-          <div class="flex justify-end">
+          <!-- <div class="flex justify-end">
             <Button
               v-if="exportFile"
               type="button"
@@ -153,7 +163,7 @@
               class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white  text-xs md:text-sm ml-2 font-poppins h-[45px] border-none"
               @click="exportCSVHandler"
             />
-          </div>
+          </div> -->
         </template>
         <template #empty>
           <div class="font-poppins flex justify-center">
@@ -411,7 +421,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
   }
   /** */
 
-  const columnsToAdd = [{ isSystemField: true, field: 'date_created', header: 'Date created', filterField: 'date_created', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }, ...formFields?.map((k) => {
+  const columnsToAdd = [...formFields?.map((k) => {
     if (k?.fieldType === 'Form image')
       return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
@@ -420,7 +430,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
       return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else
       return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
-  })]
+  }), { isSystemField: true, field: 'date_created', header: 'Date created', filterField: 'date_created', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }]
 
   selectedColumns.value = columnsToAdd
   const columsnToAddWithLegacyFields = [...columnsToAdd, ...legacyFields?.map((k) => {
