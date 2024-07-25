@@ -103,10 +103,11 @@
           <MultiSelect
             v-model="selectedColumns"
             :options="allColumns"
-            option-label="label"
+            option-label="field"
             option-group-label="label"
             option-group-children="children"
             filter
+            filter-by="field"
             filter-placeholder="Search fields"
             display="chip"
             :placeholder="$t('Cp_dataLibraryList.select_columns')"
@@ -340,6 +341,9 @@ const selectedColumns = ref()
 // watch(selectedColumns, (val) => {
 //   console.log('selected columns', val)
 // })
+watch(allColumns, (val) => {
+  console.log('all columns', val)
+})
 const componentLoading = ref(true)
 onMounted(async () => {
   setTimeout(() => {
