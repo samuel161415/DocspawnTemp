@@ -1,5 +1,10 @@
 <template>
-  <div class="box overflow-hidden z-1 px-3 py-5 table-container">
+  <div v-show="componentLoading">
+    <div class="h-[200px] flex justify-center border-none">
+      Loading data...
+    </div>
+  </div>
+  <div v-show="!componentLoading" class="box overflow-hidden z-1 px-3 py-5 table-container">
     <!-- <DataTableHeader
       v-if="filteredData.length > 0"
       :title="props.title"
@@ -12,25 +17,29 @@
       <DataTable
         ref="dataTableRef"
         v-model:filters="filters"
+        v-model:selection="selectedRows"
         :value="filteredData"
         show-gridlines
         :paginator="filteredData.length > 0"
         responsive-layout="scroll"
-        :rows="25"
+        :rows="10"
         :row-hover="true"
         data-key="id"
         filter-display="menu"
         overlay-visible
         striped-rows
         csv-separator
-        :global-filter-fields="['date_created', 'text_filled']"
+        :global-filter-fields="selectedColumns?.map(f => f?.field)"
         paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
-        :current-page-report-template="`p. {first} / ${Math.ceil(filteredData.length / 25)}`"
-        :rows-per-page-options="[25, 50, 100]"
+
         class="custom-data-table"
+
         @update:filters="onFilterChange"
       >
-        <template #header>
+        <!-- :current-page-report-template="`p. {first} / ${Math.ceil(filteredData.length / 2)}`"
+      :rows-per-page-options="[2, 25, 50, 100]" -->
+        <!-- <template #header> -->
+        <div class="mb-2">
           <div class="flex justify-between items-center mb-4 ">
             <div class="flex items-center gap-2 left-0 ">
               <p class="font-poppins font-normal text-surface-500 text-left text-lg ">
@@ -77,6 +86,7 @@
                 icon="pi pi-download"
                 label="Export CSV"
                 class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
+                :disabled="selectedRows.length < 1"
                 @click="exportCSVHandler"
               />
 
@@ -90,20 +100,6 @@
             </div>
           </div>
 
-          <!-- <MultiSelect
-            v-model="selectedColumns"
-            :options="allColumns"
-            option-label="header"
-            display="chip"
-            :placeholder="$t('Cp_dataLibraryList.select_columns')"
-            class="font-poppins w-full md:w-full my-5 py-1 custom-multiselect static-chip"
-          >
-            <template #chip="{ value }">
-              <div class="custom-chip" :class="[getChipClass(value)]">
-                <span class="option-label">{{ value.header }}</span>
-              </div>
-            </template>
-          </MultiSelect> -->
           <MultiSelect
             v-model="selectedColumns"
             :options="allColumns"
@@ -153,18 +149,8 @@
               </div>
             </template>
           </MultiSelect>
-
-          <!-- <div class="flex justify-end">
-            <Button
-              v-if="exportFile"
-              type="button"
-              icon="pi pi-download"
-              label="Export CSV"
-              class="flex p-1 md:p-3 rounded-lg bg-primaryBlue text-white  text-xs md:text-sm ml-2 font-poppins h-[45px] border-none"
-              @click="exportCSVHandler"
-            />
-          </div> -->
-        </template>
+        </div>
+        <!-- </template> -->
         <template #empty>
           <div class="font-poppins flex justify-center">
             {{ $t('Cp_dataLibraryList.select_template') }}
@@ -175,6 +161,7 @@
             {{ $t('Cp_dataLibraryList.loading_data') }}
           </div>
         </template>
+        <Column selection-mode="multiple" header-style="width: 3rem" />
         <Column
           v-for="(column, index) of selectedColumns"
           :key="`${column.field}_${index}`"
@@ -202,16 +189,31 @@
               </div>
             </div>
             <div v-else-if="column.field === 'date_created' || column.data_type === 'date'" class="font-poppins whitespace-nowrap">
-              <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
-              {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
-              {{ column.field === 'date_created' ? formatTimeForInput(data[column.field], 'HH:MM:SS XM') : '' }}
+              <p v-if="data[column.field]">
+                <i class="pi pi-calendar text-primaryBlue font-bold mr-4 text-xl"></i>
+                {{ formatDateForInput(data[column.field], column?.format || 'DD/MM/YYYY') }}
+                {{ column.field === 'date_created' ? formatTimeForInput(data[column.field], 'HH:MM:SS XM') : '' }}
+              </p>
+              <p v-else>
+                N/A
+              </p>
             </div>
             <div v-else-if="column.data_type === 'time'" class="font-poppins whitespace-nowrap">
-              <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
-              {{ formatTimeForInput(data[column.field], column?.format || 'HH:MM:SS XM') }}
+              <p v-if="data[column.field]">
+                <i class="pi pi-clock text-primaryBlue font-bold mr-4 text-xl"></i>
+                {{ formatTimeForInput(data[column.field], column?.format || 'HH:MM:SS XM') }}
+              </p>
+              <p v-else>
+                N/A
+              </p>
             </div>
             <div v-else class="flex font-poppins">
-              {{ data[column.field] }}
+              <p v-if="data[column.field]">
+                {{ data[column.field] }}
+              </p>
+              <p v-else>
+                N/A
+              </p>
             </div>
           </template>
 
@@ -307,6 +309,7 @@ const props = defineProps({
   },
 })
 const emit = defineEmits()
+const selectedRows = ref([])
 
 const runtimeConfig = useRuntimeConfig()
 
@@ -333,15 +336,16 @@ const templates = ref([])
 const filters = ref(props.filters)
 const allColumns = ref()
 const selectedColumns = ref()
-
-watch(NodeData, (val) => {
-  console.log('NodeData>>>>', val)
-})
-watch(allColumns, (val) => {
-  console.log('all columns>>', val)
-})
-
+// const globalFilterFields = ref([])
+// watch(selectedColumns, (val) => {
+//   console.log('selected columns', val)
+// })
+const componentLoading = ref(true)
 onMounted(async () => {
+  setTimeout(() => {
+    componentLoading.value = false
+  }, 2000)
+  // setInterval(() => console.log('filter global mode akk', filters.value), 5000)
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${accountData?.accountType}`)
@@ -425,11 +429,11 @@ watch(selectedTemplate, async (selectedTemplate) => {
     if (k?.fieldType === 'Form image')
       return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image' }
     else if (k?.fieldType === 'Form date')
-      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else if (k?.fieldType === 'Form time')
-      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else
-      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isNormalField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   }), { isSystemField: true, field: 'date_created', header: 'Date created', filterField: 'date_created', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }]
 
   selectedColumns.value = columnsToAdd
@@ -437,11 +441,11 @@ watch(selectedTemplate, async (selectedTemplate) => {
     if (k?.fieldType === 'Form image')
       return { field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, data_type: 'image', isLegacyField: true }
     else if (k?.fieldType === 'Form date')
-      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'date', format: k?.dateFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else if (k?.fieldType === 'Form time')
-      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'time', format: k?.timeFormat, style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
     else
-      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
+      return { isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
   allColumns.value = columsnToAddWithLegacyFields
   /** * experimenting with all columns to convert into a group */
@@ -486,15 +490,18 @@ watch(selectedTemplate, async (selectedTemplate) => {
       constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }],
     },
   }
-  temp?.added_fields?.filter(f => f?.isFormField)?.forEach((k) => {
-    if (k?.fieldType === 'Form image')
-      console.log()
-    else if (k?.fieldType === 'Form date')
-      filterToAdd[k?.name ? k?.name : k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
-    else if (k?.fieldType === 'Form time')
-      filterToAdd[k?.name ? k?.name : k?.id] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.TIME_IS }] }
-    else filterToAdd[k?.name ? k?.name : k?.id] = { value: null, matchMode: FilterMatchMode.CONTAINS }
-  })
+  // temp?.added_fields?.filter(f => f?.isFormField)
+  columsnToAddWithLegacyFields
+    ?.forEach((k) => {
+      if (k?.data_type === 'image')
+        console.log()
+      else if (k?.data_type === 'date')
+        filterToAdd[k?.field] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.DATE_IS }] }
+      else if (k?.data_type === 'time')
+        filterToAdd[k?.field] = { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.TIME_IS }] }
+      else
+        filterToAdd[k?.field] = { value: null, matchMode: FilterMatchMode.CONTAINS }
+    })
   filters.value = filterToAdd
 
   /** *** fetch form entries value */
@@ -559,8 +566,18 @@ function getPlaceholder(header) {
 }
 
 function exportCSVHandler() {
-  if (dataTableRef.value)
-    dataTableRef.value.exportCSV()
+  if (dataTableRef.value) {
+    // Get the selected rows
+    const selectedRowsData = dataTableRef.value.selection
+    console.log('selectedRowsdata', selectedRowsData)
+    if (selectedRowsData.length > 0) {
+      // Use the DataTable's exportCSV method with the selected rows data
+      dataTableRef.value.exportCSV({ selectionOnly: true })
+    }
+    else {
+      console.warn('No rows selected for export')
+    }
+  }
 }
 
 function clearFilter() {
@@ -732,6 +749,8 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   /* background-color: #009ee233 !important; */
   border-right:2px solid #ffffff!important;
   border-radius: 4px;
+  border-top:none!important;
+  border-bottom:none!important;
 }
 
 ::v-deep .p-datatable-tbody > tr {

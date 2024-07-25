@@ -24,7 +24,13 @@
         @update:filters="onFilterChange"
       >
         <template #header>
-          <DataTableFilters :filters="filters" :has-filter-actions="props.hasFilterActions" :typefilter="typefilter" @filter-data="filterData" @clear-filter="clearFilter" />
+          <DataTableFilters
+            :filters="filters"
+            :has-filter-actions="props.hasFilterActions"
+            :typefilter="typefilter"
+            @filter-data="filterData"
+            @clear-filter="clearFilter"
+          />
         </template>
 
         <template #empty>
