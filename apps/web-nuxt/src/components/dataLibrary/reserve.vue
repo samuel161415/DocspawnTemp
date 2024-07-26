@@ -29,7 +29,7 @@
         overlay-visible
         striped-rows
         csv-separator
-        :global-filter-fields="selectedColumns?.map(f => f?.hash || f?.field)"
+        :global-filter-fields="selectedColumns?.map(f => f?.field)"
         paginator-template="FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink RowsPerPageDropdown"
 
         class="custom-data-table"
@@ -530,11 +530,11 @@ watch(selectedTemplate, async (selectedTemplate) => {
               state = `${state}${e.text}: ${e.state ? '1' : '0'}; `
             })
             // obj = { ...obj, [entry?.name ? entry?.name : entry?.id]: state, hash: entry?.hash }
-            obj = { ...obj, [entry?.hash || entry?.name || entry?.id]: state, hash: entry?.hash }
+            obj = { ...obj, [entry?.hash || entry?.name]: state, hash: entry?.hash }
           }
           else {
             // obj = { ...obj, [entry?.name ? entry?.name : entry?.id]: entry.state, hash: entry?.hash }
-            obj = { ...obj, [entry?.hash || entry?.name || entry?.id]: entry.state, hash: entry?.hash }
+            obj = { ...obj, [entry?.hash || entry?.name]: entry.state, hash: entry?.hash }
           }
         })
         return {
