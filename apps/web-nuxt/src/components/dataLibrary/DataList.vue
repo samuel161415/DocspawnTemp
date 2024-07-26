@@ -67,19 +67,28 @@
                 <template #option="slotProps">
                   <div class="flex items-center pl-5">
                     <font-awesome-icon icon="fa-duotone fa-file" size="sm" class="mr-2" />
-                    <div>{{ slotProps.option.label }}</div>
+                    <div>{{ slotProps.option.label || slotProps.option.view_name }}</div>
                   </div>
                 </template>
               </Dropdown>
             </div>
             <div class="flex items-center gap-2">
               <Button
-                v-if="exportFile"
                 type="button"
                 icon="pi pi-bookmark"
-                label="Save view"
+                :label="selectedTemplate?.view_name ? 'Save changes' : 'Save view'"
                 class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
+                @click="selectedTemplate?.view_name ? saveView(selectedTemplate?.view_name) : showSaveViewModal = true"
               />
+              <Dialog v-model:visible="showSaveViewModal" header="Save View" :modal="true" class="w-[300px] md:w-[300px]">
+                <div class="p-field flex flex-col gap-2">
+                  <label for="viewName">Enter personlized view name</label>
+                  <InputText id="viewName" v-model="viewToBeSavedName" />
+                </div>
+                <div class="p-d-flex p-jc-end w-full mt-2">
+                  <Button label="Submit" class="w-full" @click="savePersonlizedView" />
+                </div>
+              </Dialog>
               <Button
                 v-if="exportFile"
                 type="button"
@@ -259,11 +268,13 @@
       </Dialog>
     </div>
   </div>
+  <Toast />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
+import { useToast } from 'primevue/usetoast'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
@@ -309,7 +320,13 @@ const props = defineProps({
     required: false,
   },
 })
+
 const emit = defineEmits()
+
+const toast = useToast()
+
+const showSaveViewModal = ref(false)
+const viewToBeSavedName = ref('')
 const selectedRows = ref([])
 
 const runtimeConfig = useRuntimeConfig()
@@ -339,13 +356,7 @@ const filters = ref(props.filters)
 const allColumns = ref()
 const selectedColumns = ref()
 // const globalFilterFields = ref([])
-watch(selectedColumns, (val) => {
-  console.log('selected columns', val)
-  console.log('selectedColumns?.map(f => f?.field)', selectedColumns.value?.map(f => f?.field))
-})
-watch(allColumns, (val) => {
-  console.log('all columns', val)
-})
+
 const componentLoading = ref(true)
 onMounted(async () => {
   setTimeout(() => {
@@ -379,6 +390,24 @@ onMounted(async () => {
       if (sorted[0])
         selectedTemplate.value = { key: sorted[0]?.id, label: sorted[0]?.name, data: sorted[0]?.name }
         /** */
+        /** ******* fetching personalized views */
+      let personalizedViews = []
+      try {
+        // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${accountData?.accountType}`)
+        if (!response.ok)
+          throw new Error(`Network response was not ok ${response.statusText}`)
+        const data = await response.json()
+
+        if (data?.length > 0)
+          personalizedViews = data?.map((d) => { return { ...d, key: d?.id, label: d?.view_name } })
+
+        console.log('data of fetching personalized views', data)
+      }
+      catch (error) {
+        console.error('Error fetching templates:', error)
+      }
+      /** */
       NodeData.value = [
         {
           key: 'Form to doc',
@@ -396,6 +425,14 @@ onMounted(async () => {
           selectable: false,
           children: dataToDoc,
         },
+        {
+          key: 'Personalized views',
+          label: 'Personalized views',
+          data: 'Personalized views',
+          icon: 'pi pi-fw pi-calendar',
+          selectable: false,
+          children: personalizedViews,
+        },
       ]
     }
     // console.log('response of fetching templates', data)
@@ -409,6 +446,16 @@ function onToggle(val) {
   selectedColumns.value = allColumns.value.filter(col => val.includes(col))
 }
 watch(selectedTemplate, async (selectedTemplate) => {
+  if (selectedTemplate.view_name) {
+    console.log('its a persoanlized view', selectedTemplate)
+    filters.value = selectedTemplate?.filters
+    filteredData.value = selectedTemplate?.filtered_data
+    allColumns.value = selectedTemplate?.all_columns
+    selectedColumns.value = selectedTemplate?.selected_columns
+    selectedRows.value = selectedTemplate?.selected_rows
+    templatefiltered.value = selectedTemplate?.template_filtered
+    return
+  }
   const temp = templates.value.filter((item) => {
     const key = item.id
     return selectedTemplate.key === key
@@ -549,7 +596,6 @@ watch(selectedTemplate, async (selectedTemplate) => {
       })
 
       templatefiltered.value = dataForTemplateEntries.sort((a, b) => new Date(b.date_created) - new Date(a.date_created))
-      console.log('template filtered value', templatefiltered.value)
     }
 
     // console.log('response of fetching templates', data)
@@ -626,6 +672,85 @@ function handleRemoveChip(event, item, onClick, removeCallback) {
   event.stopPropagation()
   onClick(event, item)
   removeCallback(event, item)
+}
+
+function savePersonlizedView() {
+  if (viewName.value.trim()) {
+    saveView(viewName.value)
+    showSaveViewModal.value = false
+    viewToBeSavedName.value = ''
+  }
+}
+async function saveView(name) {
+  const objToSend = {
+    account_type: accountData?.accountType,
+    view_name: name,
+    filters: JSON.stringify(filters.value),
+    template_filtered: JSON.stringify(templatefiltered.value),
+    filtered_data: JSON.stringify(filteredData.value),
+    all_columns: JSON.stringify(allColumns.value),
+    selected_columns: JSON.stringify(selectedColumns.value),
+    selected_rows: JSON.stringify(selectedRows.value),
+  }
+  // console.log('obj to send', obj_to_send)
+  try {
+    if (selectedTemplate.value?.view_name) {
+      // logic for save changes in view
+      // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+      const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${selectedTemplate.value?.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(objToSend), // Serialize the object to JSON string
+      })
+      if (!response.ok)
+        throw new Error(`Network response was not ok ${response.statusText}`)
+      const data = await response.json()
+      console.log('data', data)
+      toast.add({ severity: 'success', summary: 'Personalized view', detail: 'View updated successfully!', life: 5000 })
+      NodeData.value = NodeData.value?.map((n) => {
+        console.log('n>>>>', n)
+        if (n?.key === 'Personalized views') {
+          return { ...n, children: n?.children?.map((c) => {
+            if (c?.key === selectedTemplate?.value?.id)
+              return { ...data[0], key: data[0]?.id, label: data[0]?.view_name }
+
+            else
+              return c
+          }) }
+        }
+
+        else { return n }
+      })
+    }
+    else {
+      // logic for creating new view
+      // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+      const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Specify content type as JSON
+        },
+        body: JSON.stringify(objToSend), // Serialize the object to JSON string
+      })
+      if (!response.ok)
+        throw new Error(`Network response was not ok ${response.statusText}`)
+      const data = await response.json()
+      console.log('data', data)
+      toast.add({ severity: 'success', summary: 'Personalized view', detail: 'View saved successfully!', life: 5000 })
+      NodeData.value = NodeData.value?.map((n) => {
+        console.log('n>>>>', n)
+        if (n?.key === 'Personalized views')
+          return { ...n, children: [...n?.children, { ...data[0], key: data[0]?.id, label: data[0]?.view_name }] }
+        else
+          return n
+      })
+    }
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
 }
 </script>
 
