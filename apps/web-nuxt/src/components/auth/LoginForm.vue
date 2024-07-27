@@ -1,9 +1,17 @@
 <template>
-  <div id="login-embed"></div>
+  <div class="bg-white p-4">
+    <div id="login-embed"></div>
+    <Button
+      label="Go to signup page" outlined class="w-full" @click="router.push('signup')"
+    />
+  </div>
 </template>
 
 <script setup>
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 onMounted(() => {
   const script = document.createElement('script')

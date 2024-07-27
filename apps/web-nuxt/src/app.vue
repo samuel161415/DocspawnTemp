@@ -43,8 +43,8 @@ onMounted(async () => {
     else
       console.error('User details could not be fetched')
   }
-  else {
-    router.push('/signup') // Redirect to signup if no access token
+  else if (route.path !== '/signin') {
+    router.push('/signup') // Redirect to signup if no access token and not on sign-in page
   }
 })
 </script>
