@@ -269,10 +269,10 @@
         header=" "
         :modal="true"
         :dismissable-mask="true"
-        class="custom-dialog h-[50vh]"
+        class="custom-dialog max-h-[50vh]"
       >
         <div class="flex flex-col justify-center items-center h-full">
-          <img :src="currentImage" alt="Image" class="w-auto h-4/5 " />
+          <img :src="currentImage" alt="Image" class="w-auto h-4/5 object-contain " />
         </div>
       </Dialog>
     </div>
