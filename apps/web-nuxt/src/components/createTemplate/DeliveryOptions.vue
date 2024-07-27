@@ -1,51 +1,59 @@
 <template>
-  <div class=" mb-10">
+  <div class="mb-10">
     <p class="font-semibold text-surface-600 text-2xl mb-5 flex text-center justify-center">
-      Delivery options
+      {{ $t('Pg_template_create_deliveryOptions.delivery_options') }}
     </p>
 
     <div class="flex flex-col">
       <!-- section 1  -->
       <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">
-        File management
+        {{ $t('Pg_template_create_deliveryOptions.file_management') }}
       </p>
-      <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full ">
+      <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full">
         <!-- col 1 -->
         <div class="w-1/4">
           <p class="text-base text-surface-500 font-poppins">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum.
+            {{ $t('Pg_template_create_deliveryOptions.file_management_description') }}
           </p>
         </div>
 
         <!-- col 2 -->
         <div class="w-1/3">
           <p class="text-lg text-surface-500 font-poppins mb-2">
-            File format
+            {{ $t('Pg_template_create_deliveryOptions.file_format') }}
           </p>
           <div class="flex items-center mb-3">
             <Checkbox v-model="pdf" input-id="pdf" name="pdf" :value="pdf" :binary="true" />
-            <label for="pdf" class="ml-2 text-base text-surface-500 font-poppins"> PDF document </label>
+            <label for="pdf" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.pdf_document') }}
+            </label>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="pdfxml" input-id="pdfxml" name="pdfxml" :value="pdfxml" :binary="true" @change="showToast" />
-            <label for="pdfxml" class="ml-2 text-base text-surface-500 flex font-poppins"> PDF + XML <TagComponent value="Business" /> </label>
+            <label for="pdfxml" class="ml-2 text-base text-surface-500 flex font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.pdf_xml') }} <TagComponent value="Business" />
+            </label>
           </div>
         </div>
 
         <!-- col 3 -->
         <div class="w-1/3">
-          <p class="text-lg text-surface-500 font-poppins mb-2 ">
-            File output
+          <p class="text-lg text-surface-500 font-poppins mb-2">
+            {{ $t('Pg_template_create_deliveryOptions.file_output') }}
           </p>
           <div class="flex items-center mb-3">
             <Checkbox v-model="generatefile" input-id="generatefile" name="generatefile" value="generatefile" :binary="true" />
-            <label for="generatefile" class="ml-2 text-base text-surface-500 font-poppins"> Generate 1 file per document </label>
+            <label for="generatefile" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.generate_one_file') }}
+            </label>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="mergefile" input-id="mergefile" name="mergefile" value="mergefile" :binary="true" />
-            <label for="mergefile" class="ml-2 text-base text-surface-500 flex font-poppins"> Merge all files in 1 document <TagComponent value="Business" /> </label>
+            <label for="mergefile" class="ml-2 text-base text-surface-500 flex font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.merge_all_files') }} <TagComponent value="Business" />
+            </label>
           </div>
         </div>
       </div>
@@ -54,35 +62,36 @@
 
       <!-- section 2  -->
       <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">
-        File options
+        {{ $t('Pg_template_create_deliveryOptions.file_options') }}
       </p>
       <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
         <!-- col 1 -->
         <div class="w-1/4">
           <p class="text-base text-surface-500 font-poppins">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum.
+            {{ $t('Pg_template_create_deliveryOptions.file_management_description') }}
           </p>
         </div>
 
         <!-- col 2 -->
         <div class="w-1/3 flex flex-col flex-wrap">
           <p class="text-lg text-surface-500 font-poppins mb-2">
-            Checking information
+            {{ $t('Pg_template_create_deliveryOptions.checking_information') }}
           </p>
           <div class="flex items-center mb-3">
             <Checkbox v-model="verfication" input-id="verfication" name="verfication" value="verfication" :binary="true" />
-            <label for="verfication" class="ml-2 text-base text-surface-500 font-poppins"> Dont force entries verification </label>
+            <label for="verfication" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.dont_force_verification') }}
+            </label>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="forceverfication" input-id="forceverfication" name="forceverfication" value="forceverfication" :binary="true" />
             <label for="forceverfication" class="ml-2 text-base text-surface-500 font-poppins">
-              Force entries verification upon form filling
-              <span v-tooltip="'Explanation'" class="inline-flex items-center gap-x-1 rounded-full bg-gray-200 px-1.5 py-0 text-sm font-medium text-gray-600 font-sans cursor-pointer">
+              {{ $t('Pg_template_create_deliveryOptions.force_verification') }}
+              <span v-tooltip="$t('Pg_template_create_deliveryOptions.force_verification_tooltip')" class="inline-flex items-center gap-x-1 rounded-full bg-gray-200 px-1.5 py-0 text-sm font-medium text-gray-600 font-sans cursor-pointer">
                 ?
               </span>
               <TagComponent value="Business" />
-
             </label>
           </div>
         </div>
@@ -90,16 +99,20 @@
         <!-- col 3 -->
         <div class="w-1/3">
           <p class="text-lg text-surface-500 font-poppins mb-2">
-            Form
+            {{ $t('Pg_template_create_deliveryOptions.form') }}
           </p>
           <div class="flex items-center mb-3">
-            <Checkbox v-model="thirdparty" input-id="thirdparty" name="thirdparty" value="thirdparty" :boolean="true" />
-            <label for="thirdparty" class="ml-2 text-base text-surface-500 font-poppins"> Allow third party form filling  </label>
+            <Checkbox v-model="thirdparty" input-id="thirdparty" name="thirdparty" value="thirdparty" :binary="true" />
+            <label for="thirdparty" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.allow_third_party_filling') }}
+            </label>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="addpages" disabled input-id="addpages" name="addpages" value="addpages" />
-            <label for="addpages" class="ml-2 text-base text-surface-500 font-poppins"> Add additional pages with photo attachments <TagComponent value="Business" /> </label>
+            <label for="addpages" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.add_additional_pages') }} <TagComponent value="Business" />
+            </label>
           </div>
         </div>
       </div>
@@ -108,40 +121,41 @@
 
       <!-- section 3  -->
       <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">
-        Recipients
+        {{ $t('Pg_template_create_deliveryOptions.recipients') }}
       </p>
       <div class="flex sm:flex-col sm:space-y-3 md:space-y-0 md:flex-row md:space-x-12 w-full mb-5">
         <!-- col 1 -->
         <div class="w-1/4">
           <p class="text-base text-surface-500 font-poppins">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum.
+            {{ $t('Pg_template_create_deliveryOptions.file_management_description') }}
           </p>
         </div>
 
         <!-- col 2 -->
         <div class="w-1/3 flex flex-col flex-wrap">
           <p class="text-lg text-surface-500 font-poppins mb-2">
-            Email delivery
+            {{ $t('Pg_template_create_deliveryOptions.email_delivery') }}
           </p>
           <div class="flex">
             <div class="flex items-center mb-3">
               <Checkbox v-model="toLinkedData" disabled input-id="toLinkedData" name="toLinkedData" value="toLinkedData" :binary="true" />
-              <label for="toLinkedData" class="ml-2 text-base text-surface-500 font-poppins"> Send to linked data  </label>
+              <label for="toLinkedData" class="ml-2 text-base text-surface-500 font-poppins">
+                {{ $t('Pg_template_create_deliveryOptions.send_to_linked_data') }}
+              </label>
             </div>
-            <Button v-if="toLinkedData" text label="Edit email template" class="-mt-3" @click="handleOpenEditModal" />
+            <Button v-if="toLinkedData" text label="{{ $t('Pg_template_create_deliveryOptions.edit_email_template') }}" class="-mt-3" @click="handleOpenEditModal" />
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="sendToMultiple" input-id="sendToMultiple" name="sendToMultiple" value="sendToMultiple" :binary="true" />
             <label for="sendToMultiple" class="ml-2 text-base text-surface-500 flex font-poppins">
-              Send to multiple
-              <TagComponent value="Business" />
+              {{ $t('Pg_template_create_deliveryOptions.send_to_multiple') }} <TagComponent value="Business" />
             </label>
           </div>
           <div v-if="sendToMultiple" class="mt-3 ml-8 w-2/3">
             <Chips v-model="selectedEmails" />
             <p class="font-poppins text-sm text-surface-400 mt-2">
-              Write atleast one email to recieve generated documents
+              {{ $t('Pg_template_create_deliveryOptions.write_one_email') }}
             </p>
           </div>
         </div>
@@ -149,16 +163,20 @@
         <!-- col 3 -->
         <div class="w-1/3">
           <p class="text-lg text-surface-500 font-poppins mb-2">
-            Extranet
+            {{ $t('Pg_template_create_deliveryOptions.extranet') }}
           </p>
           <div class="flex items-center mb-3">
             <Checkbox disabled input-id="thirdparty" name="thirdparty" value="thirdparty" />
-            <label for="thirdparty" class="ml-2 text-base text-surface-500 font-poppins"> Create extranet account  </label>
+            <label for="thirdparty" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.create_extranet_account') }}
+            </label>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox disabled input-id="addpages" name="addpages" value="addpages" />
-            <label for="addpages" class="ml-2 text-base text-surface-500 font-poppins"> Create an extranet account </label>
+            <label for="addpages" class="ml-2 text-base text-surface-500 font-poppins">
+              {{ $t('Pg_template_create_deliveryOptions.create_extranet_account') }}
+            </label>
           </div>
         </div>
       </div>
@@ -166,9 +184,9 @@
       <hr class="my-10" />
 
       <!-- section 4 -->
-      <div class=" flex">
+      <div class="flex">
         <p class="font-medium text-surface-600 text-lg mb-5 font-poppins">
-          Email Personalization
+          {{ $t('Pg_template_create_deliveryOptions.email_personalization') }}
         </p>
         <TagComponent value="Business" />
       </div>
@@ -176,7 +194,7 @@
         <!-- col 1 -->
         <div class="w-1/4">
           <p class="text-base text-surface-500 font-poppins">
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Natus, odit. Officiis debitis modi eum.
+            {{ $t('Pg_template_create_deliveryOptions.email_personalization_description') }}
           </p>
         </div>
 
@@ -187,22 +205,23 @@
           </p>
           <div class="flex">
             <div class="flex items-center mb-3">
-              <Checkbox v-model="emailPersonalization" disabled input-id="emailPersonalization" name="emailPersonalization" value="emailPersonalization":binary="true" />
-              <label for="emailPersonalization" class="ml-2 text-base text-surface-500 font-poppins">Email Personalization </label>
+              <Checkbox v-model="emailPersonalization" disabled input-id="emailPersonalization" name="emailPersonalization" value="emailPersonalization" :binary="true" />
+              <label for="emailPersonalization" class="ml-2 text-base text-surface-500 font-poppins">
+                {{ $t('Pg_template_create_deliveryOptions.email_personalization') }}
+              </label>
             </div>
           </div>
 
-          <div class="flex items-center ">
+          <div class="flex items-center">
             <Checkbox v-model="extranetaccount" disabled input-id="extranetaccount" name="extranetaccount" value="extranetaccount" :binary="true" />
             <label for="extranetaccount" class="ml-2 text-base text-surface-500 flex font-poppins">
-              Create extranet account
+              {{ $t('Pg_template_create_deliveryOptions.create_extranet_account') }}
             </label>
           </div>
         </div>
 
         <!-- col 3 -->
-        <div class="w-1/3">
-        </div>
+        <div class="w-1/3"></div>
       </div>
     </div>
     <EditEmailTemplateModal v-model:visible="openEditModal" />

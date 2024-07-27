@@ -1,6 +1,6 @@
 <template>
-  <div class="h-full  w-max overflow-auto  ">
-    <CanvasOptionsTopBar />
+  <div ref="parentContainer" class="h-full  w-[900px] overflow-auto  ">
+    <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
@@ -18,11 +18,13 @@
         </div>
       </div>
     </div>
-    <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
-      <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  ">
+
+    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col w-[900px]  relative   ">
+      <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
-      <ThumbnailBar />
     </div>
+
+    <ThumbnailBar :style="thumbnailCoverStyle" />
   </div>
 </template>
 
@@ -40,8 +42,68 @@ const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
 const canvasWrapper = ref(null)
 const activeElement = ref()
+const parentContainer = ref()
+
+const scale = ref(1)
+// function updateScale(value) {
+//   scale.value = value
+// }
+function updateScale(value) {
+  scale.value = value
+  updateScrollPosition()
+  console.log('marginLeft', `${((900 * scale.value) - (900)) / 2}px`)
+}
+onMounted(() => {
+  updateScrollPosition()
+  watch(scale, updateScrollPosition)
+})
+function updateScrollPosition() {
+  if (parentContainer.value && canvasWrapper.value) {
+    const parentWidth = parentContainer.value.clientWidth
+    const parentHeight = parentContainer.value.clientHeight
+    const scaledWidth = canvasWrapper.value.clientWidth * scale.value
+    const scaledHeight = canvasWrapper.value.clientHeight * scale.value
+    parentContainer.value.scrollLeft = (scaledWidth - parentWidth) / 2
+    // parentContainer.value.scrollTop = (scaledHeight - parentHeight) / 2
+  }
+}
+
+// const canvasStyle = computed(() => ({
+//   transform: `scale(${scale.value}) `,
+// }))
+const canvasWrapperHeight = ref(1)
+
+const canvasWrapperStyle = computed(() => ({
+  overflow: 'auto',
+  position: 'relative',
+  width: '900px',
+  height: `${canvasWrapperHeight.value}px`,
+  minHeight: '100%',
+  transform: `scale(${scale.value})`,
+  // transformOrigin: 'center center',
+  // transformOrigin: 'top center',
+  // transformOrigin: 'center 0',
+  transformOriginY: '0',
+  // transformOriginX: '0',
+  width: '900px',
+  marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
+  // // height: 'auto',
+
+  height: `${canvasWrapperHeight.value}px`,
+}))
+
+const thumbnailCoverStyle = computed(() => ({
+  marginTop: `${(canvasWrapperHeight.value * scale.value) - canvasWrapperHeight.value + 10}px`,
+  position: 'sticky',
+  top: '0',
+  left: '0',
+}))
 
 onMounted(() => {
+  if (templateEditorStore?.templateToEdit?.id) {
+    templateEditorStore.watermarkImage = templateEditorStore?.templateToEdit?.template_options?.watermarkImage
+    templateEditorStore.watermarkDisabled = templateEditorStore?.templateToEdit?.template_options?.watermarkDisabled
+  }
   if (typeof window !== 'undefined')
     callCreateCanvas()
 })
@@ -95,6 +157,8 @@ async function createCanvas() {
 
   const canvasWidth = viewport.width * scale
   const canvasHeight = viewport.height * scale
+  // for zooming purpose
+  canvasWrapperHeight.value = canvasHeight
 
   // Set the canvas dimensions
   canvas.width = canvasWidth
@@ -182,6 +246,94 @@ async function createCanvas() {
         templateEditorStore.activeDisplayGuide = false
       }
     })
+    if (templateEditorStore?.templateToEdit?.id) {
+      canvas.getObjects()?.forEach((obj) => {
+        if (obj.type === 'textbox') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        if (obj.type === 'text') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        if (obj.type === 'image') {
+          obj.on('mouseover', (e) => {
+            if (!templateEditorStore.activeAdvancedPointer)
+              return
+            canvas.add(new fabric.Line([100, 1000, 100, 5000], {
+              left: e.target.left,
+              top: 0,
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+
+            }))
+            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              left: 0, // event.absolutePointer.x,
+              top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
+
+              stroke: '#3978eb',
+              id: e.target.hash,
+              fieldType: obj.fieldType,
+              selectable: false,
+            }))
+          })
+        }
+        obj.on('mouseout', (e) => {
+          if (!templateEditorStore.activeAdvancedPointer)
+            return
+
+          const objs = canvas._objects
+          canvas._objects = objs.filter((obj) => {
+            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
+              return false
+            else
+              return true
+          })
+
+          canvas.renderAll()
+        })
+      })
+      canvas.renderAll()
+    }
   }
 }
 async function showThumbnail() {

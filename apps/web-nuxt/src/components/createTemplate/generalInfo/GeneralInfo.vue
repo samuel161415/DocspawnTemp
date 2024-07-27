@@ -1,11 +1,11 @@
 <template>
   <div class="w-full h-full items-center mx-8">
     <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center">
-      General information
+      {{ $t('Cp_createTemplate_generalInfo.general_information') }}
     </p>
 
     <p class="font-medium text-surface-600 text-lg font-poppins mx-8 mt-4">
-      Select your use case
+      {{ $t('Cp_createTemplate_generalInfo.select_your_use_case') }}
     </p>
     <div class="flex mx-8 mt-3">
       <div class="flex flex-col gap-4">
@@ -32,24 +32,24 @@
     <div v-if="isEditing" :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex  mx-8 flex-col gap-8'" class="mt-8">
       <div v-if="templateGeneralInformation.useCase !== '' && templateFile">
         <p class="font-medium text-surface-600 text-lg font-poppins">
-          Background file
+          {{ $t('Cp_createTemplate_generalInfo.background_file') }}
         </p>
         <Button outlined class="w-max px-6 font-poppins mt-2">
-          view file
+          {{ $t('Cp_createTemplate_generalInfo.view_file') }}
         </Button>
       </div>
       <div v-if="templateGeneralInformation.useCase !== '' && isDataToDoc && datasetFile">
         <p class="font-medium text-surface-600 text-lg font-poppins">
-          Dataset file
+          {{ $t('Cp_createTemplate_generalInfo.dataset_file') }}
         </p>
         <Button outlined class="w-max px-6 font-poppins mt-2">
-          view file
+          {{ $t('Cp_createTemplate_generalInfo.view_file') }}
         </Button>
       </div>
     </div>
-    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6'" class="mt-8">
-      <UploadSection v-if="templateGeneralInformation.useCase !== ''" title="Upload your template" :is-background="true" @upload="handleTemplateUpload" />
-      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" title="Upload your data source" @upload="handleDatasetUpload" />
+    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6 mb-8'" class="mt-8">
+      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" @upload="handleTemplateUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" @upload="handleDatasetUpload" />
     </div>
   </div>
 </template>

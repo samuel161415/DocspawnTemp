@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import path from 'node:path'
 
+// import { resolve } from 'node:path'
+
 export default defineNuxtConfig({
   vite: {
     build: {
@@ -20,16 +22,32 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-primevue',
     'nuxt-gtag',
-
+    '@nuxtjs/i18n',
   ],
+  i18n: {
+    locales: [
+      { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
+      { code: 'fr', name: 'Français', iso: 'fr-FR', file: 'fr.json' },
+    ],
+    lazy: true,
+    langDir: '../lang/', // Simplified path
+    defaultLocale: 'en',
+    vueI18n: '../i18n.config.js',
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_redirected',
+      alwaysRedirect: true,
+      fallbackLocale: 'en',
+    },
+  },
 
   primevue: {
     options: {
       unstyled: false,
     },
     importPT: {
-      from: path.resolve(__dirname, './src/presets/lara/'),
-
+      // from: path.resolve(__dirname, './src/presets/lara/'),
+      from: '../src/presets/lara/',
       as: 'TailwindLara',
     },
     components: {

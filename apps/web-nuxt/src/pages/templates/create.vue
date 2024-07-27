@@ -1,15 +1,15 @@
 <template>
-  <div class=" w-full bg-secondary overflow-y-scroll no-scrollbar">
-    <div class="px-4 py-7 flex flex-col gap-2 bg-white ">
+  <div class="w-full bg-secondary overflow-y-scroll no-scrollbar">
+    <div class="px-4 py-7 flex flex-col gap-2 bg-white">
       <div class="">
         <h2 class="font-semibold text-surface-600 text-2xl mt-2 px-5">
-          Template creation
+          {{ $t('Pg_template_create.template_creation') }}
         </h2>
         <div class="flex items-center justify-center -mt-2 rounded-lg border-none">
           <Stepper v-model:activeStep="active">
             <StepperPanel>
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'General information'" class="bg-transparent border-none inline-flex flex-column gap-2 " @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.general_information')" class="bg-transparent border-none inline-flex flex-column gap-2 " @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faSquareInfo" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -20,15 +20,15 @@
                     <GeneralInfo v-if="active === index" @update-data="handleUpdateData" />
                   </div>
                   <div class="flex justify-center mb-6 space-x-8 mt-4">
-                    <Button label="Cancel" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)" />
-                    <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep1Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                    <Button :label="$t('Pg_template_create.cancel')" outlined icon="pi pi-times" severity="error" class="bg-error hover:bg-red-100 border-error hover:border-error text-error" @click="requireConfirmation($event)" />
+                    <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep1Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                   </div>
                 </div>
               </template>
             </StepperPanel>
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="Data selection">
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Data to doc'" header="$t('Pg_template_create.data_selection')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.data_selection')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faDatabase" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -38,40 +38,34 @@
                   <DataSelection v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button
-                    label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
-                    @click="prevCallback"
-                  />
-                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep2Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel header="Template editor">
+            <StepperPanel header="$t('Pg_template_create.template_editor')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Template editor'" :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.template_editor')" :disabled="!isStep1Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileInvoice" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
-                <div class=" mx-6">
+                <div class="mx-6">
                   <TemplateEditor v-if="active === index || canvasService.getCanvas()" />
                   <!-- v-if="active === index" -->
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
-                  <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button
-                    label="Next" icon="pi pi-arrow-right"
-                    icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback"
-                  />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="Form editor">
+            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Form editor'" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
                   <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
@@ -81,20 +75,17 @@
                   <FormEditor v-if="active === index" @update-data="handleUpdateData" />
                 </div>
                 <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button
-                    label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5"
-                    @click="prevCallback"
-                  />
-                  <Button label="Next" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
             </StepperPanel>
 
-            <StepperPanel header="Delivery options">
+            <StepperPanel header="$t('Pg_template_create.delivery_options')">
               <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="'Delivery options'" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class=" w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
+                <button v-tooltip.top="$t('Pg_template_create.delivery_options')" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
+                  <font-awesome-icon v-if="active >= index" :icon="fad.faSliders" class="w-10 h-11" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
+                  <font-awesome-icon v-else-if="index > active" :icon="fad.faSliders" class="w-10 h-11" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
                 </button>
               </template>
               <template #content="{ index, prevCallback }">
@@ -102,16 +93,14 @@
                   <DeliveryOptions v-if="active === index" />
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
-                  <Button label="Back" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button class="px-4 w-max  font-poppins ml-2" @click="saveTemplate()">
-                    Save Template
-                  </Button>
+                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
+                  <Button :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
                 </div>
               </template>
             </StepperPanel>
           </Stepper>
         </div>
-        <div class="flex justify-center ">
+        <div class="flex justify-center">
         </div>
       </div>
     </div>
@@ -126,6 +115,8 @@ import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import Stepper from 'primevue/stepper'
 import StepperPanel from 'primevue/stepperpanel'
 import ExcelJS from 'exceljs'
+import * as pdfjs from 'pdfjs-dist/build/pdf'
+import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
@@ -133,6 +124,7 @@ import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { accountData } from '@/composables/useAccountData'
 
 import canvasService from '@/composables/useTemplateCanvas'
 
@@ -162,28 +154,71 @@ function handleUpdateData({ isValid, step }) {
   else if (step === 3)
     isStep3Valid.value = isValid
 }
+async function fetchSizes(url) {
+  if (url) {
+    const response = await fetch(url)
+    const pdfData = await response.arrayBuffer()
+
+    pdfjs.GlobalWorkerOptions.workerSrc
+      = pdfjsWorker
+    const pdf = await pdfjs.getDocument({ data: pdfData }).promise
+
+    const pageSizes = []
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i)
+      // console.log('page getSize', page.getSize())
+      const viewport = page.getViewport({ scale: 1 })
+      pageSizes.push({ height: viewport?.height, width: viewport?.width })
+    }
+    // console.log('page sizes', pageSizes)
+    return pageSizes
+    // setPdfPageSizes(pageSizes) // Assuming you have a state or function to save the page sizes array
+  }
+}
 
 async function saveTemplate() {
   const canvas = canvasService.getCanvas()
+  if (!canvas)
+    return
+  const pageSizes = await fetchSizes(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl)
+  // return
+  const canvasSize = { height: canvas.height, width: canvas.width }
 
-  const objects = canvas?.getObjects()
+  // map is for- when it will be loaded first page will be visible
+  const objects = canvas?.getObjects().filter(obj =>
+    obj.type !== 'line' && obj?.fieldType !== 'checkboxIdNoIcon',
+  ).map((obj) => {
+    if (obj?.id === 'watermark-docspawn')
+      return obj
+
+    if (obj.pageNo === 1)
+      obj.set({ visible: true, opacity: 1 })
+    else obj.set({ visible: false, opacity: 0 })
+    return obj
+  })
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
-    return obj.toObject(['id', 'hash', '_controlsVisibility', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
+    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
   })
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
   canvasToSend = { ...canvasToSend, objects: deserializedObjects }
 
   const objToSend = {
+    account_type: accountData?.accountType,
     name: templateGeneralInformation?.name || 'sample',
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+    dataset_start_line: templateEditorStore.datasetStartAtLine,
+    template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
+    page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),
     dataset_data: JSON.stringify(templateEditorStore?.datasetData),
     canvas_data: JSON.stringify(canvasToSend),
     delivery_options: JSON.stringify(templateDeliveryOptions),
+    canvas_size: JSON.stringify(canvasSize),
   }
 
   // return true

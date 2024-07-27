@@ -1,0 +1,39 @@
+<template>
+  <div>
+    <ImageCropper
+      :is-edit="isEdit"
+      :original-image="originalImage"
+      :aspect-ratio="props?.aspectRatio"
+      @toggle-edit="isEdit = !isEdit"
+      @handle-cropped-url="(url) => croppedImageUrl = url"
+      @handle-original-image="(val) => originalImage = val"
+    />
+    <Button v-if="croppedImageUrl" label="Edit image" class="font-poppins my-2" @click="editCroppedImage" />
+    <!-- <div v-if="croppedImageUrl">
+      <h3>Cropped Image:</h3>
+      <img :src="croppedImageUrl" alt="Cropped Image" />
+    </div> -->
+  </div>
+</template>
+
+<script setup>
+import ImageCropper from './CropperModal.vue'
+
+const props = defineProps(['aspectRatio'])
+const emit = defineEmits(['handleSaveCroppedImage'])
+const isEdit = ref(false)
+const croppedImageUrl = ref(null)
+const originalImage = ref()
+
+function editCroppedImage() {
+  // cropperRef.value.editImage()
+  isEdit.value = true
+}
+watch(croppedImageUrl, (val) => {
+  emit('handleSaveCroppedImage', val)
+})
+</script>
+
+<style scoped>
+/* Add any custom styles here */
+</style>

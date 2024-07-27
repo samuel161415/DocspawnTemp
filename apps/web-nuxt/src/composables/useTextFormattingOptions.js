@@ -5,10 +5,10 @@ export function useTextFormattingOptions() {
     { label: 'Arial', value: 'Arial' },
     { label: 'Verdana', value: 'verdana' },
     { label: 'Times New Roman', value: 'Times New Roman' },
-    { label: 'Helvetica', value: 'Helvetica' },
-    { label: 'Courier New', value: 'Courier New' },
-    { label: 'Georgia', value: 'Georgia' },
-    { label: 'Comic Sans MS', value: 'Comic Sans MS' },
+    // { label: 'Helvetica', value: 'Helvetica' },
+    // { label: 'Courier New', value: 'Courier New' },
+    // { label: 'Georgia', value: 'Georgia' },
+    // { label: 'Comic Sans MS', value: 'Comic Sans MS' },
 
   ])
   const fontSizes = ref([

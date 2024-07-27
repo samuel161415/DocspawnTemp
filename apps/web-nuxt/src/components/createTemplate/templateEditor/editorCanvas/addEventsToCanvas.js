@@ -24,8 +24,8 @@ export default function addEventsToCanvas() {
               transparentCorners: false,
               // left: 0,
               // top: 0,
-              left: canvas.width - (myImg.width * (80 / myImg.width)),
-              top: canvas.height - (myImg.height * (80 / myImg.height)),
+              left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
+              top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
               scaleX: 80 / myImg.width,
               scaleY: 80 / myImg.height,
               id: 'watermark-docspawn',
@@ -36,6 +36,9 @@ export default function addEventsToCanvas() {
               uniformScaling: false,
 
             })
+            if (templateEditorStore.watermarkDisabled)
+              myImg.set({ visible: false, opacity: 0 })
+
             myImg.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
             canvas.add(myImg)
 
@@ -80,14 +83,14 @@ export default function addEventsToCanvas() {
     canvas.on('object:moving', (e) => {
       canvas._objects.forEach((obj) => {
         if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
-          if (e.target.left <= 0)
-            obj.set({ left: 0 })
-          if (e.target.top <= 0)
-            obj.set({ top: 0 })
-          if (e.target.left + (e.target.width * e.target.scaleX) >= canvas.width)
-            obj.set({ left: canvas.width - (e.target.width * e.target.scaleX) })
-          if (e.target.top + (e.target.height * e.target.scaleY) >= canvas.height)
-            obj.set({ top: canvas.height - (e.target.height * e.target.scaleY) })
+          if (e.target.left <= 10)
+            obj.set({ left: 10 })
+          if (e.target.top <= 10)
+            obj.set({ top: 10 })
+          if (e.target.left + (e.target.width * e.target.scaleX) >= canvas.width - 10)
+            obj.set({ left: canvas.width - (e.target.width * e.target.scaleX) - 10 })
+          if (e.target.top + (e.target.height * e.target.scaleY) >= canvas.height - 10)
+            obj.set({ top: canvas.height - (e.target.height * e.target.scaleY) - 10 })
         }
         else if (obj.id === e.target.hash && obj.stroke) {
           if (obj.top === 0)
@@ -119,8 +122,26 @@ export default function addEventsToCanvas() {
       canvas._objects.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
           return
-
+        /** */
         if (obj.id === e.target.hash && obj.stroke) {
+          // console.log('e.pointe', e.pointer)
+          // console.log('e.target', e.target)
+          // console.log('obj', obj)
+          // console.log('e arget lineheight', e.target.lineHeight)
+          // console.log('e target font sze', e.target.fontSize)
+          // console.log('e.target.lineHeight*e.target.fontSize', e.target.lineHeight * e.target.fontSize)
+          // console.log('e.target.lineHeight*e.target.fontSize*e.target.scaleY', e.target.lineHeight * e.target.fontSize * e.target.scaleY)
+          // console.log('Total height', e.target.height * e.target.scaleY)
+
+          // console.log('obj.top', obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)))
+          /****
+           * first clculation of bottom margi, bottom of element=
+           * top: e.target.top + (e.target.fontSize * e.target.scaleY)
+           * second calculation of bottom margin, bottm f text in element=
+           * top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5))
+           *
+           *
+           */
           if (obj.top === 0)
             obj.set({ top: 0, left: e.target.left })
           if (obj.left === 0) {
@@ -128,9 +149,23 @@ export default function addEventsToCanvas() {
               obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
               obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
             else
-              obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+              e.target.set({ top: obj.top - (e.target.fontSize * e.target.scaleY) + (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 10)) })
+
+            // obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
           }
         }
+        // if (obj.id === e.target.hash && obj.stroke) {
+        //   if (obj.top === 0)
+        //     obj.set({ top: 0, left: e.target.left })
+        //   if (obj.left === 0) {
+        //     if (
+        //       obj.fieldType === 'fixed-image' || obj.fieldType === 'Dataset image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form long text')
+        //       obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY), left: 0 })
+        //     else
+        //       obj.set({ top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)), left: 0 })
+        //   }
+        // }
+        /** */
         if (obj.isAlertIcon && obj.id === e.target.hash)
           obj.set({ top: e.target.top, left: e.target.left + (e.target.width * e.target.scaleX) })
         if (obj.id === 'checkboxIdNoIcon' && obj.checkboxHash === e.target.checkboxIdentifierHash)
@@ -183,9 +218,10 @@ export default function addEventsToCanvas() {
     let tempYMargin = null
     let currentHoveredEle = null
     canvas.on('mouse:move', (event) => {
+      // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time'
+          const isDatafield = false
           currentHoveredEle.set({
             left: event.absolutePointer.x,
             top: event.absolutePointer.y - (Number.parseFloat(activeTextStyles.fontSize)) + (Number.parseFloat(activeTextStyles.fontSize) / 5),
@@ -196,7 +232,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
-            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
+            charSpacing: 0, // isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
@@ -208,7 +244,7 @@ export default function addEventsToCanvas() {
         }
         else {
           canvas.remove(currentHoveredEle)
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list'
+          const isDatafield = false
           currentHoveredEle = new templateEditorStore.fabric.Text(
           `${templateEditorStore.fieldToAdd.name}`,
           {
@@ -221,7 +257,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
-            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
+            charSpacing: 0, // isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             pageNo: templateEditorStore.activePageForCanvas,
@@ -263,7 +299,7 @@ export default function addEventsToCanvas() {
       }
       if (templateEditorStore.fieldToAdd.type === 'Form long text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+          const isDatafield = false
           currentHoveredEle.set({
             width: 300,
             left: event.absolutePointer.x,
@@ -283,7 +319,7 @@ export default function addEventsToCanvas() {
         }
         else {
           canvas.remove(currentHoveredEle)
-          const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+          const isDatafield = false
           currentHoveredEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,
           {
@@ -520,7 +556,7 @@ export default function addEventsToCanvas() {
         }
         canvas.renderAll()
 
-        const isDatafield = templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time'
+        const isDatafield = false
 
         const textEle = new templateEditorStore.fabric.Text(
           `${templateEditorStore.fieldToAdd.name}`,
@@ -539,7 +575,7 @@ export default function addEventsToCanvas() {
             textAlign: isDatafield ? 'center' : activeTextStyles.textAlign,
             fontStyle: isDatafield ? 'normal' : activeTextStyles.fontStyle,
             fontWeight: isDatafield ? 300 : activeTextStyles.fontWeight,
-            charSpacing: isDatafield ? 0 : activeTextStyles.charSpacing,
+            charSpacing: 0, // isDatafield ? 0 : activeTextStyles.charSpacing,
             hasBorders: true,
             zIndex: 1,
             fieldType: templateEditorStore.fieldToAdd.type,
@@ -556,7 +592,7 @@ export default function addEventsToCanvas() {
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
-        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
 
         const allFields = []
@@ -595,7 +631,7 @@ export default function addEventsToCanvas() {
 
           const objs = canvas._objects
           canvas._objects = objs.filter((obj) => {
-            if (obj.stroke === '#3978eb' && obj?.id === e.target.hash && !e.target.displayGuide)
+            if (obj.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
               return false
             else
               return true
@@ -624,7 +660,7 @@ export default function addEventsToCanvas() {
         }
         canvas.renderAll()
 
-        const isDatafield = templateEditorStore.fieldToAdd.type === 'Form long text'
+        const isDatafield = false
 
         const textEle = new templateEditorStore.fabric.Textbox(
           `${templateEditorStore.fieldToAdd.name}`,
@@ -673,7 +709,7 @@ export default function addEventsToCanvas() {
           mtr: false, // middle top rotate
         })
 
-        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {
@@ -768,7 +804,7 @@ export default function addEventsToCanvas() {
             })
             myImg.setControlsVisibility({ mtr: false })
 
-            const fieldToAdd = { isFormField, isRequired: true, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
+            const fieldToAdd = { isFormField, isRequired: true, fieldType: ftoadd.type, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas,
             }
 
             const allFields = []
@@ -867,7 +903,7 @@ export default function addEventsToCanvas() {
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
-            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, name: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
+            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
 
             const allFields = []
@@ -952,6 +988,7 @@ export default function addEventsToCanvas() {
       }
       // for showing options when click
       const activeObj = canvas.getActiveObject()
+
       // console.log('active object', activeObj)
       if (activeObj instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: activeObj.scaleX, y: activeObj.scaleY }
@@ -979,8 +1016,29 @@ export default function addEventsToCanvas() {
         canvas.remove(tempYMargin)
         tempYMargin = null
       }
-      if (currentHoveredEle && (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset image'))
-        canvas.remove(currentHoveredEle.value)
+
+      // if (currentHoveredEle)
+      //   canvas.remove(currentHoveredEle)
+
+      canvas.renderAll()
+    })
+    document.addEventListener('click', (event) => {
+      // Get the canvas element's bounding box
+      const canvasRect = canvas.getElement().getBoundingClientRect()
+
+      // Check if the click is outside the canvas
+      if (
+        event.clientX < canvasRect.left
+        || event.clientX > canvasRect.right
+        || event.clientY < canvasRect.top
+        || event.clientY > canvasRect.bottom
+      ) {
+        if (currentHoveredEle)
+          canvas.remove(currentHoveredEle)
+          // templateEditorStore.fieldToAdd = null
+
+        canvas.renderAll()
+      }
     })
   }
 }

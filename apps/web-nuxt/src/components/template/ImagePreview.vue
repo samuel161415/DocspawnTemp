@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="`template-preview-canvas-${props?.previewHash}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer ">
+  <canvas :id="`template-preview-canvas-${props?.previewHash}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer  ">
   </canvas>
 </template>
 
@@ -15,7 +15,7 @@ async function loadImagePreview() {
   if (!url)
     return
 
-  const canvasWrapperWidth = 90
+  const canvasWrapperWidth = 60
   const canvas = new fabric.Canvas(`template-preview-canvas-${props?.previewHash}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
   const response = await fetch(url)
   const pdfData = await response.arrayBuffer()
@@ -28,7 +28,7 @@ async function loadImagePreview() {
   const viewport = page.getViewport({ scale: 2 })
 
   // Get the parent container's width
-  const parentWidth = 90
+  const parentWidth = 60
 
   // Calculate the scale to fit the canvas within the parent width
   const scale = parentWidth / viewport.width

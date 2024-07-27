@@ -1,12 +1,13 @@
 <template>
-  <div class="h-max p-2  flex items-center justify-between px-3  mb-6 rounded-md bg-primary-50 mt-4 ">
-    <div class="w-full  h-max p-2">
-      <p class="px-2 mb-1 ">
-        Current page: <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> out of <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
+  <div class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4">
+    <div class="w-full h-max p-2">
+      <p class="px-2 mb-1">
+        {{ $t('Cp_createTemplate_editorThumbnail.current_page') }} <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> {{ $t('Cp_createTemplate_editorThumbnail.out_of') }}
+        <span class="text-primary-400 text-bold">{{ templateEditorStore.totalPagesArray.length }}</span>
       </p>
       <div v-if="templateEditorStore.activePageForCanvas !== 0" class="flex gap-4 w-full overflow-x-auto overflow-y-hidden p-3">
-        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class=" w-18 h-max " :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="selectPageFromThumbnail(item)">
-          <canvas :id="`template-thumbnail-${item}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer ">
+        <div v-for="item in templateEditorStore.totalPagesArray" :key="item" class="w-18 h-max" :class="{ 'scale-110': templateEditorStore.activePageForCanvas === item }" @click="selectPageFromThumbnail(item)">
+          <canvas :id="`template-thumbnail-${item}`" class="flex-1 w-full min-h-full h-max rounded-md my-0 shadow cursor-pointer">
           </canvas>
         </div>
       </div>
@@ -20,6 +21,8 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { activeTextStyles, templateEditorStore } from '~/composables/useTemplateEditorData'
 import canvasService from '~/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+
+const props = defineProps(['isGeneratingPreview', 'template'])
 
 function selectPageFromThumbnail(page) {
   const canvas = canvasService.getCanvas()
@@ -36,7 +39,7 @@ async function changeCurrentPageOnCanvas(pageNo) {
   const canvas = canvasService.getCanvas()
 
   if (canvas) {
-    const response = await fetch(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(props?.isGeneratingPreview ? props?.template?.background_file_url : templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -110,19 +113,4 @@ watch(() => templateEditorStore.activePageForCanvas, (newVal) => {
 })
 </script>
 
-  <style lang="scss" scoped>
-::-webkit-scrollbar {
-    width: 10px;
-    height:10px;
-    }
-    ::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    }
-    ::-webkit-scrollbar-thumb {
-    background: #009ee299;
-    border-radius: 8px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-    background: #009ee2;
-    }
-  </style>
+<style lang="scss" scoped></style>

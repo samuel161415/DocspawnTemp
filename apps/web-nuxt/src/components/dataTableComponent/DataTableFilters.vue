@@ -1,10 +1,10 @@
 <template>
-  <div class="flex flex-col md:flex-row  justify-between mt-2 space-y-2 md:space-y-0">
-    <div class="flex flex-col md:flex-row space-x-0  md:space-x-2 space-y-2 md:space-y-0">
+  <div class="flex flex-col md:flex-row justify-between  space-y-2 md:space-y-0">
+    <div class="flex flex-col md:flex-row space-x-0 md:space-x-2 space-y-2 md:space-y-0">
       <div v-if="hasFilterActions" class="space-y-2 md:space-y-0">
         <Button
           type="button"
-          label="Form to doc"
+          :label="$t('Cp_dataTable_filter.form_to_doc')"
           class="px-4 flex rounded-lg shadow-none border-1 border-primaryBlue mr-2 hover:bg-primaryBlue hover:text-white"
           :class="[typefilter === 'Form to Doc' ? 'bg-primaryBlue border-primaryBlue text-white' : 'bg-white text-primaryBlue']"
           :outlined="typefilter !== 'Form to Doc'"
@@ -13,35 +13,35 @@
           @mouseenter="formToDocActive = true"
           @mouseleave="typefilter !== 'Form to Doc' ? formToDocActive = false : formToDocActive = true"
         >
-          <img :src="formToDocActive ? formToDocWhiteIcon : formToDoc" alt="Form to Doc" class="w-9 h-6 mr-2" /> <p>Form to Doc</p>
+          <img :src="formToDocActive ? formToDocWhiteIcon : formToDoc" alt="Form to Doc" class="w-9 h-6 mr-2" /> <p>{{ $t('Cp_dataTable_filter.form_to_doc') }}</p>
         </Button>
 
         <Button
           type="button"
-          label="Table to doc"
+          :label="$t('Cp_dataTable_filter.data_to_doc')"
           class="px-4 rounded-lg shadow-none text-primaryPink border-1 border-primaryPink  hover:bg-primaryPink hover:border-primaryPink hover:text-white"
-          :class="[typefilter === 'Table to doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
+          :class="[typefilter === 'Data to Doc' ? 'bg-primaryPink  text-white' : 'bg-white text-primaryPink ']"
           :icon="dataToDoc"
-          :outlined="typefilter !== 'Table to doc'"
+          :outlined="typefilter !== 'Data to Doc'"
           raised
-          @click="filterData('Table to doc')"
+          @click="filterData('Data to Doc')"
           @mouseenter="dataToDocActive = true"
-          @mouseleave="typefilter !== 'Table to doc' ? dataToDocActive = false : dataToDocActive = true"
+          @mouseleave="typefilter !== 'Data to Doc' ? dataToDocActive = false : dataToDocActive = true"
         >
-          <img :src="dataToDocActive ? dataToDocWhiteIcon : dataToDoc" alt="Table to doc" class="w-9 h-6 mr-2" /> <p>Table to doc</p>
+          <img :src="dataToDocActive ? dataToDocWhiteIcon : dataToDoc" alt="Data to Doc" class="w-9 h-6 mr-2" /> <p>{{ $t('Cp_dataTable_filter.data_to_doc') }}</p>
         </Button>
       </div>
     </div>
 
     <div class="flex flex-col md:flex-row space-x-0 space-y-2 md:space-y-0 md:space-x-2">
       <Button
-        v-tooltip.top="'Clear all filters'"
+        v-tooltip.top="$t('Cp_dataTable_filter.clear_all_filters')"
         type="button"
         icon="pi pi-filter-slash"
-        label="Clear"
+        :label="$t('Cp_dataTable_filter.clear_filters')"
         outlined
         raised
-        class="p-7 shadow-none rounded-lg w-1/2 md:w-24 raised  border-primaryBlue"
+        class="p-7 shadow-none rounded-lg w-max md:w-max raised border-primaryBlue h-[45px]"
         @click="clearFilter"
       />
       <span class="relative flex">
@@ -51,8 +51,8 @@
         ></i>
         <InputText
           v-model="filters.global.value"
-          placeholder="Search"
-          class="pl-10 font-normal rounded-lg border-gray-300"
+          :placeholder="$t('Cp_dataTable_filter.search')"
+          class="pl-10 font-normal rounded-lg border-gray-300 h-[45px]"
         />
       </span>
     </div>
@@ -78,7 +78,7 @@ const currentFilter = ref('')
 
 function filterData(type) {
   formToDocActive.value = type === 'Form to Doc'
-  dataToDocActive.value = type === 'Table to doc'
+  dataToDocActive.value = type === 'Data to Doc'
 
   if (currentFilter.value !== '')
     type = ''
