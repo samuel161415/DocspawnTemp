@@ -20,6 +20,7 @@ export function useAuth() {
       const response = await fetch('https://api.outseta.com/v1/user', {
         headers: {
           Authorization: `Bearer ${token.value}`,
+        //   'x-api-key': config.public.OUTSETA_API_KEY,
         },
       })
 
@@ -27,7 +28,8 @@ export function useAuth() {
         throw new Error('Failed to fetch user details')
 
       const data = await response.json()
-      setUser(data)
+      console.log(' data at use auth >>>>>', data)
+    //   setUser(data)
     }
     catch (error) {
       console.error('Error fetching user details:', error)

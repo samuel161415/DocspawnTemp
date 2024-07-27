@@ -1,5 +1,16 @@
 <template>
-  <div class="bg-white p-4">
+  <div v-show="!verifiedUser" class="flex items-center h-max justify-center bg-white w-[300px] p-8">
+    <div class="flex flex-col justify-center w-300 md:w-full gap-4 ">
+      <p class="font-poppins">
+        Write auth token
+      </p>
+      <InputText v-model="password" type="password" />
+      <Button class="w-full" @keyup.enter="checkPassword" @click="checkPassword">
+        {{ $t('app.submit') }}
+      </Button>
+    </div>
+  </div>
+  <div v-show="verifiedUser" class="bg-white p-4">
     <div id="signup-embed"></div>
     <Button
       label="Go to login page" outlined class="w-full" @click="router.push('signin')"
@@ -12,6 +23,8 @@ import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
+
+const runtimeConfig = useRuntimeConfig()
 
 onMounted(() => {
   const script = document.createElement('script')
@@ -36,6 +49,12 @@ onMounted(() => {
 
   window.o_signup_options = o_signup_options
 })
+const verifiedUser = ref(false)
+const password = ref()
+function checkPassword() {
+  if (password.value === runtimeConfig.public.ADMIN_PASSWORD)
+    verifiedUser.value = true
+}
 </script>
 
     <style scoped>
