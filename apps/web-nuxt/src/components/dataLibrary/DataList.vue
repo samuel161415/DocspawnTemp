@@ -245,11 +245,11 @@
             />
           </template>
 
-          <template v-else-if="column.header !== 'Image'" #filter="{ filterModel }">
+          <template v-else-if="column.data_type !== 'image' && column.data_type !== 'time'" #filter="{ filterModel }">
             <InputText
               v-model="filterModel.value"
               type="text"
-              class="p-column-filter"
+              class="p-column-filter w-full"
               :placeholder="getPlaceholder(column.header)"
             />
           </template>
