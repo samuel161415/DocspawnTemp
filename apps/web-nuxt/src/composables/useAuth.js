@@ -1,17 +1,29 @@
 import { ref } from 'vue'
 
-const user = ref(JSON.parse(localStorage.getItem('user')) || null)
-const token = ref(localStorage.getItem('token') || null)
+const user = ref(null)
+const token = ref(null)
+
+if (typeof window !== 'undefined') {
+  user.value = JSON.parse(localStorage.getItem('user') || 'null')
+  token.value = localStorage.getItem('token') || null
+}
 
 export function useAuth() {
   const setUser = (userData) => {
     user.value = userData
-    localStorage.setItem('user', JSON.stringify(userData))
+    if (typeof window !== 'undefined')
+      localStorage.setItem('user', JSON.stringify(userData))
   }
 
   const setToken = (accessToken) => {
     token.value = accessToken
-    localStorage.setItem('token', accessToken)
+    if (typeof window !== 'undefined')
+      localStorage.setItem('token', accessToken)
+  }
+
+  const fetchUserDetails = async () => {
+    // Fetch user details using the token and set user value
+    // Implement the actual fetch logic here
   }
 
   return {
