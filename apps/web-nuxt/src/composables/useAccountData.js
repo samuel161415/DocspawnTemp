@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 
 // Define initial values for each reactive object
 const initialAccountData = {
-  accountType: '',
+  accountType: 'Hanan',
 }
 
 // Create reactive objects

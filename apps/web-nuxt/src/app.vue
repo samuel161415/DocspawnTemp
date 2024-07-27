@@ -1,33 +1,5 @@
 <template>
-  <div v-if="!verifiedUser" class="flex items-center h-[100vh] justify-center">
-    <div class="flex flex-col justify-center w-300 md:w-1/4 gap-4 ">
-      <p class="font-poppins">
-        {{ $t('app.select_account') }}
-      </p>
-      <div class="flex flex-wrap gap-8 mb-4">
-        <div class="flex items-center">
-          <RadioButton v-model="accountType" input-id="accountType1" name="pizza" value="Demo" />
-          <label for="accountType1" class="ml-2 font-poppins text-lg">{{ $t('app.final_demo') }}</label>
-        </div>
-        <div class="flex items-center">
-          <RadioButton v-model="accountType" input-id="accountType2" name="pizza" value="Adam" />
-          <label for="accountType2" class="ml-2 font-poppins text-lg">{{ $t('app.adam') }}</label>
-        </div>
-        <div class="flex items-center">
-          <RadioButton v-model="accountType" input-id="accountType3" name="pizza" value="Hanan" />
-          <label for="accountType3" class="ml-2 font-poppins text-lg">{{ $t('app.hanan') }}</label>
-        </div>
-      </div>
-      <p class="font-poppins">
-        {{ $t('app.write_password') }}
-      </p>
-      <InputText v-model="password" type="password" />
-      <Button class="w-full" :disabled="!accountType" @keyup.enter="checkPassword" @click="checkPassword">
-        {{ $t('app.submit') }}
-      </Button>
-    </div>
-  </div>
-  <NuxtLayout v-else>
+  <NuxtLayout>
     <div class="flex flex-col w-full">
       <div class="flex fixed h-screen w-screen">
         <SideBar v-if="$route.path !== '/signin' && $route.path !== '/signup'" />
@@ -45,25 +17,34 @@
 
 <script lang="ts" setup>
 import { useToast } from 'primevue/usetoast'
+import { useRoute, useRouter } from 'vue-router'
 import SideBar from './components/layout/Sidebar.vue'
 import 'primeicons/primeicons.css'
 import MenuBar from './components/settings/MenuBar.vue'
-import { accountData } from '@/composables/useAccountData'
 
-const runtimeConfig = useRuntimeConfig()
+import { useAuth } from '@/composables/useAuth'
 
-const accountType = ref('')
-watch(accountType, (val) => {
-  accountData.accountType = val
-})
-
-const verifiedUser = ref(false)
-const password = ref()
-function checkPassword() {
-  if (password.value === runtimeConfig.public.ADMIN_PASSWORD)
-    verifiedUser.value = true
-}
 function isSettingsRoute(path: string) {
   return path.split('/').includes('settings')
 }
+
+const router = useRouter()
+const route = useRoute()
+const { token, setToken, fetchUserDetails, user } = useAuth()
+
+onMounted(async () => {
+  const accessToken = route.query.access_token
+
+  if (accessToken) {
+    setToken(accessToken)
+    await fetchUserDetails()
+    if (user.value)
+      router.push('/') // Redirect to home if user is authenticated
+    else
+      console.error('User details could not be fetched')
+  }
+  else {
+    router.push('/signup') // Redirect to signup if no access token
+  }
+})
 </script>
