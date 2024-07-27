@@ -2,7 +2,7 @@
   <div class="h-full w-full bg-white rounded-lg overflow-scroll no-scrollbar p-4 py-8">
     <div class="mb-8">
       <h1 class=" text-4xl font-bold text-surface-600">
-        Welcome {{ accountData?.accountType }} :)
+        Welcome {{ user?.name || user.email }}
       </h1>
     </div>
     <div class="card">
@@ -103,6 +103,7 @@ onMounted(async () => {
   catch (error) {
     console.error('Error fetching templates:', error)
   }
+  console.log('user>>>>>>>>>>>>>>', user)
 })
 function updateTemplateData(data) {
   templateData.value = data

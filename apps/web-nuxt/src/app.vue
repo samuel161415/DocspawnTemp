@@ -30,15 +30,17 @@ function isSettingsRoute(path: string) {
 
 const router = useRouter()
 const route = useRoute()
-const { token, setToken, fetchUserDetails, user } = useAuth()
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 onMounted(async () => {
+  if (user.email && token)
+    return
+
   const accessToken = route.query.access_token
 
   if (accessToken) {
     setToken(accessToken)
     await fetchUserDetails()
-    console.log('user value after fetch user details', user.value)
     if (user.value)
       router.push('/') // Redirect to home if user is authenticated
     else
@@ -64,10 +66,10 @@ onMounted(async () => {
 
   scriptOutseta.onload = () => {
     Outseta.on('accessToken.set', (decodedToken) => {
-      console.log({ decodedToken })
-      setToken(decodedToken)
-      setUser(decodedToken.user)
-      console.log('decodedToken.user', decodedToken.user)
+      // console.log({ decodedToken })
+      setUser(decodedToken)
+      // setUser(decodedToken.user)
+      // console.log('decodedToken.user', decodedToken.user)
       // You can now use the decoded token to fetch additional user details if needed
     })
   }
