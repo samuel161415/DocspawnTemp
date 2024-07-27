@@ -33,7 +33,7 @@ const route = useRoute()
 const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 onMounted(async () => {
-  if (user.email && token)
+  if (user && token)
     return
   if (typeof window !== 'undefined') {
     const accessToken = route.query.access_token
