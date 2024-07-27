@@ -24,6 +24,29 @@ export default defineNuxtConfig({
     'nuxt-gtag',
     '@nuxtjs/i18n',
   ],
+  head: {
+    script: [
+      {
+        hid: 'outseta-options',
+        innerHTML: `
+          var o_options = {
+            domain: 'docspawn.outseta.com'
+          };
+        `,
+        type: 'text/javascript',
+        charset: 'utf-8',
+      },
+      {
+        'src': 'https://cdn.outseta.com/outseta.min.js',
+        'data-options': 'o_options',
+        'type': 'text/javascript',
+        'charset': 'utf-8',
+      },
+    ],
+    __dangerouslyDisableSanitizersByTagID: {
+      'outseta-options': ['innerHTML'],
+    },
+  },
   i18n: {
     locales: [
       { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
@@ -64,6 +87,29 @@ export default defineNuxtConfig({
     '~/plugins/fontawesome.js',
   ],
   app: {
+    head: {
+      script: [
+        {
+          hid: 'outseta-options',
+          innerHTML: `
+            var o_options = {
+              domain: 'docspawn.outseta.com'
+            };
+          `,
+          type: 'text/javascript',
+          charset: 'utf-8',
+        },
+        {
+          'src': 'https://cdn.outseta.com/outseta.min.js',
+          'data-options': 'o_options',
+          'type': 'text/javascript',
+          'charset': 'utf-8',
+        },
+      ],
+      __dangerouslyDisableSanitizersByTagID: {
+        'outseta-options': ['innerHTML'],
+      },
+    },
     layoutTransition: {
       name: 'slide-right',
       mode: 'out-in',
