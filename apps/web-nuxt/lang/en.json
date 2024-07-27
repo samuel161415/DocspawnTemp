@@ -241,7 +241,21 @@
   "Cp_dataLibraryList": {
     "select_template": "Select a template to display data.",
     "loading_data": "Loading data. Please wait.",
-    "select_columns": "Select Columns"
+    "select_columns": "Select Columns",
+    "select_data_to_display": "Select data to display",
+    "save_changes": "Save changes",
+    "save_view": "Save view",
+    "enter_view_name": "Enter personlized view name",
+    "cancel": "Cancel",
+    "save": "Save",
+    "want_changes_to": "Do you want to update changes to",
+    "export_csv": "Export CSV",
+    "form_to_doc": "Form to doc",
+    "data_to_doc": "Data to doc",
+    "personalized_views": "Personalized views",
+    "form_fields": "Form fields",
+    "system_fields": "System fields",
+    "legacy_fields": "Legacy fields"
   },
   "Cp_dataTable": {
     "no_data_found": "No data found.",
@@ -252,7 +266,8 @@
     "data_to_doc": "Data to doc",
     "clear_all_filters": "Clear all filters",
     "clear": "Clear",
-    "search": "Search"
+    "search": "Search",
+    "clear_filters": "Clear filters"
   },
 
   "Cp_sidebar": {

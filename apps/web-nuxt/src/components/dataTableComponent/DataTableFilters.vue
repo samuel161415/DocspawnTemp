@@ -38,10 +38,10 @@
         v-tooltip.top="$t('Cp_dataTable_filter.clear_all_filters')"
         type="button"
         icon="pi pi-filter-slash"
-        :label="$t('Cp_dataTable_filter.clear')"
+        :label="$t('Cp_dataTable_filter.clear_filters')"
         outlined
         raised
-        class="p-7 shadow-none rounded-lg w-1/2 md:w-24 raised border-primaryBlue h-[45px]"
+        class="p-7 shadow-none rounded-lg w-max md:w-max raised border-primaryBlue h-[45px]"
         @click="clearFilter"
       />
       <span class="relative flex">

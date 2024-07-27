@@ -1,7 +1,7 @@
 <template>
   <div v-show="componentLoading">
     <div class="h-[200px] flex justify-center border-none">
-      Loading data...
+      {{ $t('Cp_dataLibraryList.loading_data') }} ...
     </div>
   </div>
   <div v-show="!componentLoading" class="box overflow-hidden z-1 px-3 py-5 table-container">
@@ -40,11 +40,10 @@
         :rows-per-page-options="[2, 25, 50, 100]" -->
         <!-- <template #header> -->
         <div class="mb-2">
-          <div class="flex justify-between items-center mb-4 ">
-            <div class="flex items-center gap-2 left-0 ">
+          <div class="flex justify-between items-end mb-4 ">
+            <div class="flex flex-col gap-2 left-0 ">
               <p class="font-poppins font-normal text-surface-500 text-left text-lg ">
-                <!-- {{ $t('Cp_dataLibraryList.select_template') }} -->
-                Select data to display
+                {{ $t('Cp_dataLibraryList.select_data_to_display') }}
               </p>
 
               <Dropdown
@@ -56,7 +55,7 @@
                 filter
                 filter-placeholder="Search templates"
                 placeholder="Select a Template"
-                class="md:w-[20rem] w-full font-poppins ml-3 py-0 h-[45px] flex items-center"
+                class="md:w-[20rem] w-full font-poppins  py-0 h-[45px] flex items-center"
               >
                 <template #optiongroup="slotProps">
                   <div class="flex items-center">
@@ -76,24 +75,34 @@
               <Button
                 type="button"
                 icon="pi pi-bookmark"
-                :label="selectedTemplate?.view_name ? 'Save changes' : 'Save view'"
+                :label="selectedTemplate?.view_name ? $t('Cp_dataLibraryList.save_changes') : $t('Cp_dataLibraryList.save_view')"
                 class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
-                @click="selectedTemplate?.view_name ? saveView(selectedTemplate?.view_name) : showSaveViewModal = true"
+                @click="selectedTemplate?.view_name ? showUpdateViewModal = true : showSaveViewModal = true"
               />
-              <Dialog v-model:visible="showSaveViewModal" header="Save View" :modal="true" class="w-[300px] md:w-[300px]">
+              <Dialog v-model:visible="showSaveViewModal" header="Save Personalized View" :modal="true" class="w-[300px] md:w-[300px]">
                 <div class="p-field flex flex-col gap-2">
-                  <label for="viewName">Enter personlized view name</label>
+                  <label for="viewName">{{ $t('Cp_dataLibraryList.enter_view_name') }}</label>
                   <InputText id="viewName" v-model="viewToBeSavedName" />
                 </div>
-                <div class="p-d-flex p-jc-end w-full mt-2">
-                  <Button label="Submit" class="w-full" @click="savePersonlizedView" />
+                <div class="p-d-flex p-jc-end w-full mt-2 flex gap-1">
+                  <Button outlined :label="$t('Cp_dataLibraryList.cancel')" class="w-full" @click="showSaveViewModal = false" />
+                  <Button :disabled="!viewToBeSavedName" :label="$t('Cp_dataLibraryList.save')" class="w-full" @click="savePersonlizedView" />
+                </div>
+              </Dialog>
+              <Dialog v-model:visible="showUpdateViewModal" :header="`Update ${selectedTemplate?.view_name}` " :modal="true" class="w-[300px] md:w-[300px]">
+                <div class="p-field flex flex-col gap-2">
+                  <label for="viewName">{{ $t('Cp_dataLibraryList.want_changes_to') }} {{ selectedTemplate?.view_name }}?</label>
+                </div>
+                <div class="p-d-flex p-jc-end w-full mt-2 flex gap-1">
+                  <Button outlined :label="$t('Cp_dataLibraryList.cancel')" class="w-full" @click="showUpdateViewModal = false" />
+                  <Button :label=" $t('Cp_dataLibraryList.save')" class="w-full" @click="saveView(selectedTemplate?.view_name)" />
                 </div>
               </Dialog>
               <Button
                 v-if="exportFile"
                 type="button"
                 icon="pi pi-download"
-                label="Export CSV"
+                :label=" $t('Cp_dataLibraryList.export_csv')"
                 class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
                 :disabled="selectedRows.length < 1"
                 @click="exportCSVHandler"
@@ -260,10 +269,10 @@
         header=" "
         :modal="true"
         :dismissable-mask="true"
-        class="custom-dialog"
+        class="custom-dialog h-[50vh]"
       >
         <div class="flex flex-col justify-center items-center h-full">
-          <img :src="currentImage" alt="Image" class="w-5/6 h-5/6 object-contain" />
+          <img :src="currentImage" alt="Image" class="w-auto h-4/5 " />
         </div>
       </Dialog>
     </div>
@@ -275,6 +284,7 @@
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import { useToast } from 'primevue/usetoast'
+import { useI18n } from 'vue-i18n'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
@@ -323,9 +333,12 @@ const props = defineProps({
 
 const emit = defineEmits()
 
+const { t } = useI18n()
+
 const toast = useToast()
 
 const showSaveViewModal = ref(false)
+const showUpdateViewModal = ref(false)
 const viewToBeSavedName = ref('')
 const selectedRows = ref([])
 
@@ -401,8 +414,6 @@ onMounted(async () => {
 
         if (data?.length > 0)
           personalizedViews = data?.map((d) => { return { ...d, key: d?.id, label: d?.view_name } })
-
-        console.log('data of fetching personalized views', data)
       }
       catch (error) {
         console.error('Error fetching templates:', error)
@@ -411,7 +422,7 @@ onMounted(async () => {
       NodeData.value = [
         {
           key: 'Form to doc',
-          label: 'Form to doc',
+          label: t('Cp_dataLibraryList.form_to_doc'),
           data: 'Form to doc',
           icon: 'pi pi-fw pi-inbox',
           selectable: false,
@@ -419,7 +430,7 @@ onMounted(async () => {
         },
         {
           key: 'Data to doc',
-          label: 'Data to doc',
+          label: t('Cp_dataLibraryList.data_to_doc'),
           data: 'Data to doc',
           icon: 'pi pi-fw pi-calendar',
           selectable: false,
@@ -427,7 +438,7 @@ onMounted(async () => {
         },
         {
           key: 'Personalized views',
-          label: 'Personalized views',
+          label: t('Cp_dataLibraryList.personalized_views'),
           data: 'Personalized views',
           icon: 'pi pi-fw pi-calendar',
           selectable: false,
@@ -447,7 +458,6 @@ function onToggle(val) {
 }
 watch(selectedTemplate, async (selectedTemplate) => {
   if (selectedTemplate.view_name) {
-    console.log('its a persoanlized view', selectedTemplate)
     filters.value = selectedTemplate?.filters
     filteredData.value = selectedTemplate?.filtered_data
     allColumns.value = selectedTemplate?.all_columns
@@ -501,7 +511,6 @@ watch(selectedTemplate, async (selectedTemplate) => {
       return { hash: k?.hash, isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
   allColumns.value = columsnToAddWithLegacyFields
-  console.log('all columns value', allColumns.value)
   /** * experimenting with all columns to convert into a group */
   const systemFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isSystemField)
   const formFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isNormalField)
@@ -509,7 +518,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
   allColumns.value = [
     {
       key: 'Form fields',
-      label: 'Form fields',
+      label: t('Cp_dataLibraryList.form_fields'),
       data: 'Form fields',
       icon: 'fa-light fa-file-invoice',
       selectable: false,
@@ -517,22 +526,27 @@ watch(selectedTemplate, async (selectedTemplate) => {
     },
     {
       key: 'System fields',
-      label: 'System fields',
+      label: t('Cp_dataLibraryList.system_fields'),
       data: 'System fields',
       icon: 'fa-light fa-window',
       selectable: false,
       children: systemFieldsToAdd,
     },
 
-    {
-      key: 'Legacy fields',
-      label: 'Legacy fields',
-      data: 'Legacy fields',
-      icon: 'fa-light fa-server',
-      selectable: false,
-      children: legacyFieldsToAdd,
-    },
   ]
+  if (legacyFieldsToAdd.length > 0) {
+    allColumns.value = [
+      ...allColumns.value,
+      {
+        key: 'Legacy fields',
+        label: t('Cp_dataLibraryList.legacy_fields'),
+        data: 'Legacy fields',
+        icon: 'fa-light fa-server',
+        selectable: false,
+        children: legacyFieldsToAdd,
+      },
+    ]
+  }
 
   /** */
 
@@ -695,6 +709,8 @@ async function saveView(name) {
   // console.log('obj to send', obj_to_send)
   try {
     if (selectedTemplate.value?.view_name) {
+      showUpdateViewModal.value = false
+
       // logic for save changes in view
       // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
       const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${selectedTemplate.value?.id}`, {
@@ -707,10 +723,9 @@ async function saveView(name) {
       if (!response.ok)
         throw new Error(`Network response was not ok ${response.statusText}`)
       const data = await response.json()
-      console.log('data', data)
+
       toast.add({ severity: 'success', summary: 'Personalized view', detail: 'View updated successfully!', life: 5000 })
       NodeData.value = NodeData.value?.map((n) => {
-        console.log('n>>>>', n)
         if (n?.key === 'Personalized views') {
           return { ...n, children: n?.children?.map((c) => {
             if (c?.key === selectedTemplate?.value?.id)
@@ -737,10 +752,9 @@ async function saveView(name) {
       if (!response.ok)
         throw new Error(`Network response was not ok ${response.statusText}`)
       const data = await response.json()
-      console.log('data', data)
+
       toast.add({ severity: 'success', summary: 'Personalized view', detail: 'View saved successfully!', life: 5000 })
       NodeData.value = NodeData.value?.map((n) => {
-        console.log('n>>>>', n)
         if (n?.key === 'Personalized views')
           return { ...n, children: [...n?.children, { ...data[0], key: data[0]?.id, label: data[0]?.view_name }] }
         else

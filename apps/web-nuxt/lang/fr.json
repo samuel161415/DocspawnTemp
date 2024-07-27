@@ -241,20 +241,34 @@
   "Cp_dataLibraryList": {
     "select_template": "Sélectionnez un modèle pour afficher les données.",
     "loading_data": "Chargement des données. Veuillez patienter.",
-    "select_columns": "Sélectionner les colonnes"
+    "select_columns": "Sélectionnez les colonnes",
+    "select_data_to_display": "Sélectionnez les données à afficher",
+    "save_changes": "Enregistrer les modifications",
+    "save_view": "Enregistrer la vue",
+    "enter_view_name": "Entrez le nom de la vue personnalisée",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "want_changes_to": "Voulez-vous mettre à jour les modifications sur",
+    "export_csv": "Exporter en CSV",
+    "form_to_doc": "Formulaire en document",
+    "data_to_doc": "Données en document",
+    "personalized_views": "Vues personnalisées",
+    "form_fields": "Champs du formulaire",
+    "system_fields": "Champs système",
+    "legacy_fields": "Champs hérités"
   },
   "Cp_dataTable": {
     "no_data_found": "Aucune donnée trouvée.",
     "loading_data": "Chargement des données. Veuillez patienter."
   },
   "Cp_dataTable_filter": {
-    "form_to_doc": "Formulaire en doc",
-    "data_to_doc": "Données en doc",
+    "form_to_doc": "Formulaire en document",
+    "data_to_doc": "Données en document",
     "clear_all_filters": "Effacer tous les filtres",
     "clear": "Effacer",
-    "search": "Recherche"
+    "search": "Rechercher",
+    "clear_filters": "Effacer les filtres"
   },
-
   "Cp_sidebar": {
     "home": "Accueil",
     "templates": "Modèles",
