@@ -1,4 +1,14 @@
 <template>
+  <div class="w-full h-[100vh] overflow-auto py-12 flex flex-col justify-center items-center">
+    <Login />
+  </div>
+</template>
+
+<script setup>
+import Login from '@/components/auth/LoginForm.vue'
+</script>
+
+<!-- <template>
   <div class="h-screen w-screen">
     <div class="grid grid-cols-2 w-full h-full">
       <div class="h-full w-full py-10 px-16 bg-blue-50">
@@ -186,4 +196,4 @@ const features = [
 </script>
 <style>
 /* Your CSS here */
-</style>
+</style> -->

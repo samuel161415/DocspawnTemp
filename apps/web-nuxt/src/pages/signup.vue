@@ -1,4 +1,14 @@
 <template>
+  <div class="w-full h-[100vh] overflow-auto py-12 flex flex-col justify-center items-center">
+    <Signup />
+  </div>
+</template>
+
+<script setup>
+import Signup from '@/components//auth/SignupForm.vue'
+</script>
+
+<!-- <template>
   <div class="h-[calc(100vh-86px)] w-full grid place-items-center">
     <div class="flex gap-4 items-end">
       <Card
@@ -137,4 +147,4 @@ const confirmAndNavigate = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped></style> -->
