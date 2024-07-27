@@ -57,6 +57,7 @@
 import { uuid } from 'vue-uuid'
 import { useToast } from 'primevue/usetoast'
 import { accountData } from '@/composables/useAccountData'
+import { useAuth } from '@/composables/useAuth'
 
 // import FavouriteTemplates from '~/components/dashboard/FavouriteTemplates.vue'
 import TemplateDataView from '~/components/template/TemplateDataView.vue'
@@ -65,6 +66,12 @@ import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGenera
 import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { docGenerationData } from '@/composables/useDocGenerationData'
+
+const { user } = useAuth()
+console.log('user>>>>>>>>>>>>>>', user)
+watch(user, (val) => {
+  console.log('user data>>>>>>>>>>>>>>', val)
+})
 
 const toast = useToast()
 const router = useRouter()
