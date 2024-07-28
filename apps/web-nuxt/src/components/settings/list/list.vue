@@ -264,7 +264,7 @@ function handleopensubmenu(clickedItem) {
 onMounted(async () => {
   /** */
   try {
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists/${user?.email}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists/${user?.value?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
 
@@ -354,7 +354,7 @@ async function handleCreateList(data) {
   /** **** saving list */
   const objToSend = {
     list_data: JSON.stringify(newList),
-    account_type: user?.email,
+    account_type: user?.value?.email,
   }
   try {
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists`, {

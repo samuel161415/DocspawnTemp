@@ -210,7 +210,7 @@ async function saveTemplate() {
   canvasToSend = { ...canvasToSend, objects: deserializedObjects }
 
   const objToSend = {
-    account_type: user?.email,
+    account_type: user?.value?.email,
     name: templateGeneralInformation?.name || 'sample',
     use_case: templateGeneralInformation?.useCase,
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
