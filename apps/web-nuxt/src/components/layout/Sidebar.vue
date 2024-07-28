@@ -135,7 +135,8 @@
             </NuxtLink>
           </div>
           <div class="px-3 flex items-center mb-4 gap-2" @click="logout">
-            <font-awesome-icon icon="fa-solid fa-arrow-left-from-bracket" size="sm" />
+            <font-awesome-icon icon="fa-regular fa-left-from-bracket" size="sm" />
+
             <p v-if="!isCollapsed" class="font-poppins text-lg text-surface-600 ">
               Logout
             </p>
