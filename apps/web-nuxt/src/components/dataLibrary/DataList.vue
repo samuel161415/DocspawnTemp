@@ -382,7 +382,7 @@ onMounted(async () => {
   // setInterval(() => console.log('filter global mode akk', filters.value), 5000)
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${user?.email}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${user?.value?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
@@ -411,7 +411,7 @@ onMounted(async () => {
       let personalizedViews = []
       try {
         // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-        const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${user?.email}`)
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${user?.value?.email}`)
         if (!response.ok)
           throw new Error(`Network response was not ok ${response.statusText}`)
         const data = await response.json()
@@ -701,7 +701,7 @@ function savePersonlizedView() {
 }
 async function saveView(name) {
   const objToSend = {
-    account_type: user?.email,
+    account_type: user?.value?.email,
     view_name: name,
     filters: JSON.stringify(filters.value),
     template_filtered: JSON.stringify(templatefiltered.value),

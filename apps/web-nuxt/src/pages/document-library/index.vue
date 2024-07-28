@@ -24,7 +24,11 @@ import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import DataTableComponent from '../../components/dataTableComponent/DataTableComponent.vue'
-import { accountData } from '@/composables/useAccountData'
+
+// import { accountData } from '@/composables/useAccountData'
+import { useAuth } from '@/composables/useAuth'
+
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 // import { documentLibraryData } from '../../services/sampleData'
 
@@ -76,7 +80,7 @@ onMounted(async () => {
   //   created_by: "John Doe"
   // },
   try {
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/${accountData?.accountType}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/${user?.value?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
 

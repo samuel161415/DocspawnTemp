@@ -76,11 +76,11 @@ const runtimeConfig = useRuntimeConfig()
 const templateData = ref([])
 
 async function fetchFavourites() {
-  if (!user?.email)
+  if (!user?.value?.email)
     return
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/favourites/${user?.email}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/favourites/${user?.value?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
