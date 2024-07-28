@@ -2,7 +2,7 @@
   <div class="h-full w-full bg-white rounded-lg overflow-scroll no-scrollbar p-4 py-8">
     <div class="mb-8">
       <h1 class=" text-4xl font-bold text-surface-600">
-        Welcome {{ user?.value?.name || user?.value?.email }}
+        Welcome {{ user?.name || user?.email }}
       </h1>
     </div>
     <div class="card">
@@ -56,7 +56,6 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useToast } from 'primevue/usetoast'
-import { accountData } from '@/composables/useAccountData'
 import { useAuth } from '@/composables/useAuth'
 
 // import FavouriteTemplates from '~/components/dashboard/FavouriteTemplates.vue'
@@ -67,11 +66,7 @@ import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables
 import canvasService from '@/composables/useTemplateCanvas'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 
-const { user } = useAuth()
-console.log('user>>>>>>>>>>>>>>', user)
-watch(user, (val) => {
-  console.log('user data>>>>>>>>>>>>>>', val)
-})
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 const toast = useToast()
 const router = useRouter()
@@ -80,14 +75,12 @@ const runtimeConfig = useRuntimeConfig()
 
 const templateData = ref([])
 
-onMounted(async () => {
-  templateEditorStore.templateToEdit = {}
-  resetAllTemplateCreationValues()
-  resetAllTemplateEditorValues()
-  canvasService.refreshCanvas()
+async function fetchFavourites() {
+  if (!user?.email)
+    return
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/favourites/${accountData?.accountType}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/favourites/${user?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
@@ -104,6 +97,16 @@ onMounted(async () => {
     console.error('Error fetching templates:', error)
   }
   console.log('user>>>>>>>>>>>>>>', user)
+}
+onMounted(async () => {
+  templateEditorStore.templateToEdit = {}
+  resetAllTemplateCreationValues()
+  resetAllTemplateEditorValues()
+  canvasService.refreshCanvas()
+  fetchFavourites()
+})
+watch(user, (val) => {
+  fetchFavourites()
 })
 function updateTemplateData(data) {
   templateData.value = data

@@ -34,7 +34,10 @@ import TemplateDataView from '~/components/template/TemplateDataView.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
-import { accountData } from '@/composables/useAccountData'
+
+import { useAuth } from '@/composables/useAuth'
+
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 const visible = ref(false)
 const runtimeConfig = useRuntimeConfig()
@@ -50,14 +53,12 @@ function refreshAllFirst() {
   canvasService.refreshCanvas()
 }
 
-onMounted(async () => {
-  templateEditorStore.templateToEdit = {}
-  resetAllTemplateCreationValues()
-  resetAllTemplateEditorValues()
-  canvasService.refreshCanvas()
+async function fetchTemplates() {
+  if (!user?.email)
+    return
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${accountData?.accountType}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${user?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
@@ -73,8 +74,15 @@ onMounted(async () => {
   catch (error) {
     console.error('Error fetching templates:', error)
   }
+}
+onMounted(async () => {
+  templateEditorStore.templateToEdit = {}
+  resetAllTemplateCreationValues()
+  resetAllTemplateEditorValues()
+  canvasService.refreshCanvas()
+  fetchTemplates()
 })
-
+watch(user, () => fetchTemplates())
 async function deleteTemplate(template) {
   const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${template?.id}`, {
     method: 'DELETE',

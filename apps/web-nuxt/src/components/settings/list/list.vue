@@ -184,11 +184,16 @@ import ListOptionModal from '~/components/settings/list/ListOptionModal.vue'
 import CreateSublistModal from '~/components/settings/list/CreateSublistModal.vue'
 
 // import { addNewListItem } from '~/services/newListData.js'
-import { accountData } from '@/composables/useAccountData'
+// import { accountData } from '@/composables/useAccountData'
+import { useAuth } from '@/composables/useAuth'
 import canvasService from '@/composables/useTemplateCanvas'
 
 const props = defineProps(['fromTemplateEditor', 'selectedListForTemplateEditor'])
+
 const emit = defineEmits(['closeTemplateEditorPopup', 'handleSelectList'])
+
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
+
 const addNewListItem = ref()
 const runtimeConfig = useRuntimeConfig()
 const copiedList = ref()
@@ -259,7 +264,7 @@ function handleopensubmenu(clickedItem) {
 onMounted(async () => {
   /** */
   try {
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists/${accountData?.accountType}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists/${user?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
 
@@ -349,7 +354,7 @@ async function handleCreateList(data) {
   /** **** saving list */
   const objToSend = {
     list_data: JSON.stringify(newList),
-    account_type: accountData?.accountType,
+    account_type: user?.email,
   }
   try {
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/lists`, {
