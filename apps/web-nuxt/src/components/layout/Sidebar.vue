@@ -114,7 +114,7 @@
             </p>
           </div>
           <div class="px-3">
-            <NuxtLink to="/signin">
+            <NuxtLink to="/profile-settings">
               <div
                 class="flex mt-auto "
                 :class="{ 'space-y-2 flex-col justify-center items-center': isCollapsed, 'pl-2': !isCollapsed }"
@@ -129,10 +129,16 @@
                 </span>
 
                 <p v-if="!isCollapsed" class="text-gray-500 text-lg font-normal pt-1 ml-5 mb-8 font-poppins">
-                  {{ accountData?.accountType }}
+                  {{ user?.name || user?.email }}
                 </p>
               </div>
             </NuxtLink>
+          </div>
+          <div class="px-3 flex items-center mb-4 gap-2" @click="logout">
+            <font-awesome-icon icon="fa-solid fa-arrow-left-from-bracket" size="sm" />
+            <p v-if="!isCollapsed" class="font-poppins text-lg text-surface-600 ">
+              Logout
+            </p>
           </div>
         </div>
       </ul>
@@ -150,7 +156,10 @@ import ArrowRight from '../../assets/icons/arrow-right.svg'
 import ArrowLeftWhite from '../../assets/icons/arrow-left-white.svg'
 import ArrowRightWhite from '../../assets/icons/arrow-right-white.svg'
 import LanguageDropDown from './LanguageDropDown'
-import { accountData } from '@/composables/useAccountData'
+
+import { useAuth } from '@/composables/useAuth'
+
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 const { locale } = useI18n()
 
@@ -169,6 +178,15 @@ watch(() => router.currentRoute.value.path, (newValue, oldValue) => {
   refreshLocale()
 })
 
+function logout() {
+  setUser(null)
+  setToken(null)
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('token')
+    localStorage.removeItem('user')
+  }
+  router.push('signin')
+}
 function refreshLocale() {
   const savedLocale = localStorage.getItem('locale')
   if (savedLocale)

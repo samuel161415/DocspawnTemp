@@ -289,7 +289,9 @@ import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
 import { formatDateForInput, formatTimeForInput } from '~/utils/dateFunctions'
-import { accountData } from '@/composables/useAccountData'
+
+// import { accountData } from '@/composables/useAccountData'
+import { useAuth } from '@/composables/useAuth'
 
 const props = defineProps({
   data: {
@@ -332,6 +334,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits()
+
+const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 const { t } = useI18n()
 
@@ -378,7 +382,7 @@ onMounted(async () => {
   // setInterval(() => console.log('filter global mode akk', filters.value), 5000)
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${accountData?.accountType}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${user?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
@@ -407,7 +411,7 @@ onMounted(async () => {
       let personalizedViews = []
       try {
         // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-        const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${accountData?.accountType}`)
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/data-library/personalized-views/${user?.email}`)
         if (!response.ok)
           throw new Error(`Network response was not ok ${response.statusText}`)
         const data = await response.json()
@@ -697,7 +701,7 @@ function savePersonlizedView() {
 }
 async function saveView(name) {
   const objToSend = {
-    account_type: accountData?.accountType,
+    account_type: user?.email,
     view_name: name,
     filters: JSON.stringify(filters.value),
     template_filtered: JSON.stringify(templatefiltered.value),
