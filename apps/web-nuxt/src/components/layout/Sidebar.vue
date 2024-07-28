@@ -134,8 +134,11 @@
               </div>
             </NuxtLink>
           </div>
-          <div class="px-3 flex items-center mb-4 gap-2" @click="logout">
-            <font-awesome-icon icon="fa-regular fa-left-from-bracket" size="sm" />
+          <div class="px-6 flex items-center mb-4 gap-4 mt-4 cursor-pointer" @click="logout">
+            <i
+              style="font-size: 1.2rem" class="py-3 ml-1 pi pi-chevron-left text-gray-500"
+            >
+            </i>
 
             <p v-if="!isCollapsed" class="font-poppins text-lg text-surface-600 ">
               Logout
