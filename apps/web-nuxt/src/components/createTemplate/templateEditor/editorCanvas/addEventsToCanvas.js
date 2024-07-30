@@ -593,8 +593,12 @@ export default function addEventsToCanvas() {
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
-        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        let fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
+        if (templateEditorStore.fieldToAdd?.dateFormat)
+          fieldToAdd = { ...fieldToAdd, dateFormat: templateEditorStore.fieldToAdd?.dateFormat }
+        if (templateEditorStore.fieldToAdd?.timeFormat)
+          fieldToAdd = { ...fieldToAdd, timeFormat: templateEditorStore.fieldToAdd?.timeFormat }
 
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {

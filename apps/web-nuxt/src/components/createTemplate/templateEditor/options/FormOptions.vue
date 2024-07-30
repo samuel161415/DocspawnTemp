@@ -160,6 +160,7 @@ const characterAcceptionOptions = ref([
 
 function fillUpOptions() {
   const sF = templateEditorStore.selectedAddedField
+  console.log('sf', sF)
   if (sF?.name !== 'Lorem ipsum' && sF?.name !== 'Add field name')
     fieldName.value = sF?.name
   else
@@ -181,9 +182,9 @@ function fillUpOptions() {
   }
 
   if (sF?.fieldType === 'Form date')
-    selectedDateFormat.value = sF?.dateFormat ? sF?.dateFormat : 'MM/DD/YYYY'
+    selectedDateFormat.value = sF?.dateFormat ? { name: sF?.dateFormat } : { name: 'MM/DD/YYYY' }
   if (sF?.fieldType === 'Form time')
-    selectedTimeFormat.value = sF?.timeFormat ? sF?.timeFormat : 'HH:MM:SS'
+    selectedTimeFormat.value = sF?.timeFormat ? { name: sF?.timeFormat } : { name: 'HH:MM:SS' }
   if (sF?.fieldType === 'Form list')
     selectedList.value = sF?.selectedList ? sF?.selectedList : {}
 }
