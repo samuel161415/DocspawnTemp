@@ -587,6 +587,7 @@ export default function addEventsToCanvas() {
 
             scaleX: templateEditorStore?.lastScaledTextOptions?.x,
             scaleY: templateEditorStore?.lastScaledTextOptions?.y,
+            lockScalingFlip: true,
 
           },
         )
@@ -694,7 +695,7 @@ export default function addEventsToCanvas() {
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
             editable: false,
-
+            lockScalingFlip: true,
           },
         )
         textEle.setControlsVisibility({
@@ -801,6 +802,7 @@ export default function addEventsToCanvas() {
               fieldType: ftoadd.type,
               pageNo: templateEditorStore.activePageForCanvas,
               displayGuide: false,
+              lockScalingFlip: true,
             })
             myImg.setControlsVisibility({ mtr: false })
 
@@ -898,6 +900,7 @@ export default function addEventsToCanvas() {
               fieldType: ftoadd.type,
               pageNo: templateEditorStore.activePageForCanvas,
               displayGuide: false,
+              lockScalingFlip: true,
             })
             myImg.setControlsVisibility({ mtr: false })
             /** calculating no of checkbox groups and assigning position no */

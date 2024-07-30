@@ -178,6 +178,7 @@ function addCheckboxToGroup() {
           fieldType: activeObject?.fieldType,
           pageNo: templateEditorStore?.activePageForCanvas,
           displayGuide: false,
+          lockScalingFlip: true,
         })
         myImg.setControlsVisibility({ mtr: false })
 
@@ -284,6 +285,7 @@ function selectAllInGroup() {
       cornerColor: '#119bd6',
       transparentCorners: false,
       hash: activeObject?.hash,
+      lockScalingFlip: true,
     })
     sel.setControlsVisibility({ mtr: false })
     canvas.setActiveObject(sel)

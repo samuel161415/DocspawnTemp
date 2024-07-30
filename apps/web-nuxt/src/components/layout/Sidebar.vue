@@ -189,7 +189,7 @@ function logout() {
     localStorage.removeItem('token')
     localStorage.removeItem('user')
   }
-  router.push('signin')
+  // router.push('signin')
 }
 function refreshLocale() {
   const savedLocale = localStorage.getItem('locale')

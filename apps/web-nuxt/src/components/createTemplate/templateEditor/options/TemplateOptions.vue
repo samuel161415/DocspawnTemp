@@ -40,6 +40,7 @@
         </label>
       </div>
     </div>
+    <Button label="Save template" :disabled="!templateName" class="mt-8 w-full md:w-full" @click="emit('saveTemplate')" />
   </div>
 </template>
 
@@ -49,6 +50,7 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import canvasService from '@/composables/useTemplateCanvas'
 
+const emit = defineEmits(['saveTemplate'])
 const { t } = useI18n()
 const tooltipText = computed(() => t('Cp_templateEditor_templateOptions.tooltip_paid_users'))
 

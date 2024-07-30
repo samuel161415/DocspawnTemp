@@ -1,5 +1,5 @@
 <template>
-  <div ref="parentContainer" class="h-full  w-[900px] overflow-auto  ">
+  <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  ">
     <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">

@@ -12,7 +12,7 @@
     </div>
     <div class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6 bg-surface-50 px-5 py-2 overflow-hidden">
       <div v-if="templateEditorStore.showOptionsBar === false">
-        <TemplateOptions />
+        <TemplateOptions @save-template="emit('saveTemplate')" />
       </div>
       <div v-else-if="templateEditorStore.showOptionsBar === true && templateEditorStore.selectedAddedField?.fieldType !== ''">
         <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
@@ -77,7 +77,11 @@
           <FormOptions />
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image' || templateEditorStore.selectedAddedField?.fieldType === 'Form image'" class="mb-6">
+        <div
+          v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'
+          // || templateEditorStore.selectedAddedField?.fieldType === 'Form image'
+          " class="mb-6"
+        >
           <p class="font-poppins text-surface-500 mt-4 mb-2">
             {{ $t('Cp_templateEditor_options.image_proportion') }}
           </p>
@@ -168,6 +172,8 @@ import ImageOptions from './ImageOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
+
+const emit = defineEmits(['saveTemplate'])
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()

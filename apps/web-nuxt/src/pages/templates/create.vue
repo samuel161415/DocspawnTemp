@@ -53,12 +53,12 @@
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
                 <div class="mx-6">
-                  <TemplateEditor v-if="active === index || canvasService.getCanvas()" />
+                  <TemplateEditor v-if="active === index || canvasService.getCanvas()" @save-template="nextCallback" />
                   <!-- v-if="active === index" -->
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
-                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <!-- <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" /> -->
+                  <!-- <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" /> -->
                 </div>
               </template>
             </StepperPanel>
@@ -94,7 +94,7 @@
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
                   <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
+                  <Button :disabled="isSaving" :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
                 </div>
               </template>
             </StepperPanel>
@@ -180,8 +180,10 @@ async function fetchSizes(url) {
     // setPdfPageSizes(pageSizes) // Assuming you have a state or function to save the page sizes array
   }
 }
-
+const isSaving = ref(false)
 async function saveTemplate() {
+  isSaving.value = true
+  toast.add({ severity: 'success', summary: templateEditorStore?.templateToEdit?.id ? 'Updating template' : 'Saving template', detail: 'Process started', life: 1000 })
   const canvas = canvasService.getCanvas()
   if (!canvas)
     return
@@ -203,7 +205,7 @@ async function saveTemplate() {
   })
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
-    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
+    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash', 'lockScalingFlip'])
   })
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
@@ -248,13 +250,14 @@ async function saveTemplate() {
           canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
-        }, 1000)
+        }, 500)
       }
       catch (err) {
       // console.log('error', err)
       }
     }
     catch (error) {
+      isSaving.value = false
       console.error('Error:', error)
       toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
     }
@@ -280,13 +283,14 @@ async function saveTemplate() {
           canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
-        }, 1000)
+        }, 500)
       }
       catch (err) {
       // console.log('error', err)
       }
     }
     catch (error) {
+      isSaving.value = false
       console.error('Error:', error)
       toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
     }
