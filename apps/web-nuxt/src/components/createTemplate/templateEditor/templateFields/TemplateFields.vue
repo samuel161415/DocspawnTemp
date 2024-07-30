@@ -109,7 +109,7 @@
             @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true;showDatasetOptions2 = false;"
           >
             <div class="flex gap-2 items-center">
-              <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <font-awesome-icon icon="fa-light fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
               <p class="font-poppins text-surface-600 text-lg">
                 {{ $t('Cp_createTemplate_editorTemplateFields.text') }}
               </p>

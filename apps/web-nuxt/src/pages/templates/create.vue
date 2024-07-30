@@ -63,7 +63,7 @@
               </template>
             </StepperPanel>
 
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
+            <!-- <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
                   <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
@@ -79,7 +79,7 @@
                   <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
                 </div>
               </template>
-            </StepperPanel>
+            </StepperPanel> -->
 
             <StepperPanel header="$t('Pg_template_create.delivery_options')">
               <template #header="{ index, clickCallback }">
