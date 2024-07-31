@@ -2,15 +2,15 @@
   <div class="mt-4">
     <div class="mb-4">
       <p class="font-poppins text-md text-surface-600">
-        {{ $t('Cp_templateEditor_templateOptions.template_name') }}
+        {{ $t('Cp_templateEditor_templateOptions.template_name') }}<span :class="{ 'text-red-500': templateNameError }"> *</span>
       </p>
-      <InputText v-model="templateName" class="w-full md:w-full mt-2" />
+      <InputText v-model="templateName" :invalid="templateNameError && !templateName" :class="{ 'p-invalid template-name-error': templateNameError && !templateName }" class="w-full md:w-full mt-2" />
     </div>
     <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showWatermarkOptions = !showWatermarkOptions">
       <p class="font-poppins text-md">
         {{ $t('Cp_templateEditor_templateOptions.watermark') }}
       </p>
-      <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showWatermarkOptions }" />
+      <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showWatermarkOptions }" />
     </div>
     <div v-if="showWatermarkOptions" class="mt-4">
       <p class="font-poppins text-sm text-surface-400">
@@ -40,7 +40,15 @@
         </label>
       </div>
     </div>
-    <Button label="Save template" :disabled="!templateName" class="mt-8 w-full md:w-full" @click="emit('saveTemplate')" />
+    <Button
+      label="Save template" class="mt-8 w-full md:w-full" @click="() => {
+        if (templateName)
+          emit('saveTemplate')
+        else {
+          templateNameError = true
+        }
+      }"
+    />
   </div>
 </template>
 
@@ -53,7 +61,7 @@ import canvasService from '@/composables/useTemplateCanvas'
 const emit = defineEmits(['saveTemplate'])
 const { t } = useI18n()
 const tooltipText = computed(() => t('Cp_templateEditor_templateOptions.tooltip_paid_users'))
-
+const templateNameError = ref(false)
 const showWatermarkOptions = ref(false)
 const templateName = ref('')
 const disableWatermark = ref(false)
@@ -120,3 +128,15 @@ watch(() => templateEditorStore.watermarkImage, (newVal) => {
   }
 })
 </script>
+
+<style scoped>
+::v-deep .template-name-error {
+
+  box-shadow: none!important;
+}
+
+::v-deep .template-name-error:focus {
+
+  box-shadow: none !important;
+}
+</style>

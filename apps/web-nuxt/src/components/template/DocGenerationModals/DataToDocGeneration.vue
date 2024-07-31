@@ -87,6 +87,7 @@ import { useToast } from 'primevue/usetoast'
 import ProgressSpinner from 'primevue/progressspinner'
 import CanvasPreview from './CanvasPreview'
 import EditDatasetTable from './DatasetTable'
+import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const props = defineProps({
   template: {
@@ -136,6 +137,9 @@ async function generateDocs() {
   const objToSend = {
     finalData: selectedRows.value,
   }
+  setTimeout(() => {
+    router.push('/')
+  }, 2000)
   try {
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/dataToDoc/${templateEditorStore?.templateToGenerateDocs?.id}`, {
       method: 'POST',
@@ -150,6 +154,7 @@ async function generateDocs() {
     const data = await response.json()
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
+    docGenerationData.generatedDocs = data?.generatedDocs
     // toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
     showGeneratedDocToast()
   }

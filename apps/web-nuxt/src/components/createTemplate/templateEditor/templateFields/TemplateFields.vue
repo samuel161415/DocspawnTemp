@@ -392,6 +392,10 @@ const showStaticOption1 = ref(false)
 const selectedDatasetOption = ref('')
 const selectedDatasetOption2 = ref('')
 const staticOption1Val = ref()
+onMounted(() => {
+  if (templateEditorStore?.templateToEdit?.id)
+    templateEditorStore.ShowAddedFieldsinTemplateFields = true
+})
 watch(selectedDatasetOption, (val) => {
   if (val)
     selectField('Data field', val)

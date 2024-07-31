@@ -59,7 +59,7 @@
         <p class="font-poppins text-md">
           {{ $t('Cp_templateEditor_formOptions.advanced_options') }}
         </p>
-        <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+        <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
       </div>
       <div v-if="showAdvancedOptions">
         <p class="font-poppins text-md text-surface-600 mt-4 mb-2">
