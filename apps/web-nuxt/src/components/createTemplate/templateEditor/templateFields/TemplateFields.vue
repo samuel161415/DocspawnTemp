@@ -876,6 +876,7 @@ function selectAddedField(field) {
           cornerColor: '#119bd6',
           transparentCorners: false,
           hash: obj?.hash,
+          lockScalingFlip: true,
         })
         // sel.setControlsVisibility({ mtr: false })
         sel.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })

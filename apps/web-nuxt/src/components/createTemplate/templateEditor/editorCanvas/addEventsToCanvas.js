@@ -924,7 +924,42 @@ export default function addEventsToCanvas() {
             canvas.renderAll()
             templateEditorStore.fieldToAdd = {}
 
+            const tooltip = new fabric.Text('Enter label', {
+              left: myImg.left + (myImg.width * myImg.scaleX),
+              top: myImg.top - 10,
+              fill: 'white',
+              backgroundColor: '#009ee2',
+              fieldType: 'checkbox-tooltip',
+              checkboxHash: myImg?.checkboxIdentifierHash,
+              selectable: false,
+              evented: false,
+              fontSize: 18,
+              padding: 28,
+              visible: false,
+              opacity: 0,
+            })
+
+            myImg.tooltip = tooltip
+            canvas.add(tooltip)
+
             myImg.on('mouseover', (e) => {
+              myImg.tooltip.set({ visible: true, opacity: 1 })
+              canvas.renderAll()
+              // const tooltip = new fabric.Text('Tooltip Text', {
+              //   left: myImg.left + (myImg.width * myImg.scaleX),
+              //   top: myImg.top - 10,
+              //   fill: 'white',
+              //   backgroundColor: '#009ee2',
+              //   fieldType: 'checkbox-tooltip',
+              //   checkboxHash: myImg?.checkboxIdentifierHash,
+              //   selectable: false,
+              //   evented: false,
+              //   fontSize: 18,
+              //   padding: 28,
+              // })
+
+              // myImg.tooltip = tooltip
+              // canvas.add(tooltip)
               if (!templateEditorStore.activeAdvancedPointer)
                 return
               canvas.add(new fabric.Line([100, 1000, 100, 5000], {
@@ -948,6 +983,13 @@ export default function addEventsToCanvas() {
             })
 
             myImg.on('mouseout', (e) => {
+              if (myImg.tooltip) {
+                // canvas.remove(myImg.tooltip)
+                // myImg.tooltip = null
+                myImg.tooltip.set({ visible: false, opacity: 0 })
+                canvas.renderAll()
+              }
+
               if (!templateEditorStore.activeAdvancedPointer)
                 return
 
@@ -960,6 +1002,15 @@ export default function addEventsToCanvas() {
               })
 
               canvas.renderAll()
+            })
+            myImg.on('moving', () => {
+              if (myImg.tooltip.visible) {
+                myImg.tooltip.set({
+                  left: myImg.left + (myImg.width * myImg.scaleX),
+                  top: myImg.top - 10,
+                })
+                canvas.renderAll()
+              }
             })
 
             /** ********creating checkbox info icon */

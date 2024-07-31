@@ -98,18 +98,24 @@ watch(() => templateEditorStore.selectedAddedField, (val) => {
   fieldDescription.value = val?.name ? val?.name : 0
 })
 function changeTextOfCheckboxOption(e, item) {
-  console.log('change text', item)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObject = canvas.getActiveObject()
-    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
 
     templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
       if (f?.hash === activeObject?.hash) {
         return { ...f, checkboxes: f?.checkboxes?.map((c, i) => {
-          if (i + 1 === item)
+          if (i + 1 === item) {
+            const objs = canvas.getObjects()
+            objs.forEach((obj) => {
+              if (obj?.fieldType === 'checkbox-tooltip' && obj?.checkboxHash === c?.checkboxIdentifierHash) {
+                obj.set({ text: e.target.value })
+                canvas.renderAll()
+              }
+            })
             return { ...c, text: e.target.value }
-          else return c
+          }
+          else { return c }
         }) }
       }
 
@@ -200,8 +206,46 @@ function addCheckboxToGroup() {
         templateEditorStore.addedFields = allFields
         canvas.renderAll()
         templateEditorStore.fieldToAdd = {}
+        const tooltip = new fabric.Text('Enter label', {
+          left: myImg.left + (myImg.width * myImg.scaleX),
+          top: myImg.top - 10,
+          fill: 'white',
+          backgroundColor: '#009ee2',
+          fieldType: 'checkbox-tooltip',
+          checkboxHash: myImg?.checkboxIdentifierHash,
+          selectable: false,
+          evented: false,
+          fontSize: 18,
+          padding: 28,
+          visible: false,
+          opacity: 0,
+        })
+        console.log('creating tooltip text', tooltip)
 
+        myImg.tooltip = tooltip
+        canvas.add(tooltip)
         myImg.on('mouseover', (e) => {
+          console.log('on mouse overing')
+          myImg.tooltip.set({ visible: true, opacity: 1 })
+          canvas.renderAll()
+          // const tooltip = new fabric.Text('Tooltip Text', {
+          //   left: myImg.left + (myImg.width * myImg.scaleX),
+          //   top: myImg.top - 10,
+          //   fill: 'white',
+          //   backgroundColor: '#009ee2',
+          //   fieldType: 'checkbox-tooltip',
+          //   checkboxHash: myImg?.checkboxIdentifierHash,
+          //   selectable: false,
+          //   evented: false,
+          //   fontSize: 18,
+          //   padding: 28,
+          //   visible: false,
+          //   opacity: true,
+          // })
+          // console.log('creating tooltip text', tooltip)
+
+          // myImg.tooltip = tooltip
+          // canvas.add(tooltip)
           if (!templateEditorStore.activeAdvancedPointer)
             return
           canvas.add(new fabric.Line([100, 1000, 100, 5000], {
@@ -225,6 +269,13 @@ function addCheckboxToGroup() {
         })
 
         myImg.on('mouseout', (e) => {
+          if (myImg.tooltip) {
+            // canvas.remove(myImg.tooltip)
+            // myImg.tooltip = null
+            console.log('mouseout myImg tooltip', myImg.tooltip)
+            myImg.tooltip.set({ visible: false, opacity: 0 })
+            canvas.renderAll()
+          }
           if (!templateEditorStore.activeAdvancedPointer)
             return
 
@@ -237,6 +288,15 @@ function addCheckboxToGroup() {
           })
 
           canvas.renderAll()
+        })
+        myImg.on('moving', () => {
+          if (myImg.tooltip.visible) {
+            myImg.tooltip.set({
+              left: myImg.left + (myImg.width * myImg.scaleX),
+              top: myImg.top - 10,
+            })
+            canvas.renderAll()
+          }
         })
         /** ********* adding info icon */
         const { colorsForCheckboxGroup } = templateEditorStore?.selectedAddedField
