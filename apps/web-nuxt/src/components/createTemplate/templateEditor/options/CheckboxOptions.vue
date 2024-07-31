@@ -180,7 +180,8 @@ function addCheckboxToGroup() {
           displayGuide: false,
           lockScalingFlip: true,
         })
-        myImg.setControlsVisibility({ mtr: false })
+        // myImg.setControlsVisibility({ mtr: false })
+        myImg.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
         templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
           if (f?.hash === activeObject?.hash)
@@ -272,7 +273,36 @@ function addCheckboxToGroup() {
     )
   }
 }
+function applyLastObjectPropertiesToAll(sel) {
+  const canvas = canvasService.getCanvas()
+  const objects = sel.getObjects()
+  if (objects.length === 0)
+    return
 
+  const lastObject = objects[0]
+  const { width, height, scaleX, scaleY } = lastObject
+  console.log('last object', lastObject)
+
+  objects.forEach((obj) => {
+    if (obj?.fieldType === 'checkboxIdNoIcon') {
+      const myImg = objects?.filter(f => obj?.checkboxHash === f?.checkboxIdentifierHash)[0]
+      obj.set({ left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13, top: myImg?.top + (myImg.height * myImg?.scaleY) - 13 })
+      return
+    }
+    // obj.set({
+    //   scaleX,
+    //   scaleY,
+    //   width,
+    //   height,
+
+    // })
+    // obj.scaleToWidth(width * scaleX)
+    obj.scaleToHeight(height * scaleY)
+    obj.setCoords() // Update object's coordinates
+  })
+
+  canvas.requestRenderAll()
+}
 function selectAllInGroup() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -287,7 +317,11 @@ function selectAllInGroup() {
       hash: activeObject?.hash,
       lockScalingFlip: true,
     })
-    sel.setControlsVisibility({ mtr: false })
+    // myImg.setControlsVisibility({ mtr: false })
+    sel.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
+    sel.on('scaling', () => {
+      applyLastObjectPropertiesToAll(sel)
+    })
     canvas.setActiveObject(sel)
     canvas.requestRenderAll()
   }

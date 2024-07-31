@@ -906,7 +906,8 @@ export default function addEventsToCanvas() {
               displayGuide: false,
               lockScalingFlip: true,
             })
-            myImg.setControlsVisibility({ mtr: false })
+            // myImg.setControlsVisibility({ mtr: false })
+            myImg.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 

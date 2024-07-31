@@ -795,7 +795,28 @@ function selectField(field, option) {
     templateEditorStore.showOptionsBar = true
   }
 }
+function applyLastObjectPropertiesToAll(sel) {
+  const canvas = canvasService.getCanvas()
+  const objects = sel.getObjects()
+  if (objects.length === 0)
+    return
 
+  const lastObject = objects[objects.length - 1]
+  const { width, height, scaleX, scaleY } = lastObject
+
+  objects.forEach((obj) => {
+    obj.set({
+      width,
+      height,
+      scaleX,
+      scaleY,
+    })
+    // obj.setCoords() // Update object's coordinates
+  })
+
+  canvas.requestRenderAll()
+  canvas.renderAll()
+}
 function selectAddedField(field) {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -826,7 +847,11 @@ function selectAddedField(field) {
             hash: obj?.hash,
             lockScalingFlip: true,
           })
-          sel.setControlsVisibility({ mtr: false })
+          // sel.setControlsVisibility({ mtr: false })
+          sel.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
+          sel.on('scaling', () => {
+            applyLastObjectPropertiesToAll(sel)
+          })
           canvas.setActiveObject(sel)
           canvas.requestRenderAll()
           canvas.renderAll()
@@ -841,7 +866,11 @@ function selectAddedField(field) {
           transparentCorners: false,
           hash: obj?.hash,
         })
-        sel.setControlsVisibility({ mtr: false })
+        // sel.setControlsVisibility({ mtr: false })
+        sel.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
+        sel.on('scaling', () => {
+          applyLastObjectPropertiesToAll(sel)
+        })
         canvas.setActiveObject(sel)
         canvas.requestRenderAll()
         canvas.renderAll()
