@@ -934,7 +934,6 @@ export default function addEventsToCanvas() {
               selectable: false,
               evented: false,
               fontSize: 18,
-              padding: 28,
               visible: false,
               opacity: 0,
             })

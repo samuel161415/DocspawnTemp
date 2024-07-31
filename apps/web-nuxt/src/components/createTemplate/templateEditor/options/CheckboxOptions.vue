@@ -215,8 +215,7 @@ function addCheckboxToGroup() {
           checkboxHash: myImg?.checkboxIdentifierHash,
           selectable: false,
           evented: false,
-          fontSize: 22,
-          padding: 40,
+          fontSize: 18,
           visible: false,
           opacity: 0,
         })
