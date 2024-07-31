@@ -281,7 +281,6 @@ function applyLastObjectPropertiesToAll(sel) {
 
   const lastObject = objects[0]
   const { width, height, scaleX, scaleY } = lastObject
-  console.log('last object', lastObject)
 
   objects.forEach((obj) => {
     if (obj?.fieldType === 'checkboxIdNoIcon') {

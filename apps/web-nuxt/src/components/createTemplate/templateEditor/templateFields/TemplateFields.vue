@@ -801,21 +801,28 @@ function applyLastObjectPropertiesToAll(sel) {
   if (objects.length === 0)
     return
 
-  const lastObject = objects[objects.length - 1]
+  const lastObject = objects[0]
   const { width, height, scaleX, scaleY } = lastObject
 
   objects.forEach((obj) => {
-    obj.set({
-      width,
-      height,
-      scaleX,
-      scaleY,
-    })
-    // obj.setCoords() // Update object's coordinates
+    if (obj?.fieldType === 'checkboxIdNoIcon') {
+      const myImg = objects?.filter(f => obj?.checkboxHash === f?.checkboxIdentifierHash)[0]
+      obj.set({ left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13, top: myImg?.top + (myImg.height * myImg?.scaleY) - 13 })
+      return
+    }
+    // obj.set({
+    //   scaleX,
+    //   scaleY,
+    //   width,
+    //   height,
+
+    // })
+    // obj.scaleToWidth(width * scaleX)
+    obj.scaleToHeight(height * scaleY)
+    obj.setCoords() // Update object's coordinates
   })
 
   canvas.requestRenderAll()
-  canvas.renderAll()
 }
 function selectAddedField(field) {
   const canvas = canvasService.getCanvas()
