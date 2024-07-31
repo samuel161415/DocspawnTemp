@@ -109,7 +109,7 @@ function changeTextOfCheckboxOption(e, item) {
             const objs = canvas.getObjects()
             objs.forEach((obj) => {
               if (obj?.fieldType === 'checkbox-tooltip' && obj?.checkboxHash === c?.checkboxIdentifierHash) {
-                obj.set({ text: e.target.value })
+                obj.set({ text: ` ${e.target.value} ` })
                 canvas.renderAll()
               }
             })
@@ -206,26 +206,24 @@ function addCheckboxToGroup() {
         templateEditorStore.addedFields = allFields
         canvas.renderAll()
         templateEditorStore.fieldToAdd = {}
-        const tooltip = new fabric.Text('Enter label', {
+        const tooltip = new fabric.Text(' Enter label ', {
           left: myImg.left + (myImg.width * myImg.scaleX),
           top: myImg.top - 10,
-          fill: 'white',
+          fill: '#fff',
           backgroundColor: '#009ee2',
           fieldType: 'checkbox-tooltip',
           checkboxHash: myImg?.checkboxIdentifierHash,
           selectable: false,
           evented: false,
-          fontSize: 18,
-          padding: 28,
+          fontSize: 22,
+          padding: 40,
           visible: false,
           opacity: 0,
         })
-        console.log('creating tooltip text', tooltip)
 
         myImg.tooltip = tooltip
         canvas.add(tooltip)
         myImg.on('mouseover', (e) => {
-          console.log('on mouse overing')
           myImg.tooltip.set({ visible: true, opacity: 1 })
           canvas.renderAll()
           // const tooltip = new fabric.Text('Tooltip Text', {

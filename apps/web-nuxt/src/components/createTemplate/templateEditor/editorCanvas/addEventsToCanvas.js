@@ -924,7 +924,7 @@ export default function addEventsToCanvas() {
             canvas.renderAll()
             templateEditorStore.fieldToAdd = {}
 
-            const tooltip = new fabric.Text('Enter label', {
+            const tooltip = new fabric.Text(' Enter label ', {
               left: myImg.left + (myImg.width * myImg.scaleX),
               top: myImg.top - 10,
               fill: 'white',
