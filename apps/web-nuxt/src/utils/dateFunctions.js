@@ -493,3 +493,32 @@ export function formatTimeForInput(timeValue, format) {
     return ''
   return formatTimeInternal(timeValue, format?.name ? format?.name : format)
 }
+
+export function parseDateString(dateString) {
+  // Common date formats you expect
+  const datePatterns = [
+    { regex: /^(\d{2})\/(\d{2})\/(\d{4})$/, format: '$3-$2-$1' }, // dd/MM/yyyy
+    { regex: /^(\d{2})-(\d{2})-(\d{4})$/, format: '$3-$1-$2' }, // dd-MM-yyyy
+    { regex: /^(\d{4})-(\d{2})-(\d{2})$/, format: '$1-$2-$3' }, // yyyy-MM-dd
+    { regex: /^(\d{2})\/(\d{2})\/(\d{2})$/, format: '20$3-$1-$2' }, // MM/dd/yy
+    { regex: /^(\d{2})\/(\d{2})\/(\d{2})$/, format: '20$3-$2-$1' }, // dd/MM/yy
+    { regex: /^(\d{2})\/(\d{2})\/(\d{4})$/, format: '$3-$1-$2' }, // MM/dd/yyyy
+    { regex: /^(\d{2})-(\d{2})-(\d{2})$/, format: '20$3-$1-$2' }, // dd-MM-yy
+    { regex: /^(\d{2})-(\d{2})-(\d{2})$/, format: '20$3-$2-$1' }, // MM-dd-yy
+    { regex: /^(\d{2})-(\d{2})-(\d{4})$/, format: '$3-$2-$1' }, // MM-dd-yyyy
+    // Add more patterns as needed
+  ]
+
+  for (const pattern of datePatterns) {
+    if (pattern.regex.test(dateString)) {
+      const formattedDate = dateString.replace(pattern.regex, pattern.format)
+      const dateObject = new Date(formattedDate)
+
+      if (!isNaN(dateObject))
+        return dateObject
+    }
+  }
+
+  // If no pattern matched, return an Invalid Date
+  return new Date(Number.NaN)
+}

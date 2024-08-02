@@ -58,6 +58,7 @@ import canvasService from '@/composables/useTemplateCanvas'
 
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
   template: {
@@ -102,6 +103,7 @@ function changePreviewNo(dir) {
 watch(currentPreviewNo, () => {
   renderOriginalData()
 })
+
 function renderOriginalData() {
   const canvas = canvasService.getCanvas()
   if (selectedData.value?.length > 0) {
@@ -114,8 +116,13 @@ function renderOriginalData() {
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-
+          if (obj?.fieldType === 'Dataset date') {
+            const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
+          }
+          else {
+            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          }
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }

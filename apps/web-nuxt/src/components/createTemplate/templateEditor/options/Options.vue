@@ -39,7 +39,7 @@
           </p>
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset date' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full">
           <p class="mb-1 font-poppins text-surface-500">
             {{ $t('Cp_templateEditor_options.select_field') }}
           </p>
@@ -51,7 +51,7 @@
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType === 'Data field' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter :placeholder="$t('Cp_templateEditor_options.select_data_field')" class="w-full md:w-full">
+            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType !== 'Dataset image' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter :placeholder="$t('Cp_templateEditor_options.select_data_field')" class="w-full md:w-full">
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -77,6 +77,16 @@
           <FormOptions />
         </div>
 
+        <div
+          v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset date'
+          // || templateEditorStore.selectedAddedField?.fieldType === 'Form image'
+          " class="my-6"
+        >
+          <p class="font-poppins text-md text-surafce-600 mb-2">
+            {{ $t('Cp_templateEditor_options.select_format') }}
+          </p>
+          <Dropdown v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_options.select_format')" class="w-full md:w-full" />
+        </div>
         <div
           v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'
           // || templateEditorStore.selectedAddedField?.fieldType === 'Form image'
@@ -288,14 +298,20 @@ watch(selectedDateFormat, () => {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObj = canvas.getActiveObject()
-    if (activeObj)
-      activeObj.set({ text: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' })
+    if (activeObj) {
+      if (activeObj.fieldType !== 'Dataset date')
+        activeObj.set({ text: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' })
+    }
     canvas.renderAll()
     const allFs = templateEditorStore.addedFields
     templateEditorStore.addedFields = allFs.map((f) => {
-      if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-        return { ...f, name: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
-      else return f
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash) {
+        if (f?.fieldType === 'Dataset date')
+          return { ...f, dateFormat: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
+        else
+          return { ...f, name: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY', id: selectedDateFormat.value?.name ? selectedDateFormat.value?.name : 'MM/DD/YYYY' }
+      }
+      else { return f }
     })
   }
 })
@@ -345,8 +361,10 @@ watch(
     if (newVal) {
       fieldName.value = newVal.name
 
-      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image')
+      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image' || newVal?.fieldType === 'Dataset date')
         activeDataField.value = newVal.name
+      if (newVal?.fieldType === 'Dataset date')
+        selectedDateFormat.value = { name: newVal.dateFormat }
       if (newVal?.fieldType === 'Static text') {
         if (newVal.name === 'Lorem ipsum' || newVal.name === 'Add text')
           constantTextValue.value = ''

@@ -57,6 +57,7 @@
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
+import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const emit = defineEmits(['updateScale'])
 const scale = ref(1)
@@ -239,7 +240,13 @@ watch(currentPreviewNo, (newVal) => {
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
           let correspondingData = data[newVal - 1][obj?.id]
-          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          if (obj?.fieldType === 'Dataset date') {
+            const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+            correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
+          }
+          else {
+            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          }
 
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
@@ -285,7 +292,14 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
 
         if (!obj._element && obj?.id !== 'Lorem ipsum') {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          // correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          if (obj?.fieldType === 'Dataset date') {
+            const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+            correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
+          }
+          else {
+            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+          }
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }

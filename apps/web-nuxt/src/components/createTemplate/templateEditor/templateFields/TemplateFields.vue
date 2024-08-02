@@ -106,7 +106,7 @@
           <div
             class="px-5 h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions, 'border-surface-100 bg-surface-50': !showDatasetOptions }"
-            @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true;showDatasetOptions2 = false;"
+            @click="showDatasetOptions ? showDatasetOptions = false : showDatasetOptions = true;showDatasetOptions2 = false;showDatasetOptions3 = false;"
           >
             <div class="flex gap-2 items-center">
               <font-awesome-icon icon="fa-light fa-text" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
@@ -138,9 +138,44 @@
             </Dropdown>
           </div>
           <div
+            class="px-5 h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
+            :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions3, 'border-surface-100 bg-surface-50': !showDatasetOptions3 }"
+            @click="showDatasetOptions3 ? showDatasetOptions3 = false : showDatasetOptions3 = true;showDatasetOptions2 = false;showDatasetOptions = false;"
+          >
+            <div class="flex gap-2 items-center">
+              <font-awesome-icon icon="fa-light fa-calendar" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <p class="font-poppins text-surface-600 text-lg">
+                <!-- {{ $t('Cp_createTemplate_editorTemplateFields.text') }} -->
+                Date
+              </p>
+              <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showDatasetOptions3 }" />
+            </div>
+          </div>
+          <div v-if="showDatasetOptions3" class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
+            <Dropdown v-model="selectedDatasetOption3" :options="templateEditorStore.datasetData.selectedKeys" filter placeholder="Select data field" class="w-full md:w-full">
+              <template #value="slotProps">
+                <div v-if="slotProps.value" class="flex align-items-center">
+                  <p class="font-poppins">
+                    {{ slotProps.value }}
+                  </p>
+                </div>
+                <span v-else>
+                  <p class="font-poppins">{{ slotProps.placeholder }}</p>
+                </span>
+              </template>
+              <template #option="slotProps">
+                <div class="flex align-items-center">
+                  <p class="font-poppins">
+                    {{ slotProps.option }}
+                  </p>
+                </div>
+              </template>
+            </Dropdown>
+          </div>
+          <div
             class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions2, 'border-surface-100 bg-surface-50': !showDatasetOptions2 }"
-            @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true;showDatasetOptions = false;"
+            @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true;showDatasetOptions = false;showDatasetOptions3 = false;"
           >
             <font-awesome-icon icon="fa-light fa-image" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
@@ -388,9 +423,11 @@ const showFormFields = ref(false)
 const showDataFields = ref(false)
 const showDatasetOptions = ref(false)
 const showDatasetOptions2 = ref(false)
+const showDatasetOptions3 = ref(false)
 const showStaticOption1 = ref(false)
 const selectedDatasetOption = ref('')
 const selectedDatasetOption2 = ref('')
+const selectedDatasetOption3 = ref('')
 const staticOption1Val = ref()
 onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id)
@@ -403,6 +440,10 @@ watch(selectedDatasetOption, (val) => {
 watch(selectedDatasetOption2, (val) => {
   if (val)
     selectField('Dataset image', val)
+})
+watch(selectedDatasetOption3, (val) => {
+  if (val)
+    selectField('Dataset date', val)
 })
 watch(staticOption1Val, (val) => {
   if (val)
@@ -739,6 +780,8 @@ watch(() => templateEditorStore.fieldToAdd, (val) => {
     selectedDatasetOption.value = ''
     showDatasetOptions2.value = false
     selectedDatasetOption2.value = ''
+    showDatasetOptions3.value = false
+    selectedDatasetOption3.value = ''
     showStaticOption1.value = false
     staticOption1Val.value = ''
     formFieldForNameInput.value = ''
@@ -758,6 +801,10 @@ function selectField(field, option) {
     templateEditorStore.activeTemplateField = field
     if (field === 'Data field' || field === 'Dataset image') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
+    }
+
+    else if (field === 'Dataset date') {
+      templateEditorStore.fieldToAdd = { name: option || 'Select a date field', type: field, id: option || 'Lorem ipsum', dateFormat: 'MM/DD/YYYY' }
     }
     else if (field === 'Static text') {
       templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' }
