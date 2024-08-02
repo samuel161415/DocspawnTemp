@@ -1,5 +1,5 @@
 <template>
-  <canvas :id="`template-preview-canvas-${props?.previewHash}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0 shadow  cursor-pointer  ">
+  <canvas :id="`template-preview-canvas-${props?.previewHash}`" class=" flex-1 w-full min-h-full h-max   rounded-md  my-0   cursor-pointer  ">
   </canvas>
 </template>
 

@@ -260,7 +260,8 @@
           >
             <font-awesome-icon icon="fa-light fa-calendar-clock" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
             <p class="font-poppins text-surface-600 text-lg">
-              {{ $t('Cp_createTemplate_editorTemplateFields.timestamp') }}
+              <!-- {{ $t('Cp_createTemplate_editorTemplateFields.timestamp') }} -->
+              Date & time
             </p>
             <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showFormTimestamp }" />
           </div>
