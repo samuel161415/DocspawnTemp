@@ -7,7 +7,7 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 
-const props = defineProps(['backgroundFileUrl', 'previewHash', 'filteredTemplates'])
+const props = defineProps(['backgroundFileUrl', 'previewHash', 'filteredTemplates', 'isModal'])
 
 async function loadImagePreview() {
   const { fabric } = await import('fabric')
@@ -15,7 +15,7 @@ async function loadImagePreview() {
   if (!url)
     return
 
-  const canvasWrapperWidth = 60
+  const canvasWrapperWidth = props?.isModal ? 320 : 80
   const canvas = new fabric.Canvas(`template-preview-canvas-${props?.previewHash}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
   const response = await fetch(url)
   const pdfData = await response.arrayBuffer()
@@ -28,7 +28,7 @@ async function loadImagePreview() {
   const viewport = page.getViewport({ scale: 2 })
 
   // Get the parent container's width
-  const parentWidth = 60
+  const parentWidth = props?.isModal ? 320 : 80
 
   // Calculate the scale to fit the canvas within the parent width
   const scale = parentWidth / viewport.width

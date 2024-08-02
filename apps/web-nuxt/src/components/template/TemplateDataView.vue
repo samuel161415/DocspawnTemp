@@ -2,7 +2,7 @@
   <div class="mt-14 rounded-lg pb-2">
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
-        <div class="flex justify-between space-x-2">
+        <div class="flex flex-col gap-4 md:flex-row justify-between space-x-2">
           <!-- <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
             <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
               {{ $t('Cp_templateDataview.all') }}
@@ -169,24 +169,24 @@
         <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
             v-for="(item, index) in slotProps.items" :key="index"
-            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent  max-w-[180px]"
+            class="w-full w-[420px] px-2 py-4 pointer-parent  max-w-[420px]"
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
             @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
-              <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
-              <p class="text-primaryBlue font-bold font-poppins text-sm text-center mt-5">
+              <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #43AF79; --fa-secondary-color: #43AF79; width: 50px; height: 40px;" />
+              <p class="text-success font-bold font-poppins text-[16px] text-center mt-5">
                 {{ $t('Cp_templateDataview.drop_data') }}
                 <!-- {{ console.log('item', item) }} -->
               </p>
-              <p class="text-black font-poppins text-xs text-center mt-2">
+              <p class="text-black font-poppins text-[16px] text-center mt-2">
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
 
-            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+            <!-- <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex pt-2" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-end'">
                 <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
                 <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
@@ -207,6 +207,45 @@
                   <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins text-xs" @click="handleFillForm(item)" />
                   <Button
                     v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer text-xs" @click="(e) => {
+                      templateSelectedForUploadingFile = item;
+                      uploadFile(e);
+                    }"
+                  />
+                </div>
+              </div>
+            </div> -->
+            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+              <div class="flex pt-2  p-2" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-between'">
+                <div>
+                  <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
+                </div>
+                <p class="text-lg sm:text-sm md:text-base lg:text-[18px] font-poppins font-medium text-surface-600 truncate">
+                  {{ item.name }}
+                </p>
+                <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
+              </div>
+              <div class="surface-50 flex  rounded-md  my-4 gap-6">
+                <div class="relative cursor-pointer pointer-auto   " @click="() => handleTemplatePreview(item)">
+                  <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
+                </div>
+                <div class="flex flex-col gap-2 text-[16px]">
+                  <p>Documents created: {{ item?.total_generated_docs }}</p>
+                  <p class="text-[16px]">
+                    Created on: {{ formatDateForInput(item?.created_at, "DD/MM/YYYY") }}
+                  </p>
+                  <p class="text-[16px]">
+                    Modified on:{{ formatDateForInput(item?.updated_at, "DD/MM/YYYY") }} {{ formatTimeForInput(item?.updated_at, 'HH:MM') }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-auto mb-3">
+                <div class="flex flex-col">
+                  <Button v-if="item.use_case === 'Form to doc'" outlined :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleFillForm(item)" />
+                  <Button
+                    v-else
+                    outlined
+                    severity="success" :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer  text-[16px]" @click="(e) => {
                       templateSelectedForUploadingFile = item;
                       uploadFile(e);
                     }"
@@ -331,6 +370,7 @@ import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
 import FormEditorPreview from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
+import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
 
 const props = defineProps({
   templates: {
@@ -342,8 +382,9 @@ const props = defineProps({
     type: Boolean,
   },
 })
-
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+
+console.log('props templates', props?.templates)
 
 const { t } = useI18n()
 
@@ -467,6 +508,7 @@ watch(() => props.templates, (newVal) => {
 const runtimeConfig = useRuntimeConfig()
 
 function handleTemplatePreview(template) {
+  console.log('handle template preview', template)
   visible.value = true
   currentTemplate.value = template
 }
