@@ -22,7 +22,7 @@
     "operation_complete": "Opération terminée",
     "document_generated_successfully": "Document généré avec succès",
     "download": "Télécharger",
-    "open_document_library": "Ouvrir la bibliothèque de documents"
+    "open_document_library": "Ouvrir mes documents"
   },
   "Pg_template_index": {
     "templates": "Modèles",
@@ -159,10 +159,10 @@
   "Cp_templateEditor_templateOptions": {
     "template_name": "Nom du modèle",
     "watermark": "Filigrane",
-    "watermark_description": "Il apparaîtra sur chaque document généré, jusqu'à ce que vous le désactiviez.",
+    "watermark_description": "Le filigrane apparaîtra sur chaque document généré.",
     "disable_watermark": "Désactiver le filigrane",
-    "tooltip_paid_users": "Disponible uniquement pour les utilisateurs payants",
-    "tip": "Astuce : Gardez le filigrane sur les plans payants pour obtenir 20 % de crédits supplémentaires par mois",
+    "tooltip_paid_users": "Disponible uniquement sur les formules payants",
+    "tip": "Astuce : Gardez le filigrane sur les formules payantes pour obtenir des crédits supplémentaires chaque mois",
     "select_watermark_design": "Sélectionnez le design du filigrane"
   },
   "Cp_templateEditor_checkboxOptions": {
@@ -241,7 +241,7 @@
   "Cp_dataLibraryList": {
     "select_template": "Sélectionnez un modèle pour afficher les données.",
     "loading_data": "Chargement des données. Veuillez patienter.",
-    "select_columns": "Sélectionnez les colonnes",
+    "select_columns": "Sélectionner les colonnes",
     "select_data_to_display": "Sélectionnez les données à afficher",
     "save_changes": "Enregistrer les modifications",
     "save_view": "Enregistrer la vue",
@@ -284,12 +284,11 @@
     "operation_complete": "Opération terminée",
     "documents_generated": "générés avec succès",
     "download_all": "Tout télécharger",
-    "open_document_library": "Ouvrir la bibliothèque de documents"
+    "open_document_library": "Ouvrir mes documents"
   },
   "Cp_canvasPreview": {
     "live_preview": "Aperçu en direct"
   },
-
   "Cp_templateDataview": {
     "all": "Tous",
     "favorites": "Favoris",
@@ -310,9 +309,12 @@
     "operation_complete": "Opération terminée",
     "document_generated_successfully": "Document généré avec succès",
     "download": "Télécharger",
-    "open_document_library": "Ouvrir la bibliothèque de documents"
+    "open_document_library": "Ouvrir mes documents",
+    "docs_created": "Documents créés",
+    "created_on": "Créé le",
+    "modified_on": "Modifié le",
+    "remove_from_favourites": "Retirer des favoris"
   },
-
   "Cp_settings": {
     "settings": "Paramètres",
     "general_settings": "Paramètres généraux",
@@ -334,5 +336,4 @@
     "databases": "Bases de données",
     "integrations": "Intégrations"
   }
-
 }

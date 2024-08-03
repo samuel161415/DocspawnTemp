@@ -310,7 +310,11 @@
     "operation_complete": "Operation complete",
     "document_generated_successfully": "Document generated successfully",
     "download": "Download",
-    "open_document_library": "Open Document Library"
+    "open_document_library": "Open Document Library",
+    "docs_created": "Documents created",
+    "created_on": "Created on",
+    "modified_on": "Modified on",
+    "remove_from_favourites": "Remove from favourites"
   },
 
   "Cp_settings": {

@@ -232,13 +232,13 @@
                 </div>
                 <div class="flex flex-col gap-1 ">
                   <p class="text-gray-500 text-[14px]">
-                    Documents created: {{ item?.total_generated_docs }}
+                    {{ $t('Cp_templateDataview.docs_created') }}: {{ item?.total_generated_docs }}
                   </p>
                   <p class="text-gray-500 text-[14px]">
-                    Created on: {{ formatDateForInput(item?.created_at, "DD/MM/YYYY") }}
+                    {{ $t('Cp_templateDataview.created_on') }}: {{ formatDateForInput(item?.created_at, "DD/MM/YYYY") }}
                   </p>
                   <p class="text-gray-500 text-[14px]">
-                    Modified on: {{ formatDateForInput(item?.updated_at, "DD/MM/YYYY") }} {{ formatTimeForInput(item?.updated_at, 'HH:MM') }}
+                    {{ $t('Cp_templateDataview.modified_on') }}: {{ formatDateForInput(item?.updated_at, "DD/MM/YYYY") }} {{ formatTimeForInput(item?.updated_at, 'HH:MM') }}
                   </p>
                 </div>
               </div>
@@ -298,7 +298,7 @@
           {{ $t('Cp_templateDataview.access_document') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="toggleFavourite(opItem)">
-          {{ favouriteStates[opItem?.id] ? 'Remove from favourites' : $t('Cp_templateDataview.set_as_favorites') }}
+          {{ favouriteStates[opItem?.id] ? $t('Cp_templateDataview.remove_from_favourites') : $t('Cp_templateDataview.set_as_favorites') }}
         </p>
       </div>
     </OverlayPanel>
