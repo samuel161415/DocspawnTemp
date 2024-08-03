@@ -61,13 +61,13 @@
               <div v-if="formField.fieldType === 'Form text'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
                 <InputText
                   :id="`${formField.name}-${index}`"
-                  v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`"
+                  v-model="formField.state"
                 />
                 <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
@@ -75,13 +75,14 @@
               <div v-else-if="formField.fieldType === 'Form long text'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
                 <Textarea
                   :id="`${formField.name}-${index}`"
-                  v-model="formField.state" :class="`${formField.mandatory && formField.state.trim().length === 0 ? 'border-red-700' : ''}`" rows="4" cols="30"
+                  v-model="formField.state"
+                  rows="4" cols="30"
                 />
                 <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
@@ -89,7 +90,7 @@
               <div v-else-if="formField.fieldType === 'Form date'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -102,7 +103,7 @@
               <div v-else-if="formField.fieldType === 'Form time'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -115,7 +116,7 @@
               <div v-else-if="formField.fieldType === 'Form image'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -130,7 +131,7 @@
               <div v-else-if="formField.fieldType === 'Form list'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -143,7 +144,6 @@
                   v-model="formField.state"
                   :options="formField?.selectedList?.sublists?.map(f => f?.title)"
 
-                  :class="`${formField.mandatory && formField.state === null ? 'border-red-700' : ''}`"
                   class="border-red-500 w-full md:w-full py-1"
                   placeholder="Select "
                 />
@@ -154,7 +154,7 @@
               <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -176,7 +176,7 @@
               <div v-else-if="formField.fieldType === 'signature'" class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField.name }}</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
@@ -187,7 +187,7 @@
               <Button
                 class="font-poppins font-normal text-[16px] leading-[25px]"
                 severity="success"
-                :disabled="!props?.isGeneratable || isGeneratingDoc"
+                :disabled="!props?.isGeneratable || isGeneratingDoc || !allFieldsFilledUp"
                 :label="$t('Cp_formEditor_finalPreview.spawn_document')"
                 autofocus
                 @click="generateDocument"
@@ -211,7 +211,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import ImageInput from '../formEditor/cropper/ImageInput'
@@ -225,6 +225,9 @@ const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
 const toast = useToast()
 const router = useRouter()
 const fields = ref([])
+watch(fields, (val) => {
+  console.log('fields>>>', val)
+})
 const showPreview = ref(false)
 const mobile = ref(false)
 const isGeneratingDoc = ref(false)
@@ -240,6 +243,16 @@ onMounted(() => {
   fields.value = props?.allFormFields?.map((m) => {
     return { ...m, state: '' }
   })
+})
+
+const allFieldsFilledUp = computed(() => {
+  const requiredFields = fields?.value?.filter(f => f?.isRequired)
+  let areAllFilled = true
+  requiredFields?.forEach((f) => {
+    if (!f?.state)
+      areAllFilled = false
+  })
+  return !!areAllFilled
 })
 
 function getCanvasElementProportions(formField) {
@@ -284,7 +297,23 @@ async function onImageUpload(e, formField) {
   // fileUrl.value = url
 }
 // Function to collect all form data
+function validateFormEntries() {
+  let anyError = false
+  const allFields = fields.value
+  fields.value = allFields?.map((f) => {
+    if (!f?.isRequired)
+      return { ...f, error: false }
+    if (!f?.state) {
+      anyError = true
+      return { ...f, error: true }
+    }
+    else { return { ...f, error: false } }
+  })
+  return !anyError
+}
 async function generateDocument() {
+  if (!validateFormEntries())
+    return
   isGeneratingDoc.value = true
 
   // showGeneratedDocsModal.value = true
@@ -348,3 +377,15 @@ watch(allGeneratedDocs, (val) => {
   emit('updateGeneratedDocs', val)
 })
 </script>
+
+<style scoped>
+::v-deep .field-error {
+
+  box-shadow: none!important;
+}
+
+::v-deep .field-error:focus {
+
+  box-shadow: none !important;
+}
+</style>
