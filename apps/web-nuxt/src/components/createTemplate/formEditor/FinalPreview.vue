@@ -182,8 +182,7 @@
               <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
                 <label :for="`${formField.name}-${index}`">
                   <div class="flex flex-row gap-2">
-                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} <span class="text-2xl" :class="{ 'text-red-500': formField?.error }">{{ formField?.isRequired ? '*' : "" }}</span></div>
-                    <div v-if="formField.mandatory" class="text-red-500">*</div>
+                    <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} </div>
                   </div>
                 </label>
                 <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-2">
@@ -274,12 +273,15 @@ onMounted(() => {
 })
 
 const allFieldsFilledUp = computed(() => {
-  const requiredFields = fields?.value?.filter(f => f?.isRequired)
+  const requiredFields = fields?.value?.filter(f => f?.isRequired && f?.fieldType !== 'Form checkbox group')
   let areAllFilled = true
   requiredFields?.forEach((f) => {
-    if (!f?.state)
+    if (!f?.state || f?.errorText) {
+      console.log('f', f)
       areAllFilled = false
+    }
   })
+  console.log('are all filled', areAllFilled)
   return !!areAllFilled
 })
 
@@ -329,7 +331,7 @@ function validateFormEntries() {
   let anyError = false
   const allFields = fields.value
   fields.value = allFields?.map((f) => {
-    if (!f?.isRequired)
+    if (!f?.isRequired || f?.fieldType === 'Form checkbox group')
       return { ...f, error: false }
     if (!f?.state) {
       anyError = true
