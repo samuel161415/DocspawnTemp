@@ -65,10 +65,38 @@
                     <div v-if="formField.mandatory" class="text-red-500">*</div>
                   </div>
                 </label>
+
                 <InputText
+                  v-if="formField?.characterAcception === 'Numbers'"
                   :id="`${formField.name}-${index}`"
                   v-model="formField.state"
+
+                  :maxlength="formField.maxCharAllowed"
+                  @keypress="(e) => handleKeyPressForNumbers(e, formField)"
+                  @input="() => validateMinChars(formField, formField?.minCharAllowed)"
                 />
+                <!-- :maxlength="formField.maxCharAllowed"
+                @input="() => validateMinChars(formField, formField?.minCharAllowed)" -->
+                <InputText
+                  v-else-if="formField?.characterAcception === 'Text'"
+                  :id="`${formField.name}-${index}`"
+                  v-model="formField.state"
+
+                  :maxlength="formField.maxCharAllowed"
+                  @keypress="handleKeyPressForText"
+                  @input="() => validateMinChars(formField, formField?.minCharAllowed)"
+                />
+                <InputText
+                  v-else
+                  :id="`${formField.name}-${index}`"
+                  v-model="formField.state"
+                  :maxlength="formField.maxCharAllowed"
+                  @keypress="handleKeyPressForAlphanumeric"
+                  @input="() => validateMinChars(formField, formField?.minCharAllowed)"
+                />
+                <p v-if="formField?.errorText" class="text-md text-red-500 my-1 ">
+                  {{ formField?.errorText }}
+                </p>
                 <small v-if="formField.mandatory && formField.state.trim().length === 0" class="text-red-600">{{ $t('Cp_formEditor_finalPreview.this_field_is_required') }}</small>
               </div>
 
@@ -376,6 +404,56 @@ function showGeneratedDocToast() {
 watch(allGeneratedDocs, (val) => {
   emit('updateGeneratedDocs', val)
 })
+
+function handleKeyPressForText(event) {
+  const charCode = event.charCode
+  // Allow only letters (a-z, A-Z)
+  if (
+    !(charCode >= 65 && charCode <= 90) // A-Z
+    && !(charCode >= 97 && charCode <= 122) // a-z
+    && charCode !== 32 // space
+  )
+    event.preventDefault()
+
+  // No need to handle 'Text + Numbers' because any character is allowed
+}
+function handleKeyPressForNumbers(event, formField) {
+  const allowDecimals = !!formField?.allowDecimals
+  const charCode = event.charCode
+  const currentValue = formField.state.toString()
+
+  // Allow only numbers (0-9) and one decimal point (.)
+  if ((charCode < 48 || charCode > 57) && (!allowDecimals || charCode !== 46 || currentValue.includes('.')))
+    event.preventDefault()
+}
+function handleKeyPressForAlphanumeric(event) {
+  const charCode = event.charCode
+
+  // Allow only letters (a-z, A-Z), numbers (0-9), and spaces
+  if (
+    !(charCode >= 65 && charCode <= 90) // A-Z
+    && !(charCode >= 97 && charCode <= 122) // a-z
+    && !(charCode >= 48 && charCode <= 57) // 0-9
+    && charCode !== 32 // space
+  )
+    event.preventDefault()
+}
+
+function isNumber(value) {
+  return !Number.isNaN(Number.parseFloat(value)) && Number.isFinite(value)
+}
+function validateMinChars(formField, leng) {
+  let condition = false
+  if (isNumber(formField?.state))
+    condition = formField?.state?.toString().length < leng
+  else
+    condition = formField?.state?.length < leng
+
+  if (condition)
+    formField.errorText = `Minimum ${leng} characters required.`
+  else
+    formField.errorText = ''
+}
 </script>
 
 <style scoped>

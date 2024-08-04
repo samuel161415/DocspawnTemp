@@ -595,6 +595,10 @@ export default function addEventsToCanvas() {
 
         let fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
+
+        if (templateEditorStore?.fieldToAdd?.type === 'Form text')
+          fieldToAdd = { ...fieldToAdd, allowDecimals: false, minCharAllowed: 2, maxCharAllowed: 50, characterAcception: 'Text' }
+
         if (templateEditorStore.fieldToAdd?.dateFormat)
           fieldToAdd = { ...fieldToAdd, dateFormat: templateEditorStore.fieldToAdd?.dateFormat }
         if (templateEditorStore.fieldToAdd?.timeFormat)

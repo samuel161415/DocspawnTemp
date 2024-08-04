@@ -253,7 +253,7 @@ function changeMinLength() {
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, minCharAllowed: length }
+      return { ...f, minCharAllowed: Number.parseInt(length) }
     else return f
   })
 }
@@ -263,7 +263,7 @@ function changeMaxLength() {
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, maxCharAllowed: length }
+      return { ...f, maxCharAllowed: Number.parseInt(length) }
     else return f
   })
 }
