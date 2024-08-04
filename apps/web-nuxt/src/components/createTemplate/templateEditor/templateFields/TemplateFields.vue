@@ -955,6 +955,7 @@ function selectAddedField(field) {
 
           templateEditorStore.selectedAddedField = { ...field }
           templateEditorStore.showOptionsBar = true
+          templateEditorStore.lastScaledTextOptions = { x: obj.scaleX, y: obj.scaleY }
 
           if (obj.text && obj.id !== 'Lorem ipsum') {
             activeTextStyles.fill = obj.fill ? obj.fill : '#000000'
