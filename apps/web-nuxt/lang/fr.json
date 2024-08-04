@@ -272,8 +272,8 @@
   "Cp_sidebar": {
     "home": "Accueil",
     "templates": "Modèles",
-    "documents_library": "Bibliothèque de documents",
-    "data_library": "Bibliothèque de données",
+    "documents_library": "Mes documents",
+    "data_library": "Mes données",
     "settings": "Paramètres",
     "language": "Langue"
   },
@@ -282,7 +282,7 @@
     "template_selected_data": "données sélectionnées",
     "spawn_documents": "Générer des documents",
     "operation_complete": "Opération terminée",
-    "documents_generated": "générés avec succès",
+    "documents_generated": "documents générés avec succès",
     "download_all": "Tout télécharger",
     "open_document_library": "Ouvrir mes documents"
   },
@@ -309,11 +309,7 @@
     "operation_complete": "Opération terminée",
     "document_generated_successfully": "Document généré avec succès",
     "download": "Télécharger",
-    "open_document_library": "Ouvrir mes documents",
-    "docs_created": "Documents créés",
-    "created_on": "Créé le",
-    "modified_on": "Modifié le",
-    "remove_from_favourites": "Retirer des favoris"
+    "open_document_library": "Ouvrir mes documents"
   },
   "Cp_settings": {
     "settings": "Paramètres",
@@ -335,5 +331,9 @@
     "lists": "Listes",
     "databases": "Bases de données",
     "integrations": "Intégrations"
-  }
+  },
+  "docs_created": "Documents créés",
+  "created_on": "Créé le",
+  "modified_on": "Modifié le",
+  "remove_from_favourites": "Retirer des favoris"
 }
