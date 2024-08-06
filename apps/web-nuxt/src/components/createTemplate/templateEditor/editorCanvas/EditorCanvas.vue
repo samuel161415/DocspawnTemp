@@ -103,6 +103,18 @@ onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id) {
     templateEditorStore.watermarkImage = templateEditorStore?.templateToEdit?.template_options?.watermarkImage
     templateEditorStore.watermarkDisabled = templateEditorStore?.templateToEdit?.template_options?.watermarkDisabled
+
+    if (templateEditorStore?.templateToEdit?.last_text_options) {
+      templateEditorStore.lastScaledTextOptions = templateEditorStore?.templateToEdit?.last_text_options?.lastScaledTextOptions
+      activeTextStyles.fill = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.fill || '#000000'
+      activeTextStyles.fontFamily = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.fontFamily || 'Arial'
+      activeTextStyles.fontSize = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.fontSize || 32
+      activeTextStyles.underline = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.underline || false
+      activeTextStyles.textAlign = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.textAlign || 'center'
+      activeTextStyles.fontStyle = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.fontStyle || 'normal'
+      activeTextStyles.fontWeight = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.fontWeight || 300
+      activeTextStyles.charSpacing = templateEditorStore?.templateToEdit?.last_text_options?.activeTextStyles?.charSpacing || 0
+    }
   }
   if (typeof window !== 'undefined')
     callCreateCanvas()

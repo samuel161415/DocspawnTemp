@@ -123,7 +123,7 @@ import DataSelection from '~/components/createTemplate/dataSelection/DataSelecti
 import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
-import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { activeTextStyles, resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 // import { accountData } from '@/composables/useAccountData'
 import { useAuth } from '@/composables/useAuth'
@@ -219,6 +219,7 @@ async function saveTemplate() {
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
     dataset_start_line: templateEditorStore.datasetStartAtLine,
     template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
+    last_text_options: JSON.stringify({ activeTextStyles, lastScaledTextOptions: templateEditorStore?.lastScaledTextOptions }),
     page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),
     dataset_data: JSON.stringify(templateEditorStore?.datasetData),
