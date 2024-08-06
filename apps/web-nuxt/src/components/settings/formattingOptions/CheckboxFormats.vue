@@ -42,17 +42,7 @@
             </div>
           </template>
         </Column>
-        <Column field="checked" header="Checked" :header-style="{ height: '4.5rem' }">
-          <template #body="{ data, field }">
-            <div class="flex items-center space-x-4">
-              <p class="font-poppins">
-                {{ data[field] }}
-              </p>
-            </div>
-          </template>
-        </Column>
-
-        <Column field="unchecked" header="Unchecked" :header-style="{ height: '4.5rem' }">
+        <Column field="type" header="Type" :header-style="{ height: '4.5rem' }">
           <template #body="{ data, field }">
             <div class="flex items-center space-x-4">
               <p class="font-poppins">
@@ -199,8 +189,7 @@ async function submitCheckbox() {
   console.log('selection', selection.value)
   const objToSend = {
     design: fileUrl.value,
-    checked: selection.value === 'checked' ? 'yes' : 'no',
-    unchecked: selection.value === 'unchecked' ? 'yes' : 'no',
+    type: selection.value === 'checked' ? 'checked' : 'unchecked',
     account_type: user?.value?.email,
   }
   console.log('obj to send', objToSend)
