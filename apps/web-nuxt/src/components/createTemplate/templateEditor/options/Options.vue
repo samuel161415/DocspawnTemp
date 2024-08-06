@@ -132,7 +132,7 @@
           <p class="font-poppins text-md text-surface-600 mb-2">
             {{ $t('Cp_templateEditor_options.select_format') }}
           </p>
-          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_options.select_format')" class="w-full md:w-full" />
+          <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_options.select_format')" class="w-full md:w-full" />
           <p id="username-help" class="font-poppins text-xs mt-2">
             {{ $t('Cp_templateEditor_options.static_time_help') }}
           </p>
@@ -374,7 +374,7 @@ watch(
       if (newVal?.fieldType === 'Static date')
         selectedDateFormat.value = { name: newVal.name }
       if (newVal?.fieldType === 'Static time')
-        selectedTimeFormat.value = { name: newVal.name }
+        selectedTimeFormat.value = timeFormats?.value?.filter(f => f?.name === newVal?.name)[0]
     }
   },
 )

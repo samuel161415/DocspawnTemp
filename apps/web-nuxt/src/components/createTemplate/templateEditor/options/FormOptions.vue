@@ -44,7 +44,7 @@
       <p class="font-poppins text-md text-surface-500 mb-2">
         {{ $t('Cp_templateEditor_formOptions.select_format') }}
       </p>
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
     </div>
 
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form date'" class="w-full pt-4 mb-4">
@@ -109,7 +109,7 @@
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'date'" class="w-full pt-4 mt-2">
@@ -184,7 +184,7 @@ function fillUpOptions() {
   if (sF?.fieldType === 'Form date')
     selectedDateFormat.value = sF?.dateFormat ? { name: sF?.dateFormat } : { name: 'MM/DD/YYYY' }
   if (sF?.fieldType === 'Form time')
-    selectedTimeFormat.value = sF?.timeFormat ? { name: sF?.timeFormat } : { name: 'HH:MM:SS' }
+    selectedTimeFormat.value = sF?.timeFormat ? timeFormats?.value?.filter(f => f?.name === sF?.timeFormat)[0] : { name: 'HH:MM:SS' }
   if (sF?.fieldType === 'Form list')
     selectedList.value = sF?.selectedList ? sF?.selectedList : {}
 }

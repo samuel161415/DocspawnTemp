@@ -355,7 +355,7 @@ async function generateDocument() {
   }
   ))
   setTimeout(() => {
-    // emit('cancel')
+    emit('cancel')
     router.push('/')
   }, 2000)
 
