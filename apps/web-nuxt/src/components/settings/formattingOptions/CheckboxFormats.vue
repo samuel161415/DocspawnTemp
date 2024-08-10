@@ -55,9 +55,14 @@
         <Column field="active" header="Active" :header-style="{ height: '4.5rem' }">
           <template #body="{ data, field }">
             <div class="flex items-center space-x-4">
-              <p class="font-poppins">
+              <!-- <p class="font-poppins">
                 {{ data[field] }}
-              </p>
+              </p> -->
+              <!-- <ToggleButton v-model="checked" on-label="On" off-label="Off" /> -->
+              <ToggleButton
+                v-model="checked" on-icon="pi pi-check" off-icon="pi pi-times"
+                class="w-full sm:w-40" aria-label="Confirmation"
+              />
             </div>
           </template>
         </Column>
@@ -161,6 +166,9 @@ import { ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 import { fal } from '@fortawesome/pro-light-svg-icons'
+
+// import ToggleButton from 'primevue/togglebutton'
+
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 import { useAuth } from '@/composables/useAuth'
