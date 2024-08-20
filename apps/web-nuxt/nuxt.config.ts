@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         name: 'remote-app',
         filename: 'remoteEntry.js',
         exposes: {
-          './templateData': '../src/components/template/TemplateDataView.vue',
+          './templateData': './src/components/template/TemplateDataView.vue',
         },
         shared: [],
       }),
