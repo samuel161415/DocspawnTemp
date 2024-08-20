@@ -65,7 +65,7 @@ function submitEmail() {
     isAuthenticated.value = true
   }
   else if (email.value === 'test@docspawn.com') {
-    setUser({ name: 'Adam Duchemann', email: 'test@docspawn.com' })
+    setUser({ name: 'Test account', email: 'test@docspawn.com' })
     setToken('.....')
     isAuthenticated.value = true
   }
