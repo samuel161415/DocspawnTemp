@@ -5,9 +5,9 @@ import federation from '@originjs/vite-plugin-federation'
 // import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
-  // serverMiddleware: [
-  //   { path: '/_nuxt', handler: '~/server-middleware/cors.js' },
-  // ],
+  serverMiddleware: [
+    { path: '/_nuxt', handler: '~/server-middleware/cors.js' },
+  ],
   vite: {
     build: {
       target: ['esnext', 'es2022'],
@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     },
     plugins: [
       federation({
-        name: 'remote-app',
+        name: 'mainApp',
         filename: 'remoteEntry.js',
         exposes: {
           './templateData': './src/components/template/TemplateDataView.vue',
