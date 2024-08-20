@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import path from 'node:path'
+import federation from '@originjs/vite-plugin-federation'
 
 // import { resolve } from 'node:path'
 
@@ -16,6 +17,26 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
+    plugins: [
+      federation({
+        name: 'remote-app',
+        filename: 'remoteEntry.js',
+        exposes: {
+          './templateData': '../src/components/template/TemplateDataView.vue',
+        },
+        shared: [],
+      }),
+    ],
+    // plugins: [
+    //   federation({
+    //     name: 'mainApp',
+    //     filename: 'remoteEntry.js',
+    //     exposes: {
+    //       './templateData': './src/components/Template/TemplateDataView.vue', // Path to the component you want to expose
+    //     },
+    //     shared: ['vue'],
+    //   }),
+    // ],
 
   },
   srcDir: './src',
