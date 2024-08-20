@@ -65,7 +65,7 @@ import canvasService from '@/composables/useTemplateCanvas'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const TemplateDataFromMain = defineAsyncComponent(() =>
-  import('main-app/templateData'),
+  import('mainApp/templateData'),
 )
 
 const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
