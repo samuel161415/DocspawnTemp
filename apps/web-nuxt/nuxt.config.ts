@@ -6,7 +6,7 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineNuxtConfig({
   serverMiddleware: [
-    { path: '/_nuxt', handler: '~/server-middleware/cors.js' },
+    { path: '/_nuxt', handler: '~/cors.js' },
   ],
   vite: {
     build: {

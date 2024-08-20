@@ -22,7 +22,7 @@ export default defineNuxtConfig({
         name: 'docGeneration',
         filename: 'remoteEntry.js',
         remotes: {
-          mainApp: 'mainApp@https://doc-spawn-web-nuxt-git-microfronte-d14ccd-techtectechs-projects.vercel.app/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+          mainApp: 'https://doc-spawn-web-nuxt-git-microfronte-d14ccd-techtectechs-projects.vercel.app/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
         },
         shared: ['vue'],
       }),
