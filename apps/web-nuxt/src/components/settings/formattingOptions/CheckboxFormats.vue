@@ -87,7 +87,9 @@
           style="width: 5%"
         >
           <template #body="{ data }">
+            <!-- setting it conditional because default is for all -->
             <div v-if="data.account_type !== 'by_default'" class="flex pl-3">
+              <!-- v-if="data.account_type !== 'by_default'" -->
               <i
                 class="pi pi-pencil text-success text-lg custom-icon cursor-pointer"
                 @click="handleEdit(data)"

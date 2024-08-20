@@ -6,7 +6,7 @@
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
-export default function addEventsToCanvas() {
+export default async function addEventsToCanvas(user, runtimeConfig) {
   /** ********* adding watermark */
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -217,7 +217,18 @@ export default function addEventsToCanvas() {
     let tempXMargin = null
     let tempYMargin = null
     let currentHoveredEle = null
-    canvas.on('mouse:move', (event) => {
+
+    /** */
+    // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+
+    // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
+    /** */
+    canvas.on('mouse:move', async (event) => {
       // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
@@ -491,8 +502,17 @@ export default function addEventsToCanvas() {
           canvas.renderAll()
         }
         else {
+          /** ***********default unchecked */
+          // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+
+          // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+          // if (!defaultUncheckedDesign)
+          //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
+          /** */
           fabric.Image.fromURL(
-            'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+            // defaultUncheckedDesign
+            templateEditorStore.fieldToAdd?.designs?.no
             , (myImg) => {
               if (currentHoveredEle)
                 canvas.remove(currentHoveredEle)
@@ -538,7 +558,7 @@ export default function addEventsToCanvas() {
       }
     })
 
-    canvas.on('mouse:down', (event) => {
+    canvas.on('mouse:down', async (event) => {
       const isFormField = ['Form text', 'Form long text', 'Form image', 'Form date', 'Form time', 'Form list', 'Form checkbox group']?.includes(templateEditorStore.fieldToAdd.type)
       if (currentHoveredEle)
         canvas.remove(currentHoveredEle)
@@ -871,10 +891,20 @@ export default function addEventsToCanvas() {
         )
       }
       if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+        /** ***********default unchecked */
+        // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+        // console.log('all checkboxes', allCheckboxes)
+        // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+        // if (!defaultUncheckedDesign)
+        //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+        // console.log('defaultUncheckedDesign', defaultUncheckedDesign)
+        /** */
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
+        console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
-          'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+          // defaultUncheckedDesign
+          ftoadd?.designs?.no
           , (myImg) => {
             if (currentHoveredEle)
               canvas.remove(currentHoveredEle)
@@ -917,7 +947,7 @@ export default function addEventsToCanvas() {
 
             const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
-
+            console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
             templateEditorStore.addedFields.forEach((f) => {
               allFields.push(JSON.parse(JSON.stringify(f)))
@@ -1105,6 +1135,28 @@ export default function addEventsToCanvas() {
   }
 }
 
+// async function fetchCheckboxOptions(user, runtimeConfig) {
+//   if (!user?.value?.email)
+//     return
+//   try {
+//     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+//     const response = await fetch(
+//       `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
+//     )
+//     if (!response.ok)
+//       throw new Error(`Network response was not ok ${response.statusText}`)
+//     const data = await response.json()
+
+//     if (data?.length > 0)
+//       console.log('checkboxOptions', data)
+
+//     return data
+//     // console.log('response of fetching templates', data)
+//   }
+//   catch (error) {
+//     console.error('Error fetching templates:', error)
+//   }
+// }
 function getRandomHexColor(isLight) {
   let color = ''
   for (let i = 0; i < 3; i++) {

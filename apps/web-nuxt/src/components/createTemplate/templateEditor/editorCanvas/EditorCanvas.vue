@@ -37,6 +37,10 @@ import addEventsToCanvas from './addEventsToCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { useAuth } from '@/composables/useAuth'
+
+const { user } = useAuth()
+const runtimeConfig = useRuntimeConfig()
 
 const isCanvasLoaded = ref(false)
 const templateCanvas = ref()
@@ -202,7 +206,7 @@ async function createCanvas() {
         () => {
           canvas.renderAll()
           isCanvasLoaded.value = true
-          addEventsToCanvas()
+          addEventsToCanvas(user, runtimeConfig)
           showThumbnail()
         },
         {
@@ -415,7 +419,7 @@ async function showThumbnail() {
 }
 
 watch(activeTextStyles, () => {
-  addEventsToCanvas()
+  addEventsToCanvas(user, runtimeConfig)
 
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -440,6 +444,6 @@ watch(activeTextStyles, () => {
 
 watch(() => templateEditorStore.fieldToAdd, () => {
   // everytime selected added fields change, canvas event should be rewritten becaiuse of slectadeddfields updated value
-  addEventsToCanvas()
+  addEventsToCanvas(user, runtimeConfig)
 })
 </script>

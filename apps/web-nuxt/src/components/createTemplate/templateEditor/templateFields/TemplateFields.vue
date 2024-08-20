@@ -419,6 +419,10 @@ import { useConfirm } from 'primevue/useconfirm'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { useAuth } from '@/composables/useAuth'
+
+const { user } = useAuth()
+const runtimeConfig = useRuntimeConfig()
 
 const showFormFields = ref(false)
 const showDataFields = ref(false)
@@ -790,7 +794,7 @@ watch(() => templateEditorStore.fieldToAdd, (val) => {
   }
 })
 
-function selectField(field, option) {
+async function selectField(field, option) {
   // clear refs in case of Data field
   // showDatasetOptions.value = false
   // selectedDatasetOption.value = ''
@@ -838,9 +842,21 @@ function selectField(field, option) {
       templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum' }
     }
     else if (field === 'Form checkbox group') {
+      const allCheckboxes = await fetchCheckboxOptions()
+      let yesDesign = allCheckboxes?.filter(f => f?.type === 'checked' && f?.default)[0]?.design
+      if (!yesDesign)
+        yesDesign = allCheckboxes?.filter(f => f?.type === 'checked')[0]?.design
+      if (!yesDesign)
+        yesDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png'
+      let noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+      if (!noDesign)
+        noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+      if (!noDesign)
+        noDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
       templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum', designs: {
-        yes: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png',
-        no: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png',
+        yes: yesDesign,
+        no: noDesign,
       } }
     }
     else { templateEditorStore.fieldToAdd = { name: field, type: field, id: field } }
@@ -988,5 +1004,28 @@ function confirm2(event) {
     reject: () => {
     },
   })
+}
+
+async function fetchCheckboxOptions() {
+  if (!user?.value?.email)
+    return
+  try {
+    // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(
+      `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
+    )
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+
+    if (data?.length > 0)
+      console.log('checkboxOptions', data)
+
+    return data
+    // console.log('response of fetching templates', data)
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
 }
 </script>
