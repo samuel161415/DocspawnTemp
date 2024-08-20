@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/_nuxt/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "http://localhost:3001"
+        }
+      ]
+    }
+  ]
+}
