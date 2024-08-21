@@ -5,6 +5,10 @@ import federation from '@originjs/vite-plugin-federation'
 // import { resolve } from 'node:path'
 
 export default defineNuxtConfig({
+
+  experimental: {
+    asyncEntry: true,
+  },
   vite: {
     build: {
       target: ['esnext', 'es2022'],
@@ -22,7 +26,7 @@ export default defineNuxtConfig({
         name: 'docGeneration',
         filename: 'remoteEntry.js',
         remotes: {
-          mainApp: 'https://doc-spawn-web-nuxt-git-microfronte-d14ccd-techtectechs-projects.vercel.app/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+          "mainApp": 'https://doc-spawn-web-nuxt-git-microfronte-d14ccd-techtectechs-projects.vercel.app/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
         },
         shared: ['vue'],
       }),
