@@ -6,9 +6,9 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineNuxtConfig({
   serverMiddleware: [
-    { path: '/_nuxt/remoteEntry.js', handler(req, res, next) {
+    { path: '/_nuxt/', handler(req, res, next) {
       // Set CORS headers
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+      res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE')
       res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type')
       res.setHeader('Access-Control-Allow-Credentials', true)
