@@ -8,7 +8,7 @@
       </div> -->
       <div class="card-content -mt-12">
         <!-- <FavouriteTemplates :templates="templateData" /> -->
-        <TemplateDataFromMain :is-doc-genration-microfrontend="true" :templates="templateData?.length > 0 ? [templateData[0]] : []" :is-favourite-view="true" @update-templates-for-favourites="updateTemplateData" />
+        <TemplateDataView :is-doc-genration-microfrontend="true" :templates="templateData?.length > 0 ? [templateData[0]] : []" :is-favourite-view="true" @update-templates-for-favourites="updateTemplateData" />
       </div>
     </div>
   </div>
@@ -64,9 +64,9 @@ import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables
 import canvasService from '@/composables/useTemplateCanvas'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 
-const TemplateDataFromMain = defineAsyncComponent(() =>
-  import('mainApp/templateData'),
-)
+// const TemplateDataFromMain = defineAsyncComponent(() =>
+//   import('mainApp/templateData'),
+// )
 
 const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 

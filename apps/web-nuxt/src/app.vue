@@ -25,8 +25,10 @@
 </template>
 
 <script lang="ts" setup>
+// import Button from 'docGenerationRemote/Button'
 import { useToast } from 'primevue/usetoast'
 import { useRoute, useRouter } from 'vue-router'
+
 import SideBar from './components/layout/Sidebar.vue'
 import 'primeicons/primeicons.css'
 import MenuBar from './components/settings/MenuBar.vue'

@@ -4,6 +4,7 @@
       <h1 class=" text-4xl font-bold text-surface-600">
         Welcome {{ user?.name || user?.email }}
       </h1>
+      <RemoteButton label="man" />
     </div>
     <div class="card">
       <!-- <div class="card-header">
@@ -56,6 +57,7 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useToast } from 'primevue/usetoast'
+import RemoteButton from '../testRemote.vue'
 import { useAuth } from '@/composables/useAuth'
 
 // import FavouriteTemplates from '~/components/dashboard/FavouriteTemplates.vue'

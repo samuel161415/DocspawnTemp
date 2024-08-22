@@ -9,9 +9,13 @@ export default defineNuxtConfig({
   experimental: {
     asyncEntry: true,
   },
+
   vite: {
     build: {
       target: ['esnext', 'es2022'],
+      modulePreload: false,
+      minify: false,
+      cssCodeSplit: false,
     },
     esbuild: {
       target: 'es2022',
@@ -23,14 +27,20 @@ export default defineNuxtConfig({
     },
     plugins: [
       federation({
-        name: 'docGeneration',
+        name: 'docGenerationRemote',
         filename: 'remoteEntry.js',
-        remotes: {
-          "mainApp": 'https://doc-spawn-web-nuxt-git-microfronte-d14ccd-techtectechs-projects.vercel.app/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+        // remotes: {
+        //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+        // },
+        exposes: {
+          './Button': './src/Button.vue',
         },
-        shared: ['vue'],
+        shared: [],
       }),
     ],
+    server: {
+      cors: { origin: '*' },
+    },
 
   },
   srcDir: './src',
@@ -97,6 +107,23 @@ export default defineNuxtConfig({
       OUTSETA_API_KEY: process.env.OUTSETA_API_KEY,
 
     },
+  },
+  routeRules: {
+    // Other route rules...
+
+    // Add CORS headers to remoteEntry.js
+    '/_nuxt/remoteEntry.js': { cors: true },
+    // Add CORS headers to all assets in the _nuxt directory
+    '/_nuxt/**': {
+      headers: {
+        'Access-Control-Allow-Origin': '*', // Allow all origins
+        'Access-Control-Allow-Methods': 'GET,OPTIONS', // Allow specific methods
+        'Access-Control-Allow-Headers': 'Content-Type', // Allow specific headers
+      },
+    },
+
+    // Add CORS headers to all API routes
+    '/api/**': { cors: true },
   },
 
 })
