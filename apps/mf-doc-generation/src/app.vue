@@ -1,7 +1,6 @@
 <!-- local version -->
 <template>
   <div v-if="!isAuthenticated" class="flex flex-col justify-center items-center w-full h-[100vh] gap-4">
-    <ButtonRemote />
     <InputText v-model="email" placeholder="Enter your email" />
     <p v-if="error" class="text-red-600">
       {{ error }}
@@ -15,7 +14,7 @@
 
         <div class="flex flex-col w-full">
           <div class="flex flex-row h-full bg-secondary p-4">
-            <MenuBar v-if="isSettingsRoute($route.path)" />
+            <!-- <MenuBar v-if="isSettingsRoute($route.path)" /> -->
 
             <NuxtPage />
           </div>
@@ -26,18 +25,15 @@
 </template>
 
 <script lang="ts" setup>
+// import Button from 'docGenerationRemote/Button'
 import { useToast } from 'primevue/usetoast'
 import { useRoute, useRouter } from 'vue-router'
-import SideBar from './components/layout/Sidebar.vue'
+
 import 'primeicons/primeicons.css'
-import MenuBar from './components/settings/MenuBar.vue'
-import ButtonRemote from './Button.vue'
+
+// import MenuBar from './components/settings/MenuBar.vue'
 
 import { useAuth } from '@/composables/useAuth'
-
-function isSettingsRoute(path: string) {
-  return path.split('/').includes('settings')
-}
 
 const { token, setToken, user, setUser } = useAuth()
 const error = ref('')

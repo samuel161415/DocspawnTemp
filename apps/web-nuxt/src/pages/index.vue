@@ -4,7 +4,7 @@
       <h1 class=" text-4xl font-bold text-surface-600">
         Welcome {{ user?.name || user?.email }}
       </h1>
-      <RemoteButton label="man" />
+      <RemoteButton />
     </div>
     <div class="card">
       <!-- <div class="card-header">

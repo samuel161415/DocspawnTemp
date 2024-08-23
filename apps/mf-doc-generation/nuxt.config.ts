@@ -25,19 +25,21 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
-    plugins: [
-      federation({
-        name: 'docGenerationRemote',
-        filename: 'remoteEntry.js',
-        // remotes: {
-        //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
-        // },
-        exposes: {
-          './Button': './src/Button.vue',
-        },
-        shared: [],
-      }),
-    ],
+    // plugins: [
+    //   federation({
+    //     name: 'docGenerationRemote',
+    //     filename: 'remoteEntry.js',
+    //     // remotes: {
+    //     //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+    //     // },
+    //     exposes: {
+    //       './Button': './src/Button.vue',
+    //       './DataToDocGeneration': './src/components/template/DocGenerationModals/DataToDocGeneration.vue',
+    //       './FormToDocGeneration': './src/components/createTemplate/formEditor/FinalPreview.vue',
+    //     },
+    //     shared: ['nuxt'],
+    //   }),
+    // ],
     server: {
       cors: { origin: '*' },
     },

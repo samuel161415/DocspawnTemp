@@ -25,19 +25,19 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
-    plugins: [
-      federation({
-        name: 'mainApp',
-        filename: 'remoteEntry.js',
-        // exposes: {
-        //   './templateData': './src/components/template/TemplateDataView.vue',
-        // },
-        remotes: {
-          docGenerationRemote: 'http://localhost:3000/_nuxt/remoteEntry.js',
-        },
-        shared: [],
-      }),
-    ],
+    // plugins: [
+    //   federation({
+    //     name: 'mainApp',
+    //     filename: 'remoteEntry.js',
+    //     // exposes: {
+    //     //   './templateData': './src/components/template/TemplateDataView.vue',
+    //     // },
+    //     remotes: {
+    //       docGenerationRemote: 'http://localhost:3000/_nuxt/remoteEntry.js',
+    //     },
+    //     shared: [],
+    //   }),
+    // ],
     server: {
       cors: { origin: '*' },
     },

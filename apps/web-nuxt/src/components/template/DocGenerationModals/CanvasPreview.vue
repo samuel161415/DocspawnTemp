@@ -158,7 +158,9 @@ function renderOriginalData() {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
-          obj.set({ text: obj?.id })
+          console.log('obj?.id', obj?.id)
+          if (obj?.id)
+            obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
           const correspondingData = 'https://placehold.co/300x200?text=Image'

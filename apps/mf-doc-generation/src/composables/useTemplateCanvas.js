@@ -13,7 +13,8 @@ class CanvasService {
       this.canvas = new fabric.Canvas(canvasElement, options)
 
       // Load template if canvas data exists
-      if (templateEditorStore?.templateToEdit?.canvas_data || templateEditorStore?.templateToGenerateDocs?.canvas_data) {
+      // if (templateEditorStore?.templateToEdit?.canvas_data || templateEditorStore?.templateToGenerateDocs?.canvas_data)
+      if (templateEditorStore?.templateToGenerateDocs?.canvas_data) {
         await this.loadCanvasFromData(templateEditorStore?.templateToEdit?.canvas_data
           ? templateEditorStore?.templateToEdit?.canvas_data
           : templateEditorStore?.templateToGenerateDocs?.canvas_data)
@@ -27,13 +28,13 @@ class CanvasService {
     return this.canvas
   }
 
-  async saveCanvasData() {
-    if (this.canvas) {
-      const canvasData = JSON.stringify(this.canvas.toJSON())
-      templateEditorStore.templateToEdit.canvas_data = canvasData
-      // Optionally, you can save canvasData to your server or database here
-    }
-  }
+  // async saveCanvasData() {
+  //   if (this.canvas) {
+  //     const canvasData = JSON.stringify(this.canvas.toJSON())
+  //     templateEditorStore.templateToEdit.canvas_data = canvasData
+  //     // Optionally, you can save canvasData to your server or database here
+  //   }
+  // }
 
   async loadCanvasFromData(canvasData) {
     if (!canvasData)

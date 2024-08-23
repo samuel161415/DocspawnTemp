@@ -241,11 +241,10 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
-import ImageInput from '../formEditor/cropper/ImageInput'
-import CanvasPreview from '@/components/template/DocGenerationModals/FormToDocCanvasPreview'
+import ImageInput from './cropper/ImageInput'
+import CanvasPreview from '@/components/template/DocGenerationModals/formToDoc/FormToDocCanvasPreview'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 import { docGenerationData } from '@/composables/useDocGenerationData'
-import canvasService from '@/composables/useTemplateCanvas'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])

@@ -20,9 +20,8 @@ import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { activeTextStyles, templateEditorStore } from '~/composables/useTemplateEditorData'
 import canvasService from '~/composables/useTemplateCanvas'
-import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
-const props = defineProps(['isGeneratingPreview', 'template'])
+const props = defineProps(['template'])
 
 function selectPageFromThumbnail(page) {
   const canvas = canvasService.getCanvas()
@@ -39,7 +38,7 @@ async function changeCurrentPageOnCanvas(pageNo) {
   const canvas = canvasService.getCanvas()
 
   if (canvas) {
-    const response = await fetch(props?.isGeneratingPreview ? props?.template?.background_file_url : templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(props?.template?.background_file_url)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker

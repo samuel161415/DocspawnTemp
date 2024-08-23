@@ -269,8 +269,20 @@
         <ListSkeleton v-for="n in 3" :key="n" />
       </div>
     </template>
-
+    <!--
     <FormEditorPreview
+      v-model:visible="previewFormVisible"
+      :mobile="mobile"
+      :form-title="formTitle"
+      :all-form-fields="currentTemplateAllFormFields"
+      :form-description="formDescription"
+      :is-collapsed="isCollapsed"
+      :is-generatable="true"
+      :template-data="currentTemplate"
+      @cancel="previewFormVisible = false"
+      @update-generated-docs="updateGeneratedDocs"
+    /> -->
+    <FormToDocGeneration
       v-model:visible="previewFormVisible"
       :mobile="mobile"
       :form-title="formTitle"
@@ -354,7 +366,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 
 import { useToast } from 'primevue/usetoast'
@@ -366,12 +378,16 @@ import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
+
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
-import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
-import FormEditorPreview from '~/components/createTemplate/formEditor/FinalPreview.vue'
+
+import DataToDocGeneration from './DocGenerationModals/dataToDoc/DataToDocGeneration'
+
+// import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
+import FormToDocGeneration from './DocGenerationModals/formToDoc/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
@@ -387,6 +403,12 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+// const DataToDocGeneration = defineAsyncComponent(() =>
+//   import('docGenerationRemote/DataToDocGeneration'),
+// )
+// const FormToDocGeneration = defineAsyncComponent(() =>
+//   import('docGenerationRemote/FormToDocGeneration'),
+// )
 
 console.log('props templates', props?.templates)
 
@@ -499,6 +521,9 @@ function handleFillForm(item) {
   // console.log('template at handle fill form', item)
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
+  console.log('handle fill form ')
+  console.log('current temapplate value', currentTemplate?.value)
+  console.log('currentTemplateAllFormFields.value', currentTemplateAllFormFields.value)
 }
 watch(currentTemplateAllFormFields, (val) => {
   console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)

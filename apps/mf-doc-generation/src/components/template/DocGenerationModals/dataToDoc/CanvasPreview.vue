@@ -39,7 +39,7 @@
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
-          class="pointer-auto" :is-generating-preview="true" :template="template"
+          class="pointer-auto" :template="template"
         />
       </div>
     </div>
@@ -53,11 +53,10 @@ import { useToast } from 'primevue/usetoast'
 /** ****canvas logic */
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
-import ThumbnailBar from '~/components/createTemplate/templateEditor/editorCanvas/ThumbnailBar'
+import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '@/composables/useTemplateCanvas'
 
-import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
-import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
@@ -158,7 +157,8 @@ function renderOriginalData() {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
-          obj.set({ text: obj?.id })
+          if (obj?.id)
+            obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
           const correspondingData = 'https://placehold.co/300x200?text=Image'
