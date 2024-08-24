@@ -2,16 +2,11 @@
   <div class="h-full w-full bg-white rounded-lg overflow-scroll no-scrollbar p-4 py-8">
     <div class="mb-8">
       <h1 class=" text-4xl font-bold text-surface-600">
-        Welcome {{ user?.name || user?.email }}
+        Welcome {{ user?.name || user?.email }}. Remote microfrontend
       </h1>
       <RemoteButton />
     </div>
     <div class="card">
-      <!-- <div class="card-header">
-        <h2 class=" text-2xl font-semibold text-surface-600 -mb-10">
-          Favourite Templates
-        </h2>
-      </div> -->
       <div class="card-content -mt-12">
         <!-- <FavouriteTemplates :templates="templateData" /> -->
         <TemplateDataView :templates="templateData" :is-favourite-view="true" @update-templates-for-favourites="updateTemplateData" />
@@ -63,10 +58,8 @@ import { useAuth } from '@/composables/useAuth'
 // import FavouriteTemplates from '~/components/dashboard/FavouriteTemplates.vue'
 import TemplateDataView from '~/components/template/TemplateDataView.vue'
 
-import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
-import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
-import { docGenerationData } from '@/composables/useDocGenerationData'
+import { docGenerationData, resetAllDocGenerationValues } from '@/composables/useDocGenerationData'
 
 const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
@@ -101,9 +94,7 @@ async function fetchFavourites() {
   console.log('user>>>>>>>>>>>>>>', user)
 }
 onMounted(async () => {
-  templateEditorStore.templateToEdit = {}
-  resetAllTemplateCreationValues()
-  resetAllTemplateEditorValues()
+  resetAllDocGenerationValues()
   canvasService.refreshCanvas()
   fetchFavourites()
 })

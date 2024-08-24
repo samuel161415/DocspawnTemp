@@ -36,10 +36,10 @@
           <i class="pi pi-desktop"></i>
           <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
         </div>
-        <div v-if="!props?.isGeneratable" class="mx-auto place-self-center flex flex-row">
-          <img src="../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
-          <img v-if="!isCollapsed" src="../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
-        </div>
+        <!-- <div v-if="!props?.isGeneratable" class="mx-auto place-self-center flex flex-row">
+          <img src="../../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
+          <img v-if="!isCollapsed" src="../../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
+        </div> -->
       </div>
     </template>
     <template #default>
@@ -239,7 +239,8 @@
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { useToast } from 'primevue/usetoast'
+
+// import { useToast } from 'primevue/usetoast'
 import { useRouter } from 'vue-router'
 import ImageInput from './cropper/ImageInput'
 import CanvasPreview from '@/components/template/DocGenerationModals/formToDoc/FormToDocCanvasPreview'
@@ -248,12 +249,10 @@ import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
-const toast = useToast()
+// const toast = useToast()
 const router = useRouter()
 const fields = ref([])
-watch(fields, (val) => {
-  console.log('fields>>>', val)
-})
+
 const showPreview = ref(false)
 const mobile = ref(false)
 const isGeneratingDoc = ref(false)
@@ -346,7 +345,7 @@ async function generateDocument() {
   isGeneratingDoc.value = true
 
   // showGeneratedDocsModal.value = true
-  toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 4000, group: 'ac' })
+  // toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 4000, group: 'ac' })
 
   const formData = fields.value.map(field => ({
     ...field,
@@ -383,13 +382,11 @@ async function generateDocument() {
     }
     ))
     showGeneratedDocToast()
-
-    // toast.add({ severity: 'success', summary: 'Operation complete', detail: 'Docs Generated successfully', life: 4000 })
   }
   catch (error) {
     // console.error('Error:', error)
     isGeneratingDoc.value = false
-    toast.add({ severity: 'error', summary: 'Operation failed', detail: 'Unable to generate the docs', life: 5000 })
+    // toast.add({ severity: 'error', summary: 'Operation failed', detail: 'Unable to generate the docs', life: 5000 })
   }
 }
 
@@ -397,7 +394,7 @@ const visible = ref(false)
 
 function showGeneratedDocToast() {
   // if (!visible.value) {
-  toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
+  // toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
   visible.value = true
   // }
 }

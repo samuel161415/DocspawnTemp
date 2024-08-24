@@ -11,11 +11,15 @@ export default defineNuxtConfig({
   },
 
   vite: {
+    resolve: {
+      dedupe: ['vue'],
+    },
     build: {
       target: ['esnext', 'es2022'],
       modulePreload: false,
       minify: false,
       cssCodeSplit: false,
+
     },
     esbuild: {
       target: 'es2022',
@@ -25,21 +29,22 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
-    // plugins: [
-    //   federation({
-    //     name: 'docGenerationRemote',
-    //     filename: 'remoteEntry.js',
-    //     // remotes: {
-    //     //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
-    //     // },
-    //     exposes: {
-    //       './Button': './src/Button.vue',
-    //       './DataToDocGeneration': './src/components/template/DocGenerationModals/DataToDocGeneration.vue',
-    //       './FormToDocGeneration': './src/components/createTemplate/formEditor/FinalPreview.vue',
-    //     },
-    //     shared: ['nuxt'],
-    //   }),
-    // ],
+    plugins: [
+      federation({
+        name: 'docGenerationRemote',
+        filename: 'remoteEntry.js',
+        // remotes: {
+        //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
+        // },
+        exposes: {
+          // './Button': './src/Button.vue',
+          './DataToDocGeneration': './src/components/template/DocGenerationModals/dataToDoc/DataToDocGeneration.vue',
+          './FormToDocGeneration': './src/components/template/DocGenerationModals/formToDoc/FinalPreview.vue',
+          './TemplateDataViewRemote': './src/components/template/TemplateDataView.vue',
+        },
+        shared: [],
+      }),
+    ],
     server: {
       cors: { origin: '*' },
     },

@@ -384,8 +384,8 @@ import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
 
-import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
-import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
+// import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
+// import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
@@ -401,12 +401,12 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
-// const DataToDocGeneration = defineAsyncComponent(() =>
-//   import('docGenerationRemote/DataToDocGeneration'),
-// )
-// const FormToDocGeneration = defineAsyncComponent(() =>
-//   import('docGenerationRemote/FormToDocGeneration'),
-// )
+const DataToDocGeneration = defineAsyncComponent(() =>
+  import('docGenerationRemote/DataToDocGeneration'),
+)
+const FormToDocGeneration = defineAsyncComponent(() =>
+  import('docGenerationRemote/FormToDocGeneration'),
+)
 
 console.log('props templates', props?.templates)
 

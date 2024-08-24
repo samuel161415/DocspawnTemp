@@ -55,8 +55,7 @@ import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '@/composables/useTemplateCanvas'
-
-import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { docGenerationData } from '@/composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
@@ -73,7 +72,7 @@ const props = defineProps({
 const selectedData = ref([])
 
 onMounted(() => {
-  templateEditorStore.templateToGenerateDocs = props?.template
+  docGenerationData.templateToGenerateDocs = props?.template
   selectedData.value = props?.selectedRows
   if (props?.template)
     callCreateCanvas()
@@ -116,7 +115,7 @@ function renderOriginalData() {
         if (!obj._element && obj.id !== 'Lorem ipsum') {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           if (obj?.fieldType === 'Dataset date') {
-            const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
             correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
           }
           else {
@@ -129,7 +128,7 @@ function renderOriginalData() {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
-          const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+          const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
 
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
@@ -162,7 +161,7 @@ function renderOriginalData() {
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
           const correspondingData = 'https://placehold.co/300x200?text=Image'
-          const correspondingField = templateEditorStore?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+          const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
 
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
@@ -209,7 +208,7 @@ async function createCanvas() {
   })
 
   // templateEditorStore.canvas = canvas
-  const response = await fetch(props?.template?.background_file_url ? props?.template?.background_file_url : templateEditorStore.templateBackgroundUrl)
+  const response = await fetch(props?.template?.background_file_url)
   const pdfData = await response.arrayBuffer()
 
   pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -221,7 +220,7 @@ async function createCanvas() {
   const array = []
   for (let i = 1; i <= pages; i++)
     array.push(i)
-  templateEditorStore.totalPagesArray = array
+  docGenerationData.totalPagesArray = array
   const viewport = page.getViewport({ scale: 2 })
 
   // Get the parent container's width
@@ -277,10 +276,10 @@ async function createCanvas() {
 async function showThumbnail() {
   const { fabric } = await import('fabric')
 
-  templateEditorStore.totalPagesArray.forEach(async (i) => {
+  docGenerationData.totalPagesArray.forEach(async (i) => {
     const canvasWrapperWidth = 60
     const canvas = new fabric.Canvas(`template-thumbnail-${i}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
-    const response = await fetch(props?.template?.background_file_url ? props?.template?.background_file_url : templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(props?.template?.background_file_url)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker

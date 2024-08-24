@@ -44,7 +44,7 @@
         </div>
       </div>
     </Dialog> -->
-    <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
+    <!-- <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
       <template #message="slotProps">
         <div class="flex flex-col items-start flex-auto w-max ">
           <div class="flex items-center gap-2">
@@ -77,14 +77,14 @@
           </div>
         </div>
       </template>
-    </Toast>
+    </Toast> -->
   </Dialog>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useToast } from 'primevue/usetoast'
-import ProgressSpinner from 'primevue/progressspinner'
+
+// import { useToast } from 'primevue/usetoast'
 import CanvasPreview from './CanvasPreview'
 import EditDatasetTable from './DatasetTable'
 import { docGenerationData } from '@/composables/useDocGenerationData'
@@ -100,7 +100,7 @@ const props = defineProps({
 const runtimeConfig = useRuntimeConfig()
 
 const router = useRouter()
-const toast = useToast()
+// const toast = useToast()
 
 const template = ref()
 const visible = ref(false)
@@ -132,7 +132,7 @@ function handleChangeSelectedRows(data) {
 async function generateDocs() {
   isGeneratingDoc.value = true
   showGeneratedDocsModal.value = true
-  toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 10000, group: 'ac' })
+  // toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 10000, group: 'ac' })
 
   const objToSend = {
     finalData: selectedRows.value,
@@ -141,7 +141,7 @@ async function generateDocs() {
     router.push('/')
   }, 2000)
   try {
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/dataToDoc/${templateEditorStore?.templateToGenerateDocs?.id}`, {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/dataToDoc/${docGenerationData?.templateToGenerateDocs?.id}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json', // Specify content type as JSON
@@ -155,25 +155,24 @@ async function generateDocs() {
     isGeneratingDoc.value = false
     allGeneratedDocs.value = data?.generatedDocs
     docGenerationData.generatedDocs = data?.generatedDocs
-    // toast.add({ severity: 'success', summary: 'Info', detail: 'Docs Generated successfully', life: 4000 })
     showGeneratedDocToast()
   }
   catch (error) {
     // console.error('Error:', error)
     isGeneratingDoc.value = false
-    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
+    // toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to generate the docs', life: 5000 })
   }
 }
 
 function showGeneratedDocToast() {
   if (!visible.value) {
-    toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
+    // toast.add({ severity: 'success', summary: 'Can you send me the report?', group: 'bc' })
     visible.value = true
   }
 }
 
 function onReply() {
-  toast.removeGroup('bc')
+  // toast.removeGroup('bc')
   visible.value = false
 }
 
