@@ -20,7 +20,7 @@ import { ref, watch } from 'vue'
 import Cropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 
-import uploadFileToBackend from '~/services/uploadFileToBackend'
+import uploadFileToBackend from '../../../../services/uploadFileToBackend'
 
 const props = defineProps(['isEdit', 'originalImage', 'aspectRatio'])
 

@@ -282,7 +282,7 @@
       @cancel="previewFormVisible = false"
       @update-generated-docs="updateGeneratedDocs"
     /> -->
-    <FormToDocGeneration
+    <FormToDocGenerationModal
       v-model:visible="previewFormVisible"
       :mobile="mobile"
       :form-title="formTitle"
@@ -317,7 +317,7 @@
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
 
-  <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+  <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
 
   <ConfirmDialog group="templating">
     <template #message="slotProps">
@@ -379,6 +379,7 @@ import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
 
+import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
@@ -401,12 +402,6 @@ const props = defineProps({
   },
 })
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
-const DataToDocGeneration = defineAsyncComponent(() =>
-  import('docGenerationRemote/DataToDocGeneration'),
-)
-const FormToDocGeneration = defineAsyncComponent(() =>
-  import('docGenerationRemote/FormToDocGeneration'),
-)
 
 console.log('props templates', props?.templates)
 

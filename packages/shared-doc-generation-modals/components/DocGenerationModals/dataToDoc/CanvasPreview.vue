@@ -1,17 +1,23 @@
 <template>
-  <div class="h-full  w-max overflow-auto w-7/12 ml-4 ">
+  <div class="h-full  w-max overflow-auto w-6/12 ">
     <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
-      <p class="font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6 text-center w-full  ">
-        {{ $t('Cp_canvasPreview.live_preview') }}
-      </p>
       <!-- <div class=" flex items-center">
         <Slider v-model="scale" :step="0.01" :min="0.5" :max="1" class="w-56" @input="updateScale" />
-      </div>
-      <div class="flex items-center">
-        <Button label="Refresh" @click="refreshPreview" />
+        <input v-model="scale" type="range" min="0.5" max="1" step="0.01" class="slider" />
       </div> -->
+      <p class="ml-[50%] translate-x-[-50%] font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6">
+        {{ $t('Cp_canvasPreview.live_preview') }}
+      </p>
+
+      <div class="flex items-center">
+        <Button text icon="pi pi-chevron-left text-primary-500 " @click="changePreviewNo('prev')" />
+        <p class="font-poppins text-black">
+          {{ currentPreviewNo }}/{{ selectedData?.length }}
+        </p>
+        <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />
+      </div>
     </div>
-    <div class="h-full  w-max overflow-auto   h-[70vh] overflow-y-scroll">
+    <div class="h-full  w-max overflow-auto  h-[70vh] overflow-y-auto">
       <div v-show="!isCanvasLoaded " class="w-full h-full ">
         <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8 ">
           <div class="flex mb-4">
@@ -29,11 +35,11 @@
           </div>
         </div>
       </div>
-      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   ">
-        <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 border data-to-doc-canvas" :style="canvasStyle">
+      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   border ">
+        <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
-          class="pointer-auto" :is-generating-preview="true" :template="template"
+          class="pointer-auto" :template="template"
         />
       </div>
     </div>
@@ -47,12 +53,10 @@ import { useToast } from 'primevue/usetoast'
 /** ****canvas logic */
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
-import ThumbnailBar from '~/components/createTemplate/templateEditor/editorCanvas/ThumbnailBar'
-import canvasService from '@/composables/useTemplateCanvas'
-
-import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
-import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
-import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
+import ThumbnailBar from '../common/ThumbnailBar'
+import canvasService from '../../../composables/useTemplateCanvas'
+import { docGenerationData } from '../../../composables/useDocGenerationData'
+import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
   template: {
@@ -61,30 +65,21 @@ const props = defineProps({
     default: () => {},
   },
 
-  formValues: {
+  selectedRows: {
     type: Array,
   },
 })
 const selectedData = ref([])
 
 onMounted(() => {
-  templateEditorStore.templateToGenerateDocs = props?.template
+  docGenerationData.templateToGenerateDocs = props?.template
   selectedData.value = props?.selectedRows
   if (props?.template)
     callCreateCanvas()
 })
-function refreshPreview() {
-  selectedData.value = props.formValues
-  renderOriginalData()
-}
-watch(props?.formValues, (val) => {
-  selectedData.value = val
-  renderOriginalData()
+watch(() => props?.selectedRows, (newVal) => {
+  selectedData.value = newVal
 })
-// watch(() => props?.selectedRows, (newVal) => {
-//   console.log('selected rows', props?.selectedRows)
-//   selectedData.value = newVal
-// })
 
 const currentPreviewNo = ref(0)
 watch(selectedData, (newVal) => {
@@ -93,12 +88,21 @@ watch(selectedData, (newVal) => {
   else currentPreviewNo.value = 0
   renderOriginalData()
 })
-
+function changePreviewNo(dir) {
+  if (dir === 'prev') {
+    if (currentPreviewNo.value > 1)
+      currentPreviewNo.value = currentPreviewNo.value - 1
+  }
+  if (dir === 'next') {
+    if (currentPreviewNo.value < selectedData?.value?.length)
+      currentPreviewNo.value = currentPreviewNo.value + 1
+  }
+}
 watch(currentPreviewNo, () => {
   renderOriginalData()
 })
+
 function renderOriginalData() {
-  // console.log('renderOriginalData', selectedData.value)
   const canvas = canvasService.getCanvas()
   if (selectedData.value?.length > 0) {
     if (canvas) {
@@ -109,66 +113,31 @@ function renderOriginalData() {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
-          let correspondingData
-          if (obj?.fieldType === 'Form date') {
-            if (data?.filter(d => d?.hash === obj?.hash)[0]?.state)
-            // correspondingData = new Date(data?.filter(d => d?.hash === obj?.hash)[0]?.state)?.toUTCString()
-              correspondingData = formatDateForInput(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.dateFormat)
+          let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+          if (obj?.fieldType === 'Dataset date') {
+            const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
           }
-          else if (obj?.fieldType === 'Form time') {
-            if (data?.filter(d => d?.hash === obj?.hash)[0]?.state)
-            //  correspondingData = new Date(data?.filter(d => d?.hash === obj?.hash)[0]?.state)?.getTime()
-              correspondingData = formatTimeForInput(data?.filter(d => d?.hash === obj?.hash)[0]?.state, data?.filter(d => d?.hash === obj?.hash)[0]?.timeFormat)
+          else {
+            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
           }
-          else { correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state }
-
-          correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-
           if (correspondingData)
             obj.set({ text: correspondingData?.toString() })
         }
-        else if (obj?.fieldType === 'Form checkbox group') {
-          const specificCheck = data?.filter(d => d?.hash === obj?.hash)[0]?.checkboxes?.filter(c => c?.checkboxIdentifierHash === obj?.checkboxIdentifierHash)[0]
-          const isChecked = specificCheck.state === true
-          const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
-          if (correspondingField?.designs) {
-            const originalHeight = obj.height * obj.scaleY
-            const originalWidth = obj.width * obj.scaleX
-            const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-            obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, () => {
-            //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-            //     ?
-              obj.scaleToWidth(originalWidth)
-              // : obj.scaleToHeight(originalHeight)
-              canvas.renderAll()
-            })
-          }
-        }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          let correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state
+          let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
-          const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
-
-          const originalHeight = obj.height * obj.scaleY
-          const originalWidth = obj.width * obj.scaleX
+          const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
 
           if (correspondingData) {
+            const originalHeight = obj.height * obj.scaleY
+            const originalWidth = obj.width * obj.scaleX
+
             obj.setSrc(correspondingData, () => {
-              // correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-              //   ? obj.scaleToWidth(originalWidth)
-              //   : obj.scaleToHeight(originalHeight)
-
-              // Conditional scaling logic
-              if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth') {
-                const scaleFactor = originalWidth / obj.width
-                obj.set({ scaleX: scaleFactor, scaleY: scaleFactor })
-              }
-              else {
-                const scaleFactor = originalHeight / obj.height
-                obj.set({ scaleX: scaleFactor, scaleY: scaleFactor })
-              }
-
+              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                ? obj.scaleToWidth(originalWidth)
+                : obj.scaleToHeight(originalHeight)
               canvas.renderAll()
             })
           }
@@ -179,9 +148,7 @@ function renderOriginalData() {
     }
   }
   else {
-    // alert('problem problem')
     if (canvas) {
-      const data = selectedData.value
       const objs = canvas?.getObjects()
       canvas._objects = objs.map((obj) => {
         if (obj?.id === 'watermark-docspawn')
@@ -189,13 +156,13 @@ function renderOriginalData() {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum') {
-          console.log('obj?.id', obj?.id)
           if (obj?.id)
             obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
           const correspondingData = 'https://placehold.co/300x200?text=Image'
+          const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
 
@@ -241,7 +208,7 @@ async function createCanvas() {
   })
 
   // templateEditorStore.canvas = canvas
-  const response = await fetch(props?.template?.background_file_url ? props?.template?.background_file_url : templateEditorStore.templateBackgroundUrl)
+  const response = await fetch(props?.template?.background_file_url)
   const pdfData = await response.arrayBuffer()
 
   pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -253,7 +220,7 @@ async function createCanvas() {
   const array = []
   for (let i = 1; i <= pages; i++)
     array.push(i)
-  templateEditorStore.totalPagesArray = array
+  docGenerationData.totalPagesArray = array
   const viewport = page.getViewport({ scale: 2 })
 
   // Get the parent container's width
@@ -309,10 +276,10 @@ async function createCanvas() {
 async function showThumbnail() {
   const { fabric } = await import('fabric')
 
-  templateEditorStore.totalPagesArray.forEach(async (i) => {
+  docGenerationData.totalPagesArray.forEach(async (i) => {
     const canvasWrapperWidth = 60
     const canvas = new fabric.Canvas(`template-thumbnail-${i}`, { isDrawing: true, width: canvasWrapperWidth, fill: '#000' })
-    const response = await fetch(props?.template?.background_file_url ? props?.template?.background_file_url : templateEditorStore.templateBackgroundUrl)
+    const response = await fetch(props?.template?.background_file_url)
     const pdfData = await response.arrayBuffer()
 
     pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker
@@ -392,20 +359,20 @@ function getTranslateY(scale) {
 }
 </script>
 
-    <style>
-    /* .data-to-doc-canvas{
-         transform:scale(0.8) translateX(-10%) translateY(-10%);
+  <style>
+  /* .data-to-doc-canvas{
+       transform:scale(0.8) translateX(-10%) translateY(-10%);
 
-    } */
-    .data-to-doc-canvas  {
-    transition: transform 0.3s ease;
-    pointer-events:none;
-  }
+  } */
+  .data-to-doc-canvas  {
+  transition: transform 0.3s ease;
+  pointer-events:none;
+}
 
-    .pointer-auto, .pointer-auto *{
-      pointer-events:auto;
-    }
-    .slider {
-    width: 300px;
+  .pointer-auto, .pointer-auto *{
+    pointer-events:auto;
   }
-    </style>
+  .slider {
+  width: 300px;
+}
+  </style>

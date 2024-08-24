@@ -18,8 +18,8 @@
 <script setup>
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
-import canvasService from '~/composables/useTemplateCanvas'
-import { docGenerationData } from '@/composables/useDocGenerationData'
+import canvasService from '../../../composables/useTemplateCanvas'
+import { docGenerationData } from '../../../composables/useDocGenerationData'
 
 const props = defineProps(['template'])
 

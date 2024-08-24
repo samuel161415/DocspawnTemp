@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import path from 'node:path'
-import federation from '@originjs/vite-plugin-federation'
+
+// import federation from '@originjs/vite-plugin-federation'
 
 // import { resolve } from 'node:path'
 
@@ -11,9 +12,7 @@ export default defineNuxtConfig({
   },
 
   vite: {
-    resolve: {
-      dedupe: ['vue'],
-    },
+
     build: {
       target: ['esnext', 'es2022'],
       modulePreload: false,
@@ -29,25 +28,9 @@ export default defineNuxtConfig({
         target: 'es2022',
       },
     },
-    plugins: [
-      federation({
-        name: 'docGenerationRemote',
-        filename: 'remoteEntry.js',
-        // remotes: {
-        //   mainApp: 'http://localhost:3000/_nuxt/remoteEntry.js', // Ensure the URL points to where the main app is running
-        // },
-        exposes: {
-          // './Button': './src/Button.vue',
-          './DataToDocGeneration': './src/components/template/DocGenerationModals/dataToDoc/DataToDocGeneration.vue',
-          './FormToDocGeneration': './src/components/template/DocGenerationModals/formToDoc/FinalPreview.vue',
-          './TemplateDataViewRemote': './src/components/template/TemplateDataView.vue',
-        },
-        shared: [],
-      }),
-    ],
-    server: {
-      cors: { origin: '*' },
-    },
+    // server: {
+    //   cors: { origin: '*' },
+    // },
 
   },
   srcDir: './src',
@@ -115,22 +98,22 @@ export default defineNuxtConfig({
 
     },
   },
-  routeRules: {
-    // Other route rules...
+  // routeRules: {
+  //   // Other route rules...
 
-    // Add CORS headers to remoteEntry.js
-    '/_nuxt/remoteEntry.js': { cors: true },
-    // Add CORS headers to all assets in the _nuxt directory
-    '/_nuxt/**': {
-      headers: {
-        'Access-Control-Allow-Origin': '*', // Allow all origins
-        'Access-Control-Allow-Methods': 'GET,OPTIONS', // Allow specific methods
-        'Access-Control-Allow-Headers': 'Content-Type', // Allow specific headers
-      },
-    },
+  //   // Add CORS headers to remoteEntry.js
+  //   '/_nuxt/remoteEntry.js': { cors: true },
+  //   // Add CORS headers to all assets in the _nuxt directory
+  //   '/_nuxt/**': {
+  //     headers: {
+  //       'Access-Control-Allow-Origin': '*', // Allow all origins
+  //       'Access-Control-Allow-Methods': 'GET,OPTIONS', // Allow specific methods
+  //       'Access-Control-Allow-Headers': 'Content-Type', // Allow specific headers
+  //     },
+  //   },
 
-    // Add CORS headers to all API routes
-    '/api/**': { cors: true },
-  },
+  //   // Add CORS headers to all API routes
+  //   '/api/**': { cors: true },
+  // },
 
 })

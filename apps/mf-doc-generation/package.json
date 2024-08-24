@@ -10,6 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@docspawn/shared-doc-generation-modals": "workspace:^",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/i18n": "^8.3.1",
     "exceljs": "^4.4.0",

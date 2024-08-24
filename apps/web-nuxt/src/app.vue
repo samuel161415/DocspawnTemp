@@ -26,6 +26,7 @@
 
 <script lang="ts" setup>
 // import Button from 'docGenerationRemote/Button'
+
 import { useToast } from 'primevue/usetoast'
 import { useRoute, useRouter } from 'vue-router'
 

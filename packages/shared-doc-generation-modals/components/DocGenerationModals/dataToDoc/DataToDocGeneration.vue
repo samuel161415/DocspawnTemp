@@ -85,9 +85,9 @@
 import { onMounted, ref } from 'vue'
 
 // import { useToast } from 'primevue/usetoast'
+import { docGenerationData } from '../../../composables/useDocGenerationData'
 import CanvasPreview from './CanvasPreview'
 import EditDatasetTable from './DatasetTable'
-import { docGenerationData } from '@/composables/useDocGenerationData'
 
 const props = defineProps({
   template: {

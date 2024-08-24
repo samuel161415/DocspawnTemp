@@ -1,4 +1,4 @@
-import { docGenerationData } from '@/composables/useDocGenerationData'
+import { docGenerationData } from './useDocGenerationData'
 
 // Adjust import path as needed
 

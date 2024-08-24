@@ -63,24 +63,6 @@
               </template>
             </StepperPanel>
 
-            <!-- <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
-              <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
-                </button>
-              </template>
-              <template #content="{ index, prevCallback, nextCallback }">
-                <div v-if="active === index" class="mx-10">
-                  <FormEditor v-if="active === index" @update-data="handleUpdateData" />
-                </div>
-                <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
-                </div>
-              </template>
-            </StepperPanel> -->
-
             <StepperPanel header="$t('Pg_template_create.delivery_options')">
               <template #header="{ index, clickCallback }">
                 <button v-tooltip.top="$t('Pg_template_create.delivery_options')" :disabled="!isStep3Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
@@ -120,7 +102,6 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
-import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { activeTextStyles, resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'

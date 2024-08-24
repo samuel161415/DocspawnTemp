@@ -1,23 +1,10 @@
 <template>
   <div class="mt-14 rounded-lg pb-2">
     <div class="p-fluid">
-      <!-- <Dropdown
-        v-model="selectedTemplateForDocGeneration"
-        :options="templates"
-        option-label="name"
-        placeholder="Select a rtemplat"
-      /> -->
-      <Button label="just test" />
       <Button label="'click to show modal'" @click="showTemplateModal" />
-      <p>Testing</p>
-      <button class="my-2" @click="() => showTemplateModal()">
-        Normal
-      </button>
-
-      <p>Selected City: {{ selectedTemplateForDocGeneration ? selectedTemplateForDocGeneration.name : 'None' }}</p>
     </div>
 
-    <FormToDocGeneration
+    <FormToDocGenerationModal
       v-model:visible="previewFormVisible"
       :mobile="mobile"
       :form-title="formTitle"
@@ -31,9 +18,9 @@
     />
   </div>
 
-  <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+  <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
 
-  <!-- <Toast position="top-right">
+  <Toast position="top-right">
     <template #message="slotProps">
       <div class="flex items-start space-x-2">
         <div class="mt-1">
@@ -67,30 +54,26 @@
         </div>
       </div>
     </template>
-  </Toast> -->
+  </Toast>
 </template>
 
 <script setup>
 // import { useI18n } from 'vue-i18n'
 
-import DataToDocGeneration from './DocGenerationModals/dataToDoc/DataToDocGeneration'
+import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 
-// import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
-import FormToDocGeneration from './DocGenerationModals/formToDoc/FinalPreview.vue'
-import { useAuth } from '@/composables/useAuth'
+import { useRuntimeConfig } from '#app'
+
+const props = defineProps(['templateIdIframe', 'email'])
 
 const runtimeConfig = useRuntimeConfig()
-
-const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 
 const selectedTemplateForDocGeneration = ref()
 const templates = ref([])
 async function fetchTemplates() {
-  if (!user?.value?.email)
-    return
   try {
     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${user?.value?.email}`)
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${props?.email}`)
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
@@ -106,7 +89,6 @@ async function fetchTemplates() {
   catch (error) {
     console.error('Error fetching templates:', error)
   }
-  console.log('user>>>>>>>>>>>>>>', user)
 }
 
 // const DataToDocGeneration = defineAsyncComponent(() =>
@@ -154,7 +136,14 @@ watch(selectedTemplateForDocGeneration, () => {
   }
 })
 function showTemplateModal() {
-  selectedTemplateForDocGeneration.value = templates.value[0]
+  console.log('props?.templateIdIframe', props?.templateIdIframe)
+  if (props?.templateIdIframe)
+    selectedTemplateForDocGeneration.value = templates?.value?.filter(t => Number.parseInt(t?.id) === Number.parseInt(props?.templateIdIframe))[0]
+  console.log('templates.value', templates?.value)
+  console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)', templates?.value?.filter(t => t?.id === props?.templateIdIframe))
+  console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0]', templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0])
+  if (!selectedTemplateForDocGeneration.value)
+    selectedTemplateForDocGeneration.value = templates.value[0]
   if (selectedTemplateForDocGeneration.value?.use_case === 'Form to doc') {
     currentTemplate.value = selectedTemplateForDocGeneration.value
     currentTemplateAllFormFields.value = selectedTemplateForDocGeneration.value.added_fields?.filter(f => f?.isFormField)
@@ -173,12 +162,12 @@ function handleOutsideClick() {
 }
 </script>
 
-<style>
-.pointer-parent *{
+  <style>
+  .pointer-parent *{
 
-  pointer-events: none;
-}
-.pointer-auto{
-  pointer-events: auto;
-}
-</style>
+    pointer-events: none;
+  }
+  .pointer-auto{
+    pointer-events: auto;
+  }
+  </style>
