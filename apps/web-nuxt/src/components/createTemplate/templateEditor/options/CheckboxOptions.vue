@@ -9,13 +9,57 @@
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.checked_design') }}
       </p>
-      <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" />
+      <Dropdown
+        v-model="selectedChecked"
+        :options="checkedOptions"
+        option-label="design"
+        placeholder="Select an Image"
+        class="w-full md:w-14rem"
+      >
+        <!-- Custom template for each dropdown item -->
+        <template #option="slotProps">
+          <div class="flex align-items-center">
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+          </div>
+        </template>
+
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <img :src="value?.design" alt="" class="w-12 h-12 mr-2" />
+            <!-- <span>{{ value?.id }}</span> -->
+          </div>
+        </template>
+      </Dropdown>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" /> -->
     </div>
     <div class="flex justify-between items-center mt-2">
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.unchecked_design') }}
       </p>
-      <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" />
+      <Dropdown
+        v-model="selectedUnchecked"
+        :options="uncheckedOptions"
+        option-label="design"
+        placeholder="Select an Image"
+        class="w-full md:w-14rem"
+      >
+        <!-- Custom template for each dropdown item -->
+        <template #option="slotProps">
+          <div class="flex align-items-center">
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+          </div>
+        </template>
+
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <img :src="value?.design" alt="" class="w-12 h-12 mr-2" />
+            <!-- <span>{{ value?.id }}</span> -->
+          </div>
+        </template>
+      </Dropdown>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
     </div>
   </div>
   <div class="flex flex-col mt-4">
@@ -71,11 +115,58 @@ import { ref } from 'vue'
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 
+import { useAuth } from '@/composables/useAuth'
+
 const noOfCheckboxes = ref(1)
 const minOptions = ref(0)
 const maxOptions = ref(1)
 const fieldDescription = ref('')
 const currentField = ref()
+const selectedChecked = ref()
+const selectedUnchecked = ref()
+
+const { user } = useAuth()
+
+const runtimeConfig = useRuntimeConfig()
+const checkedOptions = ref([])
+const uncheckedOptions = ref([])
+
+async function fetchCheckboxOptions() {
+  if (!user?.value?.email)
+    return
+  try {
+    // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+    const response = await fetch(
+      `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
+    )
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data = await response.json()
+
+    if (data?.length > 0) {
+      console.log('checkboxOptions at options', data)
+      checkedOptions.value = data?.filter(f => f?.type === 'checked')
+      const def = checkedOptions.value?.filter(c => c?.default)[0]
+      if (def)
+        selectedChecked.value = def
+      else
+        selectedChecked.value = checkedOptions.value[0]
+
+      uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
+      const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
+      if (def2)
+        selectedUnchecked.value = def2
+      else
+        selectedUnchecked.value = uncheckedOptions.value[0]
+    }
+
+    // console.log('response of fetching templates', data)
+  }
+  catch (error) {
+    console.error('Error fetching templates:', error)
+  }
+}
+
 onMounted(() => {
   noOfCheckboxes.value = templateEditorStore.selectedAddedField?.checkboxes?.length >= 1 ? templateEditorStore.selectedAddedField?.checkboxes.length : 1
   minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 0
@@ -90,7 +181,10 @@ onMounted(() => {
     // currentField.value = templateEditorStore.addedFields.filter(f => f?.hash === activeObject?.hash)[0]
     console.log('current field value', currentField.value)
   }
+  fetchCheckboxOptions()
 })
+watch(checkedOptions, val => console.log('checked options', val))
+watch(uncheckedOptions, val => console.log('unchecked options', val))
 watch(() => templateEditorStore.selectedAddedField, (val) => {
   noOfCheckboxes.value = val?.checkboxes?.length >= 1 ? val?.checkboxes.length : 1
   minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 0
@@ -98,18 +192,24 @@ watch(() => templateEditorStore.selectedAddedField, (val) => {
   fieldDescription.value = val?.name ? val?.name : 0
 })
 function changeTextOfCheckboxOption(e, item) {
-  console.log('change text', item)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObject = canvas.getActiveObject()
-    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
 
     templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
       if (f?.hash === activeObject?.hash) {
         return { ...f, checkboxes: f?.checkboxes?.map((c, i) => {
-          if (i + 1 === item)
+          if (i + 1 === item) {
+            const objs = canvas.getObjects()
+            objs.forEach((obj) => {
+              if (obj?.fieldType === 'checkbox-tooltip' && obj?.checkboxHash === c?.checkboxIdentifierHash) {
+                obj.set({ text: ` ${e.target.value} ` })
+                canvas.renderAll()
+              }
+            })
             return { ...c, text: e.target.value }
-          else return c
+          }
+          else { return c }
         }) }
       }
 
@@ -155,9 +255,15 @@ function addCheckboxToGroup() {
         }
       })
     }
-
+    // let defaultUncheckedDesign = uncheckedOptions.value?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = uncheckedOptions.value?.filter(f => f?.type === 'unchecked')[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+    console.log('templateEditorStore?.selectedAddedField?.designs?.no', templateEditorStore?.selectedAddedField?.designs?.no)
     fabric.Image.fromURL(
-      'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+      // defaultUncheckedDesign
+      templateEditorStore?.selectedAddedField?.designs?.no
       , (myImg) => {
         const uniqueHashForEle = uuid.v1()
         myImg.set({
@@ -178,8 +284,10 @@ function addCheckboxToGroup() {
           fieldType: activeObject?.fieldType,
           pageNo: templateEditorStore?.activePageForCanvas,
           displayGuide: false,
+          lockScalingFlip: true,
         })
-        myImg.setControlsVisibility({ mtr: false })
+        // myImg.setControlsVisibility({ mtr: false })
+        myImg.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
         templateEditorStore.addedFields = templateEditorStore.addedFields.map((f) => {
           if (f?.hash === activeObject?.hash)
@@ -198,8 +306,43 @@ function addCheckboxToGroup() {
         templateEditorStore.addedFields = allFields
         canvas.renderAll()
         templateEditorStore.fieldToAdd = {}
+        const tooltip = new fabric.Text(' Enter label ', {
+          left: myImg.left + (myImg.width * myImg.scaleX),
+          top: myImg.top - 10,
+          fill: '#fff',
+          backgroundColor: '#009ee2',
+          fieldType: 'checkbox-tooltip',
+          checkboxHash: myImg?.checkboxIdentifierHash,
+          selectable: false,
+          evented: false,
+          fontSize: 18,
+          visible: false,
+          opacity: 0,
+        })
 
+        myImg.tooltip = tooltip
+        canvas.add(tooltip)
         myImg.on('mouseover', (e) => {
+          myImg.tooltip.set({ visible: true, opacity: 1 })
+          canvas.renderAll()
+          // const tooltip = new fabric.Text('Tooltip Text', {
+          //   left: myImg.left + (myImg.width * myImg.scaleX),
+          //   top: myImg.top - 10,
+          //   fill: 'white',
+          //   backgroundColor: '#009ee2',
+          //   fieldType: 'checkbox-tooltip',
+          //   checkboxHash: myImg?.checkboxIdentifierHash,
+          //   selectable: false,
+          //   evented: false,
+          //   fontSize: 18,
+          //   padding: 28,
+          //   visible: false,
+          //   opacity: true,
+          // })
+          // console.log('creating tooltip text', tooltip)
+
+          // myImg.tooltip = tooltip
+          // canvas.add(tooltip)
           if (!templateEditorStore.activeAdvancedPointer)
             return
           canvas.add(new fabric.Line([100, 1000, 100, 5000], {
@@ -223,6 +366,13 @@ function addCheckboxToGroup() {
         })
 
         myImg.on('mouseout', (e) => {
+          if (myImg.tooltip) {
+            // canvas.remove(myImg.tooltip)
+            // myImg.tooltip = null
+            console.log('mouseout myImg tooltip', myImg.tooltip)
+            myImg.tooltip.set({ visible: false, opacity: 0 })
+            canvas.renderAll()
+          }
           if (!templateEditorStore.activeAdvancedPointer)
             return
 
@@ -235,6 +385,15 @@ function addCheckboxToGroup() {
           })
 
           canvas.renderAll()
+        })
+        myImg.on('moving', () => {
+          if (myImg.tooltip.visible) {
+            myImg.tooltip.set({
+              left: myImg.left + (myImg.width * myImg.scaleX),
+              top: myImg.top - 10,
+            })
+            canvas.renderAll()
+          }
         })
         /** ********* adding info icon */
         const { colorsForCheckboxGroup } = templateEditorStore?.selectedAddedField
@@ -271,7 +430,35 @@ function addCheckboxToGroup() {
     )
   }
 }
+function applyLastObjectPropertiesToAll(sel) {
+  const canvas = canvasService.getCanvas()
+  const objects = sel.getObjects()
+  if (objects.length === 0)
+    return
 
+  const lastObject = objects[0]
+  const { width, height, scaleX, scaleY } = lastObject
+
+  objects.forEach((obj) => {
+    if (obj?.fieldType === 'checkboxIdNoIcon') {
+      const myImg = objects?.filter(f => obj?.checkboxHash === f?.checkboxIdentifierHash)[0]
+      obj.set({ left: myImg?.left + (myImg?.width * myImg?.scaleX) - 13, top: myImg?.top + (myImg.height * myImg?.scaleY) - 13 })
+      return
+    }
+    // obj.set({
+    //   scaleX,
+    //   scaleY,
+    //   width,
+    //   height,
+
+    // })
+    // obj.scaleToWidth(width * scaleX)
+    obj.scaleToHeight(height * scaleY)
+    obj.setCoords() // Update object's coordinates
+  })
+
+  canvas.requestRenderAll()
+}
 function selectAllInGroup() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -284,8 +471,13 @@ function selectAllInGroup() {
       cornerColor: '#119bd6',
       transparentCorners: false,
       hash: activeObject?.hash,
+      lockScalingFlip: true,
     })
-    sel.setControlsVisibility({ mtr: false })
+    // myImg.setControlsVisibility({ mtr: false })
+    sel.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
+    sel.on('scaling', () => {
+      applyLastObjectPropertiesToAll(sel)
+    })
     canvas.setActiveObject(sel)
     canvas.requestRenderAll()
   }

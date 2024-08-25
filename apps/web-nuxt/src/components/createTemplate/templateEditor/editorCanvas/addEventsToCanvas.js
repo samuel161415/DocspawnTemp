@@ -6,7 +6,7 @@
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
-export default function addEventsToCanvas() {
+export default async function addEventsToCanvas(user, runtimeConfig) {
   /** ********* adding watermark */
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -217,9 +217,20 @@ export default function addEventsToCanvas() {
     let tempXMargin = null
     let tempYMargin = null
     let currentHoveredEle = null
-    canvas.on('mouse:move', (event) => {
+
+    /** */
+    // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+
+    // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+    // if (!defaultUncheckedDesign)
+    //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
+    /** */
+    canvas.on('mouse:move', async (event) => {
       // console.log('mouse event', event.absolutePointer)
-      if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
+      if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = false
           currentHoveredEle.set({
@@ -491,8 +502,17 @@ export default function addEventsToCanvas() {
           canvas.renderAll()
         }
         else {
+          /** ***********default unchecked */
+          // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+
+          // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+          // if (!defaultUncheckedDesign)
+          //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
+          /** */
           fabric.Image.fromURL(
-            'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+            // defaultUncheckedDesign
+            templateEditorStore.fieldToAdd?.designs?.no
             , (myImg) => {
               if (currentHoveredEle)
                 canvas.remove(currentHoveredEle)
@@ -538,11 +558,11 @@ export default function addEventsToCanvas() {
       }
     })
 
-    canvas.on('mouse:down', (event) => {
+    canvas.on('mouse:down', async (event) => {
       const isFormField = ['Form text', 'Form long text', 'Form image', 'Form date', 'Form time', 'Form list', 'Form checkbox group']?.includes(templateEditorStore.fieldToAdd.type)
       if (currentHoveredEle)
         canvas.remove(currentHoveredEle)
-      if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field') {
+      if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Static text' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.subType === 'text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date') {
         if (tempXMargin && tempYMargin) {
           const obs = canvas._objects
           canvas._objects = obs.filter((ob) => {
@@ -587,13 +607,22 @@ export default function addEventsToCanvas() {
 
             scaleX: templateEditorStore?.lastScaledTextOptions?.x,
             scaleY: templateEditorStore?.lastScaledTextOptions?.y,
+            lockScalingFlip: true,
 
           },
         )
         textEle.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
 
-        const fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
+        let fieldToAdd = { isFormField, isRequired: true, fieldType: templateEditorStore.fieldToAdd.type, name: templateEditorStore.fieldToAdd.id, id: templateEditorStore.fieldToAdd.id, hash: textEle.hash, page: templateEditorStore.activePageForCanvas,
         }
+
+        if (templateEditorStore?.fieldToAdd?.type === 'Form text')
+          fieldToAdd = { ...fieldToAdd, allowDecimals: false, minCharAllowed: 2, maxCharAllowed: 50, characterAcception: 'Text' }
+
+        if (templateEditorStore.fieldToAdd?.dateFormat)
+          fieldToAdd = { ...fieldToAdd, dateFormat: templateEditorStore.fieldToAdd?.dateFormat }
+        if (templateEditorStore.fieldToAdd?.timeFormat)
+          fieldToAdd = { ...fieldToAdd, timeFormat: templateEditorStore.fieldToAdd?.timeFormat }
 
         const allFields = []
         templateEditorStore.addedFields.forEach((f) => {
@@ -694,7 +723,7 @@ export default function addEventsToCanvas() {
             pageNo: templateEditorStore.activePageForCanvas,
             displayGuide: false,
             editable: false,
-
+            lockScalingFlip: true,
           },
         )
         textEle.setControlsVisibility({
@@ -801,6 +830,7 @@ export default function addEventsToCanvas() {
               fieldType: ftoadd.type,
               pageNo: templateEditorStore.activePageForCanvas,
               displayGuide: false,
+              lockScalingFlip: true,
             })
             myImg.setControlsVisibility({ mtr: false })
 
@@ -861,10 +891,20 @@ export default function addEventsToCanvas() {
         )
       }
       if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+        /** ***********default unchecked */
+        // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
+        // console.log('all checkboxes', allCheckboxes)
+        // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+        // if (!defaultUncheckedDesign)
+        //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+        // console.log('defaultUncheckedDesign', defaultUncheckedDesign)
+        /** */
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
+        console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
-          'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+          // defaultUncheckedDesign
+          ftoadd?.designs?.no
           , (myImg) => {
             if (currentHoveredEle)
               canvas.remove(currentHoveredEle)
@@ -898,14 +938,16 @@ export default function addEventsToCanvas() {
               fieldType: ftoadd.type,
               pageNo: templateEditorStore.activePageForCanvas,
               displayGuide: false,
+              lockScalingFlip: true,
             })
-            myImg.setControlsVisibility({ mtr: false })
+            // myImg.setControlsVisibility({ mtr: false })
+            myImg.setControlsVisibility({ mt: false, mb: false, mr: false, ml: false, mtr: false })
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
             const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
-
+            console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
             templateEditorStore.addedFields.forEach((f) => {
               allFields.push(JSON.parse(JSON.stringify(f)))
@@ -916,7 +958,41 @@ export default function addEventsToCanvas() {
             canvas.renderAll()
             templateEditorStore.fieldToAdd = {}
 
+            const tooltip = new fabric.Text(' Enter label ', {
+              left: myImg.left + (myImg.width * myImg.scaleX),
+              top: myImg.top - 10,
+              fill: 'white',
+              backgroundColor: '#009ee2',
+              fieldType: 'checkbox-tooltip',
+              checkboxHash: myImg?.checkboxIdentifierHash,
+              selectable: false,
+              evented: false,
+              fontSize: 18,
+              visible: false,
+              opacity: 0,
+            })
+
+            myImg.tooltip = tooltip
+            canvas.add(tooltip)
+
             myImg.on('mouseover', (e) => {
+              myImg.tooltip.set({ visible: true, opacity: 1 })
+              canvas.renderAll()
+              // const tooltip = new fabric.Text('Tooltip Text', {
+              //   left: myImg.left + (myImg.width * myImg.scaleX),
+              //   top: myImg.top - 10,
+              //   fill: 'white',
+              //   backgroundColor: '#009ee2',
+              //   fieldType: 'checkbox-tooltip',
+              //   checkboxHash: myImg?.checkboxIdentifierHash,
+              //   selectable: false,
+              //   evented: false,
+              //   fontSize: 18,
+              //   padding: 28,
+              // })
+
+              // myImg.tooltip = tooltip
+              // canvas.add(tooltip)
               if (!templateEditorStore.activeAdvancedPointer)
                 return
               canvas.add(new fabric.Line([100, 1000, 100, 5000], {
@@ -940,6 +1016,13 @@ export default function addEventsToCanvas() {
             })
 
             myImg.on('mouseout', (e) => {
+              if (myImg.tooltip) {
+                // canvas.remove(myImg.tooltip)
+                // myImg.tooltip = null
+                myImg.tooltip.set({ visible: false, opacity: 0 })
+                canvas.renderAll()
+              }
+
               if (!templateEditorStore.activeAdvancedPointer)
                 return
 
@@ -952,6 +1035,15 @@ export default function addEventsToCanvas() {
               })
 
               canvas.renderAll()
+            })
+            myImg.on('moving', () => {
+              if (myImg.tooltip.visible) {
+                myImg.tooltip.set({
+                  left: myImg.left + (myImg.width * myImg.scaleX),
+                  top: myImg.top - 10,
+                })
+                canvas.renderAll()
+              }
             })
 
             /** ********creating checkbox info icon */
@@ -1043,6 +1135,28 @@ export default function addEventsToCanvas() {
   }
 }
 
+// async function fetchCheckboxOptions(user, runtimeConfig) {
+//   if (!user?.value?.email)
+//     return
+//   try {
+//     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
+//     const response = await fetch(
+//       `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
+//     )
+//     if (!response.ok)
+//       throw new Error(`Network response was not ok ${response.statusText}`)
+//     const data = await response.json()
+
+//     if (data?.length > 0)
+//       console.log('checkboxOptions', data)
+
+//     return data
+//     // console.log('response of fetching templates', data)
+//   }
+//   catch (error) {
+//     console.error('Error fetching templates:', error)
+//   }
+// }
 function getRandomHexColor(isLight) {
   let color = ''
   for (let i = 0; i < 3; i++) {

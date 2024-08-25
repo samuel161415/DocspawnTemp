@@ -53,30 +53,12 @@
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
                 <div class="mx-6">
-                  <TemplateEditor v-if="active === index || canvasService.getCanvas()" />
+                  <TemplateEditor v-if="active === index || canvasService.getCanvas()" @save-template="nextCallback" />
                   <!-- v-if="active === index" -->
                 </div>
                 <div class="flex pt-4 justify-center mt-24 mx-52 space-x-8">
-                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
-                </div>
-              </template>
-            </StepperPanel>
-
-            <StepperPanel v-if="templateGeneralInformation.useCase === 'Form to doc'" header="$t('Pg_template_create.form_editor')">
-              <template #header="{ index, clickCallback }">
-                <button v-tooltip.top="$t('Pg_template_create.form_editor')" :disabled="!isStep2Valid" class="bg-transparent border-none inline-flex flex-column gap-2" @click="clickCallback">
-                  <font-awesome-icon v-if="active >= index" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2;" />
-                  <font-awesome-icon v-else-if="index > active" :icon="fad.faFileSignature" class="w-12 h-12" style="--fa-primary-color: #949494; --fa-secondary-color: #ababab;" />
-                </button>
-              </template>
-              <template #content="{ index, prevCallback, nextCallback }">
-                <div v-if="active === index" class="mx-10">
-                  <FormEditor v-if="active === index" @update-data="handleUpdateData" />
-                </div>
-                <div class="flex pt-4 justify-center mb-14 mx-52">
-                  <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue mr-4 px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" :disabled="!isStep3Valid" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" />
+                  <!-- <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" /> -->
+                  <!-- <Button :label="$t('Pg_template_create.next')" icon="pi pi-arrow-right" icon-pos="right" class="bg-primaryBlue border-primaryBlue px-5" @click="nextCallback" /> -->
                 </div>
               </template>
             </StepperPanel>
@@ -94,7 +76,7 @@
                 </div>
                 <div class="flex pt-4 justify-center mb-5 mx-52">
                   <Button :label="$t('Pg_template_create.back')" outlined icon="pi pi-arrow-left" class="bg-primaryBlue px-5" @click="prevCallback" />
-                  <Button :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
+                  <Button :disabled="isSaving" :label="$t('Pg_template_create.save_template')" class="px-4 w-max font-poppins ml-2" @click="saveTemplate()" />
                 </div>
               </template>
             </StepperPanel>
@@ -120,10 +102,9 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import GeneralInfo from '../../components/createTemplate/generalInfo/GeneralInfo.vue'
 import DeliveryOptions from '~/components/createTemplate/DeliveryOptions.vue'
 import DataSelection from '~/components/createTemplate/dataSelection/DataSelection.vue'
-import FormEditor from '~/components/createTemplate/formEditor/FormEditor.vue'
 import TemplateEditor from '~/components/createTemplate/TemplateEditor.vue'
 import { resetAllTemplateCreationValues, templateDeliveryOptions, templateGeneralInformation } from '~/composables/useTemplateCreationData'
-import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { activeTextStyles, resetAllTemplateEditorValues, templateEditorStore } from '@/composables/useTemplateEditorData'
 
 // import { accountData } from '@/composables/useAccountData'
 import { useAuth } from '@/composables/useAuth'
@@ -180,8 +161,10 @@ async function fetchSizes(url) {
     // setPdfPageSizes(pageSizes) // Assuming you have a state or function to save the page sizes array
   }
 }
-
+const isSaving = ref(false)
 async function saveTemplate() {
+  isSaving.value = true
+  toast.add({ severity: 'success', summary: templateEditorStore?.templateToEdit?.id ? 'Updating template' : 'Saving template', detail: 'Process started', life: 1000 })
   const canvas = canvasService.getCanvas()
   if (!canvas)
     return
@@ -203,7 +186,7 @@ async function saveTemplate() {
   })
   // creating deserialized because by default canvas does not save its all attributes of object
   const deserializedObjects = objects.map((obj) => {
-    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash'])
+    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash', 'lockScalingFlip'])
   })
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
@@ -217,6 +200,7 @@ async function saveTemplate() {
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
     dataset_start_line: templateEditorStore.datasetStartAtLine,
     template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
+    last_text_options: JSON.stringify({ activeTextStyles, lastScaledTextOptions: templateEditorStore?.lastScaledTextOptions }),
     page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),
     dataset_data: JSON.stringify(templateEditorStore?.datasetData),
@@ -248,13 +232,14 @@ async function saveTemplate() {
           canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
-        }, 1000)
+        }, 500)
       }
       catch (err) {
       // console.log('error', err)
       }
     }
     catch (error) {
+      isSaving.value = false
       console.error('Error:', error)
       toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
     }
@@ -280,13 +265,14 @@ async function saveTemplate() {
           canvasService.refreshCanvas()
           router.currentRoute.value.path = '/'
           router.push('templates')
-        }, 1000)
+        }, 500)
       }
       catch (err) {
       // console.log('error', err)
       }
     }
     catch (error) {
+      isSaving.value = false
       console.error('Error:', error)
       toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
     }

@@ -44,7 +44,7 @@
       <p class="font-poppins text-md text-surface-500 mb-2">
         {{ $t('Cp_templateEditor_formOptions.select_format') }}
       </p>
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
     </div>
 
     <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form date'" class="w-full pt-4 mb-4">
@@ -59,7 +59,7 @@
         <p class="font-poppins text-md">
           {{ $t('Cp_templateEditor_formOptions.advanced_options') }}
         </p>
-        <font-awesome-icon icon="fa-solid fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+        <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
       </div>
       <div v-if="showAdvancedOptions">
         <p class="font-poppins text-md text-surface-600 mt-4 mb-2">
@@ -109,7 +109,7 @@
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'time'" class="w-full pt-4 mt-2">
-      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
+      <Dropdown v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full p-1" />
     </div>
 
     <div v-if="templateEditorStore.activeFormField === 'date'" class="w-full pt-4 mt-2">
@@ -160,6 +160,7 @@ const characterAcceptionOptions = ref([
 
 function fillUpOptions() {
   const sF = templateEditorStore.selectedAddedField
+  console.log('sf', sF)
   if (sF?.name !== 'Lorem ipsum' && sF?.name !== 'Add field name')
     fieldName.value = sF?.name
   else
@@ -181,9 +182,9 @@ function fillUpOptions() {
   }
 
   if (sF?.fieldType === 'Form date')
-    selectedDateFormat.value = sF?.dateFormat ? sF?.dateFormat : 'MM/DD/YYYY'
+    selectedDateFormat.value = sF?.dateFormat ? { name: sF?.dateFormat } : { name: 'MM/DD/YYYY' }
   if (sF?.fieldType === 'Form time')
-    selectedTimeFormat.value = sF?.timeFormat ? sF?.timeFormat : 'HH:MM:SS'
+    selectedTimeFormat.value = sF?.timeFormat ? timeFormats?.value?.filter(f => f?.name === sF?.timeFormat)[0] : { name: 'HH:MM:SS' }
   if (sF?.fieldType === 'Form list')
     selectedList.value = sF?.selectedList ? sF?.selectedList : {}
 }
@@ -252,7 +253,7 @@ function changeMinLength() {
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, minCharAllowed: length }
+      return { ...f, minCharAllowed: Number.parseInt(length) }
     else return f
   })
 }
@@ -262,7 +263,7 @@ function changeMaxLength() {
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
-      return { ...f, maxCharAllowed: length }
+      return { ...f, maxCharAllowed: Number.parseInt(length) }
     else return f
   })
 }

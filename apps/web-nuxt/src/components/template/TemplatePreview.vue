@@ -7,8 +7,8 @@
     </template>
 
     <div class="flex justify-center items-center space-x-8">
-      <div class="flex flex-col">
-        <img class="w-80 h-[30rem] flex justify-center mt-2 mr-6" :src="props.template.image" />
+      <div class="flex flex-col ">
+        <ImagePreview :preview-hash="`${template.image_preview_hash}-modal`" :background-file-url="template.background_file_url" :filtered-templates="filteredTemplates" :is-modal="true" />
       </div>
 
       <div class="flex flex-col space-y-4 mt-4">
@@ -16,16 +16,16 @@
           <span class="font-semibold mr-2">Template name</span>  {{ props.template.name }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal">
-          <span class="font-semibold mr-2">Date created</span>  {{ props.template.createdOn }}
+          <span class="font-semibold mr-2">Date created</span>  {{ formatDateForInput(props?.template?.created_at, "DD/MM/YYYY") }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal">
-          <span class="font-semibold mr-2">Date modified</span> {{ props.template.modifiedOn }}
+          <span class="font-semibold mr-2">Date modified</span>  {{ formatDateForInput(props?.template?.updated_at, "DD/MM/YYYY") }}  {{ formatTimeForInput(props?.template?.updated_at, "HH:MM") }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal">
-          <span class="font-semibold mr-2">Total document created</span> {{ props.template.docCreated }}
+          <span class="font-semibold mr-2">Total document created</span> {{ props.template.total_generated_docs }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal">
-          <span class="font-semibold mr-2">Time saved</span> {{ props.template.timeSaved }} hrs
+          <span class="font-semibold mr-2">Time saved</span> {{ (props.template.total_generated_docs / (60 * 40))?.toFixed(6) }} hrs
         </p>
       </div>
     </div>
@@ -35,6 +35,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useToast } from 'primevue/usetoast'
+import ImagePreview from './ImagePreview'
 
 const props = defineProps({
   template: {

@@ -5,7 +5,7 @@
   <div class="flex w-full space-x-6 relative mb-12 h-[90vh] overflow-hidden">
     <TemplateFields />
     <EditorCanvas />
-    <Options />
+    <Options @save-template="emit('saveTemplate')" />
   </div>
 </template>
 
@@ -13,6 +13,8 @@
 import TemplateFields from './templateEditor/templateFields/TemplateFields.vue'
 import Options from './templateEditor/options/Options.vue'
 import EditorCanvas from './templateEditor/editorCanvas/EditorCanvas.vue'
+
+const emit = defineEmits(['saveTemplate'])
 
 // import { templateEditorStore } from '@/composables/useTemplateEditorData'
 // import { templateGeneralInformation } from '~/composables/useTemplateCreationData'

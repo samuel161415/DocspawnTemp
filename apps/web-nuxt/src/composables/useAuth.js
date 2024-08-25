@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 
-const user = ref(null)
+const user = ref({ name: 'Hanan', email: 'hanan@tec.tech' })
 const token = ref(null)
 
 if (typeof window !== 'undefined') {

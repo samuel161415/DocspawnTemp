@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev -p 3001",
     "generate": "nuxt generate",
-    "preview": "nuxt preview",
+    "preview": "nuxt preview -p 3001",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@docspawn/shared-doc-generation-modals": "workspace:^",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/i18n": "^8.3.1",
     "exceljs": "^4.4.0",
@@ -22,6 +23,7 @@
     "vue-uuid": "^3.0.0"
   },
   "devDependencies": {
+    "@originjs/vite-plugin-federation": "^1.3.5",
     "nuxt": "^3.9.1",
     "nuxt-gtag": "^1.2.0",
     "nuxt-primevue": "^0.3.0",

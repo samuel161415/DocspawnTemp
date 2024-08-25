@@ -1,5 +1,5 @@
 <template>
-  <div class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4">
+  <div v-if="templateEditorStore.totalPagesArray?.length > 1" class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4">
     <div class="w-full h-max p-2">
       <p class="px-2 mb-1">
         {{ $t('Cp_createTemplate_editorThumbnail.current_page') }} <span class="text-primary-500 text-bold">{{ templateEditorStore.activePageForCanvas }}</span> {{ $t('Cp_createTemplate_editorThumbnail.out_of') }}

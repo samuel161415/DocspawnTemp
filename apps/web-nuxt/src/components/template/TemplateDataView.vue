@@ -2,7 +2,7 @@
   <div class="mt-14 rounded-lg pb-2">
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
-        <div class="flex justify-between space-x-2">
+        <div class="flex  gap-4 md:flex-row justify-between space-x-2">
           <!-- <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
             <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
               {{ $t('Cp_templateDataview.all') }}
@@ -38,8 +38,8 @@
               Favourite Templates
             </h2>
           </div>
-          <div class="flex space-y-2 lg:space-y-0 lg:space-x-4 flex-col lg:flex-row">
-            <div class="flex space-x-2">
+          <div class="flex items-center  ">
+            <div class="flex  mr-1">
               <span class="relative flex">
                 <i
                   class="pi pi-search absolute top-2/4 -mt-2 left-3 text-surface-400 dark:text-surface-600 text-gray-700"
@@ -48,11 +48,13 @@
                 <InputText
                   v-model="searchQuery"
                   :placeholder="$t('Cp_templateDataview.search')"
-                  class="pl-10 font-normal font-poppins rounded-lg text-surface-500 border-gray-300 w-64"
+                  class="pl-10 font-normal font-poppins rounded-lg text-surface-500 border-gray-300 w-full md:w-64"
                 />
               </span>
             </div>
-            <DataViewLayoutOptions v-model="layout" />
+            <div class="w-max ml-auto">
+              <DataViewLayoutOptions v-model="layout" />
+            </div>
           </div>
         </div>
       </template>
@@ -169,24 +171,24 @@
         <div v-show="!templatesLoading" class="flex flex-wrap">
           <div
             v-for="(item, index) in slotProps.items" :key="index"
-            class="w-full sm:w-1/3 md:w-4/12 xl:w-1/5 px-2 py-4 pointer-parent  max-w-[180px]"
+            class="w-full w-[420px] px-2 py-4 pointer-parent  max-w-[380px]"
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
             @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
-              <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
-              <p class="text-primaryBlue font-bold font-poppins text-sm text-center mt-5">
+              <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #43AF79; --fa-secondary-color: #43AF79; width: 50px; height: 40px;" />
+              <p class="text-success font-bold font-poppins text-[16px] text-center mt-5">
                 {{ $t('Cp_templateDataview.drop_data') }}
                 <!-- {{ console.log('item', item) }} -->
               </p>
-              <p class="text-black font-poppins text-xs text-center mt-2">
+              <p class="text-black font-poppins text-[16px] text-center mt-2">
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
 
-            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+            <!-- <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex pt-2" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-end'">
                 <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
                 <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
@@ -213,6 +215,47 @@
                   />
                 </div>
               </div>
+            </div> -->
+            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+              <div class="flex items-center p-2 pt-4" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-between'">
+                <div class="">
+                  <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
+                </div>
+                <p class=" text-[18px] font-poppins font-semibold text-surface-600 truncate ">
+                  {{ item.name }}
+                </p>
+                <i class=" pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto " @click="(e) => { toggle(e); opItem = item }"></i>
+              </div>
+              <div class="surface-50 flex items-center  rounded-md  my-2 mt-1 gap-6">
+                <div class="relative cursor-pointer pointer-auto   " @click="() => handleTemplatePreview(item)">
+                  <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
+                </div>
+                <div class="flex flex-col gap-1 ">
+                  <p class="text-gray-500 text-[14px]">
+                    {{ $t('Cp_templateDataview.docs_created') }}: {{ item?.total_generated_docs }}
+                  </p>
+                  <p class="text-gray-500 text-[14px]">
+                    {{ $t('Cp_templateDataview.created_on') }}: {{ formatDateForInput(item?.created_at, "DD/MM/YYYY") }}
+                  </p>
+                  <p class="text-gray-500 text-[14px]">
+                    {{ $t('Cp_templateDataview.modified_on') }}: {{ formatDateForInput(item?.updated_at, "DD/MM/YYYY") }} {{ formatTimeForInput(item?.updated_at, 'HH:MM') }}
+                  </p>
+                </div>
+              </div>
+
+              <div class="mt-4 mb-3">
+                <div class="flex flex-col">
+                  <Button v-if="item.use_case === 'Form to doc'" outlined :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleFillForm(item)" />
+                  <Button
+                    v-else
+                    outlined
+                    severity="success" :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer  text-[16px]" @click="(e) => {
+                      templateSelectedForUploadingFile = item;
+                      uploadFile(e);
+                    }"
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -226,8 +269,20 @@
         <ListSkeleton v-for="n in 3" :key="n" />
       </div>
     </template>
-
+    <!--
     <FormEditorPreview
+      v-model:visible="previewFormVisible"
+      :mobile="mobile"
+      :form-title="formTitle"
+      :all-form-fields="currentTemplateAllFormFields"
+      :form-description="formDescription"
+      :is-collapsed="isCollapsed"
+      :is-generatable="true"
+      :template-data="currentTemplate"
+      @cancel="previewFormVisible = false"
+      @update-generated-docs="updateGeneratedDocs"
+    /> -->
+    <FormToDocGenerationModal
       v-model:visible="previewFormVisible"
       :mobile="mobile"
       :form-title="formTitle"
@@ -255,14 +310,14 @@
           {{ $t('Cp_templateDataview.access_document') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="toggleFavourite(opItem)">
-          {{ favouriteStates[opItem?.id] ? 'Remove from favourites' : $t('Cp_templateDataview.set_as_favorites') }}
+          {{ favouriteStates[opItem?.id] ? $t('Cp_templateDataview.remove_from_favourites') : $t('Cp_templateDataview.set_as_favorites') }}
         </p>
       </div>
     </OverlayPanel>
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
 
-  <DataToDocGeneration v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+  <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
 
   <ConfirmDialog group="templating">
     <template #message="slotProps">
@@ -311,7 +366,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { defineAsyncComponent, ref } from 'vue'
 import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions'
 
 import { useToast } from 'primevue/usetoast'
@@ -323,14 +378,18 @@ import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
+
+import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
-import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
-import FormEditorPreview from '~/components/createTemplate/formEditor/FinalPreview.vue'
+
+// import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
+// import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
+import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
 
 const props = defineProps({
   templates: {
@@ -342,8 +401,9 @@ const props = defineProps({
     type: Boolean,
   },
 })
-
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+
+console.log('props templates', props?.templates)
 
 const { t } = useI18n()
 
@@ -454,6 +514,9 @@ function handleFillForm(item) {
   // console.log('template at handle fill form', item)
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
+  console.log('handle fill form ')
+  console.log('current temapplate value', currentTemplate?.value)
+  console.log('currentTemplateAllFormFields.value', currentTemplateAllFormFields.value)
 }
 watch(currentTemplateAllFormFields, (val) => {
   console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)
@@ -467,6 +530,7 @@ watch(() => props.templates, (newVal) => {
 const runtimeConfig = useRuntimeConfig()
 
 function handleTemplatePreview(template) {
+  console.log('handle template preview', template)
   visible.value = true
   currentTemplate.value = template
 }
