@@ -1,7 +1,7 @@
 <template>
   <div class="mt-14 rounded-lg pb-2">
-    <div class="p-fluid">
-      <Button label="'click to show modal'" @click="showTemplateModal" />
+    <div class="">
+      <!-- <Button label="'click to show modal'" @click="showTemplateModal" /> -->
     </div>
 
     <FormToDocGenerationModal
@@ -13,12 +13,12 @@
       :is-collapsed="isCollapsed"
       :is-generatable="true"
       :template-data="currentTemplate"
+
       @cancel="previewFormVisible = false"
       @update-generated-docs="updateGeneratedDocs"
     />
+    <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
   </div>
-
-  <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
 
   <Toast position="top-right">
     <template #message="slotProps">
@@ -83,6 +83,23 @@ async function fetchTemplates() {
       templates.value = data?.map((d) => {
         return { ...d }
       })
+      if (props?.templateIdIframe)
+        selectedTemplateForDocGeneration.value = templates?.value?.filter(t => Number.parseInt(t?.id) === Number.parseInt(props?.templateIdIframe))[0]
+      console.log('props?.templateIdIframe', props?.templateIdIframe)
+      console.log('templates.value', templates?.value)
+      console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)', templates?.value?.filter(t => t?.id === props?.templateIdIframe))
+      console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0]', templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0])
+      if (!selectedTemplateForDocGeneration.value)
+        selectedTemplateForDocGeneration.value = templates.value[0]
+      if (selectedTemplateForDocGeneration.value?.use_case === 'Form to doc') {
+        currentTemplate.value = selectedTemplateForDocGeneration.value
+        currentTemplateAllFormFields.value = selectedTemplateForDocGeneration.value.added_fields?.filter(f => f?.isFormField)
+        previewFormVisible.value = true
+      }
+      else {
+        currentTemplate.value = selectedTemplateForDocGeneration.value
+        visibleDataToDoc.value = true
+      }
     }
     // console.log('response of fetching templates', data)
   }
@@ -135,6 +152,7 @@ watch(selectedTemplateForDocGeneration, () => {
     visibleDataToDoc.value = true
   }
 })
+
 function showTemplateModal() {
   console.log('props?.templateIdIframe', props?.templateIdIframe)
   if (props?.templateIdIframe)
