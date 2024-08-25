@@ -1,19 +1,19 @@
 <template>
-  <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max">
+  <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
     <template #header>
       <div class="inline-flex align-items-center justify-content-center gap-2">
         <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_dataToDoc_generation.header') }}</span>
       </div>
     </template>
 
-    <div class="flex justify-center space-x-8 h-3/4 w-[92vw]">
+    <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
       <div class="w-6/12 h-full mt-0">
         <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50">
           <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
             {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
           </p>
         </div>
-        <div class="w-full">
+        <div class="w-[30px] overflow-scroll" :style="{ maxWidth: '40vw' }">
           <EditDatasetTable
             v-if="template?.dataset_data?.keys?.length > 0"
             :data-source-file-complete-j-s-o-n="allData"

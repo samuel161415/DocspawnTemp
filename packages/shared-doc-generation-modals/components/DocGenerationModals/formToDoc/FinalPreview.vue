@@ -22,9 +22,6 @@
   >
     <template #header>
       <div :class="`${mobile ? '' : 'pl-4'}`" class="flex flex-row gap-3 w-full">
-        <!-- <p v-if="props?.isGeneratable" :class="` place-self-${mobile ? 'center' : 'start'} text-surface-600  text-[21px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview`">
-
-        </p> -->
         <div v-if="isGeneratable" class="inline-flex align-items-center justify-content-center gap-2">
           <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_formEditor_finalPreview.form_to_doc_generation') }}</span>
         </div>
@@ -36,10 +33,6 @@
           <i class="pi pi-desktop"></i>
           <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
         </div>
-        <!-- <div v-if="!props?.isGeneratable" class="mx-auto place-self-center flex flex-row">
-          <img src="../../../../assets/icons/LogoMark.svg" class="w-12 h-auto " />
-          <img v-if="!isCollapsed" src="../../../../assets/icons/logotext.svg" class="w-36 ml-1 h-auto" />
-        </div> -->
       </div>
     </template>
     <template #default>
@@ -234,7 +227,9 @@
     </template>
     <template #footer>
     </template>
-  </Dialog>
+    <!-- </Dialog> -->
+    <!-- </dialog> -->
+  </dialog>
 </template>
 
 <script setup>
