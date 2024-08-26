@@ -15,7 +15,7 @@
         @update-generated-docs="updateGeneratedDocs"
       />
     </div>
-    <div v-if="visibleDataToDoc" class="w-max   w-max border border-black ">
+    <div v-if="visibleDataToDoc" class="w-max   w-max  ">
       <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
     </div>
   </div>

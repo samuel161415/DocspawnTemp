@@ -7,8 +7,8 @@
     </template> -->
 
   <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
-    <div class="w-6/12 h-full mt-0">
-      <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50">
+    <div class="w-6/12 h-full mt-0" :style="{ marginRight: '12px' }">
+      <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :style="{ height: '58px' }">
         <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
           {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
         </p>
@@ -22,7 +22,7 @@
           @change-selected-rows="handleChangeSelectedRows"
         />
       </div>
-      <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
+      <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'}`" :style="{ marginTop: '12px' }">
         <Button contained severity="success" :label="$t('Cp_dataToDoc_generation.spawn_documents')" class="w-max font-poppins font-normal text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
       </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="h-full  w-max overflow-auto w-7/12 ml-4 ">
-    <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
+    <div class="mb-2  w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 " :style="{ height: '58px' }">
       <p class="font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6 text-center w-full  ">
         {{ $t('Cp_canvasPreview.live_preview') }}
       </p>
@@ -237,7 +237,9 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
+  const canvasWrapperWidth
+  //  canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth :
+    = 900
 
   const canvas = await canvasService.createCanvas(templateCanvas.value, {
     isDrawing: true,

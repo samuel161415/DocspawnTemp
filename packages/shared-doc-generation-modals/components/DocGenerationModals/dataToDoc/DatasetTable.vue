@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-wrap gap-4 mt-7">
+  <div class="flex flex-col flex-wrap gap-4 mt-7" :style="{ gap: '12px', marginTop: '20px', marginBottom: '16px' }">
     <div class="flex items-center">
       <RadioButton v-model="rowSelectionType" input-id="rowSelectionType2" name="pizza" value="manual" />
       <label for="rowSelectionType2" class="ml-2 font-poppins text-surface-600 font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px]">Manual data entry</label>

@@ -37,8 +37,8 @@
     </template> -->
   <!-- <template #default> -->
   <div class="flex">
-    <div :class="`flex flex-col gap-4 ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
-      <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }">
+    <div :class="`flex flex-col  ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
+      <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }" :style="{ height: '58px' }">
         <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
           {{ formTitle ? formTitle : templateData?.name }}
         </p>
@@ -48,7 +48,7 @@
         {{ formDescription }}
       </div>
 
-      <div v-if="fields" class="w-full place-self-start flex flex-col gap-5 bg-surface-50 p-4">
+      <div v-if="fields" class="w-full place-self-start flex flex-col  bg-surface-50 p-4" :style="{ gap: '12px' }">
         <!-- h-[70vh] overflow-y-auto -->
         <div v-for="(formField, index) in fields" :key="formField.id" class="">
           <div v-if="formField.fieldType === 'Form text'" class="flex flex-col gap-2">
@@ -203,7 +203,7 @@
             <InputText :id="`${formField.name}-${index}`" v-model="formField.state" class="border-red-500" />
           </div>
         </div>
-        <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
+        <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-4`" :style="{ marginTop: '12px' }">
           <Button
             class="font-poppins font-normal text-[16px] leading-[25px]"
             severity="success"

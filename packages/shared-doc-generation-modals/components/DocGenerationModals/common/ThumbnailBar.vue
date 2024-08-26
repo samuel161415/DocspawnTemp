@@ -1,11 +1,11 @@
 <template>
-  <div v-if="docGenerationData.totalPagesArray?.length > 1" class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4">
+  <div v-if="docGenerationData.totalPagesArray?.length > 1" class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4" :style="{ marginTop: '16px' }">
     <div class="w-full h-max p-2">
       <p class="px-2 mb-1">
         {{ $t('Cp_createTemplate_editorThumbnail.current_page') }} <span class="text-primary-500 text-bold">{{ docGenerationData.activePageForCanvas }}</span> {{ $t('Cp_createTemplate_editorThumbnail.out_of') }}
         <span class="text-primary-400 text-bold">{{ docGenerationData.totalPagesArray.length }}</span>
       </p>
-      <div v-if="docGenerationData.activePageForCanvas !== 0" class="flex gap-4 w-full overflow-x-auto overflow-y-hidden p-3">
+      <div v-if="docGenerationData.activePageForCanvas !== 0" class="flex  w-full overflow-x-auto overflow-y-hidden p-3" :style="{ gap: '12px' }">
         <div v-for="item in docGenerationData.totalPagesArray" :key="item" class="w-18 h-max" :class="{ 'scale-110': docGenerationData.activePageForCanvas === item }" @click="selectPageFromThumbnail(item)">
           <canvas :id="`template-thumbnail-${item}`" class="flex-1 w-full min-h-full h-max rounded-md my-0 shadow cursor-pointer">
           </canvas>

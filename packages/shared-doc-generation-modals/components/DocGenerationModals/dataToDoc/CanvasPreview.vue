@@ -1,6 +1,6 @@
 <template>
   <div class="h-full  w-max overflow-auto w-6/12 ">
-    <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
+    <div class="mb-2  w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 " :style="{ height: '58px' }">
       <!-- <div class=" flex items-center">
         <Slider v-model="scale" :step="0.01" :min="0.5" :max="1" class="w-56" @input="updateScale" />
         <input v-model="scale" type="range" min="0.5" max="1" step="0.01" class="slider" />
@@ -35,7 +35,7 @@
           </div>
         </div>
       </div>
-      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative   border ">
+      <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
@@ -198,8 +198,10 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
-
+  const canvasWrapperWidth
+  //  canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth :
+    = 900
+  console.log('canvas wrapper width>>>>>>>>>>>>>>>>>', canvasWrapperWidth)
   const canvas = await canvasService.createCanvas(templateCanvas.value, {
     isDrawing: true,
     width: canvasWrapperWidth,
