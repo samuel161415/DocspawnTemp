@@ -1,6 +1,6 @@
 <template>
   <div class="h-full  w-max overflow-auto w-7/12 ml-4 ">
-    <div class="mb-2 h-[58px] w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 ">
+    <div class="mb-2  w-200  flex items-center justify-between px-3  mb-0 rounded-md bg-primary-50 sticky top-0 left-0 " :style="{ height: '58px' }">
       <p class="font-poppins font-semibold text-surface-600  text-[18px] text-[rgb(75,85,99)] leading-6 text-center w-full  ">
         {{ $t('Cp_canvasPreview.live_preview') }}
       </p>
@@ -71,12 +71,20 @@ onMounted(() => {
   if (props?.template)
     callCreateCanvas()
 })
+
 function refreshPreview() {
   selectedData.value = props.formValues
   renderOriginalData()
 }
 watch(props?.formValues, (val) => {
+  console.log(' 1 change in props?.form value', val)
   selectedData.value = val
+  renderOriginalData()
+})
+watch(props, (val) => {
+  // setting watch for props , because when final preview called from main app, watch on specific props does not work
+  console.log('2 change in props?.form value', val?.formValues)
+  selectedData.value = val?.formValues
   renderOriginalData()
 })
 // watch(() => props?.selectedRows, (newVal) => {
@@ -127,7 +135,7 @@ function renderOriginalData() {
         }
         else if (obj?.fieldType === 'Form checkbox group') {
           const specificCheck = data?.filter(d => d?.hash === obj?.hash)[0]?.checkboxes?.filter(c => c?.checkboxIdentifierHash === obj?.checkboxIdentifierHash)[0]
-          const isChecked = specificCheck.state === true
+          const isChecked = specificCheck?.state === true
           const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
           if (correspondingField?.designs) {
             const originalHeight = obj.height * obj.scaleY
@@ -216,6 +224,7 @@ const templateCanvas = ref()
 const isCanvasLoaded = ref(false)
 
 function callCreateCanvas() {
+  // console.log('call create canvas being called')
   // using this function to resolve error- canvas wrapper is loading later than createcanvas function
   // const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
   //   if (parentWidth && parentWidth > 0)
@@ -228,7 +237,9 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
+  const canvasWrapperWidth
+  //  canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth :
+    = 900
 
   const canvas = await canvasService.createCanvas(templateCanvas.value, {
     isDrawing: true,

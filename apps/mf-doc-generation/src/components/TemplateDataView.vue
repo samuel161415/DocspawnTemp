@@ -1,23 +1,23 @@
 <template>
-  <div class="mt-14 rounded-lg pb-2">
-    <div class="">
-      <!-- <Button label="'click to show modal'" @click="showTemplateModal" /> -->
+  <div class="rounded-lg pb-2 flex justify-center  w-[100vw] h-[98vh] overflow-auto py-4 ">
+    <div v-if="previewFormVisible" class="w-max  min-w-[600px] w-max">
+      <FormToDocGenerationModal
+        v-model:visible="previewFormVisible"
+        :mobile="mobile"
+        :form-title="formTitle"
+        :all-form-fields="currentTemplateAllFormFields"
+        :form-description="formDescription"
+        :is-collapsed="isCollapsed"
+        :is-generatable="true"
+        :template-data="currentTemplate"
+
+        @cancel="previewFormVisible = false"
+        @update-generated-docs="updateGeneratedDocs"
+      />
     </div>
-
-    <FormToDocGenerationModal
-      v-model:visible="previewFormVisible"
-      :mobile="mobile"
-      :form-title="formTitle"
-      :all-form-fields="currentTemplateAllFormFields"
-      :form-description="formDescription"
-      :is-collapsed="isCollapsed"
-      :is-generatable="true"
-      :template-data="currentTemplate"
-
-      @cancel="previewFormVisible = false"
-      @update-generated-docs="updateGeneratedDocs"
-    />
-    <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+    <div v-if="visibleDataToDoc" class="w-max   w-max  ">
+      <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+    </div>
   </div>
 
   <Toast position="top-right">
