@@ -1,35 +1,35 @@
 <template>
-  <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
+  <!-- <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
     <template #header>
       <div class="inline-flex align-items-center justify-content-center gap-2">
         <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_dataToDoc_generation.header') }}</span>
       </div>
-    </template>
+    </template> -->
 
-    <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
-      <div class="w-6/12 h-full mt-0">
-        <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50">
-          <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
-            {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
-          </p>
-        </div>
-        <div class="w-[30px] overflow-scroll" :style="{ maxWidth: '40vw' }">
-          <EditDatasetTable
-            v-if="template?.dataset_data?.keys?.length > 0"
-            :data-source-file-complete-j-s-o-n="allData"
-            :data-source-column-names="template?.dataset_data?.keys"
-            :data-source-selected-rows="selectedRows"
-            @change-selected-rows="handleChangeSelectedRows"
-          />
-        </div>
-        <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
-          <Button contained severity="success" :label="$t('Cp_dataToDoc_generation.spawn_documents')" class="w-max font-poppins font-normal text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
-        </div>
+  <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
+    <div class="w-6/12 h-full mt-0">
+      <div class="mb-0 h-[58px] w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50">
+        <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
+          {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
+        </p>
       </div>
-      <CanvasPreview :template="template" :selected-rows="selectedRows" />
+      <div class="w-[30px] overflow-scroll" :style="{ maxWidth: '40vw' }">
+        <EditDatasetTable
+          v-if="template?.dataset_data?.keys?.length > 0"
+          :data-source-file-complete-j-s-o-n="allData"
+          :data-source-column-names="template?.dataset_data?.keys"
+          :data-source-selected-rows="selectedRows"
+          @change-selected-rows="handleChangeSelectedRows"
+        />
+      </div>
+      <div :class="`w-full flex ${mobile ? 'justify-center' : 'justify-center'} mt-5`">
+        <Button contained severity="success" :label="$t('Cp_dataToDoc_generation.spawn_documents')" class="w-max font-poppins font-normal text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
+      </div>
     </div>
-    <!-- Commented out for future use -->
-    <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
+    <CanvasPreview v-if="template" :template="template" :selected-rows="selectedRows" />
+  </div>
+  <!-- Commented out for future use -->
+  <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
       <div v-if="isGeneratingDoc" class="w-300 flex py-6 justify-center items-center">
         <p>currently generating</p>
         <ProgressSpinner />
@@ -44,7 +44,7 @@
         </div>
       </div>
     </Dialog> -->
-    <!-- <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
+  <!-- <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
       <template #message="slotProps">
         <div class="flex flex-col items-start flex-auto w-max ">
           <div class="flex items-center gap-2">
@@ -78,7 +78,7 @@
         </div>
       </template>
     </Toast> -->
-  </Dialog>
+  <!-- </Dialog> -->
 </template>
 
 <script setup>

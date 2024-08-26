@@ -71,12 +71,20 @@ onMounted(() => {
   if (props?.template)
     callCreateCanvas()
 })
+
 function refreshPreview() {
   selectedData.value = props.formValues
   renderOriginalData()
 }
 watch(props?.formValues, (val) => {
+  console.log(' 1 change in props?.form value', val)
   selectedData.value = val
+  renderOriginalData()
+})
+watch(props, (val) => {
+  // setting watch for props , because when final preview called from main app, watch on specific props does not work
+  console.log('2 change in props?.form value', val?.formValues)
+  selectedData.value = val?.formValues
   renderOriginalData()
 })
 // watch(() => props?.selectedRows, (newVal) => {
@@ -127,7 +135,7 @@ function renderOriginalData() {
         }
         else if (obj?.fieldType === 'Form checkbox group') {
           const specificCheck = data?.filter(d => d?.hash === obj?.hash)[0]?.checkboxes?.filter(c => c?.checkboxIdentifierHash === obj?.checkboxIdentifierHash)[0]
-          const isChecked = specificCheck.state === true
+          const isChecked = specificCheck?.state === true
           const correspondingField = data?.filter(a => a?.hash === obj?.hash)[0]
           if (correspondingField?.designs) {
             const originalHeight = obj.height * obj.scaleY
@@ -216,6 +224,7 @@ const templateCanvas = ref()
 const isCanvasLoaded = ref(false)
 
 function callCreateCanvas() {
+  // console.log('call create canvas being called')
   // using this function to resolve error- canvas wrapper is loading later than createcanvas function
   // const parentWidth = document?.getElementById('template-canvas')?.offsetWidth
   //   if (parentWidth && parentWidth > 0)

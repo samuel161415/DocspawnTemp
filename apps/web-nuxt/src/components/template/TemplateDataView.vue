@@ -282,19 +282,50 @@
       @cancel="previewFormVisible = false"
       @update-generated-docs="updateGeneratedDocs"
     /> -->
-    <FormToDocGenerationModal
+    <Dialog
       v-model:visible="previewFormVisible"
-      :mobile="mobile"
-      :form-title="formTitle"
-      :all-form-fields="currentTemplateAllFormFields"
-      :form-description="formDescription"
-      :is-collapsed="isCollapsed"
-      :is-generatable="true"
-      :template-data="currentTemplate"
-      @cancel="previewFormVisible = false"
-      @update-generated-docs="updateGeneratedDocs"
-    />
-
+      modal
+      :draggable="false"
+      :style="mobile ? { width: '28rem' } : { maxWidth: '90vw', width: 'max-content' }"
+      :pt="{
+        header: {
+          class: [
+            'flex items-center justify-between',
+            'shrink-0',
+            'p-6',
+            `pb-${mobile ? '0' : ''}`,
+            'border-t-0',
+            'rounded-tl-lg',
+            'rounded-tr-lg',
+            'bg-surface-0 dark:bg-surface-800',
+            'text-surface-700 dark:text-surface-0/80',
+          ],
+        },
+      }"
+    >
+      <template #header>
+        <div :class="`${mobile ? '' : 'pl-4'}`" class="flex flex-row gap-3 w-full">
+          <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_formEditor_finalPreview.form_to_doc_generation') }}</span>
+          </div>
+        </div>
+      </template>
+      <template #default>
+        <div>
+          <FormToDocGenerationModal
+            :mobile="mobile"
+            :form-title="formTitle"
+            :all-form-fields="currentTemplateAllFormFields"
+            :form-description="formDescription"
+            :is-collapsed="isCollapsed"
+            :is-generatable="true"
+            :template-data="currentTemplate"
+            @cancel="previewFormVisible = false"
+            @update-generated-docs="updateGeneratedDocs"
+          />
+        </div>
+      </template>
+    </Dialog>
     <OverlayPanel ref="op">
       <div class="flex flex-col justify-start w-48 h-max">
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="editTemplate(opItem)">
@@ -317,8 +348,16 @@
   </div>
   <TemplatePreview v-if="visible" v-model:visible="visible" :template="currentTemplate" @cancel="visible = false" @outside-click="handleOutsideClick" />
 
-  <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
-
+  <Dialog v-model:visible="visibleDataToDoc" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
+    <template #header>
+      <div class="inline-flex align-items-center justify-content-center gap-2">
+        <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_dataToDoc_generation.header') }}</span>
+      </div>
+    </template>
+    <template #default>
+      <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+    </template>
+  </Dialog>
   <ConfirmDialog group="templating">
     <template #message="slotProps">
       <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
@@ -510,13 +549,13 @@ props.templates.forEach((template, index) => {
 
 const currentTemplateAllFormFields = ref('')
 function handleFillForm(item) {
-  previewFormVisible.value = true
   // console.log('template at handle fill form', item)
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
   console.log('handle fill form ')
   console.log('current temapplate value', currentTemplate?.value)
   console.log('currentTemplateAllFormFields.value', currentTemplateAllFormFields.value)
+  previewFormVisible.value = true
 }
 watch(currentTemplateAllFormFields, (val) => {
   console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)
