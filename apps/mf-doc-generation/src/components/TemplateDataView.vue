@@ -10,13 +10,13 @@
         :is-collapsed="isCollapsed"
         :is-generatable="true"
         :template-data="currentTemplate"
-
+        :is-external="true"
         @cancel="previewFormVisible = false"
         @update-generated-docs="updateGeneratedDocs"
       />
     </div>
     <div v-if="visibleDataToDoc" class="w-max   w-max  ">
-      <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
+      <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :is-external="true" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
     </div>
   </div>
 
@@ -77,7 +77,6 @@ async function fetchTemplates() {
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
-    console.log('templates', data)
 
     if (data?.length > 0) {
       templates.value = data?.map((d) => {
@@ -85,10 +84,6 @@ async function fetchTemplates() {
       })
       if (props?.templateIdIframe)
         selectedTemplateForDocGeneration.value = templates?.value?.filter(t => Number.parseInt(t?.id) === Number.parseInt(props?.templateIdIframe))[0]
-      console.log('props?.templateIdIframe', props?.templateIdIframe)
-      console.log('templates.value', templates?.value)
-      console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)', templates?.value?.filter(t => t?.id === props?.templateIdIframe))
-      console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0]', templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0])
       if (!selectedTemplateForDocGeneration.value)
         selectedTemplateForDocGeneration.value = templates.value[0]
       if (selectedTemplateForDocGeneration.value?.use_case === 'Form to doc') {
@@ -137,11 +132,7 @@ onMounted(() => {
   }, 2000)
 })
 
-watch(previewFormVisible, () => {
-  console.log('previewFormVisible', previewFormVisible.value)
-})
 watch(selectedTemplateForDocGeneration, () => {
-  console.log('selectedTemplateForDocGeneration', selectedTemplateForDocGeneration.value)
   if (selectedTemplateForDocGeneration.value?.use_case === 'Form to doc') {
     currentTemplate.value = selectedTemplateForDocGeneration.value
     currentTemplateAllFormFields.value = selectedTemplateForDocGeneration.value.added_fields?.filter(f => f?.isFormField)
@@ -154,12 +145,8 @@ watch(selectedTemplateForDocGeneration, () => {
 })
 
 function showTemplateModal() {
-  console.log('props?.templateIdIframe', props?.templateIdIframe)
   if (props?.templateIdIframe)
     selectedTemplateForDocGeneration.value = templates?.value?.filter(t => Number.parseInt(t?.id) === Number.parseInt(props?.templateIdIframe))[0]
-  console.log('templates.value', templates?.value)
-  console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)', templates?.value?.filter(t => t?.id === props?.templateIdIframe))
-  console.log('templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0]', templates?.value?.filter(t => t?.id === props?.templateIdIframe)[0])
   if (!selectedTemplateForDocGeneration.value)
     selectedTemplateForDocGeneration.value = templates.value[0]
   if (selectedTemplateForDocGeneration.value?.use_case === 'Form to doc') {

@@ -1,11 +1,4 @@
 <template>
-  <!-- <Dialog v-model:visible="visible" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
-    <template #header>
-      <div class="inline-flex align-items-center justify-content-center gap-2">
-        <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_dataToDoc_generation.header') }}</span>
-      </div>
-    </template> -->
-
   <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
     <div class="w-6/12 h-full mt-0" :style="{ marginRight: '12px' }">
       <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :style="{ height: '58px' }">
@@ -13,7 +6,7 @@
           {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
         </p>
       </div>
-      <div class="w-[30px] overflow-scroll" :style="{ maxWidth: '40vw' }">
+      <div class="w-[30px] overflow-auto" :style="{ maxWidth: '40vw' }">
         <EditDatasetTable
           v-if="template?.dataset_data?.keys?.length > 0"
           :data-source-file-complete-j-s-o-n="allData"
@@ -26,7 +19,7 @@
         <Button contained severity="success" :label="$t('Cp_dataToDoc_generation.spawn_documents')" class="w-max font-poppins font-normal text-[16px] leading-[25px]" :disabled="selectedRows?.length < 1 || isGeneratingDoc" @click="generateDocs" />
       </div>
     </div>
-    <CanvasPreview v-if="template" :template="template" :selected-rows="selectedRows" />
+    <CanvasPreview v-if="template" :template="template" :selected-rows="selectedRows" use-case="dataToDoc" />
   </div>
   <!-- Commented out for future use -->
   <!-- <Dialog v-model:visible="showGeneratedDocsModal" modal header="Generating docs" :style="{ width: '25rem' }">
@@ -44,41 +37,42 @@
         </div>
       </div>
     </Dialog> -->
-  <!-- <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
-      <template #message="slotProps">
-        <div class="flex flex-col items-start flex-auto w-max ">
-          <div class="flex items-center gap-2">
-            <font-awesome-icon icon="fa-bold fa-check" size="lg" />
-            <span class="font-bold">{{ $t('Cp_dataToDoc_generation.operation_complete') }}</span>
-          </div>
-          <div class="font-normal text-lg mt-1 font-poppins text-md">
-            {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} {{ $t('Cp_dataToDoc_generation.documents_generated') }}
-          </div>
-          <div class="flex gap-2 mt-4">
-            <Button size="small" :label="$t('Cp_dataToDoc_generation.download_all')" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
-            <Button outlined size="small" class="font-poppins whitespace-nowrap" :label="$t('Cp_dataToDoc_generation.open_document_library')" severity="success" @click="navigateDocumentLibrary()" />
+  <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-col items-start flex-auto w-max ">
+        <div class="flex items-center gap-2">
+          <font-awesome-icon icon="fa-bold fa-check" size="lg" />
+          <span class="font-bold">{{ $t('Cp_dataToDoc_generation.operation_complete') }}</span>
+        </div>
+        <div class="font-normal text-lg mt-1 font-poppins text-md">
+          {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} {{ $t('Cp_dataToDoc_generation.documents_generated') }}
+        </div>
+        <div class="flex gap-2 mt-4">
+          <Button size="small" :label="$t('Cp_dataToDoc_generation.download_all')" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
+          <Button outlined size="small" class="font-poppins whitespace-nowrap" :label="$t('Cp_dataToDoc_generation.open_document_library')" severity="success" @click="navigateDocumentLibrary()" />
+        </div>
+      </div>
+    </template>
+  </Toast>
+  <Toast position="top-right" group="ac" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-col items-start flex-auto">
+        <div class="flex items-center gap-2">
+          <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
+          <div>
+            <p class="font-bold">
+              {{ slotProps?.message?.summary }}
+            </p>
+            <p class="font-normal">
+              {{ slotProps?.message?.detail }}
+            </p>
           </div>
         </div>
-      </template>
-    </Toast>
-    <Toast position="top-right" group="ac" @close="onClose">
-      <template #message="slotProps">
-        <div class="flex flex-col items-start flex-auto">
-          <div class="flex items-center gap-2">
-            <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
-            <div>
-              <p class="font-bold">
-                {{ slotProps?.message?.summary }}
-              </p>
-              <p class="font-normal">
-                {{ slotProps?.message?.detail }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </template>
-    </Toast> -->
+      </div>
+    </template>
+  </Toast>
   <!-- </Dialog> -->
+  <GenerationSuccessModal v-if="showGnerationSuccessMessage" />
 </template>
 
 <script setup>
@@ -86,7 +80,8 @@ import { onMounted, ref } from 'vue'
 
 // import { useToast } from 'primevue/usetoast'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
-import CanvasPreview from './CanvasPreview'
+import CanvasPreview from '../common/CanvasPreview'
+import GenerationSuccessModal from '../common/GenerationSuccessModal.vue'
 import EditDatasetTable from './DatasetTable'
 
 const props = defineProps({
@@ -95,12 +90,15 @@ const props = defineProps({
     required: true,
     default: () => {},
   },
+  isExternal: {
+    type: Boolean,
+  },
 })
 
 const runtimeConfig = useRuntimeConfig()
 
 const router = useRouter()
-// const toast = useToast()
+const toast = useToast()
 
 const template = ref()
 const visible = ref(false)
@@ -110,10 +108,11 @@ const allData = ref([])
 const isGeneratingDoc = ref(false)
 const showGeneratedDocsModal = ref(false)
 const allGeneratedDocs = ref([])
+const showGnerationSuccessMessage = ref(false)
 
 onMounted(() => {
   template.value = props?.template
-  console.log('template', template.value)
+  // console.log('template', template.value)
   //   selectedRows.value = props?.value?.dataset_data?.allEntries
   selectedColumns.value = props?.template?.dataset_data?.selectedKeys
   let dataToSet = props?.template?.dataset_data?.allEntries?.map((f, i) => {
@@ -132,13 +131,17 @@ function handleChangeSelectedRows(data) {
 async function generateDocs() {
   isGeneratingDoc.value = true
   showGeneratedDocsModal.value = true
-  // toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 10000, group: 'ac' })
+  if (!props?.isExternal)
+    toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed. Download it from Documents library once generated', life: 10000, group: 'ac' })
 
   const objToSend = {
     finalData: selectedRows.value,
   }
   setTimeout(() => {
-    router.push('/')
+    if (!props?.isExternal)
+      router.push('/')
+    else
+      showGnerationSuccessMessage.value = true
   }, 2000)
   try {
     const response = await fetch(`${runtimeConfig.public.BASE_URL}/generate-documents/dataToDoc/${docGenerationData?.templateToGenerateDocs?.id}`, {

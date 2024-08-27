@@ -69,7 +69,6 @@ watch(croppedImageUrl, (val) => {
 })
 
 watch(() => props.isEdit, (val) => {
-  console.log('is edit', val)
   if (val) {
     imageUrl.value = originalImage.value
     visible.value = true
