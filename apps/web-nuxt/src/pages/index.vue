@@ -17,7 +17,7 @@
       </div>
     </div>
   </div>
-  <Toast position="top-right" group="bc" @close="onClose">
+  <!-- <Toast position="top-right" group="bc" @close="onClose">
     <template #message="slotProps">
       <div class="flex flex-col items-start flex-auto">
         <div class="flex items-center gap-2">
@@ -50,7 +50,7 @@
         </div>
       </div>
     </template>
-  </Toast>
+  </Toast> -->
 </template>
 
 <script setup>

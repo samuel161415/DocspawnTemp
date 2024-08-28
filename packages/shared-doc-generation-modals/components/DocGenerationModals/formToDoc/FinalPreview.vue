@@ -37,8 +37,8 @@
     </template> -->
   <!-- <template #default> -->
   <div class="flex">
-    <div :class="`flex flex-col  ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`">
-      <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }" :style="{ height: '58px' }">
+    <div :class="`flex flex-col  ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`" :style="{ marginRight: '12px' }">
+      <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }" :style="{ height: '58px', marginBottom: '8px' }">
         <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
           {{ formTitle ? formTitle : templateData?.name }}
         </p>
@@ -217,7 +217,7 @@
     </div>
     <!-- <div v-if="!mobile" class=" min-h-full flex-1 ml-12 flex justify-center items-center" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }">
           <div v-if="props.isGeneratable" :class="{ 'w-max md:w-max': props.isGeneratable, 'w-[50vw] md:w-[50vw]': !props.isGeneratable }"> -->
-    <CanvasPreview v-if="props.isGeneratable && props?.templateData && fields" :template="props.templateData" :form-values="fields" :selected-rows="fields" :refresh="refresherNumber" />
+    <CanvasPreview v-if="props.isGeneratable && props?.templateData && fields" :template="props.templateData" :form-values="fields" :selected-rows="fields" :refresh="refresherNumber" use-case="formToDoc" />
     <!-- </div> -->
     <p v-else-if="!mobile" class="font-poppins text-lg w-[40vw] flex justify-center items-center">
       {{ $t('Cp_formEditor_finalPreview.template_live_preview') }}
@@ -230,6 +230,41 @@
   <!-- </Dialog> -->
   <!-- </dialog> -->
   <!-- </dialog> -->
+  <GenerationSuccessModal v-if="showGnerationSuccessMessage" />
+  <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-col items-start flex-auto w-max ">
+        <div class="flex items-center gap-2">
+          <font-awesome-icon icon="fa-bold fa-check" size="lg" />
+          <span class="font-bold">{{ $t('Cp_dataToDoc_generation.operation_complete') }}</span>
+        </div>
+        <div class="font-normal text-lg mt-1 font-poppins text-md">
+          {{ allGeneratedDocs?.length }} {{ allGeneratedDocs?.length > 1 ? 'Documents' : 'Document' }} {{ $t('Cp_dataToDoc_generation.documents_generated') }}
+        </div>
+        <div class="flex gap-2 mt-4">
+          <Button size="small" :label="$t('Cp_dataToDoc_generation.download_all')" class="font-poppins whitespace-nowrap" severity="success" @click="downlaodAllDocuments()" />
+          <Button outlined size="small" class="font-poppins whitespace-nowrap" :label="$t('Cp_dataToDoc_generation.open_document_library')" severity="success" @click="navigateDocumentLibrary()" />
+        </div>
+      </div>
+    </template>
+  </Toast>
+  <Toast position="top-right" group="ac" @close="onClose">
+    <template #message="slotProps">
+      <div class="flex flex-col items-start flex-auto">
+        <div class="flex items-center gap-2">
+          <font-awesome-icon icon="fa-bold fa-clock-rotate-left" size="lg" class="rotate-180" />
+          <div>
+            <p class="font-bold">
+              {{ slotProps?.message?.summary }}
+            </p>
+            <p class="font-normal">
+              {{ slotProps?.message?.detail }}
+            </p>
+          </div>
+        </div>
+      </div>
+    </template>
+  </Toast>
 </template>
 
 <script setup>
@@ -239,13 +274,14 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
 import uploadFileToBackend from '../../../services/uploadFileToBackend'
+import CanvasPreview from '../common/CanvasPreview'
+import GenerationSuccessModal from '../common/GenerationSuccessModal.vue'
 import ImageInput from './cropper/ImageInput'
-import CanvasPreview from './FormToDocCanvasPreview'
 import { useRuntimeConfig } from '#app'
 
-const props = defineProps(['showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
+const props = defineProps(['isExternal', 'showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
-// const toast = useToast()
+const toast = useToast()
 const router = useRouter()
 const fields = ref([])
 
@@ -255,6 +291,7 @@ const isGeneratingDoc = ref(false)
 const allGeneratedDocs = ref([])
 const runtimeConfig = useRuntimeConfig()
 const refresherNumber = ref(0)
+const showGnerationSuccessMessage = ref(false)
 
 onMounted(() => {
   showPreview.value = props.showPreview
@@ -340,7 +377,8 @@ async function generateDocument() {
   isGeneratingDoc.value = true
 
   // showGeneratedDocsModal.value = true
-  // toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed', life: 4000, group: 'ac' })
+  if (!props?.isExternal)
+    toast.add({ severity: 'success', summary: 'Generating documents', detail: 'Your request is being processed. Download from Documenst library oce generated.', life: 4000, group: 'ac' })
 
   const formData = fields.value.map(field => ({
     ...field,
@@ -348,8 +386,11 @@ async function generateDocument() {
   }
   ))
   setTimeout(() => {
-    emit('cancel')
-    router.push('/')
+    if (!props?.isExternal) {
+      emit('cancel')
+      router.push('/')
+    }
+    else { showGnerationSuccessMessage.value = true }
   }, 2000)
 
   // Add additional logic to handle form data if necessary
