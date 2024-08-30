@@ -1,6 +1,6 @@
 <template>
   <div class="h-[62px] flex items-center justify-between px-3 z-10 mb-6 rounded-md bg-primary-50 sticky top-0 left-0">
-    <div class="flex justify-content-center gap-6 ml-8">
+    <div class="flex justify-content-center gap-6 ml-2">
       <div v-tooltip.top="$t('Cp_templateEditor_topbar.advanced_pointer')">
         <div v-if="!templateEditorStore.activeAdvancedPointer" class="cursor-pointer text-surface-600" @click="templateEditorStore.activeAdvancedPointer = true">
           <font-awesome-icon icon="fa-thin fa-arrow-pointer" size="xl" />
@@ -21,11 +21,11 @@
     <!-- <div class=" flex items-center">
       <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
     </div> -->
-    <div class="flex items-center gap-2">
+    <div class="flex items-center gap-2 max-w-[150px]">
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="decreaseScale">
         <font-awesome-icon icon="fa-light fa-magnifying-glass-minus" size="xl" />
       </button>
-      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border" @change="updateScale" />
+      <Slider v-model="scale" :min="0.5" :max="2" :step="0.1" class="mx-2 flex-1 border w-4" @change="updateScale" />
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="increaseScale">
         <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
@@ -74,6 +74,16 @@ function increaseScale() {
 watch(scale, (val) => {
   emit('updateScale', val)
 })
+// const computedScaleBoundries = computed(() => {
+//   if (screenWidth.value > 1400)
+//     return { min: 0.5, max: 2 }
+//   else if (screenWidth.value < 1400 && screenWidth.value > 1000)
+//     return { min: 0.3, max: 1.5 }
+//   else if (screenWidth.value < 1000 && screenWidth.value > 800)
+//     return { min: 0.2, max: 1.2 }
+//   else
+//     return { min: 0.1, max: 1 }
+// })
 
 const currentPreviewNo = ref(1)
 

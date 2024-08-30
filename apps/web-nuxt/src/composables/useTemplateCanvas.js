@@ -7,17 +7,25 @@ class CanvasService {
     this.canvas = null
   }
 
-  async createCanvas(canvasElement, options) {
+  async createCanvas(canvasElement, options, newDimensions) {
     if (typeof window !== 'undefined') {
       const { fabric } = await import('fabric')
       this.canvas = new fabric.Canvas(canvasElement, options)
 
       // Load template if canvas data exists
-      if (templateEditorStore?.templateToEdit?.canvas_data || templateEditorStore?.templateToGenerateDocs?.canvas_data) {
-        await this.loadCanvasFromData(templateEditorStore?.templateToEdit?.canvas_data
-          ? templateEditorStore?.templateToEdit?.canvas_data
-          : templateEditorStore?.templateToGenerateDocs?.canvas_data)
-      }
+      if (templateEditorStore?.templateToEdit?.canvas_data)
+        await this.loadCanvasFromData(templateEditorStore?.templateToEdit?.canvas_data)
+
+      // here the login should be about waht if we re rendering existing canvas with existing objects but with different canvas dimensions(width and height)
+      // old width(width when canvas was last rendered with objects)=templateEditorStroe?.templateToEdit?.canvas_size?.width
+      // old height(height when canvas was last rendered with objects)=templateEditorStroe?.templateToEdit?.canvas_size?.height
+      // new width(width at which we want to present canvas, and with all its objectm scaled and positioned according to)=newDimesions?.canvasNewWidth
+      // new height(height at which we want to present canvas, and with all its objectm scaled and positioned according to)=newDimesions?.canvasNewHeight
+
+      // console.log('old width', templateEditorStore?.templateToEdit?.canvas_size?.width)
+      // console.log('old height', templateEditorStore?.templateToEdit?.canvas_size?.height)
+      // console.log('new width', newDimensions?.canvasNewWidth)
+      // console.log('new height', newDimensions?.canvasNewHeight)
     }
 
     return this.canvas

@@ -1,5 +1,5 @@
 <template>
-  <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  ">
+  <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  " :style="{ width: `${computedCanvasWidth + 20}px` }">
     <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col w-[900px]  relative   ">
+    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col   relative   ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
     </div>
@@ -38,6 +38,9 @@ import { activeTextStyles, templateEditorStore } from '@/composables/useTemplate
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { useAuth } from '@/composables/useAuth'
+import { useScreenWidth } from '@/composables/useScreenWidth'
+
+const { screenWidth } = useScreenWidth()
 
 const { user } = useAuth()
 const runtimeConfig = useRuntimeConfig()
@@ -55,12 +58,19 @@ const scale = ref(1)
 function updateScale(value) {
   scale.value = value
   updateScrollPosition()
-  console.log('marginLeft', `${((900 * scale.value) - (900)) / 2}px`)
 }
 onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
 })
+
+const computedCanvasWidth = computed(() => {
+  if (screenWidth > 1600)
+    return 900
+  else
+    return (Number.parseInt(screenWidth.value / 100) - 6) * 100
+})
+
 function updateScrollPosition() {
   if (parentContainer.value && canvasWrapper.value) {
     const parentWidth = parentContainer.value.clientWidth
@@ -89,8 +99,10 @@ const canvasWrapperStyle = computed(() => ({
   // transformOrigin: 'center 0',
   transformOriginY: '0',
   // transformOriginX: '0',
-  width: '900px',
-  marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
+  // width: '900px',
+  width: `${computedCanvasWidth.value}px`,
+  // marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
+  marginLeft: `${scale.value < 1 ? 0 : ((computedCanvasWidth.value * scale.value) - (computedCanvasWidth.value)) / 2}px`,
   // // height: 'auto',
 
   height: `${canvasWrapperHeight.value}px`,
@@ -137,7 +149,11 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
+  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0
+    ? canvasWrapper.value?.clientWidth
+    : computedCanvasWidth.value
+  console.log('canvasWrapperWidth', canvasWrapperWidth)
+  // 900
 
   templateEditorStore.fabric = fabric
   // const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false,

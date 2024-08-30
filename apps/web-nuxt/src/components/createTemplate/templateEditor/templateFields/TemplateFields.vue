@@ -1,6 +1,6 @@
 <template>
   <ConfirmPopup group="confirmFieldDeletion" />
-  <div class="flex-1 h-full overflow-auto pr-1">
+  <div class="flex-1 h-full overflow-auto pr-1" :style="{ minWidth: '200px' }">
     <div class="w-full">
       <div
         v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true"
