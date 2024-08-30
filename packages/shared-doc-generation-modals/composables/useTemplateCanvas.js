@@ -14,10 +14,54 @@ class CanvasService {
 
       // Load template if canvas data exists
       if (docGenerationData?.templateToGenerateDocs?.canvas_data) {
-        await
-        this.loadCanvasFromData(
-          docGenerationData?.templateToGenerateDocs?.canvas_data,
-        )
+        console.log('docGenerationData?.templateToGenerateDocs?.canvas_data', docGenerationData?.templateToGenerateDocs?.canvas_data)
+
+        const oldWidth = docGenerationData?.templateToGenerateDocs?.canvas_size?.width
+        const oldHeight = docGenerationData?.templateToGenerateDocs?.canvas_size?.height
+        const newWidth = options?.width
+
+        if (oldWidth && oldHeight && newWidth) {
+          // Calculate the new height while maintaining the aspect ratio
+          const aspectRatio = oldHeight / oldWidth
+          const newHeight = newWidth * aspectRatio
+
+          // Calculate scaling factors
+          const scaleX = newWidth / oldWidth
+          const scaleY = newHeight / oldHeight
+
+          // Update the objects with new scale and positions
+          const updatedObjects = docGenerationData?.templateToGenerateDocs?.canvas_data?.objects?.map((o) => {
+            return {
+              ...o,
+              scaleX: o?.scaleX * scaleX,
+              scaleY: o?.scaleY * scaleY,
+              left: o?.left * scaleX,
+              top: o?.top * scaleY,
+            }
+          })
+
+          // Scale the background image if it exists
+          const backgroundImage = docGenerationData?.templateToGenerateDocs?.canvas_data?.backgroundImage
+          if (backgroundImage) {
+            backgroundImage.scaleX *= scaleX
+            backgroundImage.scaleY *= scaleY
+            backgroundImage.left *= scaleX
+            backgroundImage.top *= scaleY
+          }
+
+          const canvasDataToLoad = {
+            ...docGenerationData?.templateToGenerateDocs?.canvas_data,
+            objects: updatedObjects,
+            backgroundImage,
+          }
+
+          console.log('canvasDataToLoad', canvasDataToLoad)
+          await this.loadCanvasFromData(canvasDataToLoad)
+        }
+        // await
+        // this.loadCanvasFromData(
+        //   docGenerationData?.templateToGenerateDocs?.canvas_data,
+        // )
       }
     }
 
