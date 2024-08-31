@@ -1,11 +1,11 @@
 <!-- local version -->
 <template>
-  <div v-if="screenWidth && screenWidth < 990" class="h-[100vh] w-[100vw] flex justify-center items-center bg-primary-200">
+  <!-- <div v-if="screenWidth && screenWidth < 990" class="h-[100vh] w-[100vw] flex justify-center items-center bg-primary-200">
     <p class="max-w-[400px]  text-center text-xl font-semibold">
       Web version of DocSpawn is not available for screens with less than 990px of width
     </p>
-  </div>
-  <div v-else-if="!isAuthenticated" class="flex flex-col justify-center items-center w-full h-[100vh] gap-4">
+  </div> -->
+  <div v-if="!isAuthenticated" class="flex flex-col justify-center items-center w-full h-[100vh] gap-4">
     <InputText v-model="email" placeholder="Enter your email" />
     <p v-if="error" class="text-red-600">
       {{ error }}

@@ -149,7 +149,7 @@
                 </div>
                 <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
                   <div class="flex space-x-5 mr-5 mb-3 md:mb-0">
-                    <i v-tooltip.top="$t('Cp_templateDataview.edit_template')" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
+                    <i v-if="screenWidth > 990" v-tooltip.top="$t('Cp_templateDataview.edit_template')" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
@@ -328,7 +328,7 @@
     </Dialog>
     <OverlayPanel ref="op">
       <div class="flex flex-col justify-start w-48 h-max">
-        <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="editTemplate(opItem)">
+        <p v-if="screenWidth > 990" class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="editTemplate(opItem)">
           {{ $t('Cp_templateDataview.edit_template') }}
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="confirmDelete(opItem)">
@@ -429,6 +429,7 @@ import ListSkeleton from './skeletons/ListSkeleton.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
+import { useScreenWidth } from '@/composables/useScreenWidth'
 
 const props = defineProps({
   templates: {
@@ -440,7 +441,10 @@ const props = defineProps({
     type: Boolean,
   },
 })
+
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+
+const { screenWidth } = useScreenWidth()
 
 console.log('props templates', props?.templates)
 

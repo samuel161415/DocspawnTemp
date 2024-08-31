@@ -7,7 +7,7 @@
         </h2>
 
         <div class="mt-14">
-          <div class="flex w-full items-center justify-between mb-4">
+          <div v-if="screenWidth > 990" class="flex w-full items-center justify-between mb-4">
             <div v-tooltip="$t('Pg_template_index.total_custom_templates')" class="px-5 py-4 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:scale-105 border-success hover:bg-green-50" @click="visible = true;refreshAllFirst()">
               <p class="font-poppins text-success text-lg text-center">
                 {{ $t('Pg_template_index.create_new_template') }}
@@ -36,6 +36,9 @@ import { resetAllTemplateEditorValues, templateEditorStore } from '@/composables
 import canvasService from '@/composables/useTemplateCanvas'
 
 import { useAuth } from '@/composables/useAuth'
+import { useScreenWidth } from '@/composables/useScreenWidth'
+
+const { screenWidth } = useScreenWidth()
 
 const { token, setToken, fetchUserDetails, user, setUser } = useAuth()
 

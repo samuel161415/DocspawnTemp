@@ -31,6 +31,7 @@
 <script setup>
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
+import { useRouter } from 'vue-router'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'
@@ -40,6 +41,7 @@ import { templateGeneralInformation } from '~/composables/useTemplateCreationDat
 import { useAuth } from '@/composables/useAuth'
 import { useScreenWidth } from '@/composables/useScreenWidth'
 
+const router = useRouter()
 const { screenWidth } = useScreenWidth()
 
 const { user } = useAuth()
@@ -65,12 +67,15 @@ onMounted(() => {
 })
 
 const computedCanvasWidth = computed(() => {
-  if (screenWidth > 1600)
+  if (screenWidth.value > 1600)
     return 900
   else
     return (Number.parseInt(screenWidth.value / 100) - 6) * 100
 })
-
+watch(screenWidth, (val) => {
+  if (val < 990)
+    router.push('/')
+})
 function updateScrollPosition() {
   if (parentContainer.value && canvasWrapper.value) {
     const parentWidth = parentContainer.value.clientWidth
@@ -152,7 +157,7 @@ async function createCanvas() {
   const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0
     ? canvasWrapper.value?.clientWidth
     : computedCanvasWidth.value
-  console.log('canvasWrapperWidth', canvasWrapperWidth)
+
   // 900
 
   templateEditorStore.fabric = fabric
@@ -239,10 +244,25 @@ async function createCanvas() {
 
   if (canvas) {
     canvas.on('mouse:down', () => {
-      const objs = canvas._objects
+      /** * testing sample for resolving watermark duplicate */
+
+      if (canvas) {
+        const objects = canvas.getObjects()
+        // console.log('objects', objects)
+        const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+        if (watermarks.length > 1) {
+        // If more than one watermark exists, remove all but the first one
+          for (let i = 1; i < watermarks.length; i++)
+            canvas.remove(watermarks[i])
+
+          canvas.renderAll() // Re-render the canvas after removing excess watermarks
+        }
+      }
+      /** */
+      const objs = canvas?.getObjects()
       objs.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
-
           canvas.bringToFront(obj)
       })
 
@@ -353,9 +373,9 @@ async function createCanvas() {
           if (!templateEditorStore.activeAdvancedPointer)
             return
 
-          const objs = canvas._objects
+          const objs = canvas?.getObjects()
           canvas._objects = objs.filter((obj) => {
-            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
+            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target?.displayGuide)
               return false
             else
               return true

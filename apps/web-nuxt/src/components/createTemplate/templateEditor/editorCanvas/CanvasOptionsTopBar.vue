@@ -30,25 +30,26 @@
         <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
     </div>
+    <div>
+      <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
+        <Button
+          v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
+        >
+          <font-awesome-icon icon="fa-solid fa-eye" size="xl" />
+        </Button>
+        <Button
+          v-else v-tooltip.top="$t('Cp_templateEditor_topbar.hide_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = false"
+        >
+          <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" />
+        </Button>
 
-    <div class="flex flex-row-reverse">
-      <Button
-        v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
-      >
-        <font-awesome-icon icon="fa-solid fa-eye" size="xl" />
-      </Button>
-      <Button
-        v-else v-tooltip.top="$t('Cp_templateEditor_topbar.hide_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = false"
-      >
-        <font-awesome-icon icon="fa-solid fa-eye-slash" size="xl" />
-      </Button>
-
-      <div v-if="templateEditorStore.showPreview" class="flex items-center">
-        <Button text icon="pi pi-chevron-left text-primary-500" @click="changePreviewNo('prev')" />
-        <p class="font-poppins text-black">
-          {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
-        </p>
-        <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />
+        <div v-if="templateEditorStore.showPreview" class="flex items-center">
+          <Button text icon="pi pi-chevron-left text-primary-500" @click="changePreviewNo('prev')" />
+          <p class="font-poppins text-black">
+            {{ currentPreviewNo }}/{{ templateEditorStore?.datasetData?.allEntries?.length }}
+          </p>
+          <Button text icon="pi pi-chevron-right text-primary-500" @click="changePreviewNo('next')" />
+        </div>
       </div>
     </div>
   </div>
@@ -58,6 +59,7 @@
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
+import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
 const emit = defineEmits(['updateScale'])
 const scale = ref(1)

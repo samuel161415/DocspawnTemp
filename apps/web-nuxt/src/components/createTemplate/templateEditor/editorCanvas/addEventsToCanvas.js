@@ -11,9 +11,23 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     if (templateEditorStore?.watermarkImage?.src) {
-      const isWaterMarkExists = canvas._objects.find(obj => obj?.id === 'watermark-docspawn') !== undefined
+      // const isWaterMarkExists = canvas.getObjects().find(obj => obj?.id === 'watermark-docspawn') !== undefined
 
-      if (!isWaterMarkExists) {
+      // if (!isWaterMarkExists)
+      // Check if a watermark already exists on the canvas
+      const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+      if (watermarks.length > 1) {
+        // If more than one watermark exists, remove all but the first one
+        for (let i = 1; i < watermarks.length; i++)
+          canvas.remove(watermarks[i])
+
+        canvas.renderAll() // Re-render the canvas after removing excess watermarks
+      }
+
+      if (watermarks.length === 0) {
+        // add logic to remove every object with id watermark-docspawn
+
         fabric.Image.fromURL(
           templateEditorStore?.watermarkImage?.src
           , (myImg) => {
@@ -81,7 +95,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
     /** */
     canvas.on('object:moving', (e) => {
-      canvas._objects.forEach((obj) => {
+      canvas.getObjects().forEach((obj) => {
         if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
           if (e.target.left <= 10)
             obj.set({ left: 10 })
@@ -119,7 +133,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
       // if(e.target.fieldType==='Form text'||e.target.fieldType==='Data field'||e.target.)
 
       /** */
-      canvas._objects.forEach((obj) => {
+      canvas.getObjects().forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
           return
         /** */
