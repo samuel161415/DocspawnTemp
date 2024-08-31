@@ -409,7 +409,7 @@ async function addWaterMarkToCanvas() {
 
     if (watermarks.length === 0) {
       // add logic to remove every object with id watermark-docspawn
-      const watermarkScaling = (Number.parseInt(screenWidth.value / 100) - 3) * 10
+      const watermarkScaling = (Number.parseInt(screenWidth.value / 100) - 5) * 10
       fabric.Image.fromURL(
         templateEditorStore?.watermarkImage?.src
         , (myImg) => {
