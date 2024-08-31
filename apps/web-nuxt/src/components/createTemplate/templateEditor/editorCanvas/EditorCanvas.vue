@@ -68,7 +68,8 @@ onMounted(() => {
 
 const computedCanvasWidth = computed(() => {
   if (screenWidth.value > 1600)
-    return 900
+    // return 900
+    return (Number.parseInt(screenWidth.value / 100) - 9) * 100
   else
     return (Number.parseInt(screenWidth.value / 100) - 6) * 100
 })
@@ -228,6 +229,7 @@ async function createCanvas() {
           canvas.renderAll()
           isCanvasLoaded.value = true
           addEventsToCanvas(user, runtimeConfig)
+          addWaterMarkToCanvas()
           showThumbnail()
         },
         {
@@ -247,17 +249,17 @@ async function createCanvas() {
       /** * testing sample for resolving watermark duplicate */
 
       if (canvas) {
-        const objects = canvas.getObjects()
+        // const objects = canvas.getObjects()
         // console.log('objects', objects)
-        const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+        // const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
 
-        if (watermarks.length > 1) {
-        // If more than one watermark exists, remove all but the first one
-          for (let i = 1; i < watermarks.length; i++)
-            canvas.remove(watermarks[i])
+        // if (watermarks.length > 1) {
+        // // If more than one watermark exists, remove all but the first one
+        //   for (let i = 1; i < watermarks.length; i++)
+        //     canvas.remove(watermarks[i])
 
-          canvas.renderAll() // Re-render the canvas after removing excess watermarks
-        }
+        //   canvas.renderAll() // Re-render the canvas after removing excess watermarks
+        // }
       }
       /** */
       const objs = canvas?.getObjects()
@@ -385,6 +387,60 @@ async function createCanvas() {
         })
       })
       canvas.renderAll()
+    }
+  }
+}
+async function addWaterMarkToCanvas() {
+  const canvas = canvasService?.getCanvas()
+  if (templateEditorStore?.watermarkImage?.src) {
+    // const isWaterMarkExists = canvas.getObjects().find(obj => obj?.id === 'watermark-docspawn') !== undefined
+
+    // if (!isWaterMarkExists)
+    // Check if a watermark already exists on the canvas
+    const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+    if (watermarks.length > 1) {
+      // If more than one watermark exists, remove all but the first one
+      for (let i = 1; i < watermarks.length; i++)
+        canvas.remove(watermarks[i])
+
+      canvas.renderAll() // Re-render the canvas after removing excess watermarks
+    }
+
+    if (watermarks.length === 0) {
+      // add logic to remove every object with id watermark-docspawn
+
+      fabric.Image.fromURL(
+        templateEditorStore?.watermarkImage?.src
+        , (myImg) => {
+          myImg.set({
+            cornerStyle: 'circle',
+            borderColor: '#00000066',
+            cornerColor: '#119bd6',
+            transparentCorners: false,
+            // left: 0,
+            // top: 0,
+            left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
+            top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
+            scaleX: 80 / myImg.width,
+            scaleY: 80 / myImg.height,
+            id: 'watermark-docspawn',
+
+            lockUniScaling: true,
+            lockScalingX: true,
+            lockScalingY: true,
+            uniformScaling: false,
+
+          })
+          if (templateEditorStore.watermarkDisabled)
+            myImg.set({ visible: false, opacity: 0 })
+
+          myImg.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
+          canvas.add(myImg)
+
+          canvas.renderAll()
+        },
+      )
     }
   }
 }
