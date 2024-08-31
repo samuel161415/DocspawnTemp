@@ -246,6 +246,21 @@ async function createCanvas() {
 
   if (canvas) {
     canvas.on('mouse:down', () => {
+      if (canvas) {
+        const objects = canvas.getObjects()
+        console.log('objects', objects)
+        const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+        if (watermarks.length > 1) {
+        // If more than one watermark exists, remove all but the first one
+          for (let i = 1; i < watermarks.length; i++)
+            canvas.remove(watermarks[i])
+
+          canvas.renderAll() // Re-render the canvas after removing excess watermarks
+        }
+      }
+    })
+    canvas.on('mouse:down', () => {
       /** * testing sample for resolving watermark duplicate */
 
       if (canvas) {
