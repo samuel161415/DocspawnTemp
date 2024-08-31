@@ -248,7 +248,7 @@ async function createCanvas() {
     canvas.on('mouse:over', () => {
       if (canvas) {
         const objects = canvas.getObjects()
-        console.log('objects', objects)
+
         const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
 
         if (watermarks.length > 1) {
@@ -424,7 +424,7 @@ async function addWaterMarkToCanvas() {
 
     if (watermarks.length === 0) {
       // add logic to remove every object with id watermark-docspawn
-
+      const watermarkScaling = (Number.parseInt(screenWidth.value / 100) - 3) * 10
       fabric.Image.fromURL(
         templateEditorStore?.watermarkImage?.src
         , (myImg) => {
@@ -435,10 +435,14 @@ async function addWaterMarkToCanvas() {
             transparentCorners: false,
             // left: 0,
             // top: 0,
-            left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
-            top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
-            scaleX: 80 / myImg.width,
-            scaleY: 80 / myImg.height,
+            // left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
+            // top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
+            // scaleX: 80 / myImg.width,
+            // scaleY: 80 / myImg.height,
+            left: canvas.width - (myImg.width * (watermarkScaling / myImg.width)) - 10,
+            top: canvas.height - (myImg.height * (watermarkScaling / myImg.height)) - 10,
+            scaleX: watermarkScaling / myImg.width,
+            scaleY: watermarkScaling / myImg.height,
             id: 'watermark-docspawn',
 
             lockUniScaling: true,
