@@ -11,6 +11,7 @@
       </p>
       <Dropdown
         v-model="selectedChecked"
+        disabled
         :options="checkedOptions"
         option-label="design"
         placeholder="Select an Image"
@@ -43,6 +44,7 @@
         option-label="design"
         placeholder="Select an Image"
         class="w-full md:w-14rem"
+        disabled
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
@@ -145,19 +147,21 @@ async function fetchCheckboxOptions() {
 
     if (data?.length > 0) {
       console.log('checkboxOptions at options', data)
-      checkedOptions.value = data?.filter(f => f?.type === 'checked')
-      const def = checkedOptions.value?.filter(c => c?.default)[0]
-      if (def)
-        selectedChecked.value = def
-      else
-        selectedChecked.value = checkedOptions.value[0]
+      // checkedOptions.value = data?.filter(f => f?.type === 'checked')
+      // const def = checkedOptions.value?.filter(c => c?.default)[0]
+      // if (def)
+      //   selectedChecked.value = def
+      // else
+      selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
+      // checkedOptions.value[0]
 
-      uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
-      const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
-      if (def2)
-        selectedUnchecked.value = def2
-      else
-        selectedUnchecked.value = uncheckedOptions.value[0]
+      // uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
+      // const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
+      // if (def2)
+      //   selectedUnchecked.value = def2
+      // else
+      selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
+      //  uncheckedOptions.value[0]
     }
 
     // console.log('response of fetching templates', data)

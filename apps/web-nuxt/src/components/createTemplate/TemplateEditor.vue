@@ -2,7 +2,7 @@
   <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center pb-5">
     {{ $t('Pg_template_create_templateEditor.template_editor') }}
   </p>
-  <div class="flex w-full space-x-6 relative mb-12 h-[90vh] overflow-hidden">
+  <div class="flex w-full space-x-3 relative mb-12 h-[90vh] overflow-hidden ">
     <TemplateFields />
     <EditorCanvas />
     <Options @save-template="emit('saveTemplate')" />

@@ -1,5 +1,5 @@
 <template>
-  <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  ">
+  <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  " :style="{ width: `${computedCanvasWidth + 20}px` }">
     <CanvasOptionsTopBar @update-scale="updateScale" />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col w-[900px]  relative   ">
+    <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col   relative   ">
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
     </div>
@@ -31,6 +31,7 @@
 <script setup>
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
+import { useRouter } from 'vue-router'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'
@@ -38,6 +39,10 @@ import { activeTextStyles, templateEditorStore } from '@/composables/useTemplate
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 import { useAuth } from '@/composables/useAuth'
+import { useScreenWidth } from '@/composables/useScreenWidth'
+
+const router = useRouter()
+const { screenWidth } = useScreenWidth()
 
 const { user } = useAuth()
 const runtimeConfig = useRuntimeConfig()
@@ -55,18 +60,29 @@ const scale = ref(1)
 function updateScale(value) {
   scale.value = value
   updateScrollPosition()
-  console.log('marginLeft', `${((900 * scale.value) - (900)) / 2}px`)
 }
 onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
 })
+
+const computedCanvasWidth = computed(() => {
+  if (screenWidth.value > 1600)
+    // return 900
+    return (Number.parseInt(screenWidth.value / 100) - 9) * 100
+  else
+    return (Number.parseInt(screenWidth.value / 100) - 6) * 100
+})
+watch(screenWidth, (val) => {
+  if (val < 990)
+    router.push('/')
+})
 function updateScrollPosition() {
   if (parentContainer.value && canvasWrapper.value) {
     const parentWidth = parentContainer.value.clientWidth
-    const parentHeight = parentContainer.value.clientHeight
+    // const parentHeight = parentContainer.value.clientHeight
     const scaledWidth = canvasWrapper.value.clientWidth * scale.value
-    const scaledHeight = canvasWrapper.value.clientHeight * scale.value
+    // const scaledHeight = canvasWrapper.value.clientHeight * scale.value
     parentContainer.value.scrollLeft = (scaledWidth - parentWidth) / 2
     // parentContainer.value.scrollTop = (scaledHeight - parentHeight) / 2
   }
@@ -89,8 +105,10 @@ const canvasWrapperStyle = computed(() => ({
   // transformOrigin: 'center 0',
   transformOriginY: '0',
   // transformOriginX: '0',
-  width: '900px',
-  marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
+  // width: '900px',
+  width: `${computedCanvasWidth.value}px`,
+  // marginLeft: `${scale.value < 1 ? 0 : ((900 * scale.value) - (900)) / 2}px`,
+  marginLeft: `${scale.value < 1 ? 0 : ((computedCanvasWidth.value * scale.value) - (computedCanvasWidth.value)) / 2}px`,
   // // height: 'auto',
 
   height: `${canvasWrapperHeight.value}px`,
@@ -137,7 +155,11 @@ function callCreateCanvas() {
 async function createCanvas() {
   const { fabric } = await import('fabric')
 
-  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0 ? canvasWrapper.value?.clientWidth : 900
+  const canvasWrapperWidth = canvasWrapper.value?.clientWidth > 0
+    ? canvasWrapper.value?.clientWidth
+    : computedCanvasWidth.value
+
+  // 900
 
   templateEditorStore.fabric = fabric
   // const canvas = new fabric.Canvas(templateCanvas.value, { isDrawing: true, width: canvasWrapperWidth, fill: '#000', selection: false,
@@ -207,6 +229,7 @@ async function createCanvas() {
           canvas.renderAll()
           isCanvasLoaded.value = true
           addEventsToCanvas(user, runtimeConfig)
+          addWaterMarkToCanvas()
           showThumbnail()
         },
         {
@@ -222,11 +245,29 @@ async function createCanvas() {
   // showThumbnail()
 
   if (canvas) {
+    [
+      // 'mouse:over', 'mouse:down',
+      'mouse:move',
+    ].forEach((event) => {
+      canvas.on(event, () => {
+        if (canvas) {
+          const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+          if (watermarks.length > 1) {
+            // If more than one watermark exists, remove all but the first one
+            for (let i = 1; i < watermarks.length; i++)
+              canvas.remove(watermarks[i])
+
+            canvas.renderAll() // Re-render the canvas after removing excess watermarks
+          }
+        }
+      })
+    })
+
     canvas.on('mouse:down', () => {
-      const objs = canvas._objects
+      const objs = canvas?.getObjects()
       objs.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
-
           canvas.bringToFront(obj)
       })
 
@@ -337,9 +378,9 @@ async function createCanvas() {
           if (!templateEditorStore.activeAdvancedPointer)
             return
 
-          const objs = canvas._objects
+          const objs = canvas?.getObjects()
           canvas._objects = objs.filter((obj) => {
-            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target.displayGuide)
+            if (obj?.stroke === '#3978eb' && obj?.id === e.target?.hash && !e.target?.displayGuide)
               return false
             else
               return true
@@ -349,6 +390,61 @@ async function createCanvas() {
         })
       })
       canvas.renderAll()
+    }
+  }
+}
+async function addWaterMarkToCanvas() {
+  const canvas = canvasService?.getCanvas()
+  if (templateEditorStore?.watermarkImage?.src) {
+    // Check if a watermark already exists on the canvas
+    const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+
+    if (watermarks.length > 1) {
+      // If more than one watermark exists, remove all but the first one
+      for (let i = 1; i < watermarks.length; i++)
+        canvas.remove(watermarks[i])
+
+      canvas.renderAll() // Re-render the canvas after removing excess watermarks
+    }
+
+    if (watermarks.length === 0) {
+      // add logic to remove every object with id watermark-docspawn
+      const watermarkScaling = (Number.parseInt(screenWidth.value / 100) - 5) * 10
+      fabric.Image.fromURL(
+        templateEditorStore?.watermarkImage?.src
+        , (myImg) => {
+          myImg.set({
+            cornerStyle: 'circle',
+            borderColor: '#00000066',
+            cornerColor: '#119bd6',
+            transparentCorners: false,
+            // left: 0,
+            // top: 0,
+            // left: canvas.width - (myImg.width * (80 / myImg.width)) - 10,
+            // top: canvas.height - (myImg.height * (80 / myImg.height)) - 10,
+            // scaleX: 80 / myImg.width,
+            // scaleY: 80 / myImg.height,
+            left: canvas.width - (myImg.width * (watermarkScaling / myImg.width)) - 10,
+            top: canvas.height - (myImg.height * (watermarkScaling / myImg.height)) - 10,
+            scaleX: watermarkScaling / myImg.width,
+            scaleY: watermarkScaling / myImg.height,
+            id: 'watermark-docspawn',
+
+            lockUniScaling: true,
+            lockScalingX: true,
+            lockScalingY: true,
+            uniformScaling: false,
+
+          })
+          if (templateEditorStore.watermarkDisabled)
+            myImg.set({ visible: false, opacity: 0 })
+
+          myImg.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
+          canvas.add(myImg)
+
+          canvas.renderAll()
+        },
+      )
     }
   }
 }

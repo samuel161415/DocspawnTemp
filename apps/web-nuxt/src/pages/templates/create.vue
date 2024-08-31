@@ -52,7 +52,7 @@
                 </button>
               </template>
               <template #content="{ index, prevCallback, nextCallback }">
-                <div class="mx-6">
+                <div class="mx-0">
                   <TemplateEditor v-if="active === index || canvasService.getCanvas()" @save-template="nextCallback" />
                   <!-- v-if="active === index" -->
                 </div>
