@@ -843,16 +843,18 @@ async function selectField(field, option) {
     }
     else if (field === 'Form checkbox group') {
       const allCheckboxes = await fetchCheckboxOptions()
-      let yesDesign = allCheckboxes?.filter(f => f?.type === 'checked' && f?.default)[0]?.design
-      if (!yesDesign)
-        yesDesign = allCheckboxes?.filter(f => f?.type === 'checked')[0]?.design
-      if (!yesDesign)
-        yesDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png'
-      let noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
-      if (!noDesign)
-        noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-      if (!noDesign)
-        noDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+      let yesDesign
+      // = allCheckboxes?.filter(f => f?.type === 'checked' && f?.default)[0]?.design
+      // if (!yesDesign)
+      //   yesDesign = allCheckboxes?.filter(f => f?.type === 'checked')[0]?.design
+      // if (!yesDesign)
+      yesDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png'
+      let noDesign
+      // = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+      // if (!noDesign)
+      //   noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+      // if (!noDesign)
+      noDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
 
       templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum', designs: {
         yes: yesDesign,
