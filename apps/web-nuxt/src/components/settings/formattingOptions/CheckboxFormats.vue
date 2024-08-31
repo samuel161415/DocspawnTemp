@@ -72,6 +72,7 @@
               <!-- <ToggleButton v-model="checked" on-label="On" off-label="Off" /> -->
 
               <ToggleSwitch
+                :disabled="data.account_type === 'by_default'"
                 :curr-val="activeCheckboxIds.includes(data.id)"
                 @update-curr-val="(e) => changeActiveStatus(e, data)"
               />
@@ -110,17 +111,6 @@
           Type:
         </p>
 
-        <!-- <div class="flex space-x-24 mt-4">
-          <div class="flex items-center">
-            <RadioButton v-model="checked" input-id="checked" name="checked" value="checked" />
-            <label for="checked" class=" text-lg font-poppins text-surface-600">Checked</label>
-          </div>
-
-          <div class="flex items-center">
-            <RadioButton v-model="unchecked" input-id="unchecked" name="unchecked" value="unchecked" />
-            <label for="unchecked" class="text-lg font-poppins text-surface-600">Unchecked</label>
-          </div>
-        </div> -->
         <div class="flex space-x-24 mt-4">
           <div class="flex items-center">
             <RadioButton
@@ -143,7 +133,7 @@
           </div>
         </div>
         <div class="flex mt-6 gap-2 items-center">
-          <Checkbox v-model="isDefaultChoice" :binary="true" />
+          <Checkbox v-model="isDefaultChoice" disabled :binary="true" />
           <p class="text-lg text-surface-600">
             Set as default choice
           </p>

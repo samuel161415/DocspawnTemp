@@ -99,7 +99,7 @@ async function fetchTemplates() {
     // console.log('response of fetching templates', data)
   }
   catch (error) {
-    console.error('Error fetching templates:', error)
+    // console.error('Error fetching templates:', error)
   }
 }
 

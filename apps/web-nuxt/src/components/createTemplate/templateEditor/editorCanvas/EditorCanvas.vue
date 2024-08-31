@@ -80,9 +80,9 @@ watch(screenWidth, (val) => {
 function updateScrollPosition() {
   if (parentContainer.value && canvasWrapper.value) {
     const parentWidth = parentContainer.value.clientWidth
-    const parentHeight = parentContainer.value.clientHeight
+    // const parentHeight = parentContainer.value.clientHeight
     const scaledWidth = canvasWrapper.value.clientWidth * scale.value
-    const scaledHeight = canvasWrapper.value.clientHeight * scale.value
+    // const scaledHeight = canvasWrapper.value.clientHeight * scale.value
     parentContainer.value.scrollLeft = (scaledWidth - parentWidth) / 2
     // parentContainer.value.scrollTop = (scaledHeight - parentHeight) / 2
   }
@@ -245,38 +245,26 @@ async function createCanvas() {
   // showThumbnail()
 
   if (canvas) {
-    canvas.on('mouse:over', () => {
-      if (canvas) {
-        const objects = canvas.getObjects()
+    [
+      // 'mouse:over', 'mouse:down',
+      'mouse:move',
+    ].forEach((event) => {
+      canvas.on(event, () => {
+        if (canvas) {
+          const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
 
-        const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
+          if (watermarks.length > 1) {
+            // If more than one watermark exists, remove all but the first one
+            for (let i = 1; i < watermarks.length; i++)
+              canvas.remove(watermarks[i])
 
-        if (watermarks.length > 1) {
-        // If more than one watermark exists, remove all but the first one
-          for (let i = 1; i < watermarks.length; i++)
-            canvas.remove(watermarks[i])
-
-          canvas.renderAll() // Re-render the canvas after removing excess watermarks
+            canvas.renderAll() // Re-render the canvas after removing excess watermarks
+          }
         }
-      }
+      })
     })
+
     canvas.on('mouse:down', () => {
-      /** * testing sample for resolving watermark duplicate */
-
-      if (canvas) {
-        // const objects = canvas.getObjects()
-        // console.log('objects', objects)
-        // const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
-
-        // if (watermarks.length > 1) {
-        // // If more than one watermark exists, remove all but the first one
-        //   for (let i = 1; i < watermarks.length; i++)
-        //     canvas.remove(watermarks[i])
-
-        //   canvas.renderAll() // Re-render the canvas after removing excess watermarks
-        // }
-      }
-      /** */
       const objs = canvas?.getObjects()
       objs.forEach((obj) => {
         if (obj.id === 'watermark-docspawn')
@@ -408,9 +396,6 @@ async function createCanvas() {
 async function addWaterMarkToCanvas() {
   const canvas = canvasService?.getCanvas()
   if (templateEditorStore?.watermarkImage?.src) {
-    // const isWaterMarkExists = canvas.getObjects().find(obj => obj?.id === 'watermark-docspawn') !== undefined
-
-    // if (!isWaterMarkExists)
     // Check if a watermark already exists on the canvas
     const watermarks = canvas.getObjects().filter(obj => obj?.id === 'watermark-docspawn')
 

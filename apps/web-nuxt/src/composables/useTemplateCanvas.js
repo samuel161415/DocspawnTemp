@@ -14,8 +14,6 @@ class CanvasService {
 
       // Load template if canvas data exists
       if (templateEditorStore?.templateToEdit?.canvas_data) {
-        console.log('templateEditorStore?.templateToEdit?.canvas_data', templateEditorStore?.templateToEdit?.canvas_data)
-
         const oldWidth = templateEditorStore?.templateToEdit?.canvas_size?.width
         const oldHeight = templateEditorStore?.templateToEdit?.canvas_size?.height
         const newWidth = options?.width
@@ -55,7 +53,6 @@ class CanvasService {
             backgroundImage,
           }
 
-          console.log('canvasDataToLoad', canvasDataToLoad)
           await this.loadCanvasFromData(canvasDataToLoad)
         }
       }

@@ -76,16 +76,6 @@ function increaseScale() {
 watch(scale, (val) => {
   emit('updateScale', val)
 })
-// const computedScaleBoundries = computed(() => {
-//   if (screenWidth.value > 1400)
-//     return { min: 0.5, max: 2 }
-//   else if (screenWidth.value < 1400 && screenWidth.value > 1000)
-//     return { min: 0.3, max: 1.5 }
-//   else if (screenWidth.value < 1000 && screenWidth.value > 800)
-//     return { min: 0.2, max: 1.2 }
-//   else
-//     return { min: 0.1, max: 1 }
-// })
 
 const currentPreviewNo = ref(1)
 

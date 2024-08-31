@@ -3,27 +3,6 @@
     <DataView :value="filteredTemplates" :layout="layout">
       <template #header>
         <div class="flex  gap-4 md:flex-row justify-between space-x-2">
-          <!-- <div class="flex flex-col md:flex-row flex-wrap justify-center space-x-5 mt-2">
-            <p class="text-lg font-poppins cursor-pointer font-normal hover:text-primaryBlue" :class="filterOption === '' ? 'text-primaryBlue' : 'text-surface-500 '" @click="filterOption = ''">
-              {{ $t('Cp_templateDataview.all') }}
-            </p>
-            <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'favorites' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'favorites'">
-              {{ $t('Cp_templateDataview.favorites') }}
-            </p>
-            <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'form to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'form to doc'">
-              {{ $t('Cp_templateDataview.form_to_doc') }}
-            </p>
-            <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'data to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'data to doc'">
-              {{ $t('Cp_templateDataview.data_to_doc') }}
-            </p>
-            <span class="mr-2 text-lg text-surface-500 font-medium"> / </span>
-            <p class="text-lg font-poppins font-normal cursor-pointer hover:text-primaryBlue" :class="filterOption === 'table to doc' ? 'text-primaryBlue' : 'text-surface-500'" @click="filterOption = 'table to doc'">
-              {{ $t('Cp_templateDataview.table_to_doc') }}
-            </p>
-          </div> -->
           <div class="flex flex-col items-center md:flex-row flex-wrap justify-center space-x-5 ">
             <Dropdown
               v-if="!props.isFavouriteView"
@@ -68,54 +47,6 @@
 
       <template #list="slotProps">
         <div v-show="!templatesLoading" class="flex flex-wrap">
-          <!-- <div
-            v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
-            @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
-            @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
-            @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
-          >
-            <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
-              <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
-              <p class="text-primaryBlue font-bold font-poppins text-lg text-center mt-2">
-                {{ $t('Cp_templateDataview.drop_data') }}
-              </p>
-              <p class="text-black font-poppins text-base text-center">
-                {{ $t('Cp_templateDataview.supported_formats') }}
-              </p>
-            </div>
-
-            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
-              <div class="md:w-[10rem] relative cursor-pointer" @click="handleTemplatePreview(item)">
-                <div class="h-max w-32 flex justify-center py-1">
-                  <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
-                </div>
-              </div>
-              <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-4">
-                <div class="flex flex-row md:flex-col justify-between items-start gap-2">
-                  <div class="ml-2">
-                    <p class="text-lg sm:text-sm md:text-base lg:text-lg font-poppins text-surface-600 mt-1">
-                      {{ item.name }}
-                    </p>
-                  </div>
-                </div>
-                <div class="flex sm:flex-row sm:space-y-2 flex-col justify-center md:items-center ml-2 md:ml-0">
-                  <div class="flex space-x-8 mr-5 mb-3 md:mb-0">
-                    <i v-tooltip.top="$t('Cp_templateDataview.edit_template')" class="pointer-auto pi pi-file-edit text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="editTemplate(item)"></i>
-                    <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
-                    <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
-                    <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
-                    <i v-tooltip.top="$t('Cp_templateDataview.set_as_favorites')" class="pointer-auto cursor-pointer text-surface-500" :class="[favouriteStates[index] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem"></i>
-                  </div>
-
-                  <div class="flex flex-row-reverse md:flex-row">
-                    <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="handleFillForm(item)" />
-                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-80 h-16" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e); }" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> -->
           <div
             v-for="(item, index) in slotProps.items" :key="index" class="w-full py-2 pointer-parent"
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
@@ -188,34 +119,6 @@
               </p>
             </div>
 
-            <!-- <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 w-11/12 min-h-[14rem] h-full lg:px-1 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
-              <div class="flex pt-2" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-end'">
-                <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
-                <i class="pi pi-ellipsis-v text-surface-500 cursor-pointer pointer-auto" @click="(e) => { toggle(e); opItem = item }"></i>
-              </div>
-              <div class="surface-50 flex justify-center rounded-md px-3 ">
-                <div class="relative mx-auto cursor-pointer " @click="handleTemplatePreview(item)">
-                  <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
-                </div>
-              </div>
-
-              <div class="mt-auto mb-3">
-                <div class="flex flex-row text-center justify-center items-center gap-2 h-12">
-                  <p class="text-lg sm:text-sm md:text-base lg:text-sm font-poppins text-surface-500 truncate">
-                    {{ item.name }}
-                  </p>
-                </div>
-                <div class="flex flex-col">
-                  <Button v-if="item.use_case === 'Form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins text-xs" @click="handleFillForm(item)" />
-                  <Button
-                    v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer text-xs" @click="(e) => {
-                      templateSelectedForUploadingFile = item;
-                      uploadFile(e);
-                    }"
-                  />
-                </div>
-              </div>
-            </div> -->
             <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex items-center p-2 pt-4" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-between'">
                 <div class="">
@@ -269,19 +172,7 @@
         <ListSkeleton v-for="n in 3" :key="n" />
       </div>
     </template>
-    <!--
-    <FormEditorPreview
-      v-model:visible="previewFormVisible"
-      :mobile="mobile"
-      :form-title="formTitle"
-      :all-form-fields="currentTemplateAllFormFields"
-      :form-description="formDescription"
-      :is-collapsed="isCollapsed"
-      :is-generatable="true"
-      :template-data="currentTemplate"
-      @cancel="previewFormVisible = false"
-      @update-generated-docs="updateGeneratedDocs"
-    /> -->
+
     <Dialog
       v-model:visible="previewFormVisible"
       modal
@@ -424,8 +315,6 @@ import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
 
-// import DataToDocGeneration from './DocGenerationModals/DataToDocGeneration'
-// import FormToDocGeneration from '~/components/createTemplate/formEditor/FinalPreview.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput } from '@/utils/dateFunctions'
@@ -446,8 +335,6 @@ const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
 
 const { screenWidth } = useScreenWidth()
 
-console.log('props templates', props?.templates)
-
 const { t } = useI18n()
 
 const filterOptions = ref([
@@ -462,9 +349,6 @@ const toast = useToast()
 const confirm = useConfirm()
 const router = useRouter()
 
-// function navigateDocumentLibrary() {
-//   router.push('document-library')
-// }
 const allGeneratedDocs = ref()
 
 function updateGeneratedDocs(val) {
@@ -556,14 +440,10 @@ function handleFillForm(item) {
   // console.log('template at handle fill form', item)
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
-  console.log('handle fill form ')
-  console.log('current temapplate value', currentTemplate?.value)
-  console.log('currentTemplateAllFormFields.value', currentTemplateAllFormFields.value)
+
   previewFormVisible.value = true
 }
-watch(currentTemplateAllFormFields, (val) => {
-  console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)
-})
+
 // default favorite state based on template changes
 watch(() => props.templates, (newVal) => {
   newVal.forEach((template, index) => {
@@ -573,7 +453,6 @@ watch(() => props.templates, (newVal) => {
 const runtimeConfig = useRuntimeConfig()
 
 function handleTemplatePreview(template) {
-  console.log('handle template preview', template)
   visible.value = true
   currentTemplate.value = template
 }
@@ -642,44 +521,6 @@ function editTemplate(temp) {
   }, 200)
 }
 
-// const entered = []
-// function handleDragEnter(item, index) {
-//   // console.log('entering', index, entered)
-//   if (!entered.includes(index))
-//     entered.push(index)
-
-//   if (!isDragging.value[index]) {
-//     isDragging.value.fill(false)
-//     isDragging.value[index] = true
-//   }
-// }
-
-// let timeout
-// function handleDragLeave(event, index) {
-//   // Check if the related target is still within the current element
-//   // console.log('leaving', index)
-
-//   clearInterval(timeout)
-//   timeout = setInterval(() => {
-//     console.log('running timeout')
-//     console.log('entered', entered)
-//     console.log('entered.includes(index)', entered.includes(index))
-
-//     if (entered.includes(index)) {
-//       isDragging.value[index] = true
-//       entered.pop(index)
-//     }
-//     else {
-//       isDragging.value[index] = false
-//       clearInterval(timeout)
-//     }
-//     // clearTimeout(timeout)
-
-//     // entered.pop(index)
-//   }, 200)
-//   // isDragging.value[index] = false
-// }
-
 function handleDragEnter(item, index) {
   // console.log('entering', index, entered)
 
@@ -726,7 +567,7 @@ function handleFileDrop(template, event) {
 }
 function handleFileUpload(file, template) {
   const keysToCheck = template?.dataset_data?.selectedKeys
-  console.log('keys to check', keysToCheck)
+
   if (!file) {
     console.error('No file provided')
     return
@@ -818,11 +659,8 @@ function uploadFile() {
   fileInput.click()
 }
 async function toggleFavourite(template) {
-  console.log('props?.isFavouriteView', props?.isFavouriteView)
   const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/toggle-favourite/${template?.id}`)
   if (!response.ok) {
-    // throw new Error(`Network response was not ok ${response.statusText}`)
-    // console.log('not deleetd')
     toast.add({ severity: 'error', summary: 'Failed', detail: 'Unable to perform at the moemnt!', life: 10000 })
   }
   else {
@@ -835,14 +673,12 @@ async function toggleFavourite(template) {
     else {
       allTempsF?.forEach((temp) => {
         if (temp?.id === template?.id) {
-          console.log('upgrading temp', temp?.name, temp?.id, temp?.is_favourite)
-          console.log('favouriteStates[temp?.id] ', favouriteStates[temp?.id])
           const objToReturn = { ...temp, is_favourite: !favouriteStates[temp?.id] }
           favouriteStates[template?.id] = objToReturn?.is_favourite
         }
       })
     }
-    console.log('layout', layout)
+
     layout.value === 'grid' && op.value.toggle()
     toast.add({ severity: 'success', summary: 'Succeed', detail: !favouriteStates[template?.id] ? 'Template removed from favourites' : 'Template set as favourite', life: 3000 })
   }
