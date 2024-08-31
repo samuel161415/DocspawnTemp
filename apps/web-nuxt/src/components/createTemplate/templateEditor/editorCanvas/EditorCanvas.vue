@@ -245,7 +245,7 @@ async function createCanvas() {
   // showThumbnail()
 
   if (canvas) {
-    canvas.on('mouse:down', () => {
+    canvas.on('mouse:over', () => {
       if (canvas) {
         const objects = canvas.getObjects()
         console.log('objects', objects)
