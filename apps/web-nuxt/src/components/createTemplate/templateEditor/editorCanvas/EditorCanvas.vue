@@ -1,7 +1,7 @@
 <template>
   <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  " :style="{ width: `${computedCanvasWidth + 20}px` }">
     <CanvasOptionsTopBar @update-scale="updateScale" />
-
+    <RichTextEditor />
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
         <div class="flex mb-4">
@@ -32,6 +32,7 @@
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { useRouter } from 'vue-router'
+import RichTextEditor from './RichTextEditor.vue'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'
@@ -64,6 +65,7 @@ function updateScale(value) {
 onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
+  console.log('templateGeneralInformation.backgroundFileUrl', templateGeneralInformation?.backgroundFileUrl)
 })
 
 const computedCanvasWidth = computed(() => {

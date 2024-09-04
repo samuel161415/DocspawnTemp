@@ -43,7 +43,11 @@ export default defineNuxtConfig({
     'nuxt-primevue',
     'nuxt-gtag',
     '@nuxtjs/i18n',
+    'nuxt-tiptap-editor',
   ],
+  tiptap: {
+    prefix: 'Tiptap', // This prefix will be used for importing Tiptap components
+  },
 
   i18n: {
     locales: [
