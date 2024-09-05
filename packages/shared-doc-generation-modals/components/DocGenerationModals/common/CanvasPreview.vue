@@ -32,6 +32,7 @@
         </div>
       </div>
       <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
+        <ExpertEditorPreview v-if="docGenerationData?.templateToGenerateDocs?.id && canvasWrapperHeight > 100" :template="docGenerationData?.templateToGenerateDocs" :editor-height="canvasWrapperHeight" :editor-width="900" />
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border border-surface-300  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
@@ -51,6 +52,7 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '../../../composables/useTemplateCanvas'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
+import ExpertEditorPreview from './ExpertEditorPreview.vue'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
@@ -312,6 +314,7 @@ function renderOriginalData() {
 const canvasWrapper = ref()
 const templateCanvas = ref()
 const isCanvasLoaded = ref(false)
+const canvasWrapperHeight = ref(1)
 
 function callCreateCanvas() {
   createCanvas()
@@ -359,6 +362,7 @@ async function createCanvas() {
   // Set the canvas dimensions
   canvas.width = canvasWidth
   canvas.height = canvasHeight
+  canvasWrapperHeight.value = canvasHeight
 
   canvas.setDimensions({
     width: canvasWidth,

@@ -207,6 +207,7 @@ async function saveTemplate() {
     canvas_data: JSON.stringify(canvasToSend),
     delivery_options: JSON.stringify(templateDeliveryOptions),
     canvas_size: JSON.stringify(canvasSize),
+    expert_container_html_content: JSON.stringify(templateEditorStore?.expertEditorHtmlContent),
   }
 
   // return true

@@ -1,7 +1,12 @@
 <template>
   <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  " :style="{ width: `${computedCanvasWidth + 20}px` }">
-    <CanvasOptionsTopBar @update-scale="updateScale" />
-    <RichTextEditor />
+    <CanvasOptionsTopBar
+      :show-expert-editor="showExpertEditor" @update-scale="updateScale" @toggle-expert-editor="() => {
+        showExpertEditor = !showExpertEditor;
+        console.log('toggling expert editor')
+      }"
+    />
+
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
         <div class="flex mb-4">
@@ -20,6 +25,10 @@
     </div>
 
     <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col   relative   ">
+      <div v-show="showExpertEditor" class="w-max h-max">
+        <RichTextEditor v-if="canvasWrapperHeight > 100" :editor-height="canvasWrapperHeight" :editor-width="computedCanvasWidth" />
+      </div>
+
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
       </canvas>
     </div>
@@ -53,6 +62,11 @@ const templateCanvas = ref()
 const canvasWrapper = ref(null)
 const activeElement = ref()
 const parentContainer = ref()
+
+const showExpertEditor = ref(false)
+watch(showExpertEditor, (val) => {
+  console.log('show expert editor', showExpertEditor.value)
+})
 
 const scale = ref(1)
 // function updateScale(value) {

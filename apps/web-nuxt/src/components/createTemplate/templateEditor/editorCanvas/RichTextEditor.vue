@@ -1,5 +1,8 @@
 <template>
-  <div class="editor-wrapper flex flex-col gap-4 relative border border-red-500">
+  <div class="absolute top-[200px] left-0 z-50 w-full h-full">
+    <TiptapEditorContent :editor="editor" class="editor-content" />
+  </div>
+  <div class="editor-wrapper flex flex-col gap-4 relative border border-red-500 h-[200px] overflow-y-auto max-w-[1000px]">
     <div v-if="editor" class="toolbar">
       <Button
         class="w-max px-2"
@@ -185,9 +188,9 @@
         Toggle Header Cell
       </Button>
     </div>
-    <div class="absolute top-[200px] left-0 z-50">
+    <!-- <div class="absolute top-[200px] left-0 z-50">
       <TiptapEditorContent :editor="editor" class="editor-content" />
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -199,9 +202,34 @@ import TiptapTable from '@tiptap/extension-table'
 import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
+
+const props = defineProps(['editorWidth', 'editorHeight'])
+
+// Manage dynamic width and height
+const editorWidth = ref('100%')
+const editorHeight = ref('2000px')
+
+onMounted(() => {
+  console.log('templateEditorStore?.templateToEdit?.expert_container_html_content', templateEditorStore?.templateToEdit?.expert_container_html_content)
+  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
+  //   console.log('props>>>>>>>>', props)
+  editorHeight.value = `${(Number.parseInt(props?.editorHeight))}px`
+  editorWidth.value = `${Number.parseInt(props?.editorWidth)}px`
+})
+
+watch(props?.editorHeight, (newVal) => {
+//   console.log('props?.editorHeight', props?.editorHeight)
+  editorHeight.value = `${Number.parseInt(newVal)}px`
+})
+watch(props?.editorWidth, (newVal) => {
+//   console.log('props?.editorWidth', props?.editorWidth)
+  editorWidth.value = `${Number.parseInt(newVal)}px`
+})
 
 const editor = useEditor({
-  content: '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   extensions: [
     TiptapStarterKit,
     TiptapTable.configure({
@@ -248,6 +276,7 @@ async function getHTMLContent() {
   if (editor.value) {
     htmlContent.value = editor.value.getHTML()
     console.log(htmlContent.value) // Log the HTML content to the console
+    templateEditorStore.expertEditorHtmlContent = htmlContent.value
     const objToSend = {
       html: htmlContent.value,
     }
@@ -310,11 +339,26 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   color: #333;
 
-  width: 1000px !important;
-  height:1000px !important;
+  /* width: 100% !important;
+  height:1000px !important; */
+   /* Bind dynamic width and height with !important */
+   width: v-bind('editorWidth') !important;
+  height: v-bind('editorHeight') !important;
+  overflow:hidden;
 
 }
+::v-deep .ProseMirror:focus{
+border:none;
+outline:none;
+}
 
+::v-deep .ProseMirror p {
+  font-size: 18px;
+}
+::v-deep .ProseMirror p:empty::before {
+  content: '';
+  display: inline-block;
+}
 /* Headings styles */
 ::v-deep .ProseMirror h1 {
   font-size: 44px;

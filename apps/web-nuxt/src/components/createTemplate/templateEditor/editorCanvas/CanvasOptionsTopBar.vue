@@ -31,6 +31,11 @@
       </button>
     </div>
     <div>
+      <div>
+        <Button @click="() => emit('toggleExpertEditor')">
+          Expert editor
+        </Button>
+      </div>
       <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
         <Button
           v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
@@ -61,7 +66,8 @@ import canvasService from '@/composables/useTemplateCanvas'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
-const emit = defineEmits(['updateScale'])
+const props = defineProps(['showExpertEditor'])
+const emit = defineEmits(['updateScale', 'toggleExpertEditor'])
 const scale = ref(1)
 function decreaseScale() {
   if (scale.value > 0.5)
