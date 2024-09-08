@@ -6,7 +6,9 @@
         console.log('toggling expert editor')
       }"
     />
-    <TipTapToolbar />
+    <div v-show="showExpertEditor">
+      <TipTapToolbar />
+    </div>
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
