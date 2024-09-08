@@ -107,14 +107,6 @@ onBeforeUnmount(() => {
   }
 
   /* Content container styles */
-  .editor-content .ProseMirror {
-    /* background-color: #f9f9f9;
-    padding: 15px;
-    min-height: 300px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    color: #333; */
-  }
 
   ::v-deep .ProseMirror {
     background-color: transparent;
