@@ -1,8 +1,14 @@
 <template>
-  <div class="absolute top-[200px] left-0 z-50 w-full h-full">
-    <TiptapEditorContent :editor="editor" class="editor-content" />
+  <!-- {{ editorContentScaleX }}  {{ editorContentScaleY }} -->
+  <div class="absolute top-[00px] left-0 z-50 w-full h-full">
+    <TiptapEditorContent
+      :editor="editor" class="editor-content" :style="{
+        transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
+        transformOrigin: 'top left',
+      }"
+    />
   </div>
-  <div class="editor-wrapper flex flex-col gap-4 relative border border-red-500 h-[200px] overflow-y-auto max-w-[1000px]">
+  <!-- <div class="editor-wrapper flex flex-col gap-4 relative border border-red-500 h-[200px] overflow-y-auto max-w-[1000px]">
     <div v-if="editor" class="toolbar">
       <Button
         class="w-max px-2"
@@ -139,11 +145,11 @@
       >
         redo
       </Button>
-      <!-- Button to get HTML content -->
+
       <Button class="w-max px-2" @click="getHTMLContent">
         Get HTML Content
       </Button>
-      <!-- Table Management -->
+
       <Button class="w-max px-2" :disabled="!editor.can().insertTable()" @click="addTable">
         Insert Table
       </Button>
@@ -151,7 +157,6 @@
         Delete Table
       </Button>
 
-      <!-- Row Management -->
       <Button class="w-max px-2" :disabled="!editor.can().addColumnBefore()" @click="addColumnBefore">
         Add Column Before
       </Button>
@@ -171,7 +176,6 @@
         Delete Row
       </Button>
 
-      <!-- Cell Management -->
       <Button class="w-max px-2" :disabled="!editor.can().mergeCells()" @click="mergeCells">
         Merge Cells
       </Button>
@@ -188,10 +192,7 @@
         Toggle Header Cell
       </Button>
     </div>
-    <!-- <div class="absolute top-[200px] left-0 z-50">
-      <TiptapEditorContent :editor="editor" class="editor-content" />
-    </div> -->
-  </div>
+  </div> -->
 </template>
 
 <script setup>
@@ -206,29 +207,17 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const props = defineProps(['editorWidth', 'editorHeight'])
 
+// Reactive state to store multiple content states
+const contentStates = ref({})
+
+// Current selected content key (e.g., "Content 1")
+const selectedContentKey = ref('Content 1')
 // Manage dynamic width and height
 const editorWidth = ref('100%')
-const editorHeight = ref('2000px')
-
-onMounted(() => {
-  console.log('templateEditorStore?.templateToEdit?.expert_container_html_content', templateEditorStore?.templateToEdit?.expert_container_html_content)
-  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
-  //   console.log('props>>>>>>>>', props)
-  editorHeight.value = `${(Number.parseInt(props?.editorHeight))}px`
-  editorWidth.value = `${Number.parseInt(props?.editorWidth)}px`
-})
-
-watch(props?.editorHeight, (newVal) => {
-//   console.log('props?.editorHeight', props?.editorHeight)
-  editorHeight.value = `${Number.parseInt(newVal)}px`
-})
-watch(props?.editorWidth, (newVal) => {
-//   console.log('props?.editorWidth', props?.editorWidth)
-  editorWidth.value = `${Number.parseInt(newVal)}px`
-})
-
+const editorHeight = ref('200px')
 const editor = useEditor({
-  content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  // content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  content: contentStates.value[selectedContentKey.value],
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   extensions: [
     TiptapStarterKit,
@@ -241,6 +230,75 @@ const editor = useEditor({
   ],
 })
 
+onMounted(() => {
+  let keysOfContent = {}
+  templateEditorStore?.totalPagesArray?.forEach((f) => {
+    keysOfContent = { ...keysOfContent, [`Content ${f}`]: `<p> </p>` }
+  })
+  contentStates.value = templateEditorStore?.templateToEdit?.expert_container_html_content || keysOfContent
+  if (editor.value)
+    editor.value.commands.setContent(contentStates.value['Content 1'])
+  if (templateEditorStore?.templateToEdit?.expert_editor_dimensions) {
+    editorHeight.value = `${(Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height))}px`
+    editorWidth.value = `${Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width)}px`
+  }
+  else {
+    editorHeight.value = `${(Number.parseInt(props?.editorHeight))}px`
+    editorWidth.value = `${Number.parseInt(props?.editorWidth)}px`
+  }
+  /** */
+  templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
+  templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
+})
+watch(() => templateEditorStore?.activePageForCanvas, () => {
+  switchContent(`Content ${templateEditorStore?.activePageForCanvas}`)
+})
+watch(props?.editorHeight, (newVal) => {
+//   console.log('props?.editorHeight', props?.editorHeight)
+  if (templateEditorStore?.templateToEdit?.expert_editor_dimensions)
+    editorHeight.value = `${Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height)}px`
+  else
+    editorHeight.value = `${Number.parseInt(newVal)}px`
+  /** */
+  templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
+})
+watch(props?.editorWidth, (newVal) => {
+//   console.log('props?.editorWidth', props?.editorWidth)
+  if (templateEditorStore?.templateToEdit?.expert_editor_dimensions)
+    editorHeight.value = `${Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width)}px`
+  else
+    editorWidth.value = `${Number.parseInt(newVal)}px`
+  /** */
+  templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
+})
+const editorContentScaleX = ref(1)
+const editorContentScaleY = ref(1)
+watch([editorHeight, editorWidth], () => {
+  const scaleX = props?.editorWidth / templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width
+  const scaleY = props?.editorHeight / templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height
+
+  editorContentScaleX.value = scaleX
+  editorContentScaleY.value = scaleY
+})
+
+// Watch the editor for updates and save the content to the current state
+watch(editor, (newEditor) => {
+  if (newEditor) {
+    newEditor.on('update', () => {
+      contentStates.value[selectedContentKey.value] = newEditor.getHTML()
+      templateEditorStore.expertEditorHtmlContent = contentStates.value
+      templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
+      templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
+    })
+  }
+})
+
+// Function to switch content in the editor when a new content key is selected
+function switchContent(key) {
+  selectedContentKey.value = key
+  if (editor.value)
+    editor.value.commands.setContent(contentStates.value[key]) // Load the selected content
+}
 // Table-related actions
 const addTable = () => editor.value.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
 const deleteTable = () => editor.value.chain().focus().deleteTable().run()
@@ -262,41 +320,36 @@ const toggleHeaderColumn = () => editor.value.chain().focus().toggleHeaderColumn
 const toggleHeaderRow = () => editor.value.chain().focus().toggleHeaderRow().run()
 const toggleHeaderCell = () => editor.value.chain().focus().toggleHeaderCell().run()
 
-// const editor = useEditor({
-//   content: '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
-//   extensions: [TiptapStarterKit],
-
-// })
-
 const htmlContent = ref('')
 
 // Function to get HTML content
 
 async function getHTMLContent() {
-  if (editor.value) {
+  if (editor.value)
     htmlContent.value = editor.value.getHTML()
-    console.log(htmlContent.value) // Log the HTML content to the console
-    templateEditorStore.expertEditorHtmlContent = htmlContent.value
-    const objToSend = {
-      html: htmlContent.value,
-    }
-    try {
-      const response = await fetch(`http://localhost:5000/html2pdf`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Specify content type as JSON
-        },
-        body: JSON.stringify(objToSend), // Serialize the object to JSON string
-      })
-      if (!response.ok)
-        throw new Error(`Network response was not ok ${response.statusText}`)
+    // console.log(htmlContent.value) // Log the HTML content to the console
+    // templateEditorStore.expertEditorHtmlContent = htmlContent.value
+    // templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
+    // templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
+    // const objToSend = {
+    //   html: htmlContent.value,
+    // }
+    // try {
+    //   const response = await fetch(`http://localhost:5000/html2pdf`, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json', // Specify content type as JSON
+    //     },
+    //     body: JSON.stringify(objToSend), // Serialize the object to JSON string
+    //   })
+    //   if (!response.ok)
+    //     throw new Error(`Network response was not ok ${response.statusText}`)
 
-      // const data = await response.json()
-    }
-    catch (error) {
-      console.error('Error:', error)
-    }
-  }
+  //   // const data = await response.json()
+  // }
+  // catch (error) {
+  //   console.error('Error:', error)
+  // }
 }
 
 onBeforeUnmount(() => {
@@ -306,6 +359,7 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /* Wrapper styles */
+
 .editor-wrapper {
   padding: 10px;
   border: 1px solid #ccc;
@@ -321,16 +375,15 @@ onBeforeUnmount(() => {
   color: white;
 }
 
-/* Content container styles */
-.editor-content .ProseMirror {
-  /* background-color: #f9f9f9;
-  padding: 15px;
-  min-height: 300px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  color: #333; */
+.ProseMirror {
+  cursor: crosshair; /* Change the cursor to crosshair */
+  caret-color: red;
 }
 
+/* You can also apply different cursor styles to specific elements */
+.ProseMirror p {
+  cursor: text; /* Cursor will appear as text in paragraphs */
+}
 ::v-deep .ProseMirror {
   background-color: transparent;
   padding: 15px;
@@ -339,9 +392,6 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   color: #333;
 
-  /* width: 100% !important;
-  height:1000px !important; */
-   /* Bind dynamic width and height with !important */
    width: v-bind('editorWidth') !important;
   height: v-bind('editorHeight') !important;
   overflow:hidden;

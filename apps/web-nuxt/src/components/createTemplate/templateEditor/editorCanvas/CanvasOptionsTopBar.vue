@@ -30,10 +30,10 @@
         <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
     </div>
-    <div>
+    <div class="flex gap-4">
       <div>
-        <Button @click="() => emit('toggleExpertEditor')">
-          Expert editor
+        <Button class="w-max px-2" @click="() => emit('toggleExpertEditor')">
+          {{ props?.showExpertEditor ? 'Hide expert editor' : 'Show expert editor' }}
         </Button>
       </div>
       <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
@@ -115,7 +115,7 @@ function showMargins() {
         }))
 
         if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
             stroke: '#3978eb',
@@ -126,7 +126,7 @@ function showMargins() {
           }))
         }
         else {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
             stroke: '#3978eb',
@@ -192,7 +192,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           selectable: false,
         }))
         if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
             stroke: '#3978eb',
@@ -202,7 +202,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           }))
         }
         else {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
             stroke: '#3978eb',

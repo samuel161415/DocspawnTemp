@@ -1,18 +1,23 @@
 <template>
   <div class="absolute left-0 z-50 w-full h-full">
-    <TiptapEditorContent :editor="editor" class="editor-content" />
+    <TiptapEditorContent
+      :editor="editor" class="editor-content" :style="{
+        transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
+        transformOrigin: 'top left',
+      }"
+    />
   </div>
 </template>
 
 <script setup>
-import { onBeforeUnmount, ref, unref } from 'vue'
+import { onBeforeUnmount, ref, unref, watch } from 'vue'
 import { useEditor } from '@tiptap/vue-3'
 import TiptapStarterKit from '@tiptap/starter-kit'
 import TiptapTable from '@tiptap/extension-table'
 import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
-import { docGenerationData } from '@/composables/useDocGenerationData'
+import { docGenerationData } from '../../../composables/useDocGenerationData'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const props = defineProps(['editorWidth', 'editorHeight', 'template'])
@@ -21,25 +26,15 @@ const props = defineProps(['editorWidth', 'editorHeight', 'template'])
 const editorWidth = ref('100%')
 const editorHeight = ref('2000px')
 
-onMounted(() => {
-  console.log('props>>>>>>', props)
-  //   console.log('props>>>>>>>>', props)
-  editorHeight.value = `${(Number.parseInt(props?.editorHeight))}px`
-  editorWidth.value = `${Number.parseInt(props?.editorWidth)}px`
-})
+// Reactive state to store multiple content states
+const contentStates = ref({})
 
-watch(props?.editorHeight, (newVal) => {
-  //   console.log('props?.editorHeight', props?.editorHeight)
-  editorHeight.value = `${Number.parseInt(newVal)}px`
-})
-watch(props?.editorWidth, (newVal) => {
-  //   console.log('props?.editorWidth', props?.editorWidth)
-  editorWidth.value = `${Number.parseInt(newVal)}px`
-})
-
+// Current selected content key (e.g., "Content 1")
+const selectedContentKey = ref('Content 1')
 const editor = useEditor({
   editable: false,
-  content: props?.template?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  // content: props?.template?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  content: contentStates.value[selectedContentKey.value],
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   extensions: [
     TiptapStarterKit,
@@ -52,6 +47,43 @@ const editor = useEditor({
   ],
 })
 
+onMounted(() => {
+  let keysOfContent = {}
+  props?.template?.page_sizes?.forEach((_, f) => {
+    keysOfContent = { ...keysOfContent, [`Content ${f + 1}`]: `<p></p>` }
+  })
+  contentStates.value = docGenerationData?.templateToGenerateDocs?.expert_container_html_content || keysOfContent
+
+  if (editor.value)
+    editor.value.commands.setContent(contentStates.value['Content 1'])
+  /** */
+  editorHeight.value = `${(Number.parseInt(props?.template?.expert_editor_dimensions?.height))}px`
+  editorWidth.value = `${Number.parseInt(props?.template?.expert_editor_dimensions?.width)}px`
+})
+
+watch(props?.editorHeight, () => {
+  editorHeight.value = `${Number.parseInt(props?.template?.expert_editor_dimensions?.height)}px`
+})
+watch(props?.editorWidth, () => {
+  editorWidth.value = `${Number.parseInt(props?.template?.expert_editor_dimensions?.width)}px`
+})
+const editorContentScaleX = ref(1)
+const editorContentScaleY = ref(1)
+watch([editorHeight, editorWidth], () => {
+  const scaleX = Number.parseInt(props?.editorWidth) / props?.template?.expert_editor_dimensions?.width
+  const scaleY = Number.parseInt(props?.editorHeight) / props?.template?.expert_editor_dimensions?.height
+
+  editorContentScaleX.value = scaleX
+  editorContentScaleY.value = scaleY
+})
+function switchContent(key) {
+  selectedContentKey.value = key
+  if (editor.value)
+    editor.value.commands.setContent(contentStates.value[key]) // Load the selected content
+}
+watch(() => docGenerationData.activePageForCanvas, () => {
+  switchContent(`Content ${docGenerationData?.activePageForCanvas}`)
+})
 onBeforeUnmount(() => {
   unref(editor).destroy()
 })
@@ -61,7 +93,7 @@ onBeforeUnmount(() => {
   /* Wrapper styles */
   .editor-wrapper {
     padding: 10px;
-    border: 1px solid #ccc;
+    /* border: 1px solid #ccc; */
   }
 
   /* Toolbar styles */
@@ -88,14 +120,14 @@ onBeforeUnmount(() => {
     background-color: transparent;
     padding: 15px;
     min-height: 300px;
-    border: 1px solid #ddd;
+    /* border: 1px solid #ddd; */
     border-radius: 4px;
     color: #333;
 
     /* width: 100% !important;
     height:1000px !important; */
      /* Bind dynamic width and height with !important */
-     width: v-bind('editorWidth') !important;
+    width: v-bind('editorWidth') !important;
     height: v-bind('editorHeight') !important;
     overflow:hidden;
 

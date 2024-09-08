@@ -42,6 +42,8 @@ const initialTemplateEditorStore = {
   templateToGenerateDocs: {},
   lastScaledTextOptions: { x: 1, y: 1 },
   expertEditorHtmlContent: null,
+  expertEditorWidth: 0,
+  expertEditorHeight: 0,
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })

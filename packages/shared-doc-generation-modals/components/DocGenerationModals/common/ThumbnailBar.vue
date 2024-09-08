@@ -1,5 +1,5 @@
 <template>
-  <div v-if="docGenerationData.totalPagesArray?.length > 1" class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4" :style="{ marginTop: '16px' }">
+  <div v-if="docGenerationData.totalPagesArray?.length > 1" class="h-max p-2 flex items-center justify-between px-3 mb-6 rounded-md bg-primary-50 mt-4 z-200" :style="{ marginTop: '16px', zIndex: 2000 }">
     <div class="w-full h-max p-2">
       <p class="px-2 mb-1">
         {{ $t('Cp_createTemplate_editorThumbnail.current_page') }} <span class="text-primary-500 text-bold">{{ docGenerationData.activePageForCanvas }}</span> {{ $t('Cp_createTemplate_editorThumbnail.out_of') }}
@@ -18,12 +18,14 @@
 <script setup>
 import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
+import { watch } from 'vue'
 import canvasService from '../../../composables/useTemplateCanvas'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
 
 const props = defineProps(['template'])
 
 function selectPageFromThumbnail(page) {
+  // console.log('running select page for thumbnail', page)
   const canvas = canvasService.getCanvas()
   if (canvas) {
     canvas.discardActiveObject()

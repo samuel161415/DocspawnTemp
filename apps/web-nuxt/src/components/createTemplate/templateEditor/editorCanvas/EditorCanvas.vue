@@ -334,7 +334,7 @@ async function createCanvas() {
               selectable: false,
             }))
 
-            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            canvas.add(new fabric.Line([1000, 100, 20000, 100], {
               left: 0, // event.absolutePointer.x,
               top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
               stroke: '#3978eb',
@@ -356,7 +356,7 @@ async function createCanvas() {
               fieldType: obj.fieldType,
               selectable: false,
             }))
-            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            canvas.add(new fabric.Line([1000, 100, 20000, 100], {
               left: 0, // event.absolutePointer.x,
               top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
               stroke: '#3978eb',
@@ -379,7 +379,7 @@ async function createCanvas() {
               selectable: false,
 
             }))
-            canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+            canvas.add(new fabric.Line([1000, 100, 20000, 100], {
               left: 0, // event.absolutePointer.x,
               top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
 
