@@ -44,6 +44,7 @@ const initialTemplateEditorStore = {
   expertEditorHtmlContent: null,
   expertEditorWidth: 0,
   expertEditorHeight: 0,
+  expertEditor: null,
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })

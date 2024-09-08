@@ -6,6 +6,7 @@
         console.log('toggling expert editor')
       }"
     />
+    <TipTapToolbar />
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
       <div class="rounded-lg border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-800 h-full shadow-lg mb-4 p-8">
@@ -45,6 +46,7 @@ import RichTextEditor from './RichTextEditor.vue'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'
+import TipTapToolbar from './TipTapToolbar.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
