@@ -1,6 +1,34 @@
 <template>
   <!-- {{ editorContentScaleX }}  {{ editorContentScaleY }} -->
   <div class="absolute top-[00px] left-0 z-50 w-full h-full">
+    <BubbleMenu
+      v-if="editor"
+      :editor="editor"
+      :tippy-options="{ duration: 100 }"
+    >
+      <div class="bubble-menu">
+        <!-- <button :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
+          Bold
+        </button>
+        <button :class="{ 'is-active': editor.isActive('italic') }" @click="editor.chain().focus().toggleItalic().run()">
+          Italic
+        </button>
+        <button :class="{ 'is-active': editor.isActive('strike') }" @click="editor.chain().focus().toggleStrike().run()">
+          Strike
+        </button> -->
+        <button :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
+          <font-awesome-icon icon="fa-solid fa-bold" size="lg" />
+        </button>
+
+        <button :class="{ 'is-active': editor.isActive('italic') }" @click="editor.chain().focus().toggleItalic().run()">
+          <font-awesome-icon icon="fa-solid fa-italic" size="lg" />
+        </button>
+
+        <button :class="{ 'is-active': editor.isActive('strike') }" @click="editor.chain().focus().toggleStrike().run()">
+          <font-awesome-icon icon="fa-solid fa-strikethrough" size="lg" />
+        </button>
+      </div>
+    </BubbleMenu>
     <TiptapEditorContent
       :editor="editor" class="editor-content" :style="{
         transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
@@ -12,12 +40,13 @@
 
 <script setup>
 import { onBeforeUnmount, ref, unref } from 'vue'
-import { useEditor } from '@tiptap/vue-3'
+import { BubbleMenu, useEditor } from '@tiptap/vue-3'
 import TiptapStarterKit from '@tiptap/starter-kit'
 import TiptapTable from '@tiptap/extension-table'
 import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
+
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const props = defineProps(['editorWidth', 'editorHeight'])
@@ -36,6 +65,7 @@ const editor = useEditor({
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   extensions: [
     TiptapStarterKit,
+
     TiptapTable.configure({
       resizable: true,
     }),
@@ -109,6 +139,9 @@ watch(editor, (newEditor) => {
       templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
       templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
     })
+    newEditor.on('selection', () => {
+      console.log('Selection changed')
+    })
   }
 })
 
@@ -128,6 +161,37 @@ onBeforeUnmount(() => {
 
 <style scoped>
 /* Wrapper styles */
+/* Bubble menu */
+.bubble-menu {
+  background-color: #ffffff;
+  border: 1px solid #009ee2;
+
+  border-radius: 0.7rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  padding: 0.2rem;
+
+  button {
+    background-color: unset;
+    color:#009ee2;
+    border:1px solid #009ee2;
+
+    &:hover {
+      background-color: var(--gray-3);
+      color:#000;
+    }
+
+    &.is-active {
+      background-color: #009ee2;
+      color:#fff;
+
+      &:hover {
+        background-color: var(--purple-contrast);
+        color:#000;
+      }
+    }
+  }
+}
 
 .editor-wrapper {
   padding: 10px;
@@ -152,6 +216,28 @@ onBeforeUnmount(() => {
 /* You can also apply different cursor styles to specific elements */
 .ProseMirror p {
   cursor: text; /* Cursor will appear as text in paragraphs */
+}
+ .bubble-menu {
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px;
+  display: flex;
+  gap: 5px;
+}
+.bubble-menu button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+.bubble-menu {
+  @apply bg-white border border-gray-300 rounded-lg p-2 flex gap-2; /* Tailwind classes */
+}
+.bubble-menu button {
+  @apply bg-blue-500 text-white px-4 py-2 rounded cursor-pointer; /* Tailwind classes */
 }
 ::v-deep .ProseMirror {
   background-color: transparent;
