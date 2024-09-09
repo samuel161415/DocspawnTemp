@@ -556,14 +556,17 @@ async function getHTMLContent() {
   border-radius: 0.7rem;
   box-shadow: var(--shadow);
   display: flex;
+  width:100%;
+  flex-wrap: wrap;
   padding: 0.2rem;
-  gap:5px;
+  gap:8px;
 }
 
 .static-menu button {
   background-color: unset;
   color: #009ee2;
   border: 1px solid #009ee2;
+  min-width:30px;
 }
 
 .static-menu button:hover {
