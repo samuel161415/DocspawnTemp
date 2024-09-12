@@ -94,6 +94,14 @@
       </template>
 
       <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
+        <div class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="addHtmlContainer">
+          <font-awesome-icon icon="fa-brands fa-html5" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+
+          <p class="font-poppins text-surface-600 text-lg">
+            <!-- {{ $t('Cp_createTemplate_editorTemplateFields.data_fields') }} -->
+            Add Html container
+          </p>
+        </div>
         <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showDataFields ? showDataFields = false : showDataFields = true">
           <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
 
@@ -416,6 +424,7 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useConfirm } from 'primevue/useconfirm'
+import HtmlContainer from '../editorCanvas/HtmlContainer.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
@@ -756,6 +765,70 @@ function duplicateField(field) {
           canvas.renderAll()
           setTimeout(() => selectAddedField(fieldToAdd), 50)
         }
+      }
+    })
+  }
+}
+async function addHtmlContainer() {
+  const { fabric } = await import('fabric')
+  console.log('html layer')
+  const canvas = canvasService.getCanvas()
+
+  if (canvas) {
+    console.log('canvas detected')
+
+    // Show the editor by toggling the v-if
+    showEditor.value = true
+
+    onMounted(() => {
+      // Position and style the editor container (which holds the Tiptap editor)
+      if (editorContainer.value) {
+        editorContainer.value.style.position = 'absolute'
+        editorContainer.value.style.left = '100px'
+        editorContainer.value.style.top = '100px'
+        editorContainer.value.style.width = '300px'
+        editorContainer.value.style.height = '150px'
+        editorContainer.value.style.border = '1px solid #000'
+        editorContainer.value.style.resize = 'both'
+        editorContainer.value.style.overflow = 'hidden'
+
+        // Create Fabric.js object to represent this HTML container
+        const fabricObject = new fabric.Rect({
+          left: 100,
+          top: 100,
+          width: 300,
+          height: 150,
+          fill: 'rgba(0, 0, 0, 0)',
+          stroke: '#000',
+          strokeWidth: 1,
+          selectable: true,
+        })
+
+        canvas.add(fabricObject)
+
+        // Resizing logic
+        fabricObject.on('scaling', () => {
+          const newWidth = fabricObject.width * fabricObject.scaleX
+          const newHeight = fabricObject.height * fabricObject.scaleY
+
+          editorContainer.value.style.width = `${newWidth}px`
+          editorContainer.value.style.height = `${newHeight}px`
+
+          fabricObject.set({
+            scaleX: 1,
+            scaleY: 1,
+            width: newWidth,
+            height: newHeight,
+          })
+
+          canvas.renderAll()
+        })
+
+        // Moving logic
+        fabricObject.on('moving', () => {
+          editorContainer.value.style.left = `${fabricObject.left}px`
+          editorContainer.value.style.top = `${fabricObject.top}px`
+        })
       }
     })
   }

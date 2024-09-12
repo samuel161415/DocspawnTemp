@@ -1,21 +1,12 @@
 <template>
   <!-- {{ editorContentScaleX }}  {{ editorContentScaleY }} -->
   <div class="absolute top-[00px] left-0 z-50 w-full h-full">
-    <BubbleMenu
+    <!-- <BubbleMenu
       v-if="editor"
       :editor="editor"
       :tippy-options="{ duration: 100 }"
     >
       <div class="bubble-menu">
-        <!-- <button :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
-          Bold
-        </button>
-        <button :class="{ 'is-active': editor.isActive('italic') }" @click="editor.chain().focus().toggleItalic().run()">
-          Italic
-        </button>
-        <button :class="{ 'is-active': editor.isActive('strike') }" @click="editor.chain().focus().toggleStrike().run()">
-          Strike
-        </button> -->
         <button :class="{ 'is-active': editor.isActive('bold') }" @click="editor.chain().focus().toggleBold().run()">
           <font-awesome-icon icon="fa-solid fa-bold" size="lg" />
         </button>
@@ -28,11 +19,11 @@
           <font-awesome-icon icon="fa-solid fa-strikethrough" size="lg" />
         </button>
       </div>
-    </BubbleMenu>
+    </BubbleMenu> -->
     <TiptapEditorContent
       :editor="editor" class="editor-content" :style="{
-        transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
-        transformOrigin: 'top left',
+        // transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
+        // transformOrigin: 'top left',
       }"
     />
   </div>
@@ -212,7 +203,7 @@ onBeforeUnmount(() => {
 
 .ProseMirror {
   cursor: crosshair; /* Change the cursor to crosshair */
-  caret-color: red;
+  /* caret-color: red; */
   resize:both;
   overflow:auto;
 }
@@ -254,7 +245,7 @@ onBeforeUnmount(() => {
    width: v-bind('editorWidth') !important;
   height: v-bind('editorHeight') !important;
   overflow:hidden;
-  border:3px solid red;
+  /* border:3px solid red; */
 
 }
 ::v-deep .ProseMirror:focus{
