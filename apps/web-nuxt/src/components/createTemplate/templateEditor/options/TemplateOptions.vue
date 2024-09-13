@@ -42,8 +42,10 @@
     </div>
     <Button
       label="Save template" class="mt-8 w-full md:w-full" @click="() => {
-        if (templateName)
+        if (templateName){
+          console.log('templateEditorStore?.editor containers', templateEditorStore?.editorContainers)
           emit('saveTemplate')
+        }
         else {
           templateNameError = true
         }

@@ -83,7 +83,7 @@
           </div>
 
           <div class="flex flex-row gap-4">
-            <Button v-if="field?.fieldType !== 'Form checkbox group'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
+            <Button v-if="field?.fieldType !== 'Form checkbox group' && field?.fieldType !== 'Html Container'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
               <font-awesome-icon icon="fa-light fa-clone" size="lg" />
             </Button>
             <Button v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.delete')" text class="text-lg text-surface-600 w-max h-max" @click="fieldToDelete = field;confirm2($event)">
@@ -424,6 +424,7 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useConfirm } from 'primevue/useconfirm'
+import { v4 as uuidv4 } from 'uuid'
 import HtmlContainer from '../editorCanvas/HtmlContainer.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
@@ -508,7 +509,6 @@ watch(showDataFields, (val) => {
     templateEditorStore.activeTemplateField = false
   }
 })
-
 function duplicateField(field) {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -769,70 +769,202 @@ function duplicateField(field) {
     })
   }
 }
-async function addHtmlContainer() {
-  const { fabric } = await import('fabric')
-  console.log('html layer')
+// function addHtmlContainer() {
+//   console.log('add html container>>>>')
+// }
+function addHtmlContainer() {
   const canvas = canvasService.getCanvas()
 
   if (canvas) {
-    console.log('canvas detected')
+    // Generate a UUID for the new editor and fabric object
+    const id = uuidv4()
 
-    // Show the editor by toggling the v-if
-    showEditor.value = true
+    // Set initial position to avoid overlap between editors
+    const left = 100 + templateEditorStore.editorContainers.length * 50 // Offset new editors to avoid overlap
+    const top = 100 + templateEditorStore.editorContainers.length * 50 // Offset new editors to avoid overlap
 
-    onMounted(() => {
-      // Position and style the editor container (which holds the Tiptap editor)
-      if (editorContainer.value) {
-        editorContainer.value.style.position = 'absolute'
-        editorContainer.value.style.left = '100px'
-        editorContainer.value.style.top = '100px'
-        editorContainer.value.style.width = '300px'
-        editorContainer.value.style.height = '150px'
-        editorContainer.value.style.border = '1px solid #000'
-        editorContainer.value.style.resize = 'both'
-        editorContainer.value.style.overflow = 'hidden'
+    // Create a new editor container entry for this element with a unique ID
+    const newEditor = {
+      id, // Unique ID for the editor and fabric object
+      style: {
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: '300px',
+        height: '150px',
+        border: '1px solid #000',
+        resize: 'both',
+        overflow: 'hidden',
+        zIndex: 10, // Ensure it's above the canvas
+      },
+      content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
+    }
+    templateEditorStore.editorContainers.push(newEditor)
 
-        // Create Fabric.js object to represent this HTML container
-        const fabricObject = new fabric.Rect({
-          left: 100,
-          top: 100,
-          width: 300,
-          height: 150,
-          fill: 'rgba(0, 0, 0, 0)',
-          stroke: '#000',
-          strokeWidth: 1,
-          selectable: true,
-        })
+    // Wait until DOM updates with the new editor container
+    nextTick(() => {
+      // Create a Fabric.js object representing the new editor container
+      const fabricObject = new fabric.Rect({
+        id, // Assign the same unique ID to the fabric object
+        hash: id,
+        left,
+        top,
+        width: 300,
+        height: 150,
+        fill: 'rgba(0, 0, 0, 0)',
+        stroke: '#000',
+        strokeWidth: 1,
+        selectable: true,
+      })
+      fabricObject.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
 
-        canvas.add(fabricObject)
+      templateEditorStore.fabricObjectRefs[id] = fabricObject // Store reference to fabric object
 
-        // Resizing logic
-        fabricObject.on('scaling', () => {
-          const newWidth = fabricObject.width * fabricObject.scaleX
-          const newHeight = fabricObject.height * fabricObject.scaleY
-
-          editorContainer.value.style.width = `${newWidth}px`
-          editorContainer.value.style.height = `${newHeight}px`
-
-          fabricObject.set({
-            scaleX: 1,
-            scaleY: 1,
-            width: newWidth,
-            height: newHeight,
-          })
-
-          canvas.renderAll()
-        })
-
-        // Moving logic
-        fabricObject.on('moving', () => {
-          editorContainer.value.style.left = `${fabricObject.left}px`
-          editorContainer.value.style.top = `${fabricObject.top}px`
-        })
+      canvas.add(fabricObject)
+      /** */
+      let fieldToAdd = { fieldType: 'Html Container', name: id, id, hash: id, page: templateEditorStore.activePageForCanvas,
       }
+
+      if (templateEditorStore?.fieldToAdd?.type === 'Form text')
+        fieldToAdd = { ...fieldToAdd, allowDecimals: false, minCharAllowed: 2, maxCharAllowed: 50, characterAcception: 'Text' }
+
+      const allFields = []
+      templateEditorStore.addedFields.forEach((f) => {
+        allFields.push(JSON.parse(JSON.stringify(f)))
+      })
+      allFields.push(fieldToAdd)
+      templateEditorStore.addedFields = allFields
+
+      /** */
+
+      // Add a resize listener for the editor container
+      const editorContainer = templateEditorStore.editorContainerRefs[id]
+      if (editorContainer) {
+        // Add a resize event listener
+        const resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            // console.log('entry', entry)
+            const newWidth = entry.contentRect.width
+            const newHeight = entry.contentRect.height
+            /** */
+            const sample = templateEditorStore.editorContainers
+            templateEditorStore.editorContainers = sample?.map((s) => {
+              if (s?.id === id)
+                return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+              else
+                return s
+            })
+
+            /** */
+
+            // Update the corresponding Fabric.js object dimensions
+
+            const fabricObj = templateEditorStore.fabricObjectRefs[id]
+            // console.log('fabric object at resizing>>>', fabricObj)
+            if (fabricObj) {
+              fabricObj.set({
+                width: newWidth + 5,
+                height: newHeight + 5,
+              })
+
+              canvas.renderAll() // Re-render the canvas to reflect changes
+            }
+          }
+        })
+
+        // Observe the editor container for size changes
+        resizeObserver.observe(editorContainer)
+      }
+
+      // Moving logic for the new Fabric.js object
+      fabricObject.on('moving', () => {
+        console.log('fabric object', fabricObject?.id)
+        const editorContainer = templateEditorStore.editorContainerRefs[fabricObject?.id]
+        if (editorContainer) {
+          editorContainer.style.left = `${fabricObject.left}px`
+          editorContainer.style.top = `${fabricObject.top}px`
+          templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
+            if (c?.id === fabricObject?.id) {
+              return { ...c, style: { ...c?.style, left: `${fabricObject.left}px`, top: `${fabricObject.top}px` } }
+            }
+            else {
+              // const fobj = templateEditorStore.fabricObjectRefs[c?.id]
+              // console.log('fobj', fobj)
+              // console.log('c', c)
+              // return { ...c, style: { ...c?.style, left: `${fobj.left}px`, top: `${fobj.top}px` } }
+              return c
+            }
+          })
+        }
+      })
     })
   }
+  console.log('editor containers at bottom of add html function', templateEditorStore.editorContainers)
 }
+// async function addHtmlContainer() {
+//   const { fabric } = await import('fabric')
+//   console.log('html layer')
+//   const canvas = canvasService.getCanvas()
+
+//   if (canvas) {
+//     console.log('canvas detected')
+
+//     // Show the editor by toggling the v-if
+//     // showEditor.value = true
+
+//     onMounted(() => {
+//       // Position and style the editor container (which holds the Tiptap editor)
+//       if (editorContainer.value) {
+//         editorContainer.value.style.position = 'absolute'
+//         editorContainer.value.style.left = '100px'
+//         editorContainer.value.style.top = '100px'
+//         editorContainer.value.style.width = '300px'
+//         editorContainer.value.style.height = '150px'
+//         editorContainer.value.style.border = '1px solid #000'
+//         editorContainer.value.style.resize = 'both'
+//         editorContainer.value.style.overflow = 'hidden'
+
+//         // Create Fabric.js object to represent this HTML container
+//         const fabricObject = new fabric.Rect({
+//           left: 100,
+//           top: 100,
+//           width: 300,
+//           height: 150,
+//           fill: 'rgba(0, 0, 0, 0)',
+//           stroke: '#000',
+//           strokeWidth: 1,
+//           selectable: true,
+//         })
+
+//         canvas.add(fabricObject)
+
+//         // Resizing logic
+//         fabricObject.on('scaling', () => {
+//           const newWidth = fabricObject.width * fabricObject.scaleX
+//           const newHeight = fabricObject.height * fabricObject.scaleY
+
+//           editorContainer.value.style.width = `${newWidth}px`
+//           editorContainer.value.style.height = `${newHeight}px`
+
+//           fabricObject.set({
+//             scaleX: 1,
+//             scaleY: 1,
+//             width: newWidth,
+//             height: newHeight,
+//           })
+
+//           canvas.renderAll()
+//         })
+
+//         // Moving logic
+//         fabricObject.on('moving', () => {
+//           editorContainer.value.style.left = `${fabricObject.left}px`
+//           editorContainer.value.style.top = `${fabricObject.top}px`
+//         })
+//       }
+//     })
+//   }
+// }
 
 function deleteField() {
   const canvas = canvasService.getCanvas()
@@ -843,7 +975,26 @@ function deleteField() {
       else
         return true
     })
+    /** ****** incase of html container */
+    console.log('field to delete', fieldToDelete.value)
+    console.log(' templateEditorStore.editorContainers', templateEditorStore.editorContainers)
+    const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
+    templateEditorStore.editorContainers = containers
+    console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
+    // const refs = templateEditorStore.editorContainerRefs.filter(f => f?.id !== fieldToDelete?.value?.hash)
+    // templateEditorStore.editorContainerRefs = refs
+    // Convert the Proxy object to an array of entries
+    const refsArray = Object.entries(templateEditorStore.editorContainerRefs)
 
+    // Filter the array to exclude the field with the hash you want to delete
+    const filteredRefsArray = refsArray.filter(([key, value]) => key !== fieldToDelete?.value?.hash)
+
+    // Convert the filtered array back to an object
+    const filteredRefs = Object.fromEntries(filteredRefsArray)
+
+    // Update the Proxy object with the filtered references
+    templateEditorStore.editorContainerRefs = filteredRefs
+    /** */
     const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== fieldToDelete?.value?.hash)
     templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
     canvas.discardActiveObject()

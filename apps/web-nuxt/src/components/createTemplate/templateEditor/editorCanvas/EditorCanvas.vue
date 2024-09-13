@@ -26,9 +26,9 @@
         </div>
       </div>
     </div>
-    <Button @click="addHtmlContainer">
+    <!-- <Button @click="addHtmlContainer">
       Add html container
-    </Button>
+    </Button> -->
     <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col   relative   ">
       <!-- <div v-show="showExpertEditor" ref="editorContainer" class="w-max h-max">
         <RichTextEditor
@@ -42,15 +42,15 @@
       </div> -->
       <!-- Loop through all editor instances and display them -->
       <div
-        v-for="(editorContainer) in editorContainers"
+        v-for="(editorContainer) in templateEditorStore.editorContainers"
         :key="editorContainer.id"
         :ref="setEditorContainerRef(editorContainer.id)"
         :style="editorContainer.style"
         class="editor-container"
       >
-        <h1>{{ editorContainer?.style?.width }}</h1>
-        <h1>{{ editorContainer?.style?.height }}</h1>
-        <HtmlContainer />
+        <!-- <h1>{{ editorContainer?.style?.width }}</h1>
+        <h1>{{ editorContainer?.style?.height }}</h1> -->
+        <HtmlContainer :editor-id="editorContainer.id" />
       </div>
 
       <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border ">
@@ -78,77 +78,6 @@ import { templateGeneralInformation } from '~/composables/useTemplateCreationDat
 import { useAuth } from '@/composables/useAuth'
 import { useScreenWidth } from '@/composables/useScreenWidth'
 
-/** */
-// const editorContainer = ref(null)
-
-// Function to insert HTML container with Tiptap editor
-// async function addHtmlContainer() {
-//   const { fabric } = await import('fabric')
-//   console.log('html layer')
-//   const canvas = canvasService.getCanvas()
-
-//   if (canvas) {
-//     console.log('canvas detected')
-
-//     // Trigger the editor to be rendered
-//     showExpertEditor.value = !showExpertEditor.value
-
-//     // Ensure the DOM is updated before interacting with it
-//     nextTick(() => {
-//       console.log('running next tixk')
-//       console.log('container value', editorContainer.value)
-//       // Position and style the editor container
-//       if (editorContainer.value) {
-//         editorContainer.value.style.position = 'absolute'
-//         editorContainer.value.style.left = '100px'
-//         editorContainer.value.style.top = '100px'
-//         editorContainer.value.style.width = '300px'
-//         editorContainer.value.style.height = '150px'
-//         editorContainer.value.style.border = '1px solid #000'
-//         editorContainer.value.style.resize = 'both'
-//         editorContainer.value.style.overflow = 'hidden'
-
-//         // Create Fabric.js object to represent this HTML container
-//         const fabricObject = new fabric.Rect({
-//           left: 100,
-//           top: 100,
-//           width: 300,
-//           height: 150,
-//           fill: 'rgba(0, 0, 0, 0)',
-//           stroke: '#000',
-//           strokeWidth: 1,
-//           selectable: true,
-//         })
-
-//         canvas.add(fabricObject)
-
-//         // Resizing logic
-//         fabricObject.on('scaling', () => {
-//           const newWidth = fabricObject.width * fabricObject.scaleX
-//           const newHeight = fabricObject.height * fabricObject.scaleY
-
-//           editorContainer.value.style.width = `${newWidth}px`
-//           editorContainer.value.style.height = `${newHeight}px`
-
-//           fabricObject.set({
-//             scaleX: 1,
-//             scaleY: 1,
-//             width: newWidth,
-//             height: newHeight,
-//           })
-
-//           canvas.renderAll()
-//         })
-
-//         // Moving logic
-//         fabricObject.on('moving', () => {
-//           editorContainer.value.style.left = `${fabricObject.left}px`
-//           editorContainer.value.style.top = `${fabricObject.top}px`
-//         })
-//       }
-//     })
-//   }
-// }
 // Array to keep track of all editor containers and their styles
 
 const router = useRouter()
@@ -179,236 +108,17 @@ function updateScale(value) {
 onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
-  console.log('templateGeneralInformation.backgroundFileUrl', templateGeneralInformation?.backgroundFileUrl)
+  // console.log('templateGeneralInformation.backgroundFileUrl', templateGeneralInformation?.backgroundFileUrl)
 }) // Import UUID generator
-
-// Array to keep track of all editor containers and their styles
-const editorContainers = ref([])
-// Object to store the references to each editor container by UUID
-const editorContainerRefs = ref({})
-
-// Function to insert a new editor and Fabric.js element
-// function addHtmlContainer() {
-//   console.log('Adding new editor and fabric object')
-//   console.log('editor containers at start of a function', editorContainers)
-
-//   const canvas = canvasService.getCanvas()
-
-//   if (canvas) {
-//     // Generate a UUID for the new editor and fabric object
-//     const id = uuidv4()
-
-//     // Set initial position to avoid overlap between editors
-//     const left = 100 + editorContainers.value.length * 50 // Offset new editors to avoid overlap
-//     const top = 100 + editorContainers.value.length * 50 // Offset new editors to avoid overlap
-
-//     // Create a new editor container entry for this element with a unique ID
-//     const newEditor = {
-//       id, // Unique ID for the editor and fabric object
-//       style: {
-//         position: 'absolute',
-//         left: `${left}px`,
-//         top: `${top}px`,
-//         width: '300px',
-//         height: '150px',
-//         border: '1px solid #000',
-//         // resize: 'both',
-//         overflow: 'hidden',
-//         zIndex: 10, // Ensure it's above the canvas
-//       },
-//     }
-//     editorContainers.value.push(newEditor)
-
-//     // Wait until DOM updates with the new editor container
-//     nextTick(() => {
-//       console.log('next tick function ran')
-//       // Create a Fabric.js object representing the new editor container
-//       const fabricObject = new fabric.Rect({
-//         id, // Assign the same unique ID to the fabric object
-//         left,
-//         top,
-//         width: 300,
-//         height: 150,
-//         fill: 'rgba(0, 0, 0, 0)',
-//         stroke: '#000',
-//         strokeWidth: 1,
-//         selectable: true,
-//       })
-
-//       canvas.add(fabricObject)
-
-//       // Resizing logic for the new Fabric.js object
-//       fabricObject.on('scaling', () => {
-//         const newWidth = fabricObject.width * fabricObject.scaleX
-//         const newHeight = fabricObject.height * fabricObject.scaleY
-
-//         // Access the corresponding editor container using its unique ID
-//         const editorContainer = editorContainerRefs.value[id]
-//         if (editorContainer) {
-//           editorContainer.style.width = `${newWidth}px`
-//           editorContainer.style.height = `${newHeight}px`
-
-//           fabricObject.set({
-//             scaleX: 1,
-//             scaleY: 1,
-//             width: newWidth,
-//             height: newHeight,
-//           })
-
-//           canvas.renderAll()
-//         }
-//       })
-
-//       // Moving logic for the new Fabric.js object
-//       fabricObject.on('moving', () => {
-//         const editorContainer = editorContainerRefs.value[id]
-//         if (editorContainer) {
-//           editorContainer.style.left = `${fabricObject.left}px`
-//           editorContainer.style.top = `${fabricObject.top}px`
-//           editorContainers.value = editorContainers?.value?.map((c) => {
-//             if (c?.id === id)
-//               return { ...c, style: { ...c?.style, left: `${fabricObject.left}px`, top: `${fabricObject.top}px` } }
-//             else
-//               return c
-//           })
-//         }
-//       })
-//     })
-//   }
-//   console.log('editor conatiners at end of the function', editorContainers)
-// }
-// Function to insert a new editor and Fabric.js element
-const fabricObjectRefs = ref({})
-function addHtmlContainer() {
-  console.log('Adding new editor and fabric object')
-  console.log('editor containers at start of add html contaziner function', editorContainers.value)
-
-  const canvas = canvasService.getCanvas()
-
-  if (canvas) {
-    // Generate a UUID for the new editor and fabric object
-    const id = uuidv4()
-
-    // Set initial position to avoid overlap between editors
-    const left = 100 + editorContainers.value.length * 50 // Offset new editors to avoid overlap
-    const top = 100 + editorContainers.value.length * 50 // Offset new editors to avoid overlap
-
-    // Create a new editor container entry for this element with a unique ID
-    const newEditor = {
-      id, // Unique ID for the editor and fabric object
-      style: {
-        position: 'absolute',
-        left: `${left}px`,
-        top: `${top}px`,
-        width: '300px',
-        height: '150px',
-        border: '1px solid #000',
-        resize: 'both',
-        overflow: 'hidden',
-        zIndex: 10, // Ensure it's above the canvas
-      },
-    }
-    editorContainers.value.push(newEditor)
-
-    // Wait until DOM updates with the new editor container
-    nextTick(() => {
-      // Create a Fabric.js object representing the new editor container
-      const fabricObject = new fabric.Rect({
-        id, // Assign the same unique ID to the fabric object
-        left,
-        top,
-        width: 300,
-        height: 150,
-        fill: 'rgba(0, 0, 0, 0)',
-        stroke: '#000',
-        strokeWidth: 1,
-        selectable: true,
-      })
-      fabricObject.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
-
-      fabricObjectRefs.value[id] = fabricObject // Store reference to fabric object
-
-      canvas.add(fabricObject)
-
-      // Add a resize listener for the editor container
-      const editorContainer = editorContainerRefs.value[id]
-      if (editorContainer) {
-        // Add a resize event listener
-        const resizeObserver = new ResizeObserver((entries) => {
-          for (const entry of entries) {
-            // console.log('entry', entry)
-            const newWidth = entry.contentRect.width
-            const newHeight = entry.contentRect.height
-            /** */
-            const sample = editorContainers.value
-            editorContainers.value = sample?.map((s) => {
-              if (s?.id === id)
-                return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
-              else
-                return s
-            })
-
-            /** */
-
-            // Update the corresponding Fabric.js object dimensions
-
-            const fabricObj = fabricObjectRefs.value[id]
-            // console.log('fabric object at resizing>>>', fabricObj)
-            if (fabricObj) {
-              fabricObj.set({
-                width: newWidth + 5,
-                height: newHeight + 5,
-              })
-
-              canvas.renderAll() // Re-render the canvas to reflect changes
-            }
-          }
-        })
-
-        // Observe the editor container for size changes
-        resizeObserver.observe(editorContainer)
-      }
-
-      // Moving logic for the new Fabric.js object
-      fabricObject.on('moving', () => {
-        console.log('fabric object', fabricObject?.id)
-        const editorContainer = editorContainerRefs.value[fabricObject?.id]
-        if (editorContainer) {
-          editorContainer.style.left = `${fabricObject.left}px`
-          editorContainer.style.top = `${fabricObject.top}px`
-          editorContainers.value = editorContainers?.value?.map((c) => {
-            if (c?.id === fabricObject?.id) {
-              return { ...c, style: { ...c?.style, left: `${fabricObject.left}px`, top: `${fabricObject.top}px` } }
-            }
-            else {
-              // const fobj = fabricObjectRefs.value[c?.id]
-              // console.log('fobj', fobj)
-              // console.log('c', c)
-              // return { ...c, style: { ...c?.style, left: `${fobj.left}px`, top: `${fobj.top}px` } }
-              return c
-            }
-          })
-        }
-      })
-    })
-  }
-  console.log('editor containers at bottom of add html function', editorContainers.value)
-}
 
 // Function to assign a ref to each editor container based on UUID
 function setEditorContainerRef(id) {
   return (el) => {
     if (el)
-      editorContainerRefs.value[id] = el
+      templateEditorStore.editorContainerRefs[id] = el
   }
 }
-watch(editorContainers, (val) => {
-  console.log('chnage in editor containers', val)
-})
 
-watch(editorContainerRefs, (val) => {
-  console.log('chnage in editor containers refs', val)
-})
 /** */
 
 const computedCanvasWidth = computed(() => {

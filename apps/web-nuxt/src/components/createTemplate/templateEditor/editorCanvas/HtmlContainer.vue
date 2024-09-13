@@ -1,7 +1,7 @@
 <template>
   <!-- {{ editorContentScaleX }}  {{ editorContentScaleY }} -->
   <div class="absolute top-[00px] left-0 z-50 w-full h-full">
-    <!-- <BubbleMenu
+    <BubbleMenu
       v-if="editor"
       :editor="editor"
       :tippy-options="{ duration: 100 }"
@@ -19,7 +19,7 @@
           <font-awesome-icon icon="fa-solid fa-strikethrough" size="lg" />
         </button>
       </div>
-    </BubbleMenu> -->
+    </BubbleMenu>
     <TiptapEditorContent
       :editor="editor" class="editor-content" :style="{
         // transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
@@ -40,7 +40,7 @@ import TiptapTableHeader from '@tiptap/extension-table-header'
 
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
-const props = defineProps(['editorWidth', 'editorHeight'])
+const props = defineProps(['editorId', 'editorWidth', 'editorHeight'])
 
 // Reactive state to store multiple content states
 const contentStates = ref({})
@@ -52,8 +52,13 @@ const editorWidth = ref('100%')
 const editorHeight = ref('200px')
 const editor = useEditor({
   // content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
-  content: contentStates.value[selectedContentKey.value],
+  content: templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  // contentStates.value[selectedContentKey.value],
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  onFocus() {
+    // Set the active editor when it gains focus
+    addToExpertEditor()
+  },
   extensions: [
     TiptapStarterKit,
 
@@ -70,13 +75,18 @@ const editor = useEditor({
 
 onMounted(() => {
   templateEditorStore.expertEditor = editor.value
-  let keysOfContent = {}
-  templateEditorStore?.totalPagesArray?.forEach((f) => {
-    keysOfContent = { ...keysOfContent, [`Content ${f}`]: `<p> </p>` }
-  })
-  contentStates.value = templateEditorStore?.templateToEdit?.expert_container_html_content || keysOfContent
-  if (editor.value)
-    editor.value.commands.setContent(contentStates.value['Content 1'])
+
+  // let keysOfContent = {}
+  // templateEditorStore?.totalPagesArray?.forEach((f) => {
+  //   keysOfContent = { ...keysOfContent, [`Content ${f}`]: `<p> </p>` }
+  // })
+  // contentStates.value = templateEditorStore?.templateToEdit?.expert_container_html_content || keysOfContent
+  // if (editor.value)
+  //   editor.value.commands.setContent(contentStates.value['Content 1'])
+  console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+  if (templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+    editor.value.commands.setContent(templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+
   if (templateEditorStore?.templateToEdit?.expert_editor_dimensions) {
     editorHeight.value = `${(Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height))}px`
     editorWidth.value = `${Number.parseInt(templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width)}px`
@@ -89,9 +99,13 @@ onMounted(() => {
   templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
   templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
 })
-watch(() => templateEditorStore?.activePageForCanvas, () => {
-  switchContent(`Content ${templateEditorStore?.activePageForCanvas}`)
-})
+function addToExpertEditor() {
+  console.log(' add to expert editor running')
+  templateEditorStore.expertEditor = editor.value
+}
+// watch(() => templateEditorStore?.activePageForCanvas, () => {
+//   switchContent(`Content ${templateEditorStore?.activePageForCanvas}`)
+// })
 watch(props?.editorHeight, (newVal) => {
 //   console.log('props?.editorHeight', props?.editorHeight)
   if (templateEditorStore?.templateToEdit?.expert_editor_dimensions)
@@ -125,7 +139,12 @@ watch(editor, (newEditor) => {
   templateEditorStore.expertEditor = editor.value
   if (newEditor) {
     newEditor.on('update', () => {
-      contentStates.value[selectedContentKey.value] = newEditor.getHTML()
+      // contentStates.value[selectedContentKey.value] = newEditor.getHTML()
+      templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((e) => {
+        if (e?.id === props?.editorId)
+          return { ...e, content: newEditor.getHTML() }
+        else return e
+      })
       templateEditorStore.expertEditorHtmlContent = contentStates.value
       templateEditorStore.expertEditorHeight = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.height || props?.editorHeight
       templateEditorStore.expertEditorWidth = templateEditorStore?.templateToEdit?.expert_editor_dimensions?.width || props?.editorWidth
@@ -137,11 +156,11 @@ watch(editor, (newEditor) => {
 })
 
 // Function to switch content in the editor when a new content key is selected
-function switchContent(key) {
-  selectedContentKey.value = key
-  if (editor.value)
-    editor.value.commands.setContent(contentStates.value[key]) // Load the selected content
-}
+// function switchContent(key) {
+//   selectedContentKey.value = key
+//   if (editor.value)
+//     editor.value.commands.setContent(contentStates.value[key]) // Load the selected content
+// }
 
 // Function to get HTML content
 
