@@ -5,6 +5,9 @@ const initialDocGenerationData = {
   templateToGenerateDocs: {},
   activePageForCanvas: 1,
   totalPagesArray: [],
+  editorContainers: [],
+  editorContainerRefs: {},
+  fabricObjectRefs: {},
 }
 
 // Create reactive objects

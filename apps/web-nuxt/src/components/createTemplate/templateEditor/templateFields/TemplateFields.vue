@@ -815,6 +815,10 @@ function addHtmlContainer() {
         stroke: '#000',
         strokeWidth: 1,
         selectable: true,
+        fieldType: 'Html Container',
+        pageNo: templateEditorStore.activePageForCanvas,
+        displayGuide: false,
+        lockScalingFlip: true,
       })
       fabricObject.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
 
@@ -848,11 +852,14 @@ function addHtmlContainer() {
             const newHeight = entry.contentRect.height
             /** */
             const sample = templateEditorStore.editorContainers
+            console.log('entry.contentRect.width', entry.contentRect.width)
             templateEditorStore.editorContainers = sample?.map((s) => {
-              if (s?.id === id)
+              if (s?.id === id) {
+                console.log('setting editor containers for id', s?.id)
+                // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
                 return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
-              else
-                return s
+              }
+              else { return s }
             })
 
             /** */
@@ -873,98 +880,27 @@ function addHtmlContainer() {
         })
 
         // Observe the editor container for size changes
+        console.log('calling resize observer observe')
         resizeObserver.observe(editorContainer)
       }
 
       // Moving logic for the new Fabric.js object
       fabricObject.on('moving', () => {
-        console.log('fabric object', fabricObject?.id)
         const editorContainer = templateEditorStore.editorContainerRefs[fabricObject?.id]
         if (editorContainer) {
           editorContainer.style.left = `${fabricObject.left}px`
           editorContainer.style.top = `${fabricObject.top}px`
           templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
-            if (c?.id === fabricObject?.id) {
+            if (c?.id === fabricObject?.id)
               return { ...c, style: { ...c?.style, left: `${fabricObject.left}px`, top: `${fabricObject.top}px` } }
-            }
-            else {
-              // const fobj = templateEditorStore.fabricObjectRefs[c?.id]
-              // console.log('fobj', fobj)
-              // console.log('c', c)
-              // return { ...c, style: { ...c?.style, left: `${fobj.left}px`, top: `${fobj.top}px` } }
+            else
               return c
-            }
           })
         }
       })
     })
   }
-  console.log('editor containers at bottom of add html function', templateEditorStore.editorContainers)
 }
-// async function addHtmlContainer() {
-//   const { fabric } = await import('fabric')
-//   console.log('html layer')
-//   const canvas = canvasService.getCanvas()
-
-//   if (canvas) {
-//     console.log('canvas detected')
-
-//     // Show the editor by toggling the v-if
-//     // showEditor.value = true
-
-//     onMounted(() => {
-//       // Position and style the editor container (which holds the Tiptap editor)
-//       if (editorContainer.value) {
-//         editorContainer.value.style.position = 'absolute'
-//         editorContainer.value.style.left = '100px'
-//         editorContainer.value.style.top = '100px'
-//         editorContainer.value.style.width = '300px'
-//         editorContainer.value.style.height = '150px'
-//         editorContainer.value.style.border = '1px solid #000'
-//         editorContainer.value.style.resize = 'both'
-//         editorContainer.value.style.overflow = 'hidden'
-
-//         // Create Fabric.js object to represent this HTML container
-//         const fabricObject = new fabric.Rect({
-//           left: 100,
-//           top: 100,
-//           width: 300,
-//           height: 150,
-//           fill: 'rgba(0, 0, 0, 0)',
-//           stroke: '#000',
-//           strokeWidth: 1,
-//           selectable: true,
-//         })
-
-//         canvas.add(fabricObject)
-
-//         // Resizing logic
-//         fabricObject.on('scaling', () => {
-//           const newWidth = fabricObject.width * fabricObject.scaleX
-//           const newHeight = fabricObject.height * fabricObject.scaleY
-
-//           editorContainer.value.style.width = `${newWidth}px`
-//           editorContainer.value.style.height = `${newHeight}px`
-
-//           fabricObject.set({
-//             scaleX: 1,
-//             scaleY: 1,
-//             width: newWidth,
-//             height: newHeight,
-//           })
-
-//           canvas.renderAll()
-//         })
-
-//         // Moving logic
-//         fabricObject.on('moving', () => {
-//           editorContainer.value.style.left = `${fabricObject.left}px`
-//           editorContainer.value.style.top = `${fabricObject.top}px`
-//         })
-//       }
-//     })
-//   }
-// }
 
 function deleteField() {
   const canvas = canvasService.getCanvas()

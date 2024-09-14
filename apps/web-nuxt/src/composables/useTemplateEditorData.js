@@ -48,6 +48,7 @@ const initialTemplateEditorStore = {
   editorContainers: [],
   editorContainerRefs: {},
   fabricObjectRefs: {},
+  editor_fields_data: {},
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })

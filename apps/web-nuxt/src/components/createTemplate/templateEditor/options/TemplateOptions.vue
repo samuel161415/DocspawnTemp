@@ -44,6 +44,13 @@
       label="Save template" class="mt-8 w-full md:w-full" @click="() => {
         if (templateName){
           console.log('templateEditorStore?.editor containers', templateEditorStore?.editorContainers)
+          console.log(' templateEditorStore?.fabricObjectRefs', templateEditorStore?.fabricObjectRefs)
+          console.log('templateEditorStore?.editorContainerRefs', templateEditorStore?.editorContainerRefs)
+          templateEditorStore.editor_fields_data = {
+            editorContainers: JSON.parse(JSON.stringify(templateEditorStore?.editorContainers)),
+            editorContainersRefs: JSON.parse(JSON.stringify(templateEditorStore?.editorContainerRefs)),
+            fabricObjectRefs: JSON.parse(JSON.stringify(templateEditorStore?.fabricObjectRefs)),
+          }
           emit('saveTemplate')
         }
         else {
