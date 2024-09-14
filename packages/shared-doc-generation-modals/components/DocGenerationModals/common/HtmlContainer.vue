@@ -54,6 +54,7 @@ const editor = useEditor({
     // Set the active editor when it gains focus
     addToExpertEditor()
   },
+  editable: false,
   extensions: [
     TiptapStarterKit,
 

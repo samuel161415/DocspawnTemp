@@ -48,6 +48,7 @@ const initialTemplateEditorStore = {
   editorContainers: [],
   editorContainerRefs: {},
   fabricObjectRefs: {},
+  canvasScaleFactors: { x: 1, y: 1 },
   editor_fields_data: {},
 }
 // Create reactive objects

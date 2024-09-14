@@ -45,7 +45,13 @@
         v-for="(editorContainer) in templateEditorStore.editorContainers"
         :key="editorContainer.id"
         :ref="setEditorContainerRef(editorContainer.id)"
-        :style="editorContainer.style"
+        :style="{ ...editorContainer.style,
+                  top: `${extractNumber(editorContainer?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`,
+                  left: `${extractNumber(editorContainer?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px`,
+                  transformOrigin: 'top left',
+                  transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`,
+
+        }"
         class="editor-container"
       >
         <!-- <h1>{{ editorContainer?.style?.width }}</h1>
@@ -104,6 +110,14 @@ const scale = ref(1)
 function updateScale(value) {
   scale.value = value
   updateScrollPosition()
+}
+function extractNumber(value) {
+  if (typeof value === 'string') {
+    // If the value is a string, remove any non-digit characters (like 'px') and convert it to a number
+    return Number.parseFloat(value.replace(/[^\d.-]/g, ''))
+  }
+  // If the value is already a number, just return it
+  return Number(value)
 }
 onMounted(() => {
   updateScrollPosition()
@@ -207,6 +221,9 @@ function callCreateCanvas() {
 
   else setTimeout(() => callCreateCanvas(), 1000)
 }
+watch(() => templateEditorStore?.canvasScaleFactors, (val) => {
+  console.log('template editor store canvas scale factors', templateEditorStore?.canvasScaleFactors)
+})
 
 async function createCanvas() {
   const { fabric } = await import('fabric')

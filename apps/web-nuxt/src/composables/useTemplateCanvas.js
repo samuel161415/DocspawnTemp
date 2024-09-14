@@ -26,6 +26,8 @@ class CanvasService {
           // Calculate scaling factors
           const scaleX = newWidth / oldWidth
           const scaleY = newHeight / oldHeight
+          // saving scale factor to use with canvas
+          templateEditorStore.canvasScaleFactors = { x: scaleX, y: scaleY }
 
           // Update the objects with new scale and positions
           const updatedObjects = templateEditorStore?.templateToEdit?.canvas_data?.objects?.map((o) => {

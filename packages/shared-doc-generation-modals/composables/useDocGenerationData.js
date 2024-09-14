@@ -5,6 +5,7 @@ const initialDocGenerationData = {
   templateToGenerateDocs: {},
   activePageForCanvas: 1,
   totalPagesArray: [],
+  canvasScalingFactor: { x: 1, y: 1 },
   editorContainers: [],
   editorContainerRefs: {},
   fabricObjectRefs: {},

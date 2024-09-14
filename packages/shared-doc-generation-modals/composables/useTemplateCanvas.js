@@ -28,6 +28,7 @@ class CanvasService {
           // Calculate scaling factors
           const scaleX = newWidth / oldWidth
           const scaleY = newHeight / oldHeight
+          docGenerationData.canvasScalingFactor = { x: scaleX, y: scaleY }
 
           // Update the objects with new scale and positions
           const updatedObjects = docGenerationData?.templateToGenerateDocs?.canvas_data?.objects?.map((o) => {
