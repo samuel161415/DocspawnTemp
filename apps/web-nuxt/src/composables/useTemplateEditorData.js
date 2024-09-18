@@ -41,6 +41,15 @@ const initialTemplateEditorStore = {
   templateToEdit: {},
   templateToGenerateDocs: {},
   lastScaledTextOptions: { x: 1, y: 1 },
+  expertEditorHtmlContent: null,
+  expertEditorWidth: 0,
+  expertEditorHeight: 0,
+  expertEditor: null,
+  editorContainers: [],
+  editorContainerRefs: {},
+  fabricObjectRefs: {},
+  canvasScaleFactors: { x: 1, y: 1 },
+  editor_fields_data: {},
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })

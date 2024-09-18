@@ -43,7 +43,11 @@ export default defineNuxtConfig({
     'nuxt-primevue',
     'nuxt-gtag',
     '@nuxtjs/i18n',
+    'nuxt-tiptap-editor',
   ],
+  tiptap: {
+    prefix: 'Tiptap', // This prefix will be used for importing Tiptap components
+  },
 
   i18n: {
     locales: [
@@ -98,7 +102,6 @@ export default defineNuxtConfig({
     public: {
       BASE_URL: process.env.NUXT_API_BASE_URL,
       ADMIN_PASSWORD: process.env.NUXT_APP_ADMIN_PASSWORD,
-      OUTSETA_API_KEY: process.env.OUTSETA_API_KEY,
 
     },
   },

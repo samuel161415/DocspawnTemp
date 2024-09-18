@@ -32,6 +32,25 @@
         </div>
       </div>
       <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
+        <!-- <ExpertEditorPreview v-if="docGenerationData?.templateToGenerateDocs?.id && canvasWrapperHeight > 100" :template="docGenerationData?.templateToGenerateDocs" :editor-height="canvasWrapperHeight" :editor-width="900" /> -->
+        <div
+          v-for="(editorContainer) in docGenerationData?.editorContainers"
+          :key="editorContainer.id"
+          :ref="setEditorContainerRef(editorContainer.id)"
+          :style="{ ...editorContainer.style,
+                    resize: 'none',
+                    zIndex: !docGenerationData?.activePageForCanvas ? '10' : editorContainer?.pageNo === docGenerationData?.activePageForCanvas ? '10' : '-1',
+                    // top: `${extractNumber(editorContainer?.style?.top) * docGenerationData?.canvasScalingFactor?.y}px`,
+                    // left: `${extractNumber(editorContainer?.style?.left) * docGenerationData?.canvasScalingFactor?.x}px`,
+                    // transformOrigin: 'top left',
+                    // transform: `scale(${Number.parseFloat(docGenerationData?.canvasScalingFactor?.x)?.toFixed(1)},${Number.parseFloat(docGenerationData?.canvasScalingFactor?.y)?.toFixed(1)})`,
+          }"
+          class="editor-container"
+        >
+          <!-- <h1>{{ editorContainer?.style?.width }}</h1>
+        <h1>{{ editorContainer?.style?.height }}</h1> -->
+          <HtmlContainer :editor-id="editorContainer.id" />
+        </div>
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border border-surface-300  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
         <ThumbnailBar
@@ -43,7 +62,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useToast } from 'primevue/usetoast'
 
 import * as pdfjs from 'pdfjs-dist/build/pdf'
@@ -51,6 +70,8 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '../../../composables/useTemplateCanvas'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
+import ExpertEditorPreview from './ExpertEditorPreview.vue'
+import HtmlContainer from './HtmlContainer.vue'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps({
@@ -68,13 +89,27 @@ const props = defineProps({
   useCase: {},
 })
 const selectedData = ref([])
-
+function extractNumber(value) {
+  if (typeof value === 'string') {
+    // If the value is a string, remove any non-digit characters (like 'px') and convert it to a number
+    return Number.parseFloat(value.replace(/[^\d.-]/g, ''))
+  }
+  // If the value is already a number, just return it
+  return Number(value)
+}
 onMounted(() => {
   docGenerationData.templateToGenerateDocs = props?.template
   selectedData.value = props?.selectedRows
   if (props?.template)
     callCreateCanvas()
 })
+
+function setEditorContainerRef(id) {
+  return (el) => {
+    if (el)
+      docGenerationData.editorContainerRefs[id] = el
+  }
+}
 watch(() => props?.selectedRows, (newVal) => {
   selectedData.value = newVal
 })
@@ -312,6 +347,7 @@ function renderOriginalData() {
 const canvasWrapper = ref()
 const templateCanvas = ref()
 const isCanvasLoaded = ref(false)
+const canvasWrapperHeight = ref(1)
 
 function callCreateCanvas() {
   createCanvas()
@@ -359,6 +395,7 @@ async function createCanvas() {
   // Set the canvas dimensions
   canvas.width = canvasWidth
   canvas.height = canvasHeight
+  canvasWrapperHeight.value = canvasHeight
 
   canvas.setDimensions({
     width: canvasWidth,
@@ -396,7 +433,109 @@ async function createCanvas() {
       )
     }
   })
+  if (canvas) {
+    // setTimeout(() => {
+    //   console.log('docGenerationData.canvasScalingFactor', docGenerationData.canvasScalingFactor)
+
+    //   if (!docGenerationData?.templateToGenerateDocs?.editor_fields_data)
+    //     return
+    //   const { editorContainers, editorContainersRefs, fabricObjectRefs } = docGenerationData?.templateToGenerateDocs?.editor_fields_data
+    //   if (editorContainers && editorContainersRefs && fabricObjectRefs) {
+    //     docGenerationData.editorContainers = editorContainers?.map((e) => {
+    //       return { ...e, style: { ...e.style, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px` } }
+    //     })
+    //     // top: `${extractNumber(e?.style?.top) * docGenerationData?.canvasScalingFactor?.y}px`, left: `${extractNumber(e?.style?.left) * docGenerationData?.canvasScalingFactor?.x}px`
+    //     // transform: `scale(${Number.parseFloat(docGenerationData?.canvasScalingFactor?.x)?.toFixed(1)},${Number.parseFloat(docGenerationData?.canvasScalingFactor?.y)?.toFixed(1)})`
+    //     // transform: `scale(${Number.parseFloat(docGenerationData?.canvasScalingFactor?.x)?.toFixed(1)},${Number.parseFloat(docGenerationData?.canvasScalingFactor?.y)?.toFixed(1)})`,
+    //     // templateEditorStore.editorContainersRefs = editorContainersRefs
+    //     docGenerationData.fabricObjectRefs = fabricObjectRefs
+    //     // editor container ref will be assigned at runtime but fabric ref, we have to re assign to recreate canvas objects
+    //     let objectsIop = {}
+    //     canvas.getObjects()?.forEach((f) => {
+    //       if (docGenerationData.fabricObjectRefs[f?.id]) {
+    //         objectsIop = { ...objectsIop, [f?.id]: f }
+    //         if (f?.fieldType === 'Html Container') {
+    //           const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
+    //           f.set({
+    //             width:
+    //               // Number.parseFloat(
+    //               editorContainer.style.width, // .replace('px', '')) + 5
+
+    //             height:
+    //               // Number.parseFloat(
+    //               editorContainer.style.height, // .replace('px', '')) + 5
+
+    //           })
+
+    //           f.on('moving', () => {
+    //             const editorContainer = docGenerationData.editorContainerRefs[f?.id]
+    //             if (editorContainer) {
+    //               editorContainer.style.left = `${f.left}px`
+    //               editorContainer.style.top = `${f.top}px`
+    //               docGenerationData.editorContainers = docGenerationData.editorContainers?.map((c) => {
+    //                 if (c?.id === f?.id)
+    //                   return { ...c, style: { ...c?.style, left: `${f.left}px`, top: `${f.top}px` } }
+    //                 else
+    //                   return c
+    //               })
+    //             }
+    //           })
+
+    //           canvas.renderAll() // Re-render the canvas to reflect changes
+    //         }
+    //       }
+    //     })
+
+    //     docGenerationData.fabricObjectRefs = objectsIop
+
+    //     // console.log('fabric object at resizing>>>', fabricObj)
+    //     // nextTick(() => {
+    //     //   docGenerationData?.editorContainers?.forEach((f) => {
+    //     //     const id = f?.id
+    //     //     // Add a resize listener for the editor container
+    //     //     const editorContainer = docGenerationData.editorContainerRefs[id]
+    //     //     if (editorContainer) {
+    //     //       // Add a resize event listener
+    //     //       const resizeObserver = new ResizeObserver((entries) => {
+    //     //         for (const entry of entries) {
+    //     //           // console.log('entry', entry)
+    //     //           const newWidth = entry.contentRect.width
+    //     //           const newHeight = entry.contentRect.height
+
+    //     //           const sample = docGenerationData.editorContainers
+    //     //           docGenerationData.editorContainers = sample?.map((s) => {
+    //     //             if (s?.id === id)
+    //     //               // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+    //     //               return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+
+    //     //             else return s
+    //     //           })
+
+    //     //           // Update the corresponding Fabric.js object dimensions
+
+    //     //           const fabricObj = docGenerationData.fabricObjectRefs[id]
+    //     //           console.log('fabric object at resizing>>>', fabricObj)
+    //     //           if (fabricObj) {
+    //     //             fabricObj.set({
+    //     //               width: newWidth + 5,
+    //     //               height: newHeight + 5,
+    //     //             })
+
+    //     //             canvas.renderAll() // Re-render the canvas to reflect changes
+    //     //           }
+    //     //         }
+    //     //       })
+
+    //     //       // Observe the editor container for size changes
+    //     //       resizeObserver.observe(editorContainer)
+    //     //     }
+    //     //   })
+    //     // })
+    //   }
+    // }, 5000)
+  }
 }
+
 async function showThumbnail() {
   const { fabric } = await import('fabric')
 

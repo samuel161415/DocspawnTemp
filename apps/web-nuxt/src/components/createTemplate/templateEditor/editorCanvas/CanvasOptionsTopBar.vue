@@ -30,7 +30,12 @@
         <font-awesome-icon icon="fa-light fa-magnifying-glass-plus" size="xl" />
       </button>
     </div>
-    <div>
+    <div class="flex gap-4">
+      <!-- <div>
+        <Button class="w-max px-2" @click="() => emit('toggleExpertEditor')">
+          {{ props?.showExpertEditor ? 'Hide expert editor' : 'Show expert editor' }}
+        </Button>
+      </div> -->
       <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
         <Button
           v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
@@ -61,7 +66,8 @@ import canvasService from '@/composables/useTemplateCanvas'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
-const emit = defineEmits(['updateScale'])
+const props = defineProps(['showExpertEditor'])
+const emit = defineEmits(['updateScale', 'toggleExpertEditor'])
 const scale = ref(1)
 function decreaseScale() {
   if (scale.value > 0.5)
@@ -109,7 +115,7 @@ function showMargins() {
         }))
 
         if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY),
             stroke: '#3978eb',
@@ -120,7 +126,7 @@ function showMargins() {
           }))
         }
         else {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: obj.top + (Number.parseFloat(obj.height) * obj.scaleY) - (1 * ((Number.parseFloat(obj.height) * obj.scaleY) / 5)),
             stroke: '#3978eb',
@@ -186,7 +192,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           selectable: false,
         }))
         if (obj.fieldType === 'Dataset image' || obj.fieldType === 'fixed-image' || obj.fieldType === 'Form image' || obj.fieldType === 'Form multiline') {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
             stroke: '#3978eb',
@@ -196,7 +202,7 @@ watch(templateEditorStore.activeAdvancedPointer, () => {
           }))
         }
         else {
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
             stroke: '#3978eb',

@@ -226,7 +226,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             })
             canvas.add(tempXMargin)
-            tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+            tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
               left: 0, // event.absolutePointer.x,
               top: currentHoveredEle.top + (Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) - (1 * ((Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) / 5)), // event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10) ,
               stroke: '#3978eb',
@@ -294,15 +294,13 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
               top: 0,
               stroke: '#3978eb',
               selectable: false,
-
             })
             canvas.add(tempXMargin)
-            tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+            tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
               left: 0, // event.absolutePointer.x,
               top: event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10),
               stroke: '#3978eb',
               selectable: false,
-
             })
             canvas.add(tempYMargin)
           }
@@ -336,7 +334,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
               })
 
               canvas.add(tempXMargin)
-              tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+              tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
                 left: 0,
                 top: event.absolutePointer.y,
                 stroke: '#3978eb',
@@ -378,7 +376,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                   })
 
                   canvas.add(tempXMargin)
-                  tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+                  tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
                     left: 0,
                     top: event.absolutePointer.y,
                     stroke: '#3978eb',
@@ -420,7 +418,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
               })
 
               canvas.add(tempXMargin)
-              tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+              tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
                 left: 0,
                 top: event.absolutePointer.y,
                 stroke: '#3978eb',
@@ -471,7 +469,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                   })
 
                   canvas.add(tempXMargin)
-                  tempYMargin = new fabric.Line([1000, 100, 2000, 100], {
+                  tempYMargin = new fabric.Line([1000, 100, 20000, 100], {
                     left: 0,
                     top: event.absolutePointer.y,
                     stroke: '#3978eb',
@@ -576,7 +574,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
             fieldType: textEle.fieldType,
             selectable: false,
           }))
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0, // event.absolutePointer.x,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY) - (1 * ((Number.parseFloat(e.target.height) * e.target.scaleY) / 5)),
             stroke: '#3978eb',
@@ -693,7 +691,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
             selectable: false,
           }))
 
-          canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+          canvas.add(new fabric.Line([1000, 100, 20000, 100], {
             left: 0, // event.absolutePointer.x,
             top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
             stroke: '#3978eb',
@@ -790,7 +788,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                 selectable: false,
 
               }))
-              canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              canvas.add(new fabric.Line([1000, 100, 20000, 100], {
                 left: 0, // event.absolutePointer.x,
                 top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
 
@@ -935,7 +933,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                 selectable: false,
 
               }))
-              canvas.add(new fabric.Line([1000, 100, 2000, 100], {
+              canvas.add(new fabric.Line([1000, 100, 20000, 100], {
                 left: 0, // event.absolutePointer.x,
                 top: e.target.top + (Number.parseFloat(e.target.height) * e.target.scaleY),
 

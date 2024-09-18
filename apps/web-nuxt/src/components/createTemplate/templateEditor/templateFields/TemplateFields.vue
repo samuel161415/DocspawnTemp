@@ -83,7 +83,7 @@
           </div>
 
           <div class="flex flex-row gap-4">
-            <Button v-if="field?.fieldType !== 'Form checkbox group'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
+            <Button v-if="field?.fieldType !== 'Form checkbox group' && field?.fieldType !== 'Html Container'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
               <font-awesome-icon icon="fa-light fa-clone" size="lg" />
             </Button>
             <Button v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.delete')" text class="text-lg text-surface-600 w-max h-max" @click="fieldToDelete = field;confirm2($event)">
@@ -94,6 +94,14 @@
       </template>
 
       <div v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === false" class="transition-all duration-200 ease-linear grid grid-cols-1 gap-2 w-full h-max flex-none">
+        <div class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="addHtmlContainer">
+          <font-awesome-icon icon="fa-brands fa-html5" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+
+          <p class="font-poppins text-surface-600 text-lg">
+            <!-- {{ $t('Cp_createTemplate_editorTemplateFields.data_fields') }} -->
+            Add Html container
+          </p>
+        </div>
         <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showDataFields ? showDataFields = false : showDataFields = true">
           <font-awesome-icon icon="fa-light fa-file-spreadsheet" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
 
@@ -416,6 +424,8 @@
 <script setup>
 import { uuid } from 'vue-uuid'
 import { useConfirm } from 'primevue/useconfirm'
+import { v4 as uuidv4 } from 'uuid'
+import HtmlContainer from '../editorCanvas/HtmlContainer.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
@@ -499,7 +509,6 @@ watch(showDataFields, (val) => {
     templateEditorStore.activeTemplateField = false
   }
 })
-
 function duplicateField(field) {
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -760,6 +769,138 @@ function duplicateField(field) {
     })
   }
 }
+// function addHtmlContainer() {
+//   console.log('add html container>>>>')
+// }
+function addHtmlContainer() {
+  const canvas = canvasService.getCanvas()
+  console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
+  if (canvas) {
+    // Generate a UUID for the new editor and fabric object
+    const id = uuidv4()
+
+    // Set initial position to avoid overlap between editors
+    const left = 100 + templateEditorStore.editorContainers.length * 50 // Offset new editors to avoid overlap
+    const top = 100 + templateEditorStore.editorContainers.length * 50 // Offset new editors to avoid overlap
+
+    // Create a new editor container entry for this element with a unique ID
+    const newEditor = {
+      id, // Unique ID for the editor and fabric object
+      style: {
+        position: 'absolute',
+        left: `${left}px`,
+        top: `${top}px`,
+        width: '300px',
+        height: '150px',
+        border: '1px solid #000',
+        resize: 'both',
+        overflow: 'hidden',
+        zIndex: 10, // Ensure it's above the canvas
+      },
+      pageNo: templateEditorStore?.activePageForCanvas,
+      content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
+    }
+    templateEditorStore.editorContainers.push(newEditor)
+
+    // Wait until DOM updates with the new editor container
+    nextTick(() => {
+      // Create a Fabric.js object representing the new editor container
+      const fabricObject = new fabric.Rect({
+        id, // Assign the same unique ID to the fabric object
+        hash: id,
+        left,
+        top,
+        width: 300,
+        height: 150,
+        fill: 'rgba(0, 0, 0, 0)',
+        stroke: '#000',
+        strokeWidth: 1,
+        selectable: true,
+        fieldType: 'Html Container',
+        pageNo: templateEditorStore.activePageForCanvas,
+        displayGuide: false,
+        lockScalingFlip: true,
+      })
+      fabricObject.setControlsVisibility({ tr: false, tl: false, br: false, bl: false, mt: false, mb: false, mr: false, ml: false, mtr: false })
+
+      templateEditorStore.fabricObjectRefs[id] = fabricObject // Store reference to fabric object
+
+      canvas.add(fabricObject)
+      /** */
+      let fieldToAdd = { fieldType: 'Html Container', name: id, id, hash: id, page: templateEditorStore.activePageForCanvas,
+      }
+
+      if (templateEditorStore?.fieldToAdd?.type === 'Form text')
+        fieldToAdd = { ...fieldToAdd, allowDecimals: false, minCharAllowed: 2, maxCharAllowed: 50, characterAcception: 'Text' }
+
+      const allFields = []
+      templateEditorStore.addedFields.forEach((f) => {
+        allFields.push(JSON.parse(JSON.stringify(f)))
+      })
+      allFields.push(fieldToAdd)
+      templateEditorStore.addedFields = allFields
+
+      /** */
+
+      // Add a resize listener for the editor container
+      const editorContainer = templateEditorStore.editorContainerRefs[id]
+      if (editorContainer) {
+        // Add a resize event listener
+        const resizeObserver = new ResizeObserver((entries) => {
+          for (const entry of entries) {
+            // console.log('entry', entry)
+            const newWidth = entry.contentRect.width
+            const newHeight = entry.contentRect.height
+            /** this part resolves an issue of resizing to original height and width when dragged- editor container */
+            const sample = templateEditorStore.editorContainers
+
+            templateEditorStore.editorContainers = sample?.map((s) => {
+              if (s?.id === id)
+              // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+                return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+
+              else return s
+            })
+
+            /** */
+
+            // Update the corresponding Fabric.js object dimensions
+
+            const fabricObj = templateEditorStore.fabricObjectRefs[id]
+            // console.log('fabric object at resizing>>>', fabricObj)
+            if (fabricObj) {
+              fabricObj.set({
+                width: newWidth + 5,
+                height: newHeight + 5,
+              })
+
+              canvas.renderAll() // Re-render the canvas to reflect changes
+            }
+          }
+        })
+
+        // Observe the editor container for size changes
+        console.log('calling resize observer observe')
+        resizeObserver.observe(editorContainer)
+      }
+
+      // Moving logic for the new Fabric.js object
+      fabricObject.on('moving', () => {
+        const editorContainer = templateEditorStore.editorContainerRefs[fabricObject?.id]
+        if (editorContainer) {
+          editorContainer.style.left = `${fabricObject.left}px`
+          editorContainer.style.top = `${fabricObject.top}px`
+          templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
+            if (c?.id === fabricObject?.id)
+              return { ...c, style: { ...c?.style, left: `${fabricObject.left}px`, top: `${fabricObject.top}px` } }
+            else
+              return c
+          })
+        }
+      })
+    })
+  }
+}
 
 function deleteField() {
   const canvas = canvasService.getCanvas()
@@ -770,7 +911,26 @@ function deleteField() {
       else
         return true
     })
+    /** ****** incase of html container */
+    console.log('field to delete', fieldToDelete.value)
+    console.log(' templateEditorStore.editorContainers', templateEditorStore.editorContainers)
+    const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
+    templateEditorStore.editorContainers = containers
+    console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
+    // const refs = templateEditorStore.editorContainerRefs.filter(f => f?.id !== fieldToDelete?.value?.hash)
+    // templateEditorStore.editorContainerRefs = refs
+    // Convert the Proxy object to an array of entries
+    const refsArray = Object.entries(templateEditorStore.editorContainerRefs)
 
+    // Filter the array to exclude the field with the hash you want to delete
+    const filteredRefsArray = refsArray.filter(([key, value]) => key !== fieldToDelete?.value?.hash)
+
+    // Convert the filtered array back to an object
+    const filteredRefs = Object.fromEntries(filteredRefsArray)
+
+    // Update the Proxy object with the filtered references
+    templateEditorStore.editorContainerRefs = filteredRefs
+    /** */
     const fieldsS = templateEditorStore.addedFields.filter(f => f?.hash !== fieldToDelete?.value?.hash)
     templateEditorStore.addedFields = fieldsS.map(f => JSON.parse(JSON.stringify (f)))
     canvas.discardActiveObject()

@@ -26,6 +26,8 @@ class CanvasService {
           // Calculate scaling factors
           const scaleX = newWidth / oldWidth
           const scaleY = newHeight / oldHeight
+          // saving scale factor to use with canvas
+          templateEditorStore.canvasScaleFactors = { x: scaleX, y: scaleY }
 
           // Update the objects with new scale and positions
           const updatedObjects = templateEditorStore?.templateToEdit?.canvas_data?.objects?.map((o) => {
@@ -81,6 +83,120 @@ class CanvasService {
       const parsedData = canvasData
       this.canvas.loadFromJSON(parsedData, () => {
         this.canvas.renderAll()
+        /** ********************  test area for editor containers */
+        // setTimeout(() => {
+        if (!templateEditorStore?.templateToEdit?.editor_fields_data)
+          return
+        const { editorContainers, editorContainersRefs, fabricObjectRefs } = templateEditorStore?.templateToEdit?.editor_fields_data
+        if (editorContainers && editorContainersRefs && fabricObjectRefs) {
+          /** * test area: try to add left and top of editor containers by rectangle left and top */
+
+          const canvasHtmlObjects = canvasData?.objects?.filter(f => editorContainers?.filter(s => f?.id === s?.id)[0])
+
+          /** */
+          templateEditorStore.editorContainers = editorContainers?.map((e) => {
+            const rectTop = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.top
+            const rectLeft = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.left
+            const rectScaleX = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleX
+            const rectScaleY = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleY
+
+            console.log('rect scale x', rectScaleX)
+            console.log('rect scale y', rectScaleY)
+
+            // return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
+            return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${rectScaleX},${rectScaleY})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
+          })
+          // templateEditorStore.editorContainersRefs = editorContainersRefs
+          templateEditorStore.fabricObjectRefs = fabricObjectRefs
+          // editor container ref will be assigned at runtime but fabric ref, we have to re assign to recreate canvas objects
+          let objectsIop = {}
+
+          this.canvas.getObjects()?.forEach((f) => {
+            if (templateEditorStore.fabricObjectRefs[f?.id]) {
+              objectsIop = { ...objectsIop, [f?.id]: f }
+              if (f?.fieldType === 'Html Container') {
+                const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
+                f.set({
+                  width:
+                    // Number.parseFloat(
+                    editorContainer.style.width, // .replace('px', '')) + 5
+
+                  height:
+                    // Number.parseFloat(
+                    editorContainer.style.height
+                    // .replace('px', '')) + 5
+                  ,
+                })
+                /** ********** set moving event on fabric */
+                f.on('moving', () => {
+                  const editorContainer = templateEditorStore.editorContainerRefs[f?.id]
+                  if (editorContainer) {
+                    editorContainer.style.left = `${f.left}px`
+                    editorContainer.style.top = `${f.top}px`
+                    templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
+                      if (c?.id === f?.id)
+                        return { ...c, style: { ...c?.style, left: `${f.left}px`, top: `${f.top}px` } }
+                      else
+                        return c
+                    })
+                  }
+                })
+                /** */
+                this.canvas.renderAll() // Re-render the canvas to reflect changes
+              }
+            }
+          })
+
+          templateEditorStore.fabricObjectRefs = objectsIop
+
+          // console.log('fabric object at resizing>>>', fabricObj)
+          nextTick(() => {
+            templateEditorStore?.editorContainers?.forEach((f) => {
+              const id = f?.id
+              // Add a resize listener for the editor container
+              const editorContainer = templateEditorStore.editorContainerRefs[id]
+              if (editorContainer) {
+                // Add a resize event listener
+                const resizeObserver = new ResizeObserver((entries) => {
+                  for (const entry of entries) {
+                    // console.log('entry', entry)
+                    const newWidth = entry.contentRect.width
+                    const newHeight = entry.contentRect.height
+                    /** */
+                    const sample = templateEditorStore.editorContainers
+                    templateEditorStore.editorContainers = sample?.map((s) => {
+                      if (s?.id === id)
+                        // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+                        return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+
+                      else return s
+                    })
+
+                    /** */
+
+                    // Update the corresponding Fabric.js object dimensions
+
+                    const fabricObj = templateEditorStore.fabricObjectRefs[id]
+
+                    if (fabricObj) {
+                      fabricObj.set({
+                        width: newWidth + 5,
+                        height: newHeight + 5,
+                      })
+
+                      this.canvas.renderAll() // Re-render the canvas to reflect changes
+                    }
+                  }
+                })
+
+                // Observe the editor container for size changes
+                resizeObserver.observe(editorContainer)
+              }
+            })
+          })
+        }
+        // }, 2000)
+        /** */
       })
     }
     catch (error) {

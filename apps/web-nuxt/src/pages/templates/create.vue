@@ -191,7 +191,8 @@ async function saveTemplate() {
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
   canvasToSend = { ...canvasToSend, objects: deserializedObjects }
-
+  console.log('templateEditorStore.editor_fields_data', templateEditorStore.editor_fields_data)
+  // return
   const objToSend = {
     account_type: user?.value?.email,
     name: templateGeneralInformation?.name || 'sample',
@@ -207,6 +208,16 @@ async function saveTemplate() {
     canvas_data: JSON.stringify(canvasToSend),
     delivery_options: JSON.stringify(templateDeliveryOptions),
     canvas_size: JSON.stringify(canvasSize),
+    editor_fields_data:
+    JSON.stringify(templateEditorStore.editor_fields_data),
+    //  JSON.stringify({
+    //   editorContainers: templateEditorStore?.editorContainers,
+    //   editorContainersRefs: templateEditorStore?.editorContainerRefs,
+    //   fabricObjectRefs: templateEditorStore?.fabricObjectRefs,
+    // }),
+    // expert_container_html_content: JSON.stringify(templateEditorStore?.expertEditorHtmlContent),
+    // expert_editor_dimensions: JSON.stringify({ height: templateEditorStore?.expertEditorHeight, width: templateEditorStore?.expertEditorWidth }),
+
   }
 
   // return true
@@ -402,6 +413,13 @@ onMounted(() => {
   if (!templateEditorStore.templateToEdit?.id) {
     templateEditorStore.addedFields = []
     templateEditorStore.datasetData = {}
+    templateEditorStore.lastScaledTextOptions = { x: 1, y: 1 }
+
+    templateEditorStore.editorContainers = []
+    templateEditorStore.editorContainerRefs = {}
+    templateEditorStore.fabricObjectRefs = {}
+    templateEditorStore.canvasScaleFactors = { x: 1, y: 1 }
+    templateEditorStore.editor_fields_data = {}
 
     templateGeneralInformation.name = ''
     templateGeneralInformation.useCase = ''
