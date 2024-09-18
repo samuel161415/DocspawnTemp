@@ -102,11 +102,6 @@ onMounted(() => {
   selectedData.value = props?.selectedRows
   if (props?.template)
     callCreateCanvas()
-  console.log('docGenerationData>>>>>', docGenerationData)
-  console.log('doc generation data activePageForCanvas', docGenerationData?.activePageForCanvas)
-})
-watch(() => docGenerationData?.activePageForCanvas, (val) => {
-  console.log('doc generation active poage for canvas', docGenerationData?.activePageForCanvas)
 })
 
 function setEditorContainerRef(id) {

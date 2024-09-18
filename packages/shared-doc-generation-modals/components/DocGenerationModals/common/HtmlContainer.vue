@@ -70,9 +70,8 @@ const editor = useEditor({
 // templateEditorStore.expertEditor=editor
 
 onMounted(() => {
-  console.log('template editor store editor containers', docGenerationData?.editorContainers)
   // templateEditorStore.expertEditor = editor.value
-  console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+
   if (docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
     editor.value.commands.setContent(docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
 })

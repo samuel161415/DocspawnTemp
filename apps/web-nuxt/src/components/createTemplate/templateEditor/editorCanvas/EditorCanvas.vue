@@ -100,9 +100,6 @@ const activeElement = ref()
 const parentContainer = ref()
 
 const showExpertEditor = ref(true)
-watch(showExpertEditor, (val) => {
-  console.log('show expert editor', showExpertEditor.value)
-})
 
 const scale = ref(1)
 // function updateScale(value) {
@@ -124,12 +121,8 @@ onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
 
-  console.log('templateEditorStore editor containers', templateEditorStore?.editorContainers)
   // console.log('templateGeneralInformation.backgroundFileUrl', templateGeneralInformation?.backgroundFileUrl)
 }) // Import UUID generator
-watch(() => templateEditorStore?.editorContainers, (val) => {
-  console.log('change in editor containers', templateEditorStore?.editorContainers)
-})
 
 // Function to assign a ref to each editor container based on UUID
 function setEditorContainerRef(id) {
@@ -251,9 +244,6 @@ function callCreateCanvas() {
 
   else setTimeout(() => callCreateCanvas(), 1000)
 }
-watch(() => templateEditorStore?.canvasScaleFactors, (val) => {
-  console.log('template editor store canvas scale factors', templateEditorStore?.canvasScaleFactors)
-})
 
 async function createCanvas() {
   const { fabric } = await import('fabric')
@@ -615,8 +605,6 @@ async function createCanvas() {
 }
 watch(() => templateEditorStore?.editorContainers, (val) => {
   const canvas = canvasService?.getCanvas()
-  console.log('canvas objects', canvas?.getObjects())
-  console.log('template editor store editor container', val)
 })
 async function addWaterMarkToCanvas() {
   const canvas = canvasService?.getCanvas()
