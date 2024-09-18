@@ -191,7 +191,6 @@ async function saveTemplate() {
 
   let canvasToSend = JSON.parse(JSON.stringify(canvas))
   canvasToSend = { ...canvasToSend, objects: deserializedObjects }
-  console.log('templateEditorStore.editor_fields_data', templateEditorStore.editor_fields_data)
   // return
   const objToSend = {
     account_type: user?.value?.email,

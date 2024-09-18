@@ -22,6 +22,7 @@
     </BubbleMenu>
     <TiptapEditorContent
       :editor="editor" class="editor-content" :style="{
+        height: '100%',
         // transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
         // transformOrigin: 'top left',
       }"
@@ -193,7 +194,7 @@ onBeforeUnmount(() => {
 ::v-deep .ProseMirror {
   background-color: transparent;
   padding: 0px;
-  min-height: 300px;
+  min-height: 100%;
   border: 1px solid #ddd;
   border-radius: 4px;
   color: #333;
