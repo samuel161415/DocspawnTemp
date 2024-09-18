@@ -774,7 +774,7 @@ function duplicateField(field) {
 // }
 function addHtmlContainer() {
   const canvas = canvasService.getCanvas()
-
+  console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
   if (canvas) {
     // Generate a UUID for the new editor and fabric object
     const id = uuidv4()
@@ -797,6 +797,7 @@ function addHtmlContainer() {
         overflow: 'hidden',
         zIndex: 10, // Ensure it's above the canvas
       },
+      pageNo: templateEditorStore?.activePageForCanvas,
       content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
     }
     templateEditorStore.editorContainers.push(newEditor)
@@ -850,16 +851,15 @@ function addHtmlContainer() {
             // console.log('entry', entry)
             const newWidth = entry.contentRect.width
             const newHeight = entry.contentRect.height
-            /** */
+            /** this part resolves an issue of resizing to original height and width when dragged- editor container */
             const sample = templateEditorStore.editorContainers
-            console.log('entry.contentRect.width', entry.contentRect.width)
+
             templateEditorStore.editorContainers = sample?.map((s) => {
-              if (s?.id === id) {
-                console.log('setting editor containers for id', s?.id)
-                // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+              if (s?.id === id)
+              // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
                 return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
-              }
-              else { return s }
+
+              else return s
             })
 
             /** */

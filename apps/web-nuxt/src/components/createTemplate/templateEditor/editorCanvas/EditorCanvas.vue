@@ -46,10 +46,11 @@
         :key="editorContainer.id"
         :ref="setEditorContainerRef(editorContainer.id)"
         :style="{ ...editorContainer.style,
-                  top: `${extractNumber(editorContainer?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`,
-                  left: `${extractNumber(editorContainer?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px`,
-                  transformOrigin: 'top left',
-                  transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`,
+                  zIndex: editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? '10' : '-1',
+        // top: `${extractNumber(editorContainer?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`,
+        // left: `${extractNumber(editorContainer?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px`,
+        // transformOrigin: 'top left',
+        // transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`,
 
         }"
         class="editor-container"
@@ -123,8 +124,12 @@ onMounted(() => {
   updateScrollPosition()
   watch(scale, updateScrollPosition)
 
+  console.log('templateEditorStore editor containers', templateEditorStore?.editorContainers)
   // console.log('templateGeneralInformation.backgroundFileUrl', templateGeneralInformation?.backgroundFileUrl)
 }) // Import UUID generator
+watch(() => templateEditorStore?.editorContainers, (val) => {
+  console.log('change in editor containers', templateEditorStore?.editorContainers)
+})
 
 // Function to assign a ref to each editor container based on UUID
 function setEditorContainerRef(id) {
@@ -210,7 +215,32 @@ onMounted(() => {
   }
   if (typeof window !== 'undefined')
     callCreateCanvas()
+  // if (!templateEditorStore?.templateToEdit?.editor_fields_data)
+  //   return
+  // const { editorContainers, editorContainersRefs, fabricObjectRefs } = templateEditorStore?.templateToEdit?.editor_fields_data
+  // if (editorContainers && editorContainersRefs && fabricObjectRefs) {
+  //   // docGenerationData.editorContainerRefs = editorContainersRefs
+  //   templateEditorStore.editorContainers = editorContainers?.map((e) => {
+  //     return { ...e, style: { ...e?.style, top: `${extractNumber(e?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`, left: `${extractNumber(e?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px` } }
+  //     // return { ...e, style: { ...e?.style, top: `${extractNumber(e?.style?.top)}px`, left: `${extractNumber(e?.style?.left)}px` } }
+  //   })
+  //   // docGenerationData.fabricObjectRefs = fabricObjectRefs
+  // }
 })
+
+// watch(() => templateEditorStore?.canvasScaleFactors, (val) => {
+//   if (!templateEditorStore?.canvasScaleFactors?.y)
+//     return
+//   const { editorContainers, editorContainersRefs, fabricObjectRefs } = templateEditorStore?.templateToEdit?.editor_fields_data
+//   if (editorContainers && editorContainersRefs && fabricObjectRefs) {
+//     // docGenerationData.editorContainerRefs = editorContainersRefs
+//     templateEditorStore.editorContainers = editorContainers?.map((e) => {
+//     // return { ...e, style: { ...e?.style, top: `${extractNumber(e?.style?.top)}px`, left: `${extractNumber(e?.style?.left)}px` } }
+//       return { ...e, style: { ...e?.style, top: `${extractNumber(e?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`, left: `${extractNumber(e?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px` } }
+//     })
+//     // docGenerationData.fabricObjectRefs = fabricObjectRefs
+//   }
+// })
 
 function callCreateCanvas() {
   // using this function to resolve error- canvas wrapper is loading later than createcanvas function
@@ -378,103 +408,120 @@ async function createCanvas() {
     })
     if (templateEditorStore?.templateToEdit?.id) {
     /** */
-      setTimeout(() => {
-        if (!templateEditorStore?.templateToEdit?.editor_fields_data)
-          return
-        const { editorContainers, editorContainersRefs, fabricObjectRefs } = templateEditorStore?.templateToEdit?.editor_fields_data
-        if (editorContainers && editorContainersRefs && fabricObjectRefs) {
-          templateEditorStore.editorContainers = editorContainers?.map((e) => {
-            return { ...e, style: { ...e.style, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px` } }
-          })
-          // templateEditorStore.editorContainersRefs = editorContainersRefs
-          templateEditorStore.fabricObjectRefs = fabricObjectRefs
-          // editor container ref will be assigned at runtime but fabric ref, we have to re assign to recreate canvas objects
-          let objectsIop = {}
-          canvas.getObjects()?.forEach((f) => {
-            if (templateEditorStore.fabricObjectRefs[f?.id]) {
-              objectsIop = { ...objectsIop, [f?.id]: f }
-              if (f?.fieldType === 'Html Container') {
-                const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
-                f.set({
-                  width:
-                  // Number.parseFloat(
-                  editorContainer.style.width, // .replace('px', '')) + 5
+      // setTimeout(() => {
+      //   if (!templateEditorStore?.templateToEdit?.editor_fields_data)
+      //     return
+      //   const { editorContainers, editorContainersRefs, fabricObjectRefs } = templateEditorStore?.templateToEdit?.editor_fields_data
+      //   if (editorContainers && editorContainersRefs && fabricObjectRefs) {
+      //     /** * test area: try to add left and top of editor containers by rectangle left and top */
+      //     const canvasHtmlObjects = canvas.getObjects()?.filter(f => templateEditorStore?.editorContainers?.filter(s => f?.id === s?.id)[0])
+      //     console.log('canvas html objects', canvasHtmlObjects)
+      //     /** */
+      //     templateEditorStore.editorContainers = editorContainers?.map((e) => {
+      //       const rectTop = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.top
+      //       const rectLeft = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.left
+      //       console.log('rect top', rectTop)
+      //       console.log('rect eft', rectLeft)
+      //       console.log('templateEditorStore.editorContainerRefs[e?.id]', templateEditorStore.editorContainerRefs[e?.id])
+      //       // const editorContainer = templateEditorStore.editorContainerRefs[e?.id]
+      //       // if (editorContainer) {
+      //       //   editorContainer.style.left = `${rectLeft}px`
+      //       //   editorContainer.style.top = `${rectTop}px`
+      //       // }
+      //       return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
+      //     })
+      //     // templateEditorStore.editorContainersRefs = editorContainersRefs
+      //     templateEditorStore.fabricObjectRefs = fabricObjectRefs
+      //     // editor container ref will be assigned at runtime but fabric ref, we have to re assign to recreate canvas objects
+      //     let objectsIop = {}
 
-                  height:
-                  // Number.parseFloat(
-                  editorContainer.style.height
-                  // .replace('px', '')) + 5
-                  ,
-                })
-                /** ********** set moving event on fabric */
-                f.on('moving', () => {
-                  const editorContainer = templateEditorStore.editorContainerRefs[f?.id]
-                  if (editorContainer) {
-                    editorContainer.style.left = `${f.left}px`
-                    editorContainer.style.top = `${f.top}px`
-                    templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
-                      if (c?.id === f?.id)
-                        return { ...c, style: { ...c?.style, left: `${f.left}px`, top: `${f.top}px` } }
-                      else
-                        return c
-                    })
-                  }
-                })
-                /** */
-                canvas.renderAll() // Re-render the canvas to reflect changes
-              }
-            }
-          })
+      //     canvas.getObjects()?.forEach((f) => {
+      //       if (templateEditorStore.fabricObjectRefs[f?.id]) {
+      //         objectsIop = { ...objectsIop, [f?.id]: f }
+      //         if (f?.fieldType === 'Html Container') {
+      //           const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
 
-          templateEditorStore.fabricObjectRefs = objectsIop
+      //           console.log(' editorContainer.style.width>>>>', editorContainer.style.width)
+      //           f.set({
+      //             width:
+      //             // Number.parseFloat(
+      //             editorContainer.style.width, // .replace('px', '')) + 5
 
-          // console.log('fabric object at resizing>>>', fabricObj)
-          nextTick(() => {
-            templateEditorStore?.editorContainers?.forEach((f) => {
-              const id = f?.id
-              // Add a resize listener for the editor container
-              const editorContainer = templateEditorStore.editorContainerRefs[id]
-              if (editorContainer) {
-                // Add a resize event listener
-                const resizeObserver = new ResizeObserver((entries) => {
-                  for (const entry of entries) {
-                    // console.log('entry', entry)
-                    const newWidth = entry.contentRect.width
-                    const newHeight = entry.contentRect.height
-                    /** */
-                    const sample = templateEditorStore.editorContainers
-                    templateEditorStore.editorContainers = sample?.map((s) => {
-                      if (s?.id === id)
-                      // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
-                        return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+      //             height:
+      //             // Number.parseFloat(
+      //             editorContainer.style.height
+      //             // .replace('px', '')) + 5
+      //             ,
+      //           })
+      //           /** ********** set moving event on fabric */
+      //           f.on('moving', () => {
+      //             const editorContainer = templateEditorStore.editorContainerRefs[f?.id]
+      //             if (editorContainer) {
+      //               editorContainer.style.left = `${f.left}px`
+      //               editorContainer.style.top = `${f.top}px`
+      //               templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((c) => {
+      //                 if (c?.id === f?.id)
+      //                   return { ...c, style: { ...c?.style, left: `${f.left}px`, top: `${f.top}px` } }
+      //                 else
+      //                   return c
+      //               })
+      //             }
+      //           })
+      //           /** */
+      //           canvas.renderAll() // Re-render the canvas to reflect changes
+      //         }
+      //       }
+      //     })
 
-                      else return s
-                    })
+      //     templateEditorStore.fabricObjectRefs = objectsIop
 
-                    /** */
+      //     // console.log('fabric object at resizing>>>', fabricObj)
+      //     nextTick(() => {
+      //       templateEditorStore?.editorContainers?.forEach((f) => {
+      //         const id = f?.id
+      //         // Add a resize listener for the editor container
+      //         const editorContainer = templateEditorStore.editorContainerRefs[id]
+      //         if (editorContainer) {
+      //           // Add a resize event listener
+      //           const resizeObserver = new ResizeObserver((entries) => {
+      //             for (const entry of entries) {
+      //               // console.log('entry', entry)
+      //               const newWidth = entry.contentRect.width
+      //               const newHeight = entry.contentRect.height
+      //               /** */
+      //               const sample = templateEditorStore.editorContainers
+      //               templateEditorStore.editorContainers = sample?.map((s) => {
+      //                 if (s?.id === id)
+      //                 // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+      //                   return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
 
-                    // Update the corresponding Fabric.js object dimensions
+      //                 else return s
+      //               })
 
-                    const fabricObj = templateEditorStore.fabricObjectRefs[id]
-                    // console.log('fabric object at resizing>>>', fabricObj)
-                    if (fabricObj) {
-                      fabricObj.set({
-                        width: newWidth + 5,
-                        height: newHeight + 5,
-                      })
+      //               /** */
 
-                      canvas.renderAll() // Re-render the canvas to reflect changes
-                    }
-                  }
-                })
+      //               // Update the corresponding Fabric.js object dimensions
 
-                // Observe the editor container for size changes
-                resizeObserver.observe(editorContainer)
-              }
-            })
-          })
-        }
-      }, 5000)
+      //               const fabricObj = templateEditorStore.fabricObjectRefs[id]
+      //               console.log('fabric object at resizing>>>', fabricObj)
+      //               if (fabricObj) {
+      //                 fabricObj.set({
+      //                   width: newWidth + 5,
+      //                   height: newHeight + 5,
+      //                 })
+
+      //                 canvas.renderAll() // Re-render the canvas to reflect changes
+      //               }
+      //             }
+      //           })
+
+      //           // Observe the editor container for size changes
+      //           resizeObserver.observe(editorContainer)
+      //         }
+      //       })
+      //     })
+      //   }
+      // }, 5000)
 
       /** */
       canvas.getObjects()?.forEach((obj) => {
@@ -566,6 +613,11 @@ async function createCanvas() {
     }
   }
 }
+watch(() => templateEditorStore?.editorContainers, (val) => {
+  const canvas = canvasService?.getCanvas()
+  console.log('canvas objects', canvas?.getObjects())
+  console.log('template editor store editor container', val)
+})
 async function addWaterMarkToCanvas() {
   const canvas = canvasService?.getCanvas()
   if (templateEditorStore?.watermarkImage?.src) {

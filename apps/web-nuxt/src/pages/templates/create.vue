@@ -413,6 +413,13 @@ onMounted(() => {
   if (!templateEditorStore.templateToEdit?.id) {
     templateEditorStore.addedFields = []
     templateEditorStore.datasetData = {}
+    templateEditorStore.lastScaledTextOptions = { x: 1, y: 1 }
+
+    templateEditorStore.editorContainers = []
+    templateEditorStore.editorContainerRefs = {}
+    templateEditorStore.fabricObjectRefs = {}
+    templateEditorStore.canvasScaleFactors = { x: 1, y: 1 }
+    templateEditorStore.editor_fields_data = {}
 
     templateGeneralInformation.name = ''
     templateGeneralInformation.useCase = ''
