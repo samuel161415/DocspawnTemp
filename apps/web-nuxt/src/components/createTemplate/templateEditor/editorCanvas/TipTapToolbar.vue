@@ -379,9 +379,6 @@ async function getHTMLContent() {
 const selectedDatasetkey = ref(null)
 
 function insetDatasetKey() {
-  console.log('template editor store dataset keys', templateEditorStore?.datasetData?.selectedKeys)
-  console.log('runniug insert fruit')
-  console.log('selected fruit valkue', selectedDatasetkey?.value)
   if (!selectedDatasetkey.value)
     return
 

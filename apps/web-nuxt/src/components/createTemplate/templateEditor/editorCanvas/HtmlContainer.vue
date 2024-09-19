@@ -31,14 +31,14 @@
 </template>
 
 <script setup>
-import { onBeforeUnmount, ref, unref } from 'vue'
+import { h, onBeforeUnmount, ref, render, unref } from 'vue'
 import { BubbleMenu, useEditor } from '@tiptap/vue-3'
 import TiptapStarterKit from '@tiptap/starter-kit'
 import TiptapTable from '@tiptap/extension-table'
 import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
-
+import Dropdown from 'primevue/dropdown'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const props = defineProps(['editorId'])
@@ -66,14 +66,153 @@ const editor = useEditor({
     TiptapTableHeader,
   ],
 })
+const selectedDatasetkey = ref(null)
 
+function insetDatasetKey() {
+  if (!selectedDatasetkey.value)
+    return
+
+  // Insert the selected fruit wrapped in {{}} into the editor
+  editor.value.chain().focus().insertContent(`{{dataset[${selectedDatasetkey.value}]}}`).run()
+
+  // Reset the dropdown
+  selectedDatasetkey.value = null
+}
 // templateEditorStore.expertEditor=editor
+// function handleContextMenu(event) {
+//   event.preventDefault() // Disable the default browser context menu
+
+//   // Remove any existing custom menu
+//   const existingMenu = document.getElementById('custom-context-menu')
+//   if (existingMenu)
+//     existingMenu.remove()
+
+//   // Create the custom context menu
+//   const menu = document.createElement('div')
+//   menu.id = 'custom-context-menu'
+//   menu.style.position = 'absolute'
+//   menu.style.top = `${event.clientY}px`
+//   menu.style.left = `${event.clientX}px`
+//   menu.style.background = '#fff'
+//   menu.style.border = '1px solid #ccc'
+//   menu.style.padding = '10px'
+//   menu.style.zIndex = '1000'
+
+//   // Add a custom option (like Make Heading)
+//   const makeHeadingOption = document.createElement('div')
+//   makeHeadingOption.textContent = 'Make Heading'
+//   makeHeadingOption.style.cursor = 'pointer'
+//   makeHeadingOption.onclick = () => {
+//     editor.value.chain().focus().toggleHeading({ level: 4 }).run() // Toggle Heading level 1
+//     menu.remove() // Remove menu after applying action
+//   }
+
+//   // Add more custom options as needed
+//   // const anotherOption = document.createElement('div');
+//   // anotherOption.textContent = 'Another Option';
+//   // anotherOption.style.cursor = 'pointer';
+//   // anotherOption.onclick = () => { ... };
+
+//   // Append options to the custom menu
+//   menu.appendChild(makeHeadingOption)
+//   // menu.appendChild(anotherOption);
+
+//   // Append the custom menu to the body
+//   document.body.appendChild(menu)
+
+//   // Remove the menu if clicking elsewhere
+//   document.addEventListener('click', () => {
+//     menu.remove()
+//   }, { once: true })
+// }
+// Function to handle custom context menu creation
+function handleContextMenu(event) {
+  event.preventDefault() // Disable the default browser context menu
+
+  // Remove any existing custom menu
+  const existingMenu = document.getElementById('custom-context-menu')
+  if (existingMenu)
+    existingMenu.remove()
+
+  // Create the custom context menu
+  const menu = document.createElement('div')
+  menu.id = 'custom-context-menu'
+  menu.style.position = 'absolute'
+  menu.style.top = `${event.clientY}px`
+  menu.style.left = `${event.clientX}px`
+  menu.style.background = '#fff'
+  menu.style.border = '1px solid #ccc'
+  menu.style.padding = '10px'
+  menu.style.zIndex = '1000'
+
+  // Prevent menu from closing when interacting with the dropdown
+  menu.addEventListener('click', e => e.stopPropagation())
+
+  // Create the "Make Heading" option
+  const makeHeadingOption = document.createElement('div')
+  makeHeadingOption.textContent = 'Make Heading'
+  makeHeadingOption.style.cursor = 'pointer'
+  makeHeadingOption.style.marginBottom = '10px'
+  makeHeadingOption.onclick = () => {
+    editor.value.chain().focus().toggleHeading({ level: 4 }).run() // Toggle Heading level 4
+    menu.remove() // Remove menu after applying action
+  }
+
+  // Create the select dropdown
+  const selectLabel = document.createElement('label')
+  selectLabel.textContent = 'Insert Dataset Key: '
+  selectLabel.style.display = 'block'
+  selectLabel.style.marginBottom = '5px'
+
+  const selectDropdown = document.createElement('select')
+  const options = templateEditorStore.datasetData.selectedKeys?.map((s) => {
+    return { label: s, value: s }
+  })
+  // [
+  //   { label: 'Select a key', value: '' },
+  //   { label: 'Key 1', value: 'key1' },
+  //   { label: 'Key 2', value: 'key2' },
+  //   { label: 'Key 3', value: 'key3' },
+  // ]
+
+  options.forEach((option) => {
+    const optionElement = document.createElement('option')
+    optionElement.value = option.value
+    optionElement.textContent = option.label
+    selectDropdown.appendChild(optionElement)
+  })
+
+  // Function to insert the selected dataset key
+  selectDropdown.onchange = () => {
+    const selectedValue = selectDropdown.value
+    if (selectedValue) {
+      editor.value.chain().focus().insertContent(`{{dataset[${selectedValue}]}}`).run() // Insert dataset key
+      menu.remove() // Remove menu after applying action
+    }
+  }
+
+  // Append elements to the custom menu
+  menu.appendChild(makeHeadingOption)
+  menu.appendChild(selectLabel)
+  menu.appendChild(selectDropdown)
+
+  // Append the custom menu to the body
+  document.body.appendChild(menu)
+
+  // Remove the menu if clicking elsewhere
+  document.addEventListener('click', () => {
+    menu.remove()
+  }, { once: true })
+}
 
 onMounted(() => {
   templateEditorStore.expertEditor = editor.value
   // console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
   if (templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
     editor.value.commands.setContent(templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+
+  if (editor.value)
+    editor.value.view.dom.addEventListener('contextmenu', handleContextMenu)
 })
 function addToExpertEditor() {
   // console.log(' add to expert editor running')
@@ -102,6 +241,8 @@ watch(editor, (newEditor) => {
 
 onBeforeUnmount(() => {
   unref(editor).destroy()
+  if (editor.value)
+    editor.value.view.dom.removeEventListener('contextmenu', handleContextMenu)
 })
 </script>
 
