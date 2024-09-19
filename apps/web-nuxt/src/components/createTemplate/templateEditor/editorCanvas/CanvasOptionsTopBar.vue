@@ -237,6 +237,7 @@ watch(() => templateEditorStore.activePageForCanvas, () => {
   templateEditorStore.activeDisplayGuide = false
 })
 watch(currentPreviewNo, (newVal) => {
+  templateEditorStore.currentPreviewNo = newVal
   if (templateEditorStore.showPreview) {
     const canvas = canvasService.getCanvas()
     if (canvas) {

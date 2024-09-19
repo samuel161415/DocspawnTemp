@@ -214,6 +214,47 @@ onMounted(() => {
   if (editor.value)
     editor.value.view.dom.addEventListener('contextmenu', handleContextMenu)
 })
+
+watch(() => [templateEditorStore.currentPreviewNo, templateEditorStore.showPreview], ([currentPreviewNo, showPreview]) => {
+  // console.log('change in current preview', currentPreviewNo, showPreview)
+  if (showPreview) {
+    if (currentPreviewNo > 0) {
+      const htmlContent = templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+      const htmlContentWithRealValues = replaceDatasetValues(htmlContent, templateEditorStore?.datasetData?.allEntries[currentPreviewNo - 1])
+      editor.value.commands.setContent(htmlContentWithRealValues)
+    }
+  }
+  else {
+    const htmlContent = templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+    editor.value.commands.setContent(htmlContent)
+  }
+})
+
+function replaceDatasetValues(html, dataset) {
+  // Regular expression to match {{dataset[key]}} pattern
+  const regex = /{{dataset\[([^\]]+)\]}}/g
+
+  // Replace each match with the corresponding value from the dataset
+  return html.replace(regex, (match, key) => {
+    // Trim the key and handle cases where key may have extra spaces
+    key = key.trim()
+
+    // Access the value from the dataset
+    const value = dataset[key]
+
+    // If the key exists in the dataset and is not null, return the value, otherwise leave it as is
+    if (value !== undefined && value !== null) {
+      // Check if the value is an object (like 'Anomaly 1'), and pick the 'text' or hyperlink field if necessary
+      if (typeof value === 'object' && value.text)
+        return value.text
+      else
+        return value
+    }
+
+    // If key is not found, return the original match (without any replacement)
+    return match
+  })
+}
 function addToExpertEditor() {
   // console.log(' add to expert editor running')
   templateEditorStore.expertEditor = editor.value
