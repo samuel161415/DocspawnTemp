@@ -37,7 +37,9 @@
           v-for="(editorContainer) in docGenerationData?.editorContainers"
           :key="editorContainer.id"
           :ref="setEditorContainerRef(editorContainer.id)"
+
           :style="{ ...editorContainer.style,
+                    borderColor: 'transparent',
                     resize: 'none',
                     zIndex: !docGenerationData?.activePageForCanvas ? '10' : editorContainer?.pageNo === docGenerationData?.activePageForCanvas ? '10' : '-1',
                     // top: `${extractNumber(editorContainer?.style?.top) * docGenerationData?.canvasScalingFactor?.y}px`,
@@ -49,7 +51,11 @@
         >
           <!-- <h1>{{ editorContainer?.style?.width }}</h1>
         <h1>{{ editorContainer?.style?.height }}</h1> -->
-          <HtmlContainer :editor-id="editorContainer.id" />
+          <HtmlContainer
+            :editor-id="editorContainer.id" :is-data-to-doc="props?.useCase === 'dataToDoc'"
+            :dataset-data="selectedData"
+            :preview-no="currentPreviewNo"
+          />
         </div>
         <canvas id="template-canvas" ref="templateCanvas" class=" flex-1 w-full min-h-full h-full  rounded-md  my-0 shadow border border-surface-300  data-to-doc-canvas" :style="canvasStyle">
         </canvas>
