@@ -847,6 +847,56 @@ function addHtmlContainer() {
       // Add a resize listener for the editor container
       const editorContainer = templateEditorStore.editorContainerRefs[id]
       if (editorContainer) {
+        editorContainer.addEventListener('mousemove', (event) => {
+          const rect = editorContainer.getBoundingClientRect()
+
+          // Calculate the position of the mouse relative to the container
+          const mouseX = event.clientX - rect.left
+          const mouseY = event.clientY - rect.top
+
+          // Define a threshold for "corner" detection (e.g., 10px)
+          const cornerThreshold = 10
+
+          // Check if the mouse is near the top-left corner
+          const isTopLeft = mouseX < cornerThreshold && mouseY < cornerThreshold
+
+          // Check if the mouse is near the top-right corner
+          const isTopRight = mouseX > rect.width - cornerThreshold && mouseY < cornerThreshold
+
+          // Check if the mouse is near the bottom-left corner
+          const isBottomLeft = mouseX < cornerThreshold && mouseY > rect.height - cornerThreshold
+
+          // Check if the mouse is near the bottom-right corner
+          const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
+
+          // Handle the hover event based on which corner is hovered
+          // || isBottomRight
+          if (isTopLeft || isTopRight || isBottomLeft) {
+            // console.log('Hovering near a corner')
+            // You can add additional logic to change the cursor or show resize handles
+            editorContainer.style.cursor = 'move'
+            // Example to change the cursor to a resize indicator
+            // setting drag mode
+
+            templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+              if (container?.id === id)
+                return { ...container, behaviourMode: 'drag' }
+              else
+                return container
+            })
+          }
+          else {
+            editorContainer.style.cursor = 'auto' // Reset cursor when not hovering near a corner
+            // console.log('hovering center')
+            // removing dragging mode
+            // templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+            //   if (container?.id === id)
+            //     return { ...container, behaviourMode: 'edit' }
+            //   else
+            //     return container
+            // })
+          }
+        })
         // Add a resize event listener
         const resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
@@ -872,8 +922,8 @@ function addHtmlContainer() {
             // console.log('fabric object at resizing>>>', fabricObj)
             if (fabricObj) {
               fabricObj.set({
-                width: newWidth, // + 5,
-                height: newHeight, // + 5,
+                width: newWidth, // + 50,
+                height: newHeight, // + 50,
               })
 
               canvas.renderAll() // Re-render the canvas to reflect changes
@@ -882,12 +932,13 @@ function addHtmlContainer() {
         })
 
         // Observe the editor container for size changes
-        console.log('calling resize observer observe')
+        // console.log('calling resize observer observe')
         resizeObserver.observe(editorContainer)
       }
 
       // Moving logic for the new Fabric.js object
       fabricObject.on('moving', () => {
+        // console.log('fabric object moving')
         const editorContainer = templateEditorStore.editorContainerRefs[fabricObject?.id]
         if (editorContainer) {
           editorContainer.style.left = `${fabricObject.left}px`
@@ -899,6 +950,41 @@ function addHtmlContainer() {
               return c
           })
         }
+      })
+      // remove drag mode from container
+      fabricObject.on('mousemove', (options) => {
+        const cornerThreshold = 10
+        // console.log('mouse moving')
+        const pointer = canvas.getPointer(options.e) // Get the current mouse pointer
+        const rect = fabricObject.getBoundingRect() // Get the bounding box of the object
+
+        // Calculate the position of the mouse relative to the Fabric object
+        const mouseX = pointer.x - fabricObject.left
+        const mouseY = pointer.y - fabricObject.top
+
+        // Check if the mouse is near the corners of the Fabric object
+        const isTopLeft = mouseX < cornerThreshold && mouseY < cornerThreshold
+        const isTopRight = mouseX > rect.width - cornerThreshold && mouseY < cornerThreshold
+        const isBottomLeft = mouseX < cornerThreshold && mouseY > rect.height - cornerThreshold
+        const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
+
+        // Change the cursor based on corner detection
+        if (isTopLeft || isTopRight || isBottomLeft || isBottomRight) {
+          // console.log('hovering at rectangle corners')
+          // canvas.setCursor('move') // Show drag cursor if near corners
+        }
+        else {
+          canvas.setCursor('auto')
+
+          templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+            if (container?.id === id)
+              return { ...container, behaviourMode: 'edit' }
+            else
+              return container
+          })
+        } // Reset to default cursor
+
+        canvas.renderAll()
       })
     })
   }
@@ -917,7 +1003,7 @@ function deleteField() {
 
     const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
     templateEditorStore.editorContainers = containers
-    console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
+    // console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
     // const refs = templateEditorStore.editorContainerRefs.filter(f => f?.id !== fieldToDelete?.value?.hash)
     // templateEditorStore.editorContainerRefs = refs
     // Convert the Proxy object to an array of entries
@@ -968,7 +1054,6 @@ async function selectField(field, option) {
     if (field === 'Data field' || field === 'Dataset image') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
     }
-
     else if (field === 'Dataset date') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a date field', type: field, id: option || 'Lorem ipsum', dateFormat: 'MM/DD/YYYY' }
     }

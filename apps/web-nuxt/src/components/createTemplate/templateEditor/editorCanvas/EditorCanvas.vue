@@ -57,6 +57,7 @@
         }"
         class="editor-container"
       >
+        <!-- {{ editorContainer?.behaviourMode }} -->
         <!-- <h1>{{ editorContainer?.style?.width }}</h1>
         <h1>{{ editorContainer?.style?.height }}</h1> -->
         <HtmlContainer :editor-id="editorContainer.id" />
