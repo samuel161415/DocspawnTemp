@@ -41,6 +41,8 @@ import TiptapTableHeader from '@tiptap/extension-table-header'
 import Dropdown from 'primevue/dropdown'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
+import canvasService from '@/composables/useTemplateCanvas'
+
 const props = defineProps(['editorId'])
 
 // Manage dynamic width and height
@@ -258,13 +260,25 @@ function replaceDatasetValues(html, dataset) {
 function addToExpertEditor() {
   // console.log(' add to expert editor running')
   templateEditorStore.expertEditor = editor.value
+  // setting current added field when focus on container
+  const toBeCurrent = templateEditorStore?.addedFields?.filter(f => f?.hash === props?.editorId)[0]
+
+  templateEditorStore.selectedAddedField = toBeCurrent
+  templateEditorStore.showOptionsBar = true
+  const canvas = canvasService.getCanvas()
+  const activeObj = canvas.getObjects()?.filter(obj => obj?.hash === props?.editorId)[0]
+  console.log('active obj', activeObj)
+  activeObj
+  && canvas.setActiveObject(activeObj)
 }
 
 // Watch the editor for updates and save the content to the current state
 watch(editor, (newEditor) => {
   templateEditorStore.expertEditor = editor.value
+  console.log('chnage in editor setting expert editor')
   if (newEditor) {
     newEditor.on('update', () => {
+      console.log('editor updated')
       // contentStates.value[selectedContentKey.value] = newEditor.getHTML()
       templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((e) => {
         if (e?.id === props?.editorId)
@@ -273,7 +287,7 @@ watch(editor, (newEditor) => {
       })
     })
     newEditor.on('selection', () => {
-      // console.log('Selection changed')
+      console.log('editor changed')
     })
   }
 })

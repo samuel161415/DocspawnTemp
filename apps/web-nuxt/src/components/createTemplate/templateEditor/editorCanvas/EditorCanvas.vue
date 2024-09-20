@@ -47,6 +47,8 @@
         :ref="setEditorContainerRef(editorContainer.id)"
         :style="{ ...editorContainer.style,
                   zIndex: editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? '10' : '-1',
+                  pointerEvents: editorContainer?.behaviourMode === 'drag' ? 'none' : 'auto',
+
         // top: `${extractNumber(editorContainer?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`,
         // left: `${extractNumber(editorContainer?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px`,
         // transformOrigin: 'top left',

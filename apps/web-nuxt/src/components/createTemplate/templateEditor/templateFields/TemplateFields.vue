@@ -799,6 +799,7 @@ function addHtmlContainer() {
       },
       pageNo: templateEditorStore?.activePageForCanvas,
       content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
+      behaviourMode: 'edit',
     }
     templateEditorStore.editorContainers.push(newEditor)
 
@@ -813,7 +814,8 @@ function addHtmlContainer() {
         width: 300,
         height: 150,
         fill: 'rgba(0, 0, 0, 0)',
-        stroke: '#000',
+        // stroke: '#000',
+        stroke: 'transparent',
         strokeWidth: 1,
         selectable: true,
         fieldType: 'Html Container',
@@ -870,8 +872,8 @@ function addHtmlContainer() {
             // console.log('fabric object at resizing>>>', fabricObj)
             if (fabricObj) {
               fabricObj.set({
-                width: newWidth + 5,
-                height: newHeight + 5,
+                width: newWidth, // + 5,
+                height: newHeight, // + 5,
               })
 
               canvas.renderAll() // Re-render the canvas to reflect changes
@@ -912,8 +914,7 @@ function deleteField() {
         return true
     })
     /** ****** incase of html container */
-    console.log('field to delete', fieldToDelete.value)
-    console.log(' templateEditorStore.editorContainers', templateEditorStore.editorContainers)
+
     const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
     templateEditorStore.editorContainers = containers
     console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)

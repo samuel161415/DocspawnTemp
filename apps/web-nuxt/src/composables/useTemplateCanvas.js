@@ -100,11 +100,11 @@ class CanvasService {
             const rectScaleX = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleX
             const rectScaleY = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleY
 
-            console.log('rect scale x', rectScaleX)
-            console.log('rect scale y', rectScaleY)
+            // console.log('rect scale x', rectScaleX)
+            // console.log('rect scale y', rectScaleY)
 
             // return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
-            return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${rectScaleX},${rectScaleY})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
+            return { ...e, behaviourMode: 'edit', style: { ...e.style, transformOrigin: 'top left', transform: `scale(${rectScaleX},${rectScaleY})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
           })
           // templateEditorStore.editorContainersRefs = editorContainersRefs
           templateEditorStore.fabricObjectRefs = fabricObjectRefs
@@ -180,8 +180,8 @@ class CanvasService {
 
                     if (fabricObj) {
                       fabricObj.set({
-                        width: newWidth + 5,
-                        height: newHeight + 5,
+                        width: newWidth, // + 5,
+                        height: newHeight, // + 5,
                       })
 
                       this.canvas.renderAll() // Re-render the canvas to reflect changes
