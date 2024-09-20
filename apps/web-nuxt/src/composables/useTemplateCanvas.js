@@ -166,7 +166,7 @@ class CanvasService {
                     this.canvas.setCursor('auto')
 
                     templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
-                      if (container?.id === id)
+                      if (container?.id === f?.id)
                         return { ...container, behaviourMode: 'edit' }
                       else
                         return container
