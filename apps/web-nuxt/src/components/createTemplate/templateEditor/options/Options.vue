@@ -159,12 +159,12 @@
             </Button>
           </div>
         </div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Html Container'" class="w-full pt-4">
+        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Html Container'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
             Select container behaviour
           </p>
-          <!-- Radio buttons for selecting mode -->
-          <!-- <div class="flex items-center space-x-4 mb-4">
+
+          <div class="flex items-center space-x-4 mb-4">
             <label class="flex items-center">
               <input v-model="selectedContainerMode" type="radio" value="drag" />
               <span class="ml-2">Drag Mode</span>
@@ -173,8 +173,8 @@
               <input v-model="selectedContainerMode" type="radio" value="edit" />
               <span class="ml-2">Edit Mode</span>
             </label>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
       <div v-else>
         <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">

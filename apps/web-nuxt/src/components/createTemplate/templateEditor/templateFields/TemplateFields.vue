@@ -774,7 +774,7 @@ function duplicateField(field) {
 // }
 function addHtmlContainer() {
   const canvas = canvasService.getCanvas()
-  console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
+  // console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
   if (canvas) {
     // Generate a UUID for the new editor and fabric object
     const id = uuidv4()
@@ -792,7 +792,7 @@ function addHtmlContainer() {
         top: `${top}px`,
         width: '300px',
         height: '150px',
-        border: '1px solid #000',
+        border: '0.6px dashed lightgray',
         resize: 'both',
         overflow: 'hidden',
         zIndex: 10, // Ensure it's above the canvas
@@ -829,7 +829,10 @@ function addHtmlContainer() {
 
       canvas.add(fabricObject)
       /** */
-      let fieldToAdd = { fieldType: 'Html Container', name: id, id, hash: id, page: templateEditorStore.activePageForCanvas,
+      /** count no. of containers and name accordingly */
+      const containerCount = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Html Container')?.length
+      const nameToBe = `container n${containerCount + 1}`
+      let fieldToAdd = { fieldType: 'Html Container', name: nameToBe, id, hash: id, page: templateEditorStore.activePageForCanvas,
       }
 
       if (templateEditorStore?.fieldToAdd?.type === 'Form text')
@@ -848,36 +851,38 @@ function addHtmlContainer() {
       const editorContainer = templateEditorStore.editorContainerRefs[id]
       if (editorContainer) {
         editorContainer.addEventListener('mousemove', (event) => {
+          canvas.getObjects()?.forEach((obj) => {
+            if (id === obj?.id) {
+              templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
+
+              canvas.setActiveObject(obj)
+              canvas.renderAll()
+            }
+          })
           const rect = editorContainer.getBoundingClientRect()
 
           // Calculate the position of the mouse relative to the container
           const mouseX = event.clientX - rect.left
           const mouseY = event.clientY - rect.top
 
-          // Define a threshold for "corner" detection (e.g., 10px)
-          const cornerThreshold = 10
+          // Define a threshold for "border" detection (e.g., 10px)
+          const borderThreshold = 13
 
-          // Check if the mouse is near the top-left corner
-          const isTopLeft = mouseX < cornerThreshold && mouseY < cornerThreshold
+          // Check if the mouse is near any of the borders, excluding the bottom-right corner
+          const isTopBorder = mouseY < borderThreshold
+          const isLeftBorder = mouseX < borderThreshold
+          const isRightBorder = mouseX > rect.width - borderThreshold
+          const isBottomBorder = mouseY > rect.height - borderThreshold
 
-          // Check if the mouse is near the top-right corner
-          const isTopRight = mouseX > rect.width - cornerThreshold && mouseY < cornerThreshold
+          // Check for the bottom-right corner exclusion
+          const isBottomRight = mouseX > rect.width - borderThreshold && mouseY > rect.height - borderThreshold
 
-          // Check if the mouse is near the bottom-left corner
-          const isBottomLeft = mouseX < cornerThreshold && mouseY > rect.height - cornerThreshold
-
-          // Check if the mouse is near the bottom-right corner
-          const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
-
-          // Handle the hover event based on which corner is hovered
-          // || isBottomRight
-          if (isTopLeft || isTopRight || isBottomLeft) {
-            // console.log('Hovering near a corner')
-            // You can add additional logic to change the cursor or show resize handles
+          // Check if the mouse is on any border except the bottom-right corner
+          if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+            // Change the cursor to "move"
             editorContainer.style.cursor = 'move'
-            // Example to change the cursor to a resize indicator
-            // setting drag mode
 
+            // Set the drag mode in the store
             templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
               if (container?.id === id)
                 return { ...container, behaviourMode: 'drag' }
@@ -886,17 +891,10 @@ function addHtmlContainer() {
             })
           }
           else {
-            editorContainer.style.cursor = 'auto' // Reset cursor when not hovering near a corner
-            // console.log('hovering center')
-            // removing dragging mode
-            // templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
-            //   if (container?.id === id)
-            //     return { ...container, behaviourMode: 'edit' }
-            //   else
-            //     return container
-            // })
+            editorContainer.style.cursor = 'auto' // Reset cursor when not on the border
           }
         })
+
         // Add a resize event listener
         const resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
@@ -951,10 +949,9 @@ function addHtmlContainer() {
           })
         }
       })
-      // remove drag mode from container
+
       fabricObject.on('mousemove', (options) => {
-        const cornerThreshold = 10
-        // console.log('mouse moving')
+        const cornerThreshold = 13
         const pointer = canvas.getPointer(options.e) // Get the current mouse pointer
         const rect = fabricObject.getBoundingRect() // Get the bounding box of the object
 
@@ -962,29 +959,32 @@ function addHtmlContainer() {
         const mouseX = pointer.x - fabricObject.left
         const mouseY = pointer.y - fabricObject.top
 
-        // Check if the mouse is near the corners of the Fabric object
-        const isTopLeft = mouseX < cornerThreshold && mouseY < cornerThreshold
-        const isTopRight = mouseX > rect.width - cornerThreshold && mouseY < cornerThreshold
-        const isBottomLeft = mouseX < cornerThreshold && mouseY > rect.height - cornerThreshold
+        // Check if the mouse is near any of the borders, excluding the bottom-right corner
+        const isTopBorder = mouseY < cornerThreshold
+        const isLeftBorder = mouseX < cornerThreshold
+        const isRightBorder = mouseX > rect.width - cornerThreshold
+        const isBottomBorder = mouseY > rect.height - cornerThreshold
+
+        // Check for the bottom-right corner exclusion
         const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
 
-        // Change the cursor based on corner detection
-        if (isTopLeft || isTopRight || isBottomLeft || isBottomRight) {
-          // console.log('hovering at rectangle corners')
-          // canvas.setCursor('move') // Show drag cursor if near corners
+        // Check if the mouse is on any border except the bottom-right corner
+        if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+          // Set drag mode and change cursor to "move"
+
         }
         else {
-          canvas.setCursor('auto')
-
+          // Set edit mode and change cursor to "auto" when not on border or at bottom-right corner
+          canvas.setCursor('auto') // Reset cursor
           templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
             if (container?.id === id)
               return { ...container, behaviourMode: 'edit' }
             else
               return container
           })
-        } // Reset to default cursor
+        }
 
-        canvas.renderAll()
+        canvas.renderAll() // Re-render the canvas to reflect changes
       })
     })
   }

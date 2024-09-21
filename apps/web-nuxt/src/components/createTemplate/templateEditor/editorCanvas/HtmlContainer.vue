@@ -265,9 +265,10 @@ function addToExpertEditor() {
 
   templateEditorStore.selectedAddedField = toBeCurrent
   templateEditorStore.showOptionsBar = true
+  templateEditorStore.ShowAddedFieldsinTemplateFields = true
   const canvas = canvasService.getCanvas()
   const activeObj = canvas.getObjects()?.filter(obj => obj?.hash === props?.editorId)[0]
-  console.log('active obj', activeObj)
+  // console.log('active obj', activeObj)
   activeObj
   && canvas.setActiveObject(activeObj)
 }
@@ -275,10 +276,10 @@ function addToExpertEditor() {
 // Watch the editor for updates and save the content to the current state
 watch(editor, (newEditor) => {
   templateEditorStore.expertEditor = editor.value
-  console.log('chnage in editor setting expert editor')
+  // console.log('chnage in editor setting expert editor')
   if (newEditor) {
     newEditor.on('update', () => {
-      console.log('editor updated')
+      // console.log('editor updated')
       // contentStates.value[selectedContentKey.value] = newEditor.getHTML()
       templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((e) => {
         if (e?.id === props?.editorId)
@@ -391,7 +392,7 @@ onBeforeUnmount(() => {
   background-color: transparent;
   padding: 0px;
   min-height: 100%;
-  border: 1px solid #ddd;
+  /*border: 1px solid #ddd;*/
   border-radius: 4px;
   color: #333;
 
