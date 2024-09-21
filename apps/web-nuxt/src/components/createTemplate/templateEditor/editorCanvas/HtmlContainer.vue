@@ -23,8 +23,6 @@
     <TiptapEditorContent
       :editor="editor" class="editor-content" :style="{
         height: '100%',
-        // transform: `scale(${parseFloat(editorContentScaleX)?.toFixed(2)}, ${parseFloat(editorContentScaleY)?.toFixed(2)})`,
-        // transformOrigin: 'top left',
       }"
     />
   </div>
@@ -288,7 +286,7 @@ watch(editor, (newEditor) => {
       })
     })
     newEditor.on('selection', () => {
-      console.log('editor changed')
+      // console.log('editor changed')
     })
   }
 })
