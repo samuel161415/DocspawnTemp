@@ -159,6 +159,22 @@
             </Button>
           </div>
         </div>
+        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Html Container'" class="w-full pt-4">
+          <p class="font-poppins text-md text-surface-600 mb-2">
+            Select container behaviour
+          </p>
+
+          <div class="flex items-center space-x-4 mb-4">
+            <label class="flex items-center">
+              <input v-model="selectedContainerMode" type="radio" value="drag" />
+              <span class="ml-2">Drag Mode</span>
+            </label>
+            <label class="flex items-center">
+              <input v-model="selectedContainerMode" type="radio" value="edit" />
+              <span class="ml-2">Edit Mode</span>
+            </label>
+          </div>
+        </div> -->
       </div>
       <div v-else>
         <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
@@ -193,6 +209,7 @@ const fileUrl = ref()
 const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
 const datasetImageProportionOption = ref('fitToHeight')
+const selectedContainerMode = ref()
 
 // onMounted(() => {
 
@@ -375,7 +392,24 @@ watch(
         selectedDateFormat.value = { name: newVal.name }
       if (newVal?.fieldType === 'Static time')
         selectedTimeFormat.value = timeFormats?.value?.filter(f => f?.name === newVal?.name)[0]
+      if (newVal?.fieldType === 'Html Container') {
+        templateEditorStore?.editorContainers?.forEach((container) => {
+          if (container?.id === newVal?.hash) {
+            if (container?.behaviourMode)
+              selectedContainerMode.value = container.behaviourMode
+          }
+        })
+      }
     }
   },
 )
+watch(selectedContainerMode, () => {
+  templateEditorStore.editorContainerRefs[templateEditorStore.selectedAddedField?.hash].behaviourMode = selectedContainerMode.value
+  templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+    if (container?.id === templateEditorStore?.selectedAddedField?.hash)
+      return { ...container, behaviourMode: selectedContainerMode.value }
+    else
+      return container
+  })
+})
 </script>

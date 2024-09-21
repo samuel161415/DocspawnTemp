@@ -40,7 +40,7 @@ import TiptapTableHeader from '@tiptap/extension-table-header'
 
 import { docGenerationData } from '../../../composables/useDocGenerationData'
 
-const props = defineProps(['editorId'])
+const props = defineProps(['editorId', 'isDataToDoc', 'datasetData', 'previewNo'])
 
 // Manage dynamic width and height
 const editorWidth = ref('100%')
@@ -66,6 +66,31 @@ const editor = useEditor({
     TiptapTableHeader,
   ],
 })
+function replaceDatasetValues(html, dataset) {
+  // Regular expression to match {{dataset[key]}} pattern
+  const regex = /{{dataset\[([^\]]+)\]}}/g
+
+  // Replace each match with the corresponding value from the dataset
+  return html.replace(regex, (match, key) => {
+    // Trim the key and handle cases where key may have extra spaces
+    key = key.trim()
+
+    // Access the value from the dataset
+    const value = dataset[key]
+
+    // If the key exists in the dataset and is not null, return the value, otherwise leave it as is
+    if (value !== undefined && value !== null) {
+      // Check if the value is an object (like 'Anomaly 1'), and pick the 'text' or hyperlink field if necessary
+      if (typeof value === 'object' && value.text)
+        return value.text
+      else
+        return value
+    }
+
+    // If key is not found, return the original match (without any replacement)
+    return match
+  })
+}
 
 // templateEditorStore.expertEditor=editor
 
@@ -74,6 +99,18 @@ onMounted(() => {
 
   if (docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
     editor.value.commands.setContent(docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
+})
+watch(() => props?.previewNo, (val) => {
+  if (val > 0) {
+    const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+    const htmlCOntentWithRealValues = replaceDatasetValues(htmlContent, props?.datasetData[val - 1])
+    editor.value.commands.setContent(htmlCOntentWithRealValues)
+  }
+  else {
+    const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+
+    editor.value.commands.setContent(htmlContent)
+  }
 })
 function addToExpertEditor() {
   // console.log(' add to expert editor running')

@@ -36,6 +36,7 @@ const initialTemplateEditorStore = {
   activeDisplayGuideForAll: false,
   anyObjectSelected: false,
   showPreview: false,
+  currentPreviewNo: '',
   watermarkImage: {},
   watermarkDisabled: false,
   templateToEdit: {},

@@ -774,7 +774,7 @@ function duplicateField(field) {
 // }
 function addHtmlContainer() {
   const canvas = canvasService.getCanvas()
-  console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
+  // console.log('template editor store scaling factors', templateEditorStore?.canvasScaleFactors)
   if (canvas) {
     // Generate a UUID for the new editor and fabric object
     const id = uuidv4()
@@ -792,13 +792,14 @@ function addHtmlContainer() {
         top: `${top}px`,
         width: '300px',
         height: '150px',
-        border: '1px solid #000',
+        border: '0.6px dashed lightgray',
         resize: 'both',
         overflow: 'hidden',
         zIndex: 10, // Ensure it's above the canvas
       },
       pageNo: templateEditorStore?.activePageForCanvas,
       content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
+      behaviourMode: 'edit',
     }
     templateEditorStore.editorContainers.push(newEditor)
 
@@ -813,7 +814,8 @@ function addHtmlContainer() {
         width: 300,
         height: 150,
         fill: 'rgba(0, 0, 0, 0)',
-        stroke: '#000',
+        // stroke: '#000',
+        stroke: 'transparent',
         strokeWidth: 1,
         selectable: true,
         fieldType: 'Html Container',
@@ -827,7 +829,10 @@ function addHtmlContainer() {
 
       canvas.add(fabricObject)
       /** */
-      let fieldToAdd = { fieldType: 'Html Container', name: id, id, hash: id, page: templateEditorStore.activePageForCanvas,
+      /** count no. of containers and name accordingly */
+      const containerCount = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Html Container')?.length
+      const nameToBe = `container n${containerCount + 1}`
+      let fieldToAdd = { fieldType: 'Html Container', name: nameToBe, id, hash: id, page: templateEditorStore.activePageForCanvas,
       }
 
       if (templateEditorStore?.fieldToAdd?.type === 'Form text')
@@ -845,6 +850,51 @@ function addHtmlContainer() {
       // Add a resize listener for the editor container
       const editorContainer = templateEditorStore.editorContainerRefs[id]
       if (editorContainer) {
+        editorContainer.addEventListener('mousemove', (event) => {
+          canvas.getObjects()?.forEach((obj) => {
+            if (id === obj?.id) {
+              templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
+
+              canvas.setActiveObject(obj)
+              canvas.renderAll()
+            }
+          })
+          const rect = editorContainer.getBoundingClientRect()
+
+          // Calculate the position of the mouse relative to the container
+          const mouseX = event.clientX - rect.left
+          const mouseY = event.clientY - rect.top
+
+          // Define a threshold for "border" detection (e.g., 10px)
+          const borderThreshold = 13
+
+          // Check if the mouse is near any of the borders, excluding the bottom-right corner
+          const isTopBorder = mouseY < borderThreshold
+          const isLeftBorder = mouseX < borderThreshold
+          const isRightBorder = mouseX > rect.width - borderThreshold
+          const isBottomBorder = mouseY > rect.height - borderThreshold
+
+          // Check for the bottom-right corner exclusion
+          const isBottomRight = mouseX > rect.width - borderThreshold && mouseY > rect.height - borderThreshold
+
+          // Check if the mouse is on any border except the bottom-right corner
+          if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+            // Change the cursor to "move"
+            editorContainer.style.cursor = 'move'
+
+            // Set the drag mode in the store
+            templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+              if (container?.id === id)
+                return { ...container, behaviourMode: 'drag' }
+              else
+                return container
+            })
+          }
+          else {
+            editorContainer.style.cursor = 'auto' // Reset cursor when not on the border
+          }
+        })
+
         // Add a resize event listener
         const resizeObserver = new ResizeObserver((entries) => {
           for (const entry of entries) {
@@ -870,8 +920,8 @@ function addHtmlContainer() {
             // console.log('fabric object at resizing>>>', fabricObj)
             if (fabricObj) {
               fabricObj.set({
-                width: newWidth + 5,
-                height: newHeight + 5,
+                width: newWidth, // + 50,
+                height: newHeight, // + 50,
               })
 
               canvas.renderAll() // Re-render the canvas to reflect changes
@@ -880,12 +930,13 @@ function addHtmlContainer() {
         })
 
         // Observe the editor container for size changes
-        console.log('calling resize observer observe')
+        // console.log('calling resize observer observe')
         resizeObserver.observe(editorContainer)
       }
 
       // Moving logic for the new Fabric.js object
       fabricObject.on('moving', () => {
+        // console.log('fabric object moving')
         const editorContainer = templateEditorStore.editorContainerRefs[fabricObject?.id]
         if (editorContainer) {
           editorContainer.style.left = `${fabricObject.left}px`
@@ -897,6 +948,43 @@ function addHtmlContainer() {
               return c
           })
         }
+      })
+
+      fabricObject.on('mousemove', (options) => {
+        const cornerThreshold = 13
+        const pointer = canvas.getPointer(options.e) // Get the current mouse pointer
+        const rect = fabricObject.getBoundingRect() // Get the bounding box of the object
+
+        // Calculate the position of the mouse relative to the Fabric object
+        const mouseX = pointer.x - fabricObject.left
+        const mouseY = pointer.y - fabricObject.top
+
+        // Check if the mouse is near any of the borders, excluding the bottom-right corner
+        const isTopBorder = mouseY < cornerThreshold
+        const isLeftBorder = mouseX < cornerThreshold
+        const isRightBorder = mouseX > rect.width - cornerThreshold
+        const isBottomBorder = mouseY > rect.height - cornerThreshold
+
+        // Check for the bottom-right corner exclusion
+        const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
+
+        // Check if the mouse is on any border except the bottom-right corner
+        if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+          // Set drag mode and change cursor to "move"
+
+        }
+        else {
+          // Set edit mode and change cursor to "auto" when not on border or at bottom-right corner
+          canvas.setCursor('auto') // Reset cursor
+          templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+            if (container?.id === id)
+              return { ...container, behaviourMode: 'edit' }
+            else
+              return container
+          })
+        }
+
+        canvas.renderAll() // Re-render the canvas to reflect changes
       })
     })
   }
@@ -912,11 +1000,10 @@ function deleteField() {
         return true
     })
     /** ****** incase of html container */
-    console.log('field to delete', fieldToDelete.value)
-    console.log(' templateEditorStore.editorContainers', templateEditorStore.editorContainers)
+
     const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
     templateEditorStore.editorContainers = containers
-    console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
+    // console.log('templateEditorStore.editorContainerRefs', templateEditorStore.editorContainerRefs)
     // const refs = templateEditorStore.editorContainerRefs.filter(f => f?.id !== fieldToDelete?.value?.hash)
     // templateEditorStore.editorContainerRefs = refs
     // Convert the Proxy object to an array of entries
@@ -967,7 +1054,6 @@ async function selectField(field, option) {
     if (field === 'Data field' || field === 'Dataset image') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a data field', type: field, id: option || 'Lorem ipsum' }
     }
-
     else if (field === 'Dataset date') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a date field', type: field, id: option || 'Lorem ipsum', dateFormat: 'MM/DD/YYYY' }
     }

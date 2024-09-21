@@ -100,11 +100,11 @@ class CanvasService {
             const rectScaleX = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleX
             const rectScaleY = canvasHtmlObjects?.filter(ob => ob?.id === e?.id)[0]?.scaleY
 
-            console.log('rect scale x', rectScaleX)
-            console.log('rect scale y', rectScaleY)
+            // console.log('rect scale x', rectScaleX)
+            // console.log('rect scale y', rectScaleY)
 
             // return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
-            return { ...e, style: { ...e.style, transformOrigin: 'top left', transform: `scale(${rectScaleX},${rectScaleY})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
+            return { ...e, behaviourMode: 'edit', style: { ...e.style, transformOrigin: 'top left', transform: `scale(${rectScaleX},${rectScaleY})`, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px`, top: `${rectTop}px`, left: `${rectLeft}px` } }
           })
           // templateEditorStore.editorContainersRefs = editorContainersRefs
           templateEditorStore.fabricObjectRefs = fabricObjectRefs
@@ -141,6 +141,44 @@ class CanvasService {
                     })
                   }
                 })
+
+                f.on('mousemove', (options) => {
+                  const cornerThreshold = 13
+                  const pointer = this.canvas.getPointer(options.e) // Get the current mouse pointer
+                  const rect = f.getBoundingRect() // Get the bounding box of the object
+
+                  // Calculate the position of the mouse relative to the Fabric object
+                  const mouseX = pointer.x - f.left
+                  const mouseY = pointer.y - f.top
+
+                  // Check if the mouse is near any of the borders, excluding the bottom-right corner
+                  const isTopBorder = mouseY < cornerThreshold
+                  const isLeftBorder = mouseX < cornerThreshold
+                  const isRightBorder = mouseX > rect.width - cornerThreshold
+                  const isBottomBorder = mouseY > rect.height - cornerThreshold
+
+                  // Check for the bottom-right corner exclusion
+                  const isBottomRight = mouseX > rect.width - cornerThreshold && mouseY > rect.height - cornerThreshold
+
+                  // Check if the mouse is on any border except the bottom-right corner
+                  if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+                    // Set drag mode and change cursor to "move"
+
+                  }
+                  else {
+                    console.log('hovering center of rectangle')
+                    // Set edit mode and change cursor to "auto" when not on border or at bottom-right corner
+                    this.canvas.setCursor('auto') // Reset cursor
+                    templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+                      if (container?.id === f?.id)
+                        return { ...container, behaviourMode: 'edit' }
+                      else
+                        return container
+                    })
+                  }
+
+                  this.canvas.renderAll() // Re-render the canvas to reflect changes
+                })
                 /** */
                 this.canvas.renderAll() // Re-render the canvas to reflect changes
               }
@@ -156,6 +194,49 @@ class CanvasService {
               // Add a resize listener for the editor container
               const editorContainer = templateEditorStore.editorContainerRefs[id]
               if (editorContainer) {
+                editorContainer.addEventListener('mousemove', (event) => {
+                  this.canvas.getObjects()?.forEach((obj) => {
+                    if (id === obj?.id) {
+                      templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
+                      this.canvas.setActiveObject(obj)
+                      this.canvas.renderAll()
+                    }
+                  })
+                  const rect = editorContainer.getBoundingClientRect()
+
+                  // Calculate the position of the mouse relative to the container
+                  const mouseX = event.clientX - rect.left
+                  const mouseY = event.clientY - rect.top
+
+                  // Define a threshold for "border" detection (e.g., 10px)
+                  const borderThreshold = 13
+
+                  // Check if the mouse is near any of the borders, excluding the bottom-right corner
+                  const isTopBorder = mouseY < borderThreshold
+                  const isLeftBorder = mouseX < borderThreshold
+                  const isRightBorder = mouseX > rect.width - borderThreshold
+                  const isBottomBorder = mouseY > rect.height - borderThreshold
+
+                  // Check for the bottom-right corner exclusion
+                  const isBottomRight = mouseX > rect.width - borderThreshold && mouseY > rect.height - borderThreshold
+
+                  // Check if the mouse is on any border except the bottom-right corner
+                  if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+                    // Change the cursor to "move"
+                    editorContainer.style.cursor = 'move'
+
+                    // Set the drag mode in the store
+                    templateEditorStore.editorContainers = templateEditorStore?.editorContainers?.map((container) => {
+                      if (container?.id === id)
+                        return { ...container, behaviourMode: 'drag' }
+                      else
+                        return container
+                    })
+                  }
+                  else {
+                    editorContainer.style.cursor = 'auto' // Reset cursor when not on the border
+                  }
+                })
                 // Add a resize event listener
                 const resizeObserver = new ResizeObserver((entries) => {
                   for (const entry of entries) {
@@ -180,8 +261,8 @@ class CanvasService {
 
                     if (fabricObj) {
                       fabricObj.set({
-                        width: newWidth + 5,
-                        height: newHeight + 5,
+                        width: newWidth, // + 5,
+                        height: newHeight, // + 5,
                       })
 
                       this.canvas.renderAll() // Re-render the canvas to reflect changes

@@ -47,16 +47,11 @@
         :ref="setEditorContainerRef(editorContainer.id)"
         :style="{ ...editorContainer.style,
                   zIndex: editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? '10' : '-1',
-        // top: `${extractNumber(editorContainer?.style?.top) * templateEditorStore?.canvasScaleFactors?.y}px`,
-        // left: `${extractNumber(editorContainer?.style?.left) * templateEditorStore?.canvasScaleFactors?.x}px`,
-        // transformOrigin: 'top left',
-        // transform: `scale(${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.x)?.toFixed(1)},${Number.parseFloat(templateEditorStore?.canvasScaleFactors?.y)?.toFixed(1)})`,
+                  pointerEvents: editorContainer?.behaviourMode === 'drag' ? 'none' : 'auto',
 
         }"
         class="editor-container"
       >
-        <!-- <h1>{{ editorContainer?.style?.width }}</h1>
-        <h1>{{ editorContainer?.style?.height }}</h1> -->
         <HtmlContainer :editor-id="editorContainer.id" />
       </div>
 
@@ -159,6 +154,7 @@ function updateScrollPosition() {
 // const canvasStyle = computed(() => ({
 //   transform: `scale(${scale.value}) `,
 // }))
+
 const canvasWrapperHeight = ref(1)
 
 const canvasWrapperStyle = computed(() => ({
