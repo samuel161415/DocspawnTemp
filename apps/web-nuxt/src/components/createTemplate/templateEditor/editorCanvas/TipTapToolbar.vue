@@ -341,7 +341,7 @@
       />
       <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" class="w-max" @click="showAddFieldForm = !showAddFieldForm" />
     </div>
-    <div v-if="showAddFieldForm" class="border border-red-500 p-2 flex gap-4">
+    <div v-if="showAddFieldForm" class="p-2 flex gap-4">
       <InputText v-model="formInputName" placeholder="field name" />
       <!-- <InputText placeholder="field input" /> -->
       <Dropdown
