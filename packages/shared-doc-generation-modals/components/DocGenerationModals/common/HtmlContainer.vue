@@ -39,6 +39,7 @@ import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
 
 import { docGenerationData } from '../../../composables/useDocGenerationData'
+import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
 const props = defineProps(['editorId', 'isDataToDoc', 'datasetData', 'previewNo'])
 
@@ -67,6 +68,9 @@ const editor = useEditor({
   ],
 })
 function replaceDatasetValues(html, dataset) {
+  console.log('at replacement datset values function')
+  console.log('html', html)
+  console.log('dataset', dataset)
   // Regular expression to match {{dataset[key]}} pattern
   const regex = /{{dataset\[([^\]]+)\]}}/g
 
@@ -136,7 +140,36 @@ watch(editor, (newEditor) => {
 })
 
 watch(() => props.datasetData, (val) => {
-  console.log('props dtataset form value', val)
+  console.log('props dataste', props?.datasetData)
+  if (!props?.isDataToDoc) {
+    console.log('props dtataset form value', val)
+    console.log('props id', props?.editorId)
+    let replacementObjects = {}
+    val?.forEach((f) => {
+      console.log('f?.textboxHash===props?.editorId', f?.textboxHash === props?.editorId)
+      if (f?.textboxHash === props?.editorId) {
+        console.log('f ', f)
+        console.log('f?.state', f?.state)
+        let stateValue = f?.state
+        if (f?.fieldType === 'Form date')
+          stateValue = formatDateForInput(f?.state, f?.dateFormat)
+        if (f?.fieldType === 'Form time')
+          stateValue = formatTimeForInput(f?.state, f?.timeFormat)
+        if (stateValue)
+          replacementObjects = { ...replacementObjects, [f?.id]: stateValue || f?.state }
+      }
+    })
+    console.log('replacement objects', replacementObjects)
+    if (replacementObjects) {
+      const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+      const htmlCOntentWithRealValues = replaceDatasetValues(htmlContent, replacementObjects)
+      editor.value.commands.setContent(htmlCOntentWithRealValues)
+    }
+    // else {
+    //   const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
+    //   editor.value.commands.setContent(htmlContent)
+    // }
+  }
 }, { deep: true })
 
 // Function to get HTML content
