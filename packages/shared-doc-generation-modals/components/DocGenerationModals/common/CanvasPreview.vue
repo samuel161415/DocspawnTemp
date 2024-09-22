@@ -124,15 +124,15 @@ watch(props?.formValues, (val) => {
     selectedData.value = val?.formValues
     renderOriginalData()
   }
-})
-watch(props, (val) => {
-  // setting watch for props , because when final preview called from main app, watch on specific props does not work
+}, { deep: true })
+// watch(props, (val) => {
+//   // setting watch for props , because when final preview called from main app, watch on specific props does not work
 
-  if (props?.useCase === 'formToDoc') {
-    selectedData.value = val?.formValues
-    renderOriginalData()
-  }
-})
+//   if (props?.useCase === 'formToDoc') {
+//     selectedData.value = val?.formValues
+//     renderOriginalData()
+//   }
+// })
 
 const currentPreviewNo = ref(0)
 watch(selectedData, (newVal) => {
@@ -233,8 +233,13 @@ function renderOriginalData() {
           }
           return obj
         })
+
         canvas.renderAll()
       }
+      // here we should replace keys in html conatiner with form field values
+      console.log('template editor store editor containers', templateEditorStore?.editorContainers)
+      console.log('template editor store editorCOntainersRefs')
+      console.log('template Editor store ')
     }
     else {
     // alert('problem problem')

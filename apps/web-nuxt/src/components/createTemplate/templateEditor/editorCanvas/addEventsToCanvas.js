@@ -830,7 +830,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
         /** */
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
-        console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
+        // console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
           // defaultUncheckedDesign
           ftoadd?.designs?.no
@@ -876,7 +876,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
-            console.log('saving fieldToAdd', fieldToAdd, myImg)
+            // console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
             templateEditorStore.addedFields.forEach((f) => {
               allFields.push(JSON.parse(JSON.stringify(f)))

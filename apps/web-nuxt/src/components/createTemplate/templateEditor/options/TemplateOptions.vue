@@ -51,6 +51,7 @@
             editorContainersRefs: JSON.parse(JSON.stringify(templateEditorStore?.editorContainerRefs)),
             fabricObjectRefs: JSON.parse(JSON.stringify(templateEditorStore?.fabricObjectRefs)),
           }
+          // console.log('added fields', templateEditorStore?.addedFields)
           emit('saveTemplate')
         }
         else {

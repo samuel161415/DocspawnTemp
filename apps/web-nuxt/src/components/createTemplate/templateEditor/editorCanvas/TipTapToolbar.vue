@@ -331,24 +331,60 @@
       >
         <font-awesome-icon icon="fa-solid fa-table-cells" size="lg" />
       </Button>
+
       <Dropdown
+        v-if="templateGeneralInformation?.useCase === 'Data to doc'"
         v-model="selectedDatasetkey"
         :options="templateEditorStore.datasetData.selectedKeys"
         placeholder="Select key"
         @change="insetDatasetKey"
       />
+      <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" class="w-max" @click="showAddFieldForm = !showAddFieldForm" />
+    </div>
+    <div v-if="showAddFieldForm" class="border border-red-500 p-2 flex gap-4">
+      <InputText v-model="formInputName" placeholder="field name" />
+      <!-- <InputText placeholder="field input" /> -->
+      <Dropdown
+        v-model="selectedFormInput"
+        :options="formInputOptions"
+        placeholder="Select field input"
+      />
+
+      <Dropdown v-if="selectedFormInput === 'Form time'" v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+      <Dropdown v-if="selectedFormInput === 'Form date'" v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+
+      <Button label="Add" @click="addFormInputToTextbox" />
+      <Button outlined label="cancel" @click="showAddFieldForm = false" />
     </div>
   </div>
 </template>
 
 <script setup>
+import { v4 as uuidv4 } from 'uuid'
+import { useTimestampFormats } from '@/composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import { templateGeneralInformation } from '@/composables/useTemplateCreationData.js'
+
+const selectedTimeFormat = ref()
+const selectedDateFormat = ref()
+const { timeFormats, dateFormats } = useTimestampFormats()
 
 const editor = ref()
 watch(() => templateEditorStore.expertEditor, (val) => {
 //   console.log('template editor store', templateEditorStore?.expertEditor)
   editor.value = val
 })
+onMounted(() => {
+  console.log('template general information use case', templateGeneralInformation?.useCase)
+})
+watch(() => templateGeneralInformation?.useCase, (val) => {
+  console.log('template general information', templateGeneralInformation?.useCase)
+})
+
+const formInputOptions = ['Form text', 'Form date', 'Form time']
+const selectedFormInput = ref()
+const formInputName = ref()
+const showAddFieldForm = ref(false)
 
 // Table-related actions
 const addTable = () => editor.value.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()
@@ -371,6 +407,34 @@ const toggleHeaderColumn = () => editor.value.chain().focus().toggleHeaderColumn
 const toggleHeaderRow = () => editor.value.chain().focus().toggleHeaderRow().run()
 const toggleHeaderCell = () => editor.value.chain().focus().toggleHeaderCell().run()
 const htmlContent = ref('')
+
+function addFormInputToTextbox() {
+  // Insert the selected fruit wrapped in {{}} into the editor
+  editor.value.chain().focus().insertContent(`{{dataset[${formInputName.value}]}}`).run()
+  const hash = uuidv4()
+  let fieldToAdd = { isFormField: true, isRequired: true, fieldType: selectedFormInput.value, name: formInputName.value, id: formInputName.value, hash, isTextBoxInserted: true, textboxHash: templateEditorStore?.selectedAddedField?.hash }
+
+  if (selectedFormInput.value === 'Form text')
+    fieldToAdd = { ...fieldToAdd, allowDecimals: false, minCharAllowed: 2, maxCharAllowed: 50, characterAcception: 'Text' }
+
+  if (selectedFormInput.value === 'Form date')
+    fieldToAdd = { ...fieldToAdd, dateFormat: selectedDateFormat }
+  if (selectedFormInput.value === 'Form time')
+    fieldToAdd = { ...fieldToAdd, timeFormat: selectedTimeFormat }
+
+  const allFields = []
+  templateEditorStore.addedFields.forEach((f) => {
+    allFields.push(JSON.parse(JSON.stringify(f)))
+  })
+  allFields.push(fieldToAdd)
+  templateEditorStore.addedFields = allFields
+
+  formInputName.value = ''
+  selectedFormInput.value = ''
+  selectedTimeFormat.value = ''
+  showAddFieldForm.value = false
+  selectedDateFormat.value = ''
+}
 async function getHTMLContent() {
   if (editor.value)
     htmlContent.value = editor.value.getHTML()

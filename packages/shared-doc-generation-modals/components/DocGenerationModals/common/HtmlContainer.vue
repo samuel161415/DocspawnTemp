@@ -108,10 +108,10 @@ watch(() => props?.previewNo, (val) => {
   }
   else {
     const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
-
     editor.value.commands.setContent(htmlContent)
   }
 })
+
 function addToExpertEditor() {
   // console.log(' add to expert editor running')
   // templateEditorStore.expertEditor = editor.value
@@ -134,6 +134,10 @@ watch(editor, (newEditor) => {
     })
   }
 })
+
+watch(() => props.datasetData, (val) => {
+  console.log('props dtataset form value', val)
+}, { deep: true })
 
 // Function to get HTML content
 

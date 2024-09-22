@@ -25,7 +25,7 @@
         </p>
       </div>
 
-      <template v-for="(field, index) in templateEditorStore.addedFields">
+      <template v-for="(field, index) in templateEditorStore.addedFields?.filter(f => !f?.isTextBoxInserted)">
         <div
           v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true"
           :key="index"
@@ -235,7 +235,7 @@
           <div v-if="formFieldForNameInput === 'Form text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
             <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" :placeholder="$t('Cp_createTemplate_editorTemplateFields.write_field_name')" />
           </div>
-          <div
+          <!-- <div
             class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form long text', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form long text' }"
             @click="formFieldForNameInput = 'Form long text';showFormFieldNameInput = true"
@@ -247,7 +247,7 @@
           </div>
           <div v-if="formFieldForNameInput === 'Form long text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
             <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" :placeholder="$t('Cp_createTemplate_editorTemplateFields.write_field_name')" />
-          </div>
+          </div> -->
 
           <div
             class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
