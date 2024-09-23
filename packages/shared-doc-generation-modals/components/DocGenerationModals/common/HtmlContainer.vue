@@ -142,14 +142,9 @@ watch(editor, (newEditor) => {
 watch(() => props.datasetData, (val) => {
   console.log('props dataste', props?.datasetData)
   if (!props?.isDataToDoc) {
-    console.log('props dtataset form value', val)
-    console.log('props id', props?.editorId)
     let replacementObjects = {}
     val?.forEach((f) => {
-      console.log('f?.textboxHash===props?.editorId', f?.textboxHash === props?.editorId)
       if (f?.textboxHash === props?.editorId) {
-        console.log('f ', f)
-        console.log('f?.state', f?.state)
         let stateValue = f?.state
         if (f?.fieldType === 'Form date')
           stateValue = formatDateForInput(f?.state, f?.dateFormat)
@@ -159,7 +154,7 @@ watch(() => props.datasetData, (val) => {
           replacementObjects = { ...replacementObjects, [f?.id]: stateValue || f?.state }
       }
     })
-    console.log('replacement objects', replacementObjects)
+
     if (replacementObjects) {
       const htmlContent = docGenerationData.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content
       const htmlCOntentWithRealValues = replaceDatasetValues(htmlContent, replacementObjects)
