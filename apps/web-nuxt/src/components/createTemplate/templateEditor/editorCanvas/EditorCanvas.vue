@@ -1,13 +1,16 @@
 <template>
   <div ref="parentContainer" class="h-full  w-[920px] overflow-auto  " :style="{ width: `${computedCanvasWidth + 20}px` }">
     <CanvasOptionsTopBar
-      :show-expert-editor="showExpertEditor" @update-scale="updateScale" @toggle-expert-editor="() => {
-        showExpertEditor = !showExpertEditor;
+      :show-expert-editor="templateEditorStore.showExpertEditor" @update-scale="updateScale" @toggle-expert-editor="() => {
+        templateEditorStore.showExpertEditor = !templateEditorStore.showExpertEditor;
         console.log('toggling expert editor')
       }"
     />
-    <div v-show="showExpertEditor">
+    <div v-show="templateEditorStore.showExpertEditor || templateEditorStore?.selectedAddedField?.fieldType === 'Html Container'">
       <TipTapToolbar />
+    </div>
+    <div v-if=" templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group' && templateEditorStore?.selectedAddedField?.fieldType !== 'Html Container' && templateEditorStore?.showOptionsBar" class="mb-6">
+      <TextFormatting />
     </div>
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -68,6 +71,7 @@ import * as pdfjs from 'pdfjs-dist/build/pdf'
 import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
+import TextFormatting from '../options/TextFormatting.vue'
 import RichTextEditor from './RichTextEditor.vue'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
@@ -94,7 +98,7 @@ const canvasWrapper = ref(null)
 const activeElement = ref()
 const parentContainer = ref()
 
-const showExpertEditor = ref(true)
+// const showExpertEditor = ref(true)
 
 const scale = ref(1)
 // function updateScale(value) {

@@ -269,6 +269,7 @@ function addToExpertEditor() {
   // console.log('active obj', activeObj)
   activeObj
   && canvas.setActiveObject(activeObj)
+  templateEditorStore.showExpertEditor = true
 }
 
 // Watch the editor for updates and save the content to the current state

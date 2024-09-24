@@ -30,7 +30,7 @@
           </span>
         </p>
         <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'" class="mb-6">
-          <TextFormatting />
+          <!-- <TextFormatting /> -->
           <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field')" class="font-poppins text-sm text-red-500 mt-2">
             {{ $t('Cp_templateEditor_options.styles_applied_on_select') }}
           </p>
