@@ -6,11 +6,14 @@
         console.log('toggling expert editor')
       }"
     />
-    <div v-show="templateEditorStore.showExpertEditor || templateEditorStore?.selectedAddedField?.fieldType === 'Html Container'">
-      <TipTapToolbar />
-    </div>
-    <div v-if=" templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group' && templateEditorStore?.selectedAddedField?.fieldType !== 'Html Container' && templateEditorStore?.showOptionsBar" class="mb-6">
-      <TextFormatting />
+
+    <div class="">
+      <div v-show="templateEditorStore.showExpertEditor || templateEditorStore?.selectedAddedField?.fieldType === 'Text box'">
+        <TipTapToolbar />
+      </div>
+      <div v-if=" templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group' && templateEditorStore?.selectedAddedField?.fieldType !== 'Text box' && templateEditorStore?.showOptionsBar" class="mb-6">
+        <TextFormatting />
+      </div>
     </div>
 
     <div v-if="!isCanvasLoaded " class="w-full h-full ">
@@ -30,7 +33,7 @@
       </div>
     </div>
     <!-- <Button @click="addHtmlContainer">
-      Add html container
+      Add Text box
     </Button> -->
     <div id="canvas-wrapper" ref="canvasWrapper" :style="canvasWrapperStyle" class="rounded-md min-h-full flex  flex-col   relative   ">
       <!-- <div v-show="showExpertEditor" ref="editorContainer" class="w-max h-max">
@@ -428,7 +431,7 @@ async function createCanvas() {
       //     canvas.getObjects()?.forEach((f) => {
       //       if (templateEditorStore.fabricObjectRefs[f?.id]) {
       //         objectsIop = { ...objectsIop, [f?.id]: f }
-      //         if (f?.fieldType === 'Html Container') {
+      //         if (f?.fieldType === 'Text box') {
       //           const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
 
       //           console.log(' editorContainer.style.width>>>>', editorContainer.style.width)

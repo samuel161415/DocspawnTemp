@@ -159,7 +159,7 @@
             </Button>
           </div>
         </div>
-        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Html Container'" class="w-full pt-4">
+        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Text box'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
             Select container behaviour
           </p>
@@ -392,7 +392,7 @@ watch(
         selectedDateFormat.value = { name: newVal.name }
       if (newVal?.fieldType === 'Static time')
         selectedTimeFormat.value = timeFormats?.value?.filter(f => f?.name === newVal?.name)[0]
-      if (newVal?.fieldType === 'Html Container') {
+      if (newVal?.fieldType === 'Text box') {
         templateEditorStore?.editorContainers?.forEach((container) => {
           if (container?.id === newVal?.hash) {
             if (container?.behaviourMode)

@@ -31,7 +31,9 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     /** */
     canvas.on('object:moving', (e) => {
       canvas.getObjects().forEach((obj) => {
-        if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
+        // lets add text box also
+        // console.log('obj moving', obj?.moving)
+        if ((obj.id === 'watermark-docspawn' || obj.fieldType === 'Text box') && e.target.id === obj.id) {
           if (e.target.left <= 10)
             obj.set({ left: 10 })
           if (e.target.top <= 10)
