@@ -119,7 +119,7 @@ function setEditorContainerRef(id) {
 watch(() => props?.selectedRows, (newVal) => {
   selectedData.value = newVal
 })
-watch(props?.formValues, (val) => {
+watch(() => props?.formValues, (val) => {
   if (props?.useCase === 'formToDoc') {
     selectedData.value = val
     renderOriginalData()
