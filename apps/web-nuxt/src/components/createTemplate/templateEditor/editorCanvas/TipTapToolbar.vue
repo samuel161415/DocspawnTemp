@@ -339,46 +339,149 @@
         placeholder="Select key"
         @change="insetDatasetKey"
       />
-      <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" class="w-max" @click="showAddFieldForm = !showAddFieldForm" />
+      <!-- <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" class="w-max" @click="showAddFieldForm = !showAddFieldForm" /> -->
+      <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" @click="showAddFormFieldsForm = true" />
     </div>
-    <div v-if="showAddFieldForm" class="p-2 flex gap-4">
-      <InputText v-model="formInputName" placeholder="field name" />
-      <!-- <InputText placeholder="field input" /> -->
-      <Dropdown
-        v-model="selectedFormInput"
-        :options="formInputOptions"
-        placeholder="Select field input"
-      />
 
-      <Dropdown v-if="selectedFormInput === 'Form time'" v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
-      <Dropdown v-if="selectedFormInput === 'Form date'" v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+    <Dialog v-model:visible="showAddFormFieldsForm" modal header="Add form field into Text box" :style="{ minWidth: '40rem' }">
+      <!-- <DataTable
+        :value="templateEditorStore?.addedFields"
+        :paginator="true"
+        :rows="5"
+        :global-filter="globalFilter"
+        data-key="id"
+        :empty-message="$t('No data found')"
+      >
+        <Column field="name" header="Field Name" sortable />
+        <Column field="fieldType" header="Field Type" sortable />
 
-      <Button label="Add" @click="addFormInputToTextbox" />
-      <Button outlined label="cancel" @click="showAddFieldForm = false" />
-    </div>
+        <Column header="Action">
+          <template #body="slotProps">
+            <Button
+              label="Insert"
+              icon="pi pi-plus"
+              class="p-button-sm p-button-success"
+              @click="insertFormField(slotProps.rowData)"
+            />
+          </template>
+        </Column>
+      </DataTable> -->
+      <DataTable
+        v-model:filters="filters"
+        v-model:selection="selectedField"
+        :value="templateEditorStore?.addedFields?.filter(f => f?.isFormField && ['Form text', 'Form date', 'Form time']?.includes(f?.fieldType))"
+        state-storage="session"
+        state-key="dt-state-demo-session"
+        paginator
+        :rows="5"
+        filter-display="menu"
+        selection-mode="single"
+        data-key="id"
+        :global-filter-fields="['fieldName', 'fieldType', 'fieldDescription']"
+        table-style="min-width: 50rem"
+      >
+        <template #header>
+          <div class="flex items-center justify-between gap-2 ">
+            <!-- <i class="pi pi-search"></i> -->
+            <InputText v-model="filters.global.value" placeholder="Search..." />
+            <Button label="add new" @click="showAddFieldForm = !showAddFieldForm" />
+          </div>
+          <div v-if="showAddFieldForm" class="w-full p-2 border bg-white mt-2 flex gap-2">
+            <InputText v-model="formInputName" placeholder="field name" class="h-full" />
+            <!-- <InputText placeholder="field input" /> -->
+            <!-- <Dropdown
+              v-model="selectedFormInput"
+              :options="formInputOptions"
+              placeholder="Select field input"
+              class="h-full md:h-full"
+            /> -->
+            <Dropdown
+              v-model="selectedFormInput"
+              :options="formInputOptions"
+              placeholder="Select field input"
+            />
+
+            <Dropdown v-if="selectedFormInput === 'Form time'" v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+            <Dropdown v-if="selectedFormInput === 'Form date'" v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
+
+            <Button label="Add" @click="addFormInputToTextbox" />
+            <Button outlined label="cancel" @click="showAddFormFieldsForm = false" />
+          </div>
+        </template>
+
+        <!-- Column for Field Name -->
+        <Column field="name" header="Field Name" sortable style="width: 25%">
+          <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by field name" />
+          </template>
+        </Column>
+
+        <!-- Column for Field Type -->
+        <Column field="fieldType" header="Field Type" sortable style="width: 25%">
+          <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by field type" />
+          </template>
+        </Column>
+
+        <!-- Column for Field Description -->
+        <Column field="fieldDescription" header="Field Description" sortable style="width: 25%">
+          <template #filter="{ filterModel }">
+            <InputText v-model="filterModel.value" type="text" placeholder="Search by field description" />
+          </template>
+        </Column>
+
+        <!-- Action Column -->
+        <Column header="Action" style="width: 25%">
+          <template #body="{ data }">
+            <Button
+              label="Insert"
+              icon="pi pi-plus"
+              class="p-button-sm p-button-success"
+              @click="insertOnEditor(data)"
+            />
+          </template>
+        </Column>
+
+        <template #empty>
+          No fields found.
+        </template>
+      </DataTable>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
 import { v4 as uuidv4 } from 'uuid'
+import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import { useTimestampFormats } from '@/composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData.js'
+
+// Data for the form fields
+
+// Selected field for table row selection
+const selectedField = ref(null)
+
+// Filters configuration for DataTable
+const filters = ref({
+  global: { value: null, matchMode: FilterMatchMode.CONTAINS },
+  name: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+  fieldType: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.STARTS_WITH }] },
+  fieldDescription: { operator: FilterOperator.AND, constraints: [{ value: null, matchMode: FilterMatchMode.CONTAINS }] },
+})
 
 const selectedTimeFormat = ref()
 const selectedDateFormat = ref()
 const { timeFormats, dateFormats } = useTimestampFormats()
 
+const showAddFormFieldsForm = ref(false)
+
+// Action column template function
+
 const editor = ref()
 watch(() => templateEditorStore.expertEditor, (val) => {
 //   console.log('template editor store', templateEditorStore?.expertEditor)
   editor.value = val
-})
-onMounted(() => {
-  console.log('template general information use case', templateGeneralInformation?.useCase)
-})
-watch(() => templateGeneralInformation?.useCase, (val) => {
-  console.log('template general information', templateGeneralInformation?.useCase)
 })
 
 const formInputOptions = ['Form text', 'Form date', 'Form time']
@@ -410,7 +513,7 @@ const htmlContent = ref('')
 
 function addFormInputToTextbox() {
   // Insert the selected fruit wrapped in {{}} into the editor
-  editor.value.chain().focus().insertContent(`{{dataset[${formInputName.value}]}}`).run()
+  // editor.value.chain().focus().insertContent(`{{dataset[${formInputName.value}]}}`).run()
   const hash = uuidv4()
   let fieldToAdd = { isFormField: true, isRequired: true, fieldType: selectedFormInput.value, name: formInputName.value, id: formInputName.value, hash, isTextBoxInserted: true, textboxHash: templateEditorStore?.selectedAddedField?.hash }
 
@@ -434,6 +537,11 @@ function addFormInputToTextbox() {
   selectedTimeFormat.value = ''
   showAddFieldForm.value = false
   selectedDateFormat.value = ''
+}
+function insertOnEditor(data) {
+  console.log('data in insert on editor', data)
+  editor.value.chain().focus().insertContent(`{{dataset[${data?.name}]}}`).run()
+  showAddFormFieldsForm.value = false
 }
 async function getHTMLContent() {
   if (editor.value)

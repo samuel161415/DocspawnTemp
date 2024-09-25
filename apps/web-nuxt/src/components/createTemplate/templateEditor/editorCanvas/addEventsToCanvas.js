@@ -1028,7 +1028,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
         // hiding text formatting for tiptap editor
         templateEditorStore.showExpertEditor = false
       }
-      console.log('active obj', activeObj)
+
       if (activeObj?.fieldType === 'Html Container')
         templateEditorStore.showExpertEditor = true
       templateEditorStore.activeTemplateField = false

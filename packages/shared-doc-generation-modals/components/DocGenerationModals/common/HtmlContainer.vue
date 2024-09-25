@@ -144,15 +144,15 @@ watch(() => props.datasetData, (val) => {
   if (!props?.isDataToDoc) {
     let replacementObjects = {}
     val?.forEach((f) => {
-      if (f?.textboxHash === props?.editorId) {
-        let stateValue = f?.state
-        if (f?.fieldType === 'Form date')
-          stateValue = formatDateForInput(f?.state, f?.dateFormat)
-        if (f?.fieldType === 'Form time')
-          stateValue = formatTimeForInput(f?.state, f?.timeFormat)
-        if (stateValue)
-          replacementObjects = { ...replacementObjects, [f?.id]: stateValue || f?.state }
-      }
+      // if (f?.textboxHash === props?.editorId) {
+      let stateValue = f?.state
+      if (f?.fieldType === 'Form date')
+        stateValue = formatDateForInput(f?.state, f?.dateFormat)
+      if (f?.fieldType === 'Form time')
+        stateValue = formatTimeForInput(f?.state, f?.timeFormat)
+      if (stateValue)
+        replacementObjects = { ...replacementObjects, [f?.id]: stateValue || f?.state }
+      // }
     })
 
     if (replacementObjects) {

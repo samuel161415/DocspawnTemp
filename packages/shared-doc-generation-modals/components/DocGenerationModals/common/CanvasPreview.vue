@@ -121,7 +121,7 @@ watch(() => props?.selectedRows, (newVal) => {
 })
 watch(props?.formValues, (val) => {
   if (props?.useCase === 'formToDoc') {
-    selectedData.value = val?.formValues
+    selectedData.value = val
     renderOriginalData()
   }
 }, { deep: true })
@@ -157,13 +157,15 @@ watch(currentPreviewNo, () => {
 
 function renderOriginalData() {
   const canvas = canvasService.getCanvas()
+  console.log('render original data')
   if (props?.useCase === 'formToDoc') {
+    console.log('selected data', selectedData.value)
     if (selectedData.value?.length > 0) {
       if (canvas) {
         const data = selectedData.value
         const objs = canvas?.getObjects()
 
-        canvas.objects = objs.map((obj) => {
+        canvas._objects = objs.map((obj) => {
           if (obj.stroke || obj.isAlertIcon)
             return obj
           if (!obj._element && obj.id !== 'Lorem ipsum') {
@@ -181,7 +183,7 @@ function renderOriginalData() {
             else { correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state }
 
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-
+            console.log('corresponsing data', correspondingData)
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
