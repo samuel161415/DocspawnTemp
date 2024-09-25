@@ -157,9 +157,8 @@ watch(currentPreviewNo, () => {
 
 function renderOriginalData() {
   const canvas = canvasService.getCanvas()
-  console.log('render original data')
+
   if (props?.useCase === 'formToDoc') {
-    console.log('selected data', selectedData.value)
     if (selectedData.value?.length > 0) {
       if (canvas) {
         const data = selectedData.value
