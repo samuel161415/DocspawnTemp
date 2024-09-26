@@ -199,7 +199,7 @@ async function saveTemplate() {
     background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
     dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
     dataset_start_line: templateEditorStore.datasetStartAtLine,
-    template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage }),
+    template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage, fileNamingString: templateEditorStore?.fileNamingString, enableCustomFileNaming: templateEditorStore?.enableCustomFileNaming }),
     last_text_options: JSON.stringify({ activeTextStyles, lastScaledTextOptions: templateEditorStore?.lastScaledTextOptions }),
     page_sizes: JSON.stringify(pageSizes),
     added_fields: JSON.stringify(templateEditorStore?.addedFields),

@@ -40,12 +40,35 @@
         </label>
       </div>
     </div>
+    <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showFileNamingoptions = !showFileNamingoptions">
+      <p class="font-poppins text-md">
+        File naming
+      </p>
+      <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showFileNamingoptions }" />
+    </div>
+    <div v-if="showFileNamingoptions" class="mt-4">
+      <p class="font-poppins text-sm text-surface-400">
+        Set name string for all generated documents
+      </p>
+      <div class="flex gap-2 my-6">
+        <Checkbox v-model="enableCustomFileNaming" :binary="true" />
+        <p class="font-poppins text-surface-500">
+          Enable custom file naming
+        </p>
+        <div v-tooltip.top="tooltipText">
+          <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+        </div>
+      </div>
+      <p class="font-poppins italic text-surface-400 text-sm mb-4">
+        use "<" character at last to add variables
+      </p>
+
+      <FileNamingOptions v-if="enableCustomFileNaming" />
+    </div>
     <Button
       label="Save template" class="mt-8 w-full md:w-full" @click="() => {
         if (templateName){
-          console.log('templateEditorStore?.editor containers', templateEditorStore?.editorContainers)
-          console.log(' templateEditorStore?.fabricObjectRefs', templateEditorStore?.fabricObjectRefs)
-          console.log('templateEditorStore?.editorContainerRefs', templateEditorStore?.editorContainerRefs)
+
           templateEditorStore.editor_fields_data = {
             editorContainers: JSON.parse(JSON.stringify(templateEditorStore?.editorContainers)),
             editorContainersRefs: JSON.parse(JSON.stringify(templateEditorStore?.editorContainerRefs)),
@@ -64,6 +87,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n'
+import FileNamingOptions from './TemplateOptions/FileNaming.vue'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import canvasService from '@/composables/useTemplateCanvas'
@@ -75,8 +99,12 @@ const templateNameError = ref(false)
 const showWatermarkOptions = ref(false)
 const templateName = ref('')
 const disableWatermark = ref(false)
+const enableCustomFileNaming = ref(false)
+const showFileNamingoptions = ref(false)
+watch(enableCustomFileNaming, () => {
+  templateEditorStore.enableCustomFileNaming = enableCustomFileNaming.value
+})
 watch(disableWatermark, (val) => {
-  console.log('disable watermark', val)
   templateEditorStore.watermarkDisabled = val
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -99,7 +127,8 @@ onMounted(() => {
     templateEditorStore.watermarkImage = watermarkImages.value[1]
   if (templateGeneralInformation?.name)
     templateName.value = templateGeneralInformation?.name
-
+  if (templateEditorStore?.templateToEdit)
+    enableCustomFileNaming.value = templateEditorStore?.templateToEdit?.template_options?.enableCustomFileNaming
   disableWatermark.value = templateEditorStore?.watermarkDisabled
 })
 watch(templateName, (newVal) => {

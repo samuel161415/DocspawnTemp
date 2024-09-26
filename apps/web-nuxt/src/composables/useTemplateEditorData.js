@@ -39,6 +39,8 @@ const initialTemplateEditorStore = {
   currentPreviewNo: '',
   watermarkImage: {},
   watermarkDisabled: false,
+  fileNamingString: '',
+  enableCustomFileNaming: false,
   templateToEdit: {},
   templateToGenerateDocs: {},
   lastScaledTextOptions: { x: 1, y: 1 },
