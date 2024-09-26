@@ -43,7 +43,7 @@ onMounted(() => {
     suggestions.value = [...suggestions.value, ...fieldsNamesToAdd]
     filteredSuggestions.value = [...suggestions.value, ...fieldsNamesToAdd]
   }
-  console.log('templateEditorStore?.templateToEdit', templateEditorStore?.templateToEdit)
+
   if (templateEditorStore?.templateToEdit)
     inputValue.value = templateEditorStore?.templateToEdit?.template_options?.fileNamingString || 'DocSpawn - {templateName} - {YYMMDD HHMMSS}'
 })
