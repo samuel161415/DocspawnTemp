@@ -157,6 +157,10 @@ function handleExpiredCallback() {
 }
 function handleLoadCallback(response: unknown) {
   console.log('Load callback', response)
+  if (response) {
+    // recaptchaResponse.value = response // Save the response token
+    verified.value = true // Mark CAPTCHA as successfully completed
+  }
 }
 function handleVerifyCallback(response: string) {
   console.log('Verify callback', response)
