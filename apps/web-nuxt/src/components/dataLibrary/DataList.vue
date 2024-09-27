@@ -5,14 +5,6 @@
     </div>
   </div>
   <div v-show="!componentLoading" class="box overflow-hidden z-1 px-3 py-5 table-container">
-    <!-- <DataTableHeader
-        v-if="filteredData.length > 0"
-        :title="props.title"
-        :info="props.info"
-        :export-file="props.exportFile"
-        @export-c-s-v="exportCSVHandler"
-      /> -->
-
     <div class="mt-0">
       <DataTable
         ref="dataTableRef"
