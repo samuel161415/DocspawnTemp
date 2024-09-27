@@ -2,12 +2,31 @@
   <div class="bg-white">
     <div class="h-12 w-full flex items-center justify-between">
       <div class="flex gap-2">
-        <div v-tooltip.top="$t('Cp_templateEditor_elementRotation.rotate_clockwise')" class="h-8 w-8 text-2xl text-black flex items-center justify-center rounded-md cursor-pointer p-2" @click="rotateClockwise">
+        <!-- <div v-tooltip.top="$t('Cp_templateEditor_elementRotation.rotate_clockwise')" class="h-8 w-8 text-2xl text-black flex items-center justify-center rounded-md cursor-pointer p-2" @click="rotateClockwise">
           <font-awesome-icon icon="fa-light fa-arrow-rotate-right" size="xs" />
         </div>
         <div v-tooltip.top="$t('Cp_templateEditor_elementRotation.rotate_anticlockwise')" class="h-8 w-8 text-2xl text-black flex items-center justify-center rounded-md cursor-pointer p-2" @click="rotateAntiClockwise">
           <font-awesome-icon icon="fa-light fa-arrow-rotate-left" size="xs" />
-        </div>
+        </div> -->
+        <!-- Rotate Clockwise Button -->
+        <Button
+          v-tooltip="$t('Cp_templateEditor_elementRotation.rotate_clockwise')"
+          outlined
+          class="w-max px-2"
+          @click="rotateClockwise"
+        >
+          <font-awesome-icon icon="fa-solid fa-arrow-rotate-right" size="lg" />
+        </Button>
+
+        <!-- Rotate Anticlockwise Button -->
+        <Button
+          v-tooltip="$t('Cp_templateEditor_elementRotation.rotate_anticlockwise')"
+          outlined
+          class="w-max px-2"
+          @click="rotateAntiClockwise"
+        >
+          <font-awesome-icon icon="fa-solid fa-arrow-rotate-left" size="lg" />
+        </Button>
       </div>
     </div>
     <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field')" class="font-poppins text-sm text-surface-500 mt-2">

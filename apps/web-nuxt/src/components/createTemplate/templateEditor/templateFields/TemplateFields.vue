@@ -25,7 +25,7 @@
         </p>
       </div>
 
-      <template v-for="(field, index) in templateEditorStore.addedFields">
+      <template v-for="(field, index) in templateEditorStore.addedFields?.filter(f => !f?.isTextBoxInserted)">
         <div
           v-if="templateEditorStore.ShowAddedFieldsinTemplateFields === true"
           :key="index"
@@ -83,7 +83,7 @@
           </div>
 
           <div class="flex flex-row gap-4">
-            <Button v-if="field?.fieldType !== 'Form checkbox group' && field?.fieldType !== 'Html Container'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
+            <Button v-if="field?.fieldType !== 'Form checkbox group' && field?.fieldType !== 'Text box'" v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.duplicate')" text class="text-lg text-surface-600 w-max h-max" @click="duplicateField(field)">
               <font-awesome-icon icon="fa-light fa-clone" size="lg" />
             </Button>
             <Button v-tooltip.top="$t('Cp_createTemplate_editorTemplateFields.delete')" text class="text-lg text-surface-600 w-max h-max" @click="fieldToDelete = field;confirm2($event)">
@@ -99,7 +99,7 @@
 
           <p class="font-poppins text-surface-600 text-lg">
             <!-- {{ $t('Cp_createTemplate_editorTemplateFields.data_fields') }} -->
-            Add Html container
+            Add Text box
           </p>
         </div>
         <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showDataFields ? showDataFields = false : showDataFields = true">
@@ -235,7 +235,7 @@
           <div v-if="formFieldForNameInput === 'Form text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
             <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" :placeholder="$t('Cp_createTemplate_editorTemplateFields.write_field_name')" />
           </div>
-          <div
+          <!-- <div
             class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': formFieldForNameInput === 'Form long text', 'border-surface-100 bg-surface-50': formFieldForNameInput !== 'Form long text' }"
             @click="formFieldForNameInput = 'Form long text';showFormFieldNameInput = true"
@@ -247,7 +247,7 @@
           </div>
           <div v-if="formFieldForNameInput === 'Form long text' && showFormFieldNameInput" class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
             <InputText v-model="formFieldNameInputValue" class="w-full md:w-full" :placeholder="$t('Cp_createTemplate_editorTemplateFields.write_field_name')" />
-          </div>
+          </div> -->
 
           <div
             class="px-5 pl-14 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
@@ -770,7 +770,7 @@ function duplicateField(field) {
   }
 }
 // function addHtmlContainer() {
-//   console.log('add html container>>>>')
+//   console.log('add Text box>>>>')
 // }
 function addHtmlContainer() {
   const canvas = canvasService.getCanvas()
@@ -818,7 +818,7 @@ function addHtmlContainer() {
         stroke: 'transparent',
         strokeWidth: 1,
         selectable: true,
-        fieldType: 'Html Container',
+        fieldType: 'Text box',
         pageNo: templateEditorStore.activePageForCanvas,
         displayGuide: false,
         lockScalingFlip: true,
@@ -830,9 +830,9 @@ function addHtmlContainer() {
       canvas.add(fabricObject)
       /** */
       /** count no. of containers and name accordingly */
-      const containerCount = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Html Container')?.length
-      const nameToBe = `container n${containerCount + 1}`
-      let fieldToAdd = { fieldType: 'Html Container', name: nameToBe, id, hash: id, page: templateEditorStore.activePageForCanvas,
+      const containerCount = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Text box')?.length
+      const nameToBe = `Text box ${containerCount + 1}`
+      let fieldToAdd = { fieldType: 'Text box', name: nameToBe, id, hash: id, page: templateEditorStore.activePageForCanvas,
       }
 
       if (templateEditorStore?.fieldToAdd?.type === 'Form text')
@@ -999,7 +999,7 @@ function deleteField() {
       else
         return true
     })
-    /** ****** incase of html container */
+    /** ****** incase of Text box */
 
     const containers = templateEditorStore.editorContainers.filter(f => f?.id !== fieldToDelete?.value?.hash)
     templateEditorStore.editorContainers = containers

@@ -114,7 +114,7 @@ class CanvasService {
           this.canvas.getObjects()?.forEach((f) => {
             if (templateEditorStore.fabricObjectRefs[f?.id]) {
               objectsIop = { ...objectsIop, [f?.id]: f }
-              if (f?.fieldType === 'Html Container') {
+              if (f?.fieldType === 'Text box') {
                 const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
                 f.set({
                   width:

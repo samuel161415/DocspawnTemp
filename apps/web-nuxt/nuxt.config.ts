@@ -87,6 +87,7 @@ export default defineNuxtConfig({
   },
   plugins: [
     '~/plugins/fontawesome.js',
+    '~/plugins/vue-recaptcha.js',
   ],
   app: {
     layoutTransition: {

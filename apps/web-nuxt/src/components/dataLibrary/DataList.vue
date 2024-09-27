@@ -98,16 +98,38 @@
                   <Button :label=" $t('Cp_dataLibraryList.save')" class="w-full" @click="saveView(selectedTemplate?.view_name)" />
                 </div>
               </Dialog>
-              <Button
-                v-if="exportFile"
-                type="button"
-                icon="pi pi-download"
-                :label=" $t('Cp_dataLibraryList.export_csv')"
-                class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
-                :disabled="selectedRows.length < 1"
-                @click="exportCSVHandler"
-              />
 
+              <div ref="dropdownContainer" class="flex items-center relative">
+                <!-- Export Button that triggers the dropdown -->
+                <Button
+                  label="Export"
+                  icon="pi pi-download"
+                  class="flex rounded-lg bg-primaryBlue text-white text-xs md:text-sm font-poppins h-[45px] border-none"
+                  :disabled="selectedRows.length < 1"
+                  @click="toggleDropdown"
+                />
+
+                <div
+                  v-if="showDropdown"
+                  class="absolute top-[35px] left-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+                >
+                  <ul class="py-1">
+                    <li
+                      class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      @click="exportCSVHandler('csv')"
+                    >
+                      Export as CSV
+                    </li>
+                    <li
+                      class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      @click="exportCSVHandler('xlsx')"
+                    >
+                      Export as XLSX
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <!-- <SplitButtonSample /> -->
               <DataTableFilters
                 :filters="filters"
                 :has-filter-actions="props.hasFilterActions"
@@ -285,7 +307,14 @@ import { ref } from 'vue'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
 import { useToast } from 'primevue/usetoast'
 import { useI18n } from 'vue-i18n'
+import ExcelJS from 'exceljs'
+import Papa from 'papaparse'
+
+import SplitButton from 'primevue/splitbutton'
 import DataTableHeader from '../dataTableComponent/DataTableHeader.vue'
+
+// import SplitButtonSample from './Splitbutton.vue'
+
 import DataTableFilters from '~/components/dataTableComponent/DataTableFilters.vue'
 import formatDate from '~/utils'
 import { formatDateForInput, formatTimeForInput } from '~/utils/dateFunctions'
@@ -372,6 +401,8 @@ const templates = ref([])
 const filters = ref(props.filters)
 const allColumns = ref()
 const selectedColumns = ref()
+// Reference for the dropdown container
+const dropdownContainer = ref(null)
 // const globalFilterFields = ref([])
 
 const componentLoading = ref(true)
@@ -405,9 +436,10 @@ onMounted(async () => {
       const filtered = templateData?.filter(d => d?.use_case === 'Form to doc')
       const sorted = filtered?.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
       if (sorted[0])
-        selectedTemplate.value = { key: sorted[0]?.id, label: sorted[0]?.name, data: sorted[0]?.name }
-        /** */
-        /** ******* fetching personalized views */
+        console.log('sorted 0 before selected template', sorted[0])
+      selectedTemplate.value = { key: sorted[0]?.id, label: sorted[0]?.name, data: sorted[0]?.name }
+      /** */
+      /** ******* fetching personalized views */
       let personalizedViews = []
       try {
         // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
@@ -456,11 +488,31 @@ onMounted(async () => {
     console.error('Error fetching templates:', error)
   }
 })
+const showDropdown = ref(false)
 
-function onToggle(val) {
-  selectedColumns.value = allColumns.value.filter(col => val.includes(col))
+// Toggle dropdown visibility
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value
 }
+
+// Close dropdown when clicking outside
+function handleClickOutside(event) {
+  if (dropdownContainer.value && !dropdownContainer.value.contains(event.target))
+    showDropdown.value = false
+}
+
+// Add event listener for outside click when component mounts
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+// Remove event listener when component unmounts
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
 watch(selectedTemplate, async (selectedTemplate) => {
+  // console.log('selected template change', selectedTemplate)
   if (selectedTemplate.view_name) {
     filters.value = selectedTemplate?.filters
     filteredData.value = selectedTemplate?.filtered_data
@@ -503,6 +555,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
       return { isNormalField: true, hash: k?.hash, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   }), { isSystemField: true, field: 'date_created', header: 'Date created', filterField: 'date_created', data_type: 'date', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }]
 
+  console.log('columns to add', columnsToAdd)
   selectedColumns.value = columnsToAdd
   const columsnToAddWithLegacyFields = [...columnsToAdd, ...legacyFields?.map((k) => {
     if (k?.fieldType === 'Form image')
@@ -515,6 +568,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
       return { hash: k?.hash, isLegacyField: true, field: k?.name ? k?.name : k?.id, header: k?.name ? k?.name : k?.id, filterField: k?.name ? k?.name : k?.id, data_type: 'text', style: 'min-width: 7rem', filterMenuStyle: { width: '14rem' } }
   })]
   allColumns.value = columsnToAddWithLegacyFields
+  console.log('columns to add with legacy fields', columsnToAddWithLegacyFields)
   /** * experimenting with all columns to convert into a group */
   const systemFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isSystemField)
   const formFieldsToAdd = columsnToAddWithLegacyFields?.filter(f => f?.isNormalField)
@@ -613,6 +667,7 @@ watch(selectedTemplate, async (selectedTemplate) => {
         }
       })
 
+      console.log('here template filtered is being assigned', dataForTemplateEntries.sort((a, b) => new Date(b.date_created) - new Date(a.date_created)))
       templatefiltered.value = dataForTemplateEntries.sort((a, b) => new Date(b.date_created) - new Date(a.date_created))
     }
 
@@ -641,17 +696,95 @@ function getPlaceholder(header) {
   return `Search by ${header}`
 }
 
-function exportCSVHandler() {
+// Sample handler for export
+// Options for the SplitButton
+// const exportOptions = [
+//   {
+//     label: 'Export as CSV',
+//     icon: 'pi pi-file',
+//     command: () => exportCSVHandler('csv'),
+//   },
+//   {
+//     label: 'Export as XLSX',
+//     icon: 'pi pi-file-excel',
+//     command: () => exportCSVHandler('xlsx'),
+//   },
+// ]
+async function exportCSVHandler(exportType) {
   if (dataTableRef.value) {
     // Get the selected rows
     const selectedRowsData = dataTableRef.value.selection
     console.log('selectedRowsdata', selectedRowsData)
-    if (selectedRowsData.length > 0) {
-      // Use the DataTable's exportCSV method with the selected rows data
-      dataTableRef.value.exportCSV({ selectionOnly: true })
+    console.log('filtered data', filteredData.value)
+    console.log('selected columsnb', selectedColumns.value)
+
+    const finalDataToExport = filteredData.value?.map((f) => {
+      let obj = {}
+      selectedColumns.value?.forEach((s) => {
+        obj = { ...obj, [s?.field]: f[s?.hash || s?.field] }
+      })
+      return obj
+    })
+    console.log('final data to export', finalDataToExport)
+
+    // if (selectedRowsData.length > 0) {
+    //   // Use the DataTable's exportCSV method with the selected rows data
+    //   dataTableRef.value.exportCSV({ selectionOnly: true })
+    // }
+    // else {
+    //   console.warn('No rows selected for export')
+    // }
+    if (finalDataToExport.length === 0)
+      return
+
+    // Extract headers from the first object
+    const headers = Object.keys(finalDataToExport[0])
+
+    // Create rows with data
+    const rows = finalDataToExport.map(obj => headers.map(header => obj[header]))
+
+    // Include headers as the first row for CSV
+    rows.unshift(headers)
+
+    // Export to CSV using PapaParse
+    if (exportType === 'csv') {
+      const csvContent = Papa.unparse(rows)
+      const csvBlob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const csvUrl = URL.createObjectURL(csvBlob)
+
+      // Create a temporary link element and trigger the download
+      const csvLink = document.createElement('a')
+      csvLink.href = csvUrl
+      csvLink.download = 'exported_data.csv'
+      document.body.appendChild(csvLink)
+      csvLink.click()
+      document.body.removeChild(csvLink)
+      URL.revokeObjectURL(csvUrl)
     }
-    else {
-      console.warn('No rows selected for export')
+    if (exportType === 'xlsx') {
+      // Export to XLSX using ExcelJS
+      const workbook = new ExcelJS.Workbook()
+      const worksheet = workbook.addWorksheet('Sheet 1')
+
+      // Add header row
+      worksheet.addRow(headers)
+
+      // Add data rows
+      rows.slice(1).forEach(row => worksheet.addRow(row))
+
+      // Write to buffer
+      const buffer = await workbook.xlsx.writeBuffer()
+      const xlsxBlob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' })
+      const xlsxUrl = URL.createObjectURL(xlsxBlob)
+
+      // Create a temporary link element and trigger the download
+      const xlsxLink = document.createElement('a')
+      xlsxLink.href = xlsxUrl
+      xlsxLink.download = 'exported_data.xlsx'
+      document.body.appendChild(xlsxLink)
+      xlsxLink.click()
+      document.body.removeChild(xlsxLink)
+      URL.revokeObjectURL(xlsxUrl)
     }
   }
 }

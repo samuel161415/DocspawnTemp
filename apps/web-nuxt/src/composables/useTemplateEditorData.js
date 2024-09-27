@@ -39,6 +39,8 @@ const initialTemplateEditorStore = {
   currentPreviewNo: '',
   watermarkImage: {},
   watermarkDisabled: false,
+  fileNamingString: '',
+  enableCustomFileNaming: false,
   templateToEdit: {},
   templateToGenerateDocs: {},
   lastScaledTextOptions: { x: 1, y: 1 },
@@ -51,6 +53,7 @@ const initialTemplateEditorStore = {
   fabricObjectRefs: {},
   canvasScaleFactors: { x: 1, y: 1 },
   editor_fields_data: {},
+  showExpertEditor: true,
 }
 // Create reactive objects
 export const activeTextStyles = reactive({ ...initialActiveTextStyles })

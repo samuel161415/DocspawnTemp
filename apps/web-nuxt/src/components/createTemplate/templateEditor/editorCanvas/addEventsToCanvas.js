@@ -31,7 +31,9 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     /** */
     canvas.on('object:moving', (e) => {
       canvas.getObjects().forEach((obj) => {
-        if (obj.id === 'watermark-docspawn' && e.target.id === obj.id) {
+        // lets add text box also
+        // console.log('obj moving', obj?.moving)
+        if ((obj.id === 'watermark-docspawn' || obj.fieldType === 'Text box') && e.target.id === obj.id) {
           if (e.target.left <= 10)
             obj.set({ left: 10 })
           if (e.target.top <= 10)
@@ -830,7 +832,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
         /** */
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
-        console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
+        // console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
           // defaultUncheckedDesign
           ftoadd?.designs?.no
@@ -876,7 +878,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
-            console.log('saving fieldToAdd', fieldToAdd, myImg)
+            // console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
             templateEditorStore.addedFields.forEach((f) => {
               allFields.push(JSON.parse(JSON.stringify(f)))
@@ -1023,7 +1025,12 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
       else {
         templateEditorStore.showOptionsBar = false
         templateEditorStore.selectedAddedField = {}
+        // hiding text formatting for tiptap editor
+        templateEditorStore.showExpertEditor = false
       }
+
+      if (activeObj?.fieldType === 'Html Container')
+        templateEditorStore.showExpertEditor = true
       templateEditorStore.activeTemplateField = false
       templateEditorStore.ShowAddedFieldsinTemplateFields = true
     })

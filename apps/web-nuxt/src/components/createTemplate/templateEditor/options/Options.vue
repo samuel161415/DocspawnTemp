@@ -30,7 +30,7 @@
           </span>
         </p>
         <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'" class="mb-6">
-          <TextFormatting />
+          <!-- <TextFormatting /> -->
           <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field')" class="font-poppins text-sm text-red-500 mt-2">
             {{ $t('Cp_templateEditor_options.styles_applied_on_select') }}
           </p>
@@ -159,7 +159,7 @@
             </Button>
           </div>
         </div>
-        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Html Container'" class="w-full pt-4">
+        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Text box'" class="w-full pt-4">
           <p class="font-poppins text-md text-surface-600 mb-2">
             Select container behaviour
           </p>
@@ -392,7 +392,7 @@ watch(
         selectedDateFormat.value = { name: newVal.name }
       if (newVal?.fieldType === 'Static time')
         selectedTimeFormat.value = timeFormats?.value?.filter(f => f?.name === newVal?.name)[0]
-      if (newVal?.fieldType === 'Html Container') {
+      if (newVal?.fieldType === 'Text box') {
         templateEditorStore?.editorContainers?.forEach((container) => {
           if (container?.id === newVal?.hash) {
             if (container?.behaviourMode)

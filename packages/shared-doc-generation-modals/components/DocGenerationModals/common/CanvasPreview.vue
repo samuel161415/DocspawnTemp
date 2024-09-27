@@ -119,20 +119,20 @@ function setEditorContainerRef(id) {
 watch(() => props?.selectedRows, (newVal) => {
   selectedData.value = newVal
 })
-watch(props?.formValues, (val) => {
+watch(() => props?.formValues, (val) => {
   if (props?.useCase === 'formToDoc') {
-    selectedData.value = val?.formValues
+    selectedData.value = val
     renderOriginalData()
   }
-})
-watch(props, (val) => {
-  // setting watch for props , because when final preview called from main app, watch on specific props does not work
+}, { deep: true })
+// watch(props, (val) => {
+//   // setting watch for props , because when final preview called from main app, watch on specific props does not work
 
-  if (props?.useCase === 'formToDoc') {
-    selectedData.value = val?.formValues
-    renderOriginalData()
-  }
-})
+//   if (props?.useCase === 'formToDoc') {
+//     selectedData.value = val?.formValues
+//     renderOriginalData()
+//   }
+// })
 
 const currentPreviewNo = ref(0)
 watch(selectedData, (newVal) => {
@@ -157,13 +157,14 @@ watch(currentPreviewNo, () => {
 
 function renderOriginalData() {
   const canvas = canvasService.getCanvas()
+
   if (props?.useCase === 'formToDoc') {
     if (selectedData.value?.length > 0) {
       if (canvas) {
         const data = selectedData.value
         const objs = canvas?.getObjects()
 
-        canvas.objects = objs.map((obj) => {
+        canvas._objects = objs.map((obj) => {
           if (obj.stroke || obj.isAlertIcon)
             return obj
           if (!obj._element && obj.id !== 'Lorem ipsum') {
@@ -181,7 +182,7 @@ function renderOriginalData() {
             else { correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state }
 
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-
+            console.log('corresponsing data', correspondingData)
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
@@ -233,8 +234,13 @@ function renderOriginalData() {
           }
           return obj
         })
+
         canvas.renderAll()
       }
+      // here we should replace keys in html conatiner with form field values
+      console.log('template editor store editor containers', templateEditorStore?.editorContainers)
+      console.log('template editor store editorCOntainersRefs')
+      console.log('template Editor store ')
     }
     else {
     // alert('problem problem')
@@ -460,7 +466,7 @@ async function createCanvas() {
     //     canvas.getObjects()?.forEach((f) => {
     //       if (docGenerationData.fabricObjectRefs[f?.id]) {
     //         objectsIop = { ...objectsIop, [f?.id]: f }
-    //         if (f?.fieldType === 'Html Container') {
+    //         if (f?.fieldType === 'Text box') {
     //           const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
     //           f.set({
     //             width:
