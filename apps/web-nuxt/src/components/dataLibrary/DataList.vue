@@ -98,32 +98,36 @@
                   <Button :label=" $t('Cp_dataLibraryList.save')" class="w-full" @click="saveView(selectedTemplate?.view_name)" />
                 </div>
               </Dialog>
-              <!-- <Button
-                v-if="exportFile"
-                type="button"
-                icon="pi pi-download"
-                :label=" $t('Cp_dataLibraryList.export_csv')"
-                class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
-                :disabled="selectedRows.length < 1"
-                @click="() => exportCSVHandler('csv')"
-              />
-              <Button
-                v-if="exportFile"
-                type="button"
-                icon="pi pi-download"
-                label="Export Xlsx"
-                class="flex  rounded-lg bg-primaryBlue text-white  text-xs md:text-sm  font-poppins h-[45px] border-none"
-                :disabled="selectedRows.length < 1"
-                @click="() => exportCSVHandler('xlsx')"
-              /> -->
-              <div>
-                <SplitButton
+
+              <div ref="dropdownContainer" class="flex items-center relative">
+                <!-- Export Button that triggers the dropdown -->
+                <Button
                   label="Export"
                   icon="pi pi-download"
                   class="flex rounded-lg bg-primaryBlue text-white text-xs md:text-sm font-poppins h-[45px] border-none"
-                  :model="exportOptions"
                   :disabled="selectedRows.length < 1"
+                  @click="toggleDropdown"
                 />
+
+                <div
+                  v-if="showDropdown"
+                  class="absolute top-[35px] left-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-lg z-10"
+                >
+                  <ul class="py-1">
+                    <li
+                      class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      @click="exportCSVHandler('csv')"
+                    >
+                      Export as CSV
+                    </li>
+                    <li
+                      class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      @click="exportCSVHandler('xlsx')"
+                    >
+                      Export as XLSX
+                    </li>
+                  </ul>
+                </div>
               </div>
               <!-- <SplitButtonSample /> -->
               <DataTableFilters
@@ -397,6 +401,8 @@ const templates = ref([])
 const filters = ref(props.filters)
 const allColumns = ref()
 const selectedColumns = ref()
+// Reference for the dropdown container
+const dropdownContainer = ref(null)
 // const globalFilterFields = ref([])
 
 const componentLoading = ref(true)
@@ -482,10 +488,29 @@ onMounted(async () => {
     console.error('Error fetching templates:', error)
   }
 })
+const showDropdown = ref(false)
 
-function onToggle(val) {
-  selectedColumns.value = allColumns.value.filter(col => val.includes(col))
+// Toggle dropdown visibility
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value
 }
+
+// Close dropdown when clicking outside
+function handleClickOutside(event) {
+  if (dropdownContainer.value && !dropdownContainer.value.contains(event.target))
+    showDropdown.value = false
+}
+
+// Add event listener for outside click when component mounts
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+
+// Remove event listener when component unmounts
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
 watch(selectedTemplate, async (selectedTemplate) => {
   // console.log('selected template change', selectedTemplate)
   if (selectedTemplate.view_name) {
@@ -673,18 +698,18 @@ function getPlaceholder(header) {
 
 // Sample handler for export
 // Options for the SplitButton
-const exportOptions = [
-  {
-    label: 'Export as CSV',
-    icon: 'pi pi-file',
-    command: () => exportCSVHandler('csv'),
-  },
-  {
-    label: 'Export as XLSX',
-    icon: 'pi pi-file-excel',
-    command: () => exportCSVHandler('xlsx'),
-  },
-]
+// const exportOptions = [
+//   {
+//     label: 'Export as CSV',
+//     icon: 'pi pi-file',
+//     command: () => exportCSVHandler('csv'),
+//   },
+//   {
+//     label: 'Export as XLSX',
+//     icon: 'pi pi-file-excel',
+//     command: () => exportCSVHandler('xlsx'),
+//   },
+// ]
 async function exportCSVHandler(exportType) {
   if (dataTableRef.value) {
     // Get the selected rows
