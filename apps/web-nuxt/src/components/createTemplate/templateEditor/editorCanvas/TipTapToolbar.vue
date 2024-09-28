@@ -1,9 +1,9 @@
 <template>
-  <div class="editor-wrapper flex flex-col gap-4 relative  h-max mb-4 overflow-y-auto ">
+  <div class="editor-wrapper flex flex-col gap-4 relative h-max mb-4 overflow-y-auto ">
     <div v-if="editor" class="toolbar static-menu">
       <!-- Button for Bold -->
       <Button
-        v-tooltip="'Bold'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.bold')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().toggleBold().run()"
         :class="{ 'is-active': editor.isActive('bold') }"
@@ -14,7 +14,7 @@
 
       <!-- Button for Italic -->
       <Button
-        v-tooltip="'Italic'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.italic')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().toggleItalic().run()"
         :class="{ 'is-active': editor.isActive('italic') }"
@@ -25,7 +25,7 @@
 
       <!-- Button for Strike -->
       <Button
-        v-tooltip="'Strike'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.strike')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().toggleStrike().run()"
         :class="{ 'is-active': editor.isActive('strike') }"
@@ -36,7 +36,7 @@
 
       <!-- Button for Code -->
       <Button
-        v-tooltip="'Code'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.code')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().toggleCode().run()"
         :class="{ 'is-active': editor.isActive('code') }"
@@ -47,7 +47,7 @@
 
       <!-- Button for Clear Marks -->
       <Button
-        v-tooltip="'Clear Marks'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.clear_marks')"
         class="w-max px-2"
         @click="editor.chain().focus().unsetAllMarks().run()"
       >
@@ -56,7 +56,7 @@
 
       <!-- Button for Clear Nodes -->
       <Button
-        v-tooltip="'Clear Nodes'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.clear_nodes')"
         class="w-max px-2"
         @click="editor.chain().focus().clearNodes().run()"
       >
@@ -65,7 +65,7 @@
 
       <!-- Paragraph -->
       <Button
-        v-tooltip="'Paragraph'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.paragraph')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('paragraph') }"
         @click="editor.chain().focus().setParagraph().run()"
@@ -75,7 +75,7 @@
 
       <!-- Headings H1 to H6 -->
       <Button
-        v-tooltip="'Heading 1'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_1')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
@@ -84,7 +84,7 @@
       </Button>
 
       <Button
-        v-tooltip="'Heading 2'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_2')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
@@ -94,7 +94,7 @@
 
       <!-- Repeat for h3, h4, h5, h6 -->
       <Button
-        v-tooltip="'Heading 3'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_3')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
@@ -102,7 +102,7 @@
         <font-awesome-icon icon="fa-solid fa-heading" size="lg" />
       </Button>
       <Button
-        v-tooltip="'Heading 4'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_4')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 4 }).run()"
@@ -110,7 +110,7 @@
         <font-awesome-icon icon="fa-solid fa-heading" size="lg" />
       </Button>
       <Button
-        v-tooltip="'Heading 5'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_5')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 5 }).run()"
@@ -118,7 +118,7 @@
         <font-awesome-icon icon="fa-solid fa-heading" size="lg" />
       </Button>
       <Button
-        v-tooltip="'Heading 6'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.heading_6')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }"
         @click="editor.chain().focus().toggleHeading({ level: 6 }).run()"
@@ -128,7 +128,7 @@
 
       <!-- Bullet List -->
       <Button
-        v-tooltip="'Bullet List'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.bullet_list')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('bulletList') }"
         @click="editor.chain().focus().toggleBulletList().run()"
@@ -138,7 +138,7 @@
 
       <!-- Ordered List -->
       <Button
-        v-tooltip="'Ordered List'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.ordered_list')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('orderedList') }"
         @click="editor.chain().focus().toggleOrderedList().run()"
@@ -148,7 +148,7 @@
 
       <!-- Code Block -->
       <Button
-        v-tooltip="'Code Block'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.code_block')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('codeBlock') }"
         @click="editor.chain().focus().toggleCodeBlock().run()"
@@ -158,7 +158,7 @@
 
       <!-- Blockquote -->
       <Button
-        v-tooltip="'Blockquote'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.blockquote')"
         class="w-max px-2"
         :class="{ 'is-active': editor.isActive('blockquote') }"
         @click="editor.chain().focus().toggleBlockquote().run()"
@@ -168,7 +168,7 @@
 
       <!-- Horizontal Rule -->
       <Button
-        v-tooltip="'Horizontal Rule'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.horizontal_rule')"
         class="w-max px-2"
         @click="editor.chain().focus().setHorizontalRule().run()"
       >
@@ -177,7 +177,7 @@
 
       <!-- Hard Break -->
       <Button
-        v-tooltip="'Hard Break'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.hard_break')"
         class="w-max px-2"
         @click="editor.chain().focus().setHardBreak().run()"
       >
@@ -186,7 +186,7 @@
 
       <!-- Undo and Redo -->
       <Button
-        v-tooltip="'Undo'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.undo')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().undo().run()"
         @click="editor.chain().focus().undo().run()"
@@ -195,7 +195,7 @@
       </Button>
 
       <Button
-        v-tooltip="'Redo'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.redo')"
         class="w-max px-2"
         :disabled="!editor.can().chain().focus().redo().run()"
         @click="editor.chain().focus().redo().run()"
@@ -203,9 +203,9 @@
         <font-awesome-icon icon="fa-solid fa-redo" size="lg" />
       </Button>
 
-      <!-- Insert Table, Delete Table -->
+      <!-- Insert Table -->
       <Button
-        v-tooltip="'Insert Table'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.insert_table')"
         class="w-max px-2"
         :disabled="!editor.can().insertTable()"
         @click="addTable"
@@ -213,8 +213,9 @@
         <font-awesome-icon icon="fa-solid fa-table" size="lg" />
       </Button>
 
+      <!-- Delete Table -->
       <Button
-        v-tooltip="'Delete Table'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.delete_table')"
         class="w-max px-2"
         :disabled="!editor.can().deleteTable()"
         @click="deleteTable"
@@ -224,7 +225,7 @@
 
       <!-- Add Column Before -->
       <Button
-        v-tooltip="'Add Column Before'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.add_column_before')"
         class="w-max px-2"
         :disabled="!editor.can().addColumnBefore()"
         @click="addColumnBefore"
@@ -234,7 +235,7 @@
 
       <!-- Add Column After -->
       <Button
-        v-tooltip="'Add Column After'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.add_column_after')"
         class="w-max px-2"
         :disabled="!editor.can().addColumnAfter()"
         @click="addColumnAfter"
@@ -244,7 +245,7 @@
 
       <!-- Delete Column -->
       <Button
-        v-tooltip="'Delete Column'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.delete_column')"
         class="w-max px-2"
         :disabled="!editor.can().deleteColumn()"
         @click="deleteColumn"
@@ -254,7 +255,7 @@
 
       <!-- Add Row Before -->
       <Button
-        v-tooltip="'Add Row Before'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.add_row_before')"
         class="w-max px-2"
         :disabled="!editor.can().addRowBefore()"
         @click="addRowBefore"
@@ -264,7 +265,7 @@
 
       <!-- Add Row After -->
       <Button
-        v-tooltip="'Add Row After'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.add_row_after')"
         class="w-max px-2"
         :disabled="!editor.can().addRowAfter()"
         @click="addRowAfter"
@@ -274,7 +275,7 @@
 
       <!-- Delete Row -->
       <Button
-        v-tooltip="'Delete Row'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.delete_row')"
         class="w-max px-2"
         :disabled="!editor.can().deleteRow()"
         @click="deleteRow"
@@ -284,7 +285,7 @@
 
       <!-- Merge Cells -->
       <Button
-        v-tooltip="'Merge Cells'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.merge_cells')"
         class="w-max px-2"
         :disabled="!editor.can().mergeCells()"
         @click="mergeCells"
@@ -294,7 +295,7 @@
 
       <!-- Split Cell -->
       <Button
-        v-tooltip="'Split Cell'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.split_cell')"
         class="w-max px-2"
         :disabled="!editor.can().splitCell()"
         @click="splitCell"
@@ -304,7 +305,7 @@
 
       <!-- Toggle Header Column -->
       <Button
-        v-tooltip="'Toggle Header Column'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.toggle_header_column')"
         class="w-max px-2"
         :disabled="!editor.can().toggleHeaderColumn()"
         @click="toggleHeaderColumn"
@@ -314,7 +315,7 @@
 
       <!-- Toggle Header Row -->
       <Button
-        v-tooltip="'Toggle Header Row'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.toggle_header_row')"
         class="w-max px-2"
         :disabled="!editor.can().toggleHeaderRow()"
         @click="toggleHeaderRow"
@@ -324,7 +325,7 @@
 
       <!-- Toggle Header Cell -->
       <Button
-        v-tooltip="'Toggle Header Cell'"
+        v-tooltip="$t('Cp_templateEditor_tiptap_topbar.toggle_header_cell')"
         class="w-max px-2"
         :disabled="!editor.can().toggleHeaderCell()"
         @click="toggleHeaderCell"
@@ -332,40 +333,10 @@
         <font-awesome-icon icon="fa-solid fa-table-cells" size="lg" />
       </Button>
 
-      <Dropdown
-        v-if="templateGeneralInformation?.useCase === 'Data to doc'"
-        v-model="selectedDatasetkey"
-        :options="templateEditorStore.datasetData.selectedKeys"
-        placeholder="Select key"
-        @change="insetDatasetKey"
-      />
-      <!-- <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" class="w-max" @click="showAddFieldForm = !showAddFieldForm" /> -->
-      <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" label="Add form field" @click="showAddFormFieldsForm = true" />
+      <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" :label="$t('Cp_templateEditor_tiptap_topbar.add_form_field')" @click="showAddFormFieldsForm = true" />
     </div>
 
-    <Dialog v-model:visible="showAddFormFieldsForm" modal header="Add form field into Text box" :style="{ minWidth: '40rem' }">
-      <!-- <DataTable
-        :value="templateEditorStore?.addedFields"
-        :paginator="true"
-        :rows="5"
-        :global-filter="globalFilter"
-        data-key="id"
-        :empty-message="$t('No data found')"
-      >
-        <Column field="name" header="Field Name" sortable />
-        <Column field="fieldType" header="Field Type" sortable />
-
-        <Column header="Action">
-          <template #body="slotProps">
-            <Button
-              label="Insert"
-              icon="pi pi-plus"
-              class="p-button-sm p-button-success"
-              @click="insertFormField(slotProps.rowData)"
-            />
-          </template>
-        </Column>
-      </DataTable> -->
+    <Dialog v-model:visible="showAddFormFieldsForm" modal :header="$t('Cp_tiptap_toolbar_formOptions.add_form_field_dialog_title')" :style="{ minWidth: '40rem' }">
       <DataTable
         v-model:filters="filters"
         v-model:selection="selectedField"
@@ -382,61 +353,39 @@
       >
         <template #header>
           <div class="flex items-center justify-between gap-2 ">
-            <!-- <i class="pi pi-search"></i> -->
-            <InputText v-model="filters.global.value" placeholder="Search..." />
-            <Button label="add new" @click="showAddFieldForm = !showAddFieldForm" />
+            <InputText v-model="filters.global.value" :placeholder="$t('Cp_tiptap_toolbar_formOptions.search_placeholder')" />
+            <Button :label="$t('Cp_tiptap_toolbar_formOptions.add_new')" @click="showAddFieldForm = !showAddFieldForm" />
           </div>
           <div v-if="showAddFieldForm" class="w-full p-2 border bg-white mt-2 flex gap-2">
-            <InputText v-model="formInputName" placeholder="field name" class="h-full" />
-            <InputText v-model="formInputDescription" placeholder="field description" class="h-full" />
-            <!-- <InputText placeholder="field input" /> -->
-            <!-- <Dropdown
-              v-model="selectedFormInput"
-              :options="formInputOptions"
-              placeholder="Select field input"
-              class="h-full md:h-full"
-            /> -->
+            <InputText v-model="formInputName" :placeholder="$t('Cp_tiptap_toolbar_formOptions.field_name_placeholder')" class="h-full" />
+            <InputText v-model="formInputDescription" :placeholder="$t('Cp_tiptap_toolbar_formOptions.field_description_placeholder')" class="h-full" />
             <Dropdown
               v-model="selectedFormInput"
-              :options="formInputOptions "
-              placeholder="Select field input"
+              :options="formInputOptions"
+              :placeholder="$t('Cp_tiptap_toolbar_formOptions.select_field_input')"
               option-label="label"
             />
-
-            <Dropdown v-if="selectedFormInput === 'Form time'" v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
-            <Dropdown v-if="selectedFormInput === 'Form date'" v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_templateEditor_formOptions.select_format')" class="w-full md:w-full" />
-
-            <Button :disabled="!formInputName || !selectedFormInput" label="Add" class="min-w-[60px] " @click="addFormInputToTextbox" />
-            <Button outlined label="cancel" class="px-2 min-w-[80px] " @click="showAddFieldForm = false" />
+            <Dropdown v-if="selectedFormInput === 'Form time'" v-model="selectedTimeFormat" :options="timeFormats" option-label="label" :placeholder="$t('Cp_tiptap_toolbar_formOptions.select_format')" class="w-full md:w-full" />
+            <Dropdown v-if="selectedFormInput === 'Form date'" v-model="selectedDateFormat" :options="dateFormats" option-label="name" :placeholder="$t('Cp_tiptap_toolbar_formOptions.select_format')" class="w-full md:w-full" />
+            <Button :disabled="!formInputName || !selectedFormInput" :label="$t('Cp_tiptap_toolbar_formOptions.add')" class="min-w-[60px]" @click="addFormInputToTextbox" />
+            <Button outlined :label="$t('Cp_tiptap_toolbar_formOptions.cancel')" class="px-2 min-w-[80px]" @click="showAddFieldForm = false" />
           </div>
         </template>
 
         <!-- Column for Field Name -->
-        <Column field="name" header="Field Name" sortable style="width: 25%">
-          <!-- <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by field name" />
-          </template> -->
-        </Column>
+        <Column field="name" :header="$t('Cp_tiptap_toolbar_formOptions.field_name')" sortable style="width: 25%" />
 
         <!-- Column for Field Type -->
-        <Column field="fieldType" header="Field Type" sortable style="width: 25%">
-          <!-- <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by field type" />
-          </template> -->
-        </Column>
+        <Column field="fieldType" :header="$t('Cp_tiptap_toolbar_formOptions.field_type')" sortable style="width: 25%" />
 
         <!-- Column for Field Description -->
-        <Column field="fieldDescription" header="Field Description" sortable style="width: 25%">
-          <!-- <template #filter="{ filterModel }">
-            <InputText v-model="filterModel.value" type="text" placeholder="Search by field description" />
-          </template> -->
-        </Column>
+        <Column field="fieldDescription" :header="$t('Cp_tiptap_toolbar_formOptions.field_description')" sortable style="width: 25%" />
 
         <!-- Action Column -->
-        <Column header="Action" style="width: 25%">
+        <Column :header="$t('Cp_tiptap_toolbar_formOptions.action')" style="width: 25%">
           <template #body="{ data }">
             <Button
-              label="Insert"
+              :label="$t('Cp_tiptap_toolbar_formOptions.insert')"
               icon="pi pi-plus"
               class="p-button-sm p-button-success"
               @click="insertOnEditor(data)"
@@ -445,7 +394,7 @@
         </Column>
 
         <template #empty>
-          No fields found.
+          {{ $t('Cp_tiptap_toolbar_formOptions.no_fields_found') }}
         </template>
       </DataTable>
     </Dialog>

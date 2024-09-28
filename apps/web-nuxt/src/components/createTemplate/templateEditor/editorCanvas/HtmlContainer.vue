@@ -48,7 +48,7 @@ const editorWidth = ref('100%')
 const editorHeight = ref('100%')
 const editor = useEditor({
   // content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
-  content: templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
+  content: templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content || '<p>Advance multiline text box...</p>',
   // contentStates.value[selectedContentKey.value],
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   onFocus() {

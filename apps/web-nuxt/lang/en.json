@@ -76,7 +76,9 @@
     "view_file": "View file",
     "dataset_file": "Dataset file",
     "upload_your_template": "Upload your template",
-    "upload_your_data_source": "Upload your data source"
+    "upload_your_data_source": "Upload your data source",
+    "data_to_doc": "Data to doc",
+    "form_to_doc": "Form to doc"
   },
   "Cp_createTemplate_generalUpload": {
     "selected_file": "Selected file: ",
@@ -97,8 +99,63 @@
     "show_preview": "Show preview",
     "hide_preview": "Hide preview"
   },
+  "Cp_templateEditor_tiptap_topbar": {
+    "bold": "Bold",
+    "italic": "Italic",
+    "strike": "Strike",
+    "code": "Code",
+    "clear_marks": "Clear Marks",
+    "clear_nodes": "Clear Nodes",
+    "paragraph": "Paragraph",
+    "heading_1": "Heading 1",
+    "heading_2": "Heading 2",
+    "heading_3": "Heading 3",
+    "heading_4": "Heading 4",
+    "heading_5": "Heading 5",
+    "heading_6": "Heading 6",
+    "bullet_list": "Bullet List",
+    "ordered_list": "Ordered List",
+    "code_block": "Code Block",
+    "blockquote": "Blockquote",
+    "horizontal_rule": "Horizontal Rule",
+    "hard_break": "Hard Break",
+    "undo": "Undo",
+    "redo": "Redo",
+    "insert_table": "Insert Table",
+    "delete_table": "Delete Table",
+    "add_column_before": "Add Column Before",
+    "add_column_after": "Add Column After",
+    "delete_column": "Delete Column",
+    "add_row_before": "Add Row Before",
+    "add_row_after": "Add Row After",
+    "delete_row": "Delete Row",
+    "merge_cells": "Merge Cells",
+    "split_cell": "Split Cell",
+    "toggle_header_column": "Toggle Header Column",
+    "toggle_header_row": "Toggle Header Row",
+    "toggle_header_cell": "Toggle Header Cell",
+    "add_form_field": "Add form field"
+  },
+  "Cp_tiptap_toolbar_formOptions": {
+    "add_form_field_dialog_title": "Add form field into Text box",
+    "search_placeholder": "Search...",
+    "add_new": "Add new",
+    "field_name_placeholder": "Field name",
+    "field_description_placeholder": "Field description",
+    "select_field_input": "Select field input",
+    "select_format": "Select format",
+    "add": "Add",
+    "cancel": "Cancel",
+    "field_name": "Field Name",
+    "field_type": "Field Type",
+    "field_description": "Field Description",
+    "action": "Action",
+    "insert": "Insert",
+    "no_fields_found": "No fields found."
+  },
   "Cp_createTemplate_editorTemplateFields": {
     "add_new_field": "Add new field",
+    "add_text_box": "Add Text box",
     "fields_list": "Fields list",
     "select_a_data_field": "Select a data field",
     "add_text": "Add text",
@@ -163,7 +220,13 @@
     "disable_watermark": "Disable watermark",
     "tooltip_paid_users": "Available for paid users only",
     "tip": "Tip: Keep the watermark on the paid plans to get 20% extra credits per month",
-    "select_watermark_design": "Select watermark design"
+    "select_watermark_design": "Select watermark design",
+    "file_naming": "File naming",
+    "file_naming_description_one": "Set name string for all generated documents",
+    "file_naming_checkbox_label": "Enable custom file naming",
+    "file_naming_description_two": "use \"<\" character at last to add variables",
+    "save_template": "Save Template"
+
   },
   "Cp_templateEditor_checkboxOptions": {
     "checked_design": "Checked design",
@@ -269,7 +332,9 @@
     "search": "Search",
     "clear_filters": "Clear filters"
   },
-
+  "Cp_documents_library": {
+    "doc_library": "Documents library"
+  },
   "Cp_sidebar": {
     "home": "Home",
     "templates": "Templates",

@@ -14,7 +14,7 @@
               placeholder="Select a filter"
             />
             <h2 v-else class=" text-xl font-semibold text-surface-600 ">
-              Favourite Templates
+              {{ $t('Pg_home.favorite_templates') }}
             </h2>
           </div>
           <div class="flex items-center  ">

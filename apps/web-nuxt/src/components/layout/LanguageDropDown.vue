@@ -1,5 +1,5 @@
 <template>
-  <div v-tooltip.bottom="'Select Language'" class="flex items-center gap-4 ">
+  <div v-tooltip.bottom="'Select Language'" class="flex items-center gap-4 mt-2">
     <Button
       v-if="!selectedLanguage" type="button" icon="pi pi-globe" class="p-4 border-none" rounded outlined
       size="large" aria-haspopup="true" aria-controls="overlay_menu"
@@ -16,10 +16,12 @@
           : selectedLanguage === 'chinees'
             ? chineesFlag
             : engFlag
-        " style="width: 20px; height: 13.4px"
+        " style="width: 30px; height: 20.4px"
       />
     </Button>
-
+    <p class="capitalize">
+      {{ selectedLanguage }}
+    </p>
     <Menu ref="menu" :popup="true" :model="languageLists">
       <template #item="{ item, props }">
         <div class="flex p-2 cursor-pointer" @click="setLanguage(item.label)">

@@ -133,7 +133,8 @@
             <p class="text-surface-600 font-poppins text-lg font-normal">
               Language
             </p>
-            <Dropdown v-model="selectedLanguage" :options="language" option-label="name" placeholder="English" style="width: 100%; height: 44px;" class="flex justify-center mt-3 font-poppins" />
+            <LanguageDropDown />
+            <!-- <Dropdown v-model="selectedLanguage" :options="language" option-label="name" placeholder="English" style="width: 100%; height: 44px;" class="flex justify-center mt-3 font-poppins" /> -->
           </div>
 
           <div class="mt-5">
@@ -232,6 +233,7 @@
 <script setup>
 import { useRouter } from 'vue-router'
 import { useConfirm } from 'primevue/useconfirm'
+import LanguageDropDown from '~/components/layout/LanguageDropDown.vue'
 
 const confirm = useConfirm()
 const router = useRouter()
@@ -270,7 +272,7 @@ const cities = ref([
 const language = ref([
   { name: 'English', code: 'EN' },
   { name: 'French', code: 'F' },
-  { name: 'Chinese', code: 'C' },
+  // { name: 'Chinese', code: 'C' },
 ])
 
 function uploadImage() {

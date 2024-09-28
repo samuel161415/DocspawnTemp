@@ -23,7 +23,7 @@
 
       <div class="border surface-border rounded-lg flex-auto flex p-6 ml-4">
         <p class="font-poppins text-surface-600 text-lg font-medium">
-          {{ currentData !== '' ? currentData : templateGeneralInformation.useCase }}
+          {{ (currentData !== '' ? currentData : templateGeneralInformation.useCase) === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
         </p>
       </div>
     </div>

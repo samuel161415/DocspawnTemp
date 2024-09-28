@@ -98,8 +98,7 @@
           <font-awesome-icon icon="fa-brands fa-html5" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
 
           <p class="font-poppins text-surface-600 text-lg">
-            <!-- {{ $t('Cp_createTemplate_editorTemplateFields.data_fields') }} -->
-            Add Text box
+            {{ $t('Cp_createTemplate_editorTemplateFields.add_text_box') }}
           </p>
         </div>
         <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="px-5 h-[62px] flex items-center gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50" @click="showDataFields ? showDataFields = false : showDataFields = true">
@@ -798,7 +797,7 @@ function addHtmlContainer() {
         zIndex: 10, // Ensure it's above the canvas
       },
       pageNo: templateEditorStore?.activePageForCanvas,
-      content: '<p>I\'m running Tiptap with Vue.js. Superbb 🎉</p>',
+      content: '<p>Advance multiline text box...</p>',
       behaviourMode: 'edit',
     }
     templateEditorStore.editorContainers.push(newEditor)

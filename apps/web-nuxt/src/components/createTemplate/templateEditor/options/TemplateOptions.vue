@@ -42,31 +42,31 @@
     </div>
     <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showFileNamingoptions = !showFileNamingoptions">
       <p class="font-poppins text-md">
-        File naming
+        {{ $t('Cp_templateEditor_templateOptions.file_naming') }}
       </p>
       <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showFileNamingoptions }" />
     </div>
     <div v-if="showFileNamingoptions" class="mt-4">
       <p class="font-poppins text-sm text-surface-400">
-        Set name string for all generated documents
+        {{ $t('Cp_templateEditor_templateOptions.file_naming_description_one') }}
       </p>
       <div class="flex gap-2 my-6">
         <Checkbox v-model="enableCustomFileNaming" :binary="true" />
         <p class="font-poppins text-surface-500">
-          Enable custom file naming
+          {{ $t('Cp_templateEditor_templateOptions.file_naming_checkbox_label') }}
         </p>
         <div v-tooltip.top="tooltipText">
           <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
         </div>
       </div>
       <p class="font-poppins italic text-surface-400 text-sm mb-4">
-        use "<" character at last to add variables
+        {{ $t('Cp_templateEditor_templateOptions.file_naming_description_two') }}
       </p>
 
       <FileNamingOptions v-if="enableCustomFileNaming" />
     </div>
     <Button
-      label="Save template" class="mt-8 w-full md:w-full" @click="() => {
+      :label="$t('Cp_templateEditor_templateOptions.save_template')" class="mt-8 w-full md:w-full" @click="() => {
         if (templateName){
 
           templateEditorStore.editor_fields_data = {
