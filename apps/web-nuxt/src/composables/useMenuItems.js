@@ -27,6 +27,12 @@ export function useMenuItems() {
       isHovered: false,
     },
     {
+      title: 'Image library',
+      icon: 'pi pi-images',
+      route: '/image-library',
+      isHovered: false,
+    },
+    {
       title: 'Settings',
       icon: 'pi pi-cog',
       route: '/settings',
