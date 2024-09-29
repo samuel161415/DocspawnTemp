@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 3001",
+    "dev": "nuxt dev -p 3000",
     "generate": "nuxt generate",
     "preview": "nuxt preview -p 3001",
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@docspawn/image-library-modal": "workspace:^",
     "@docspawn/shared-doc-generation-modals": "workspace:^",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/i18n": "^8.3.1",

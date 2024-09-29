@@ -8,6 +8,7 @@ module.exports = {
     './src/pages/**/*.vue',
     './src/plugins/**/*.{js,ts}',
     './src/app.vue',
+    '../../packages/**/*.{js,vue,ts}', // Add this line to include your package
   ],
   theme: {
     extend: {
@@ -20,7 +21,7 @@ module.exports = {
         'secondaryPink': '#EA9BB6',
         'success': '#43AF79',
         'error': '#C8432F',
-        'secondary':'#F9FAFB',
+        'secondary': '#F9FAFB',
         'warning': '#FCB603',
         'primary-50': 'rgb(var(--primary-50))',
         'primary-100': 'rgb(var(--primary-100))',

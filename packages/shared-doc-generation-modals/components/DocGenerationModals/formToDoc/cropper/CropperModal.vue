@@ -1,8 +1,18 @@
 <template>
   <div>
+    <ImageLibraryModal
+      @set-image="url => {
+        imageUrl = url;visible = true; originalImage = url
+        emit('handleOriginalImage', url)
+      }"
+    />
+    <p class="my-2">
+      Or
+    </p>
+
     <input type="file" @change="onFileChange" />
     <Dialog v-model:visible="visible" modal :style="{ width: '50vw' }">
-      <div v-if="imageUrl">
+      <div v-if="imageUrl && originalImage">
         <Cropper
           ref="cropper"
           :src="imageUrl"
@@ -19,6 +29,7 @@
 import { ref, watch } from 'vue'
 import Cropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
+import { ImageLibraryModal } from '@docspawn/image-library-modal'
 
 import uploadFileToBackend from '../../../../services/uploadFileToBackend'
 

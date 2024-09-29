@@ -113,6 +113,10 @@
               {{ $t('Cp_templateEditor_options.upload_image') }}
             </h1>
             <input class="border border-gray-300 p-1 mt-2 w-full text-sm" type="file" @change="getFile" />
+            <p class="my-2">
+              Or
+            </p>
+            <ImageLibraryModal @set-image="url => { fileUrl = url;setFileToCanvasObject(url) }" />
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
@@ -189,6 +193,7 @@
 </template>
 
 <script setup>
+import { ImageLibraryModal } from '@docspawn/image-library-modal'
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TextFormatting from './TextFormatting.vue'
@@ -256,6 +261,9 @@ async function getFile(e) {
   const file = e.target.files[0]
   const url = await uploadFileToBackend(file)
   fileUrl.value = url
+  setFileToCanvasObject(url)
+}
+function setFileToCanvasObject(url) {
   const canvas = canvasService.getCanvas()
   const activeObj = canvas.getActiveObject()
   if (canvas) {
