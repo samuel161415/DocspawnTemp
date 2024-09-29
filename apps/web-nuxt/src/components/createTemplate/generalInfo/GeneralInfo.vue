@@ -48,8 +48,8 @@
       </div>
     </div>
     <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6 mb-8'" class="mt-8">
-      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" @upload="handleTemplateUpload" />
-      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" @upload="handleDatasetUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" :is-file-uploaded="templateFile ? true : false" @upload="handleTemplateUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" :is-file-uploaded="datasetFile ? true : false" @upload="handleDatasetUpload" />
     </div>
   </div>
 </template>
@@ -92,6 +92,8 @@ onMounted(() => {
     datasetFile.value = ''
   }
 })
+watch(datasetFile, val => console.log('dataset file', val))
+watch(templateFile, val => console.log('template filke', val))
 function setIsHovered(label, hovered) {
   currentData.value = hovered ? label : ''
 }

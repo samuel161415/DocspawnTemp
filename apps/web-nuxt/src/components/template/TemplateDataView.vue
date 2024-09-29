@@ -52,7 +52,7 @@
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event, index)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
@@ -63,8 +63,18 @@
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
+            <div v-if="isLoading[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+              <p>Uploading file</p>
+              <ProgressSpinner
+                :style="{ width: '50px', height: '50px' }"
+                stroke-width="4"
+                fill="#fff"
+                animation-duration=".5s"
+                class="progress-spinner-circle"
+              />
+            </div>
 
-            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
+            <div v-else-if="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
               <div class="min-w-[6rem] relative cursor-pointer " @click="handleTemplatePreview(item)">
                 <div class="h-max w-full flex justify-center py-1 ">
                   <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
@@ -89,7 +99,7 @@
 
                   <div class="flex flex-row-reverse md:flex-row">
                     <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="handleFillForm(item)" />
-                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e); }" />
+                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e, index); }" />
                   </div>
                 </div>
               </div>
@@ -106,7 +116,7 @@
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event, index)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #43AF79; --fa-secondary-color: #43AF79; width: 50px; height: 40px;" />
@@ -118,8 +128,17 @@
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
-
-            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+            <div v-if="isLoading[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
+              <p>Uploading file</p>
+              <ProgressSpinner
+                :style="{ width: '50px', height: '50px' }"
+                stroke-width="4"
+                fill="#fff"
+                animation-duration=".5s"
+                class="progress-spinner-circle"
+              />
+            </div>
+            <div v-else-if="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex items-center p-2 pt-4" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-between'">
                 <div class="">
                   <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
@@ -154,7 +173,7 @@
                     outlined
                     severity="success" :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer  text-[16px]" @click="(e) => {
                       templateSelectedForUploadingFile = item;
-                      uploadFile(e);
+                      uploadFile(e, index);
                     }"
                   />
                 </div>
@@ -413,6 +432,7 @@ const visible = ref(false)
 const visibleDataToDoc = ref(false)
 const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
+const isLoading = ref(Array.from({ length: props.templates.length }).fill(false))
 
 const filterOption = ref(filterOptions.value[0])
 watch(filterOption, (val) => {
@@ -543,7 +563,7 @@ function handleDragOver(item, index) {
 function showError() {
   toast.add({ severity: 'error', summary: 'Invalid file', detail: 'Please upload a .csv, .xls or .xlsx file', life: 10000 })
 }
-function handleFileDrop(template, event) {
+function handleFileDrop(template, event, index) {
   const files = event.dataTransfer.files
 
   if (!files[0]) {
@@ -556,7 +576,7 @@ function handleFileDrop(template, event) {
 
     if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
       fileTypeCheck.value = true
-      handleFileUpload(files[0], template)
+      handleFileUpload(files[0], template, index)
     }
     else {
       fileTypeCheck.value = false
@@ -565,7 +585,11 @@ function handleFileDrop(template, event) {
     isDragging.value.fill(false)
   }
 }
-function handleFileUpload(file, template) {
+function handleFileUpload(file, template, index) {
+  /** */
+  isLoading.value.fill(false)
+  isLoading.value[index] = true
+  /** */
   const keysToCheck = template?.dataset_data?.selectedKeys
 
   if (!file) {
@@ -625,15 +649,18 @@ function compareAndNotify(headers, keysToCheck, template) {
 
   if (isAllKeysPresent) {
     // You can use a toast or some UI element to notify the user
+    isLoading.value.fill(false)
+
     toast.add({ severity: 'success', summary: 'Congrats', detail: 'All keys present', life: 3000 })
     handleDataToDocGenerationPreview(template)
   }
   else {
+    isLoading.value.fill(false)
     toast.add({ severity: 'error', summary: 'Invalid file', detail: 'This file doesn\'t match the template data', life: 10000 })
   }
 }
 
-function uploadFile() {
+function uploadFile(e, index) {
   const template = templateSelectedForUploadingFile.value
   templateSelectedForUploadingFile.value = null
   const fileInput = document.createElement('input')
@@ -644,7 +671,7 @@ function uploadFile() {
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0]
     file
-    && handleFileUpload(file, template)
+    && handleFileUpload(file, template, index)
     // const reader = new FileReader()
 
     // reader.onload = () => {

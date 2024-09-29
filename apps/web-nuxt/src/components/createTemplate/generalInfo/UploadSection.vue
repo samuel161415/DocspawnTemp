@@ -12,7 +12,17 @@
       @dragenter.prevent=" handleDragEnter"
       @dragleave.prevent=" handleDragLeave"
     >
-      <div v-if="selectedFile && !dragging" class="pointer-parent  index-10 h-full flex flex-col items-center justify-center gap-4 ">
+      <div v-if="isLoading" class="pointer-parent  index-10 h-full flex flex-col items-center justify-center gap-4 ">
+        <p>Uploading file</p>
+        <ProgressSpinner
+          :style="{ width: '50px', height: '50px' }"
+          stroke-width="4"
+          fill="#fff"
+          animation-duration=".5s"
+          class="progress-spinner-circle"
+        />
+      </div>
+      <div v-else-if="selectedFile && !dragging" class="pointer-parent  index-10 h-full flex flex-col items-center justify-center gap-4 ">
         <p class="text-surface-500 font-poppins text-lg">
           {{ $t('Cp_createTemplate_generalUpload.selected_file') }}:  {{ selectedFile.name }}
         </p>
@@ -52,6 +62,17 @@
         {{ $t('Cp_createTemplate_generalUpload.reselect_file') }}
       </button>
     </div>
+    <!-- <div v-if="isLoading">
+      <div class="card flex justify-center">
+        <ProgressSpinner
+          :style="{ width: '50px', height: '50px' }"
+          stroke-width="4"
+          fill="#fff"
+          animation-duration=".5s"
+          class="progress-spinner-circle"
+        />
+      </div>
+    </div> -->
     <Toast />
   </div>
 </template>
@@ -62,12 +83,22 @@ import { useToast } from 'primevue/usetoast'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { fad } from '@fortawesome/pro-duotone-svg-icons'
 
+// import ProgressSpinner from 'primevue/progressspinner'
+
 const props = defineProps({
   title: String,
   isBackground: Boolean,
+  isFileUploaded: Boolean,
 })
 
 const emit = defineEmits(['upload'])
+
+const isLoading = ref(false)
+
+watch(() => props.isFileUploaded, (val) => {
+  if (val)
+    isLoading.value = false
+})
 
 const acceptedFileTypes = computed(() => {
   return props.isBackground ? 'application/pdf' : '.xls,.xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -85,11 +116,13 @@ function triggerFileInput() {
 
 function handleFileSelect(event) {
   const file = event.target.files[0]
+  isLoading.value = true
   validateAndEmitFile(file)
 }
 
 function handleDrop(event) {
   dragging.value = false
+  isLoading.value = true
   const file = event.dataTransfer.files[0]
   validateAndEmitFile(file)
 }
