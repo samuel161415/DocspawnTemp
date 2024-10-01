@@ -52,7 +52,9 @@ class CanvasService {
 
           const canvasDataToLoad = {
             ...docGenerationData?.templateToGenerateDocs?.canvas_data,
-            objects: updatedObjects,
+            objects: updatedObjects.filter(obj =>
+              obj?.fieldType !== 'checkboxIdNoIcon',
+            ),
             backgroundImage,
           }
 
