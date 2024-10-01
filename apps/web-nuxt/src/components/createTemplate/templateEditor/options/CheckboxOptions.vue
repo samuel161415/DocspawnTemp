@@ -145,10 +145,12 @@ async function fetchCheckboxOptions() {
     const data = await response.json()
 
     if (data?.length > 0) {
-      console.log('checkboxOptions at options', data)
       checkedOptions.value = data?.filter(f => f?.type === 'checked')
       const def = checkedOptions.value?.filter(c => c?.default)[0]
-      if (def)
+      if (templateEditorStore?.selectedAddedField?.designs?.yes)
+        selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
+
+      else if (def)
         selectedChecked.value = def
       else
       // selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
@@ -156,7 +158,10 @@ async function fetchCheckboxOptions() {
 
       uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
       const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
-      if (def2)
+
+      if (templateEditorStore?.selectedAddedField?.designs?.no)
+        selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
+      else if (def2)
         selectedUnchecked.value = def2
       else
       // selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
@@ -169,6 +174,12 @@ async function fetchCheckboxOptions() {
     console.error('Error fetching templates:', error)
   }
 }
+watch(() => templateEditorStore.selectedAddedField, (val) => {
+  if (val?.fieldType === 'Form checkbox group') {
+    selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
+    selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
+  }
+})
 
 onMounted(() => {
   noOfCheckboxes.value = templateEditorStore.selectedAddedField?.checkboxes?.length >= 1 ? templateEditorStore.selectedAddedField?.checkboxes.length : 1
