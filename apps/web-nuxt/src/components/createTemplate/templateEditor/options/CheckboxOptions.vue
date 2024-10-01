@@ -142,7 +142,8 @@ async function fetchCheckboxOptions() {
     )
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
-    const data = await response.json()
+    const rawData = await response.json()
+    const data = rawData?.filter(f => f?.active === 'yes')
 
     if (data?.length > 0) {
       checkedOptions.value = data?.filter(f => f?.type === 'checked')

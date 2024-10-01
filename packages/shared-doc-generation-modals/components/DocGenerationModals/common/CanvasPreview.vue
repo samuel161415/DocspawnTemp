@@ -182,7 +182,7 @@ function renderOriginalData() {
             else { correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state }
 
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-            console.log('corresponsing data', correspondingData)
+            // console.log('corresponsing data', correspondingData)
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
