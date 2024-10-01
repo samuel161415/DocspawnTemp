@@ -194,10 +194,14 @@ function renderOriginalData() {
               const originalHeight = obj.height * obj.scaleY
               const originalWidth = obj.width * obj.scaleX
               const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-              obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, () => {
+              obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, (myImg) => {
                 //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
                 //     ?
-                obj.scaleToWidth(originalWidth)
+                // obj.scaleToWidth(originalWidth )
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
                 // : obj.scaleToHeight(originalHeight)
                 canvas.renderAll()
               })

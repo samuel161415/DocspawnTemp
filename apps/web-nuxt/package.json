@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev -p 3000",
+    "dev": "nuxt dev -p 3001",
     "generate": "nuxt generate",
     "preview": "nuxt preview -p 3001",
     "postinstall": "nuxt prepare"

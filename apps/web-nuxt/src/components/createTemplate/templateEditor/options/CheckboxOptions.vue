@@ -11,16 +11,16 @@
       </p>
       <Dropdown
         v-model="selectedChecked"
-        disabled
+
         :options="checkedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-14rem"
+        class="w-full md:w-12rem"
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
           <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8 " />
           </div>
         </template>
 
@@ -43,13 +43,12 @@
         :options="uncheckedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-14rem"
-        disabled
+        class="w-full md:w-12rem"
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
           <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8" />
           </div>
         </template>
 
@@ -147,21 +146,21 @@ async function fetchCheckboxOptions() {
 
     if (data?.length > 0) {
       console.log('checkboxOptions at options', data)
-      // checkedOptions.value = data?.filter(f => f?.type === 'checked')
-      // const def = checkedOptions.value?.filter(c => c?.default)[0]
-      // if (def)
-      //   selectedChecked.value = def
-      // else
-      selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
-      // checkedOptions.value[0]
+      checkedOptions.value = data?.filter(f => f?.type === 'checked')
+      const def = checkedOptions.value?.filter(c => c?.default)[0]
+      if (def)
+        selectedChecked.value = def
+      else
+      // selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
+        selectedChecked.value = checkedOptions.value[0]
 
-      // uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
-      // const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
-      // if (def2)
-      //   selectedUnchecked.value = def2
-      // else
-      selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
-      //  uncheckedOptions.value[0]
+      uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
+      const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
+      if (def2)
+        selectedUnchecked.value = def2
+      else
+      // selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
+        selectedUnchecked.value = uncheckedOptions.value[0]
     }
 
     // console.log('response of fetching templates', data)
@@ -264,7 +263,6 @@ function addCheckboxToGroup() {
     //   defaultUncheckedDesign = uncheckedOptions.value?.filter(f => f?.type === 'unchecked')[0]?.design
     // if (!defaultUncheckedDesign)
     //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-    console.log('templateEditorStore?.selectedAddedField?.designs?.no', templateEditorStore?.selectedAddedField?.designs?.no)
     fabric.Image.fromURL(
       // defaultUncheckedDesign
       templateEditorStore?.selectedAddedField?.designs?.no
@@ -278,10 +276,10 @@ function addCheckboxToGroup() {
 
           left: activeObject?.left + (activeObject?.width * activeObject?.scaleX),
           top: activeObject?.top,
-          scaleX: activeObject?.scaleX,
-          scaleY: activeObject?.scaleY,
-          width: activeObject?.width,
-          height: activeObject?.height,
+          scaleX: (activeObject.width * activeObject.scaleX) / (myImg.width), // ?.scaleX,
+          scaleY: (activeObject.height * activeObject.scaleY) / (myImg.height), // activeObject?.scaleY,
+          // width: activeObject?.width,
+          // height: activeObject?.height,
           id: activeObject?.id,
           hash: activeObject?.hash,
           checkboxIdentifierHash: uniqueHashForEle,
@@ -373,7 +371,7 @@ function addCheckboxToGroup() {
           if (myImg.tooltip) {
             // canvas.remove(myImg.tooltip)
             // myImg.tooltip = null
-            console.log('mouseout myImg tooltip', myImg.tooltip)
+
             myImg.tooltip.set({ visible: false, opacity: 0 })
             canvas.renderAll()
           }
@@ -549,6 +547,61 @@ function deleteCheckboxById(id) {
     }
   }
 }
+watch(selectedChecked, (val) => {
+  const canvas = canvasService.getCanvas()
+  // commenting this because we will set check to either yes or no, if while insertion we are using yes, then yes else no
+
+  // const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && f?.fieldType === 'Form checkbox group')
+  // allCheckBoxesObjects.forEach((obj) => {
+  //   if (val?.design) {
+  //     const scaleXToBe = (obj.width * obj.scaleX)
+  //     const scaleYToBe = (obj.height * obj.scaleY)
+  //     obj.setSrc(val?.design, (myImg) => {
+  //       obj.set({
+  //         scaleX: scaleXToBe / (myImg.width),
+  //         scaleY: scaleYToBe / (myImg.height),
+  //       })
+
+  //       canvas.renderAll()
+  //     })
+  //   }
+  // })
+  templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      const updated = { ...field, designs: { ...field?.designs, yes: val?.design } }
+      templateEditorStore.selectedAddedField = updated
+      return updated
+    }
+    else { return field }
+  })
+})
+watch(selectedUnchecked, (val) => {
+  const canvas = canvasService.getCanvas()
+  // commenting this because we will set check to either yes or no, if while insertion we are using yes, then yes else no
+  const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && f?.fieldType === 'Form checkbox group')
+  allCheckBoxesObjects.forEach((obj) => {
+    if (val?.design) {
+      const scaleXToBe = (obj.width * obj.scaleX)
+      const scaleYToBe = (obj.height * obj.scaleY)
+      obj.setSrc(val?.design, (myImg) => {
+        obj.set({
+          scaleX: scaleXToBe / (myImg.width),
+          scaleY: scaleYToBe / (myImg.height),
+        })
+
+        canvas.renderAll()
+      })
+    }
+  })
+  templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      const updated = { ...field, designs: { ...field?.designs, no: val?.design } }
+      templateEditorStore.selectedAddedField = updated
+      return updated
+    }
+    else { return field }
+  })
+})
 </script>
 
   <style scoped>
