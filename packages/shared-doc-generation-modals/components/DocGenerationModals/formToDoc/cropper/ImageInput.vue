@@ -4,6 +4,7 @@
       :is-edit="isEdit"
       :original-image="originalImage"
       :aspect-ratio="props?.aspectRatio"
+      :is-checkbox="props?.isCheckbox"
       @toggle-edit="isEdit = !isEdit"
       @handle-cropped-url="(url) => croppedImageUrl = url"
       @handle-original-image="(val) => originalImage = val"
@@ -19,7 +20,7 @@
 <script setup>
 import ImageCropper from './CropperModal.vue'
 
-const props = defineProps(['aspectRatio'])
+const props = defineProps(['aspectRatio', 'isCheckbox'])
 const emit = defineEmits(['handleSaveCroppedImage'])
 const isEdit = ref(false)
 const croppedImageUrl = ref(null)

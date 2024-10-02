@@ -146,11 +146,13 @@
             Accepted image formats: transparent PNG files, 64x64px
           </p>
           <!-- <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/png" :max-file-size="1000000" @upload="onUpload" /> -->
-          <input
+          <!-- <input
             class="border border-gray-300 p-1 mt-2 w-full text-sm"
             type="file"
             @change="getFile"
-          />
+          /> -->
+          <ImageInput :aspect-ratio="1" :is-checkbox="true" @handle-save-cropped-image="(url) => fileUrl = url" />
+
           <img
             v-if="fileUrl"
             id="output"
@@ -218,6 +220,7 @@ import { fal } from '@fortawesome/pro-light-svg-icons'
 
 // import ToggleButton from 'primevue/togglebutton'
 // import InputSwitch @click="chnageActiveStatus" from "primevue/inputswitch";
+import { ImageInput } from '@docspawn/shared-doc-generation-modals'
 import ToggleSwitch from './ToggleSwitch.vue'
 
 import uploadFileToBackend from '~/services/uploadFileToBackend'
