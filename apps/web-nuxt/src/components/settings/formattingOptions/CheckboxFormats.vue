@@ -107,10 +107,12 @@
             Add checkboxes options
           </p>
         </template>
-        <p class="text-surface-600 font-poppins text-lg font-normal">
+        <p class="text-surface-600 font-poppins text-lg font-semibold">
           Type:
         </p>
-
+        <p v-if="!selection" class="text-red-500">
+          required
+        </p>
         <div class="flex space-x-24 mt-4">
           <div class="flex items-center">
             <RadioButton
@@ -139,12 +141,12 @@
           </p>
         </div>
         <div class="mt-7">
-          <p class="text-surface-600 font-poppins text-lg font-normal mb-2">
+          <p class="text-surface-600 font-poppins text-lg font-semibold mb-2">
             Select option image to upload
           </p>
-          <p class="text-surface-600 font-poppins text-lg font-normal mb-6">
+          <!-- <p class="text-surface-600 font-poppins text-lg font-normal mb-6">
             Accepted image formats: transparent PNG files, 64x64px
-          </p>
+          </p> -->
           <!-- <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/png" :max-file-size="1000000" @upload="onUpload" /> -->
           <!-- <input
             class="border border-gray-300 p-1 mt-2 w-full text-sm"

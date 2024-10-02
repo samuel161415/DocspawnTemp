@@ -13,12 +13,12 @@
     <input type="file" @change="onFileChange" />
     <Dialog v-model:visible="visible" modal :style="{ width: props?.isCheckbox ? '30vw' : '50vw' }">
       <div v-if="imageUrl && originalImage">
-        <div v-if="props?.isCheckbox" class=" flex w-full justify-center  h-[124px]">
+        <div v-if="props?.isCheckbox" class=" flex w-full justify-center  h-[330px]">
           <Cropper
             ref="cropper"
             :src="imageUrl"
             :aspect-ratio="props?.aspectRatio ? props.aspectRatio : 1"
-            style="height: 128px; width: 128px;"
+            style="height: 300px; width: 300px;"
           />
         </div>
         <div v-else>
