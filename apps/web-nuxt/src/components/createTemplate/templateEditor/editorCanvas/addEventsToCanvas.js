@@ -394,7 +394,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           )
         }
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group' || templateEditorStore.fieldToAdd.type === 'Dataset checkbox') {
         if (currentHoveredEle && currentHoveredEle?._element) {
           currentHoveredEle.set({
             left: event.absolutePointer.x - (40 / currentHoveredEle.width),
@@ -821,7 +821,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           },
         )
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group' || templateEditorStore.fieldToAdd.type === 'Dataset checkbox') {
         /** ***********default unchecked */
         // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
         // console.log('all checkboxes', allCheckboxes)
@@ -979,7 +979,9 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             /** ********creating checkbox info icon */
             // https://placehold.co/400/000000/ffffff?font=roboto&text=1
-            fabric.Image.fromURL(
+            console.log('templateEditorStore.fieldToAdd.type', templateEditorStore.fieldToAdd.type)
+            if (ftoadd.type !== 'Dataset checkbox') {
+              fabric.Image.fromURL(
                 `https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=1`
                 , (icon) => {
                   icon.set({
@@ -1000,7 +1002,8 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                   canvas.add(icon)
                   canvas.renderAll()
                 },
-            )
+              )
+            }
 
             /** */
 

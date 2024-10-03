@@ -63,49 +63,51 @@
       <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
     </div>
   </div>
-  <div class="flex flex-col mt-4">
-    <p class="font-poppins text-md text-surface-600 mb-2">
-      {{ $t('Cp_templateEditor_checkboxOptions.checkbox_description') }}
-    </p>
-    <Textarea v-model="fieldDescription" rows="3" />
-  </div>
-  <div class="mt-4">
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
-      </label>
-      <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
-    </div>
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
-      </label>
-      <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
-    </div>
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600 mt-8">
-        {{ $t('Cp_templateEditor_checkboxOptions.no_of_checkboxes') }}: <span class="text-primary-600">{{ noOfCheckboxes }}</span>
-      </label>
-    </div>
-  </div>
-  <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
-    {{ $t('Cp_templateEditor_checkboxOptions.select_all_checkboxes') }}
-  </Button>
-  <Button class="w-full mt-2" @click="addCheckboxToGroup">
-    {{ $t('Cp_templateEditor_checkboxOptions.add_checkbox_to_group') }}
-  </Button>
-  <div class="mt-4">
-    <div
-      v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
-    >
-      <p class="font-poppins text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.checkbox_text', { index: index + 1 }) }}
+  <div v-if="!props?.isCheckbox">
+    <div class="flex flex-col mt-4">
+      <p class="font-poppins text-md text-surface-600 mb-2">
+        {{ $t('Cp_templateEditor_checkboxOptions.checkbox_description') }}
       </p>
-      <div class="w-full flex mt-1 border rounded-lg">
-        <InputText class="flex-1 rounded rounded-r-none border-0" :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
-        <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
-          <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
-        </Button>
+      <Textarea v-model="fieldDescription" rows="3" />
+    </div>
+    <div class="mt-4">
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
+        </label>
+        <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
+      </div>
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
+        </label>
+        <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
+      </div>
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600 mt-8">
+          {{ $t('Cp_templateEditor_checkboxOptions.no_of_checkboxes') }}: <span class="text-primary-600">{{ noOfCheckboxes }}</span>
+        </label>
+      </div>
+    </div>
+    <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
+      {{ $t('Cp_templateEditor_checkboxOptions.select_all_checkboxes') }}
+    </Button>
+    <Button class="w-full mt-2" @click="addCheckboxToGroup">
+      {{ $t('Cp_templateEditor_checkboxOptions.add_checkbox_to_group') }}
+    </Button>
+    <div class="mt-4">
+      <div
+        v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
+      >
+        <p class="font-poppins text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.checkbox_text', { index: index + 1 }) }}
+        </p>
+        <div class="w-full flex mt-1 border rounded-lg">
+          <InputText class="flex-1 rounded rounded-r-none border-0" :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
+          <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
+            <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
+          </Button>
+        </div>
       </div>
     </div>
   </div>
@@ -117,6 +119,8 @@ import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 
 import { useAuth } from '@/composables/useAuth'
+
+const props = defineProps(['isCheckbox'])
 
 const noOfCheckboxes = ref(1)
 const minOptions = ref(0)
@@ -590,7 +594,7 @@ watch(selectedChecked, (val) => {
 watch(selectedUnchecked, (val) => {
   const canvas = canvasService.getCanvas()
   // commenting this because we will set check to either yes or no, if while insertion we are using yes, then yes else no
-  const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && f?.fieldType === 'Form checkbox group')
+  const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && (f?.fieldType === 'Form checkbox group' || (props?.isCheckbox && f?.fieldType === 'Dataset checkbox')))
   allCheckBoxesObjects.forEach((obj) => {
     if (val?.design) {
       const scaleXToBe = (obj.width * obj.scaleX)

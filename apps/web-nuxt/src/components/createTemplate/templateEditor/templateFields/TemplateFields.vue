@@ -180,6 +180,41 @@
             </Dropdown>
           </div>
           <div
+            class="px-5 h-[62px] flex flex-col justify-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
+            :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions4, 'border-surface-100 bg-surface-50': !showDatasetOptions4 }"
+            @click="showDatasetOptions4 ? showDatasetOptions4 = false : showDatasetOptions4 = true;showDatasetOptions3 = false;showDatasetOptions2 = false;showDatasetOptions = false;"
+          >
+            <div class="flex gap-2 items-center">
+              <font-awesome-icon icon="fa-light fa-square-check" size="lg" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee299; --fa-secondary-opacity: 0.6;" />
+              <p class="font-poppins text-surface-600 text-lg">
+                <!-- {{ $t('Cp_createTemplate_editorTemplateFields.text') }} -->
+                Checkbox
+              </p>
+              <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300" size="lg" :class="{ 'rotate-90': showDatasetOptions3 }" />
+            </div>
+          </div>
+          <div v-if="showDatasetOptions4" class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50 border-surface-100 bg-surface-50">
+            <Dropdown v-model="selectedDatasetOption4" :options="templateEditorStore.datasetData.selectedKeys" filter placeholder="Select data field" class="w-full md:w-full">
+              <template #value="slotProps">
+                <div v-if="slotProps.value" class="flex align-items-center">
+                  <p class="font-poppins">
+                    {{ slotProps.value }}
+                  </p>
+                </div>
+                <span v-else>
+                  <p class="font-poppins">{{ slotProps.placeholder }}</p>
+                </span>
+              </template>
+              <template #option="slotProps">
+                <div class="flex align-items-center">
+                  <p class="font-poppins">
+                    {{ slotProps.option }}
+                  </p>
+                </div>
+              </template>
+            </Dropdown>
+          </div>
+          <div
             class="px-5 h-[62px] flex items-center pl-14 gap-2 rounded-lg shadow-sm w-full border font-poppins text-surface-500 cursor-pointer transition-transform duration-300 hover:bg-primary-50"
             :class="{ 'border-primaryBlue bg-primary-50': showDatasetOptions2, 'border-surface-100 bg-surface-50': !showDatasetOptions2 }"
             @click="showDatasetOptions2 ? showDatasetOptions2 = false : showDatasetOptions2 = true;showDatasetOptions = false;showDatasetOptions3 = false;"
@@ -438,10 +473,12 @@ const showDataFields = ref(false)
 const showDatasetOptions = ref(false)
 const showDatasetOptions2 = ref(false)
 const showDatasetOptions3 = ref(false)
+const showDatasetOptions4 = ref(false)
 const showStaticOption1 = ref(false)
 const selectedDatasetOption = ref('')
 const selectedDatasetOption2 = ref('')
 const selectedDatasetOption3 = ref('')
+const selectedDatasetOption4 = ref('')
 const staticOption1Val = ref()
 onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id)
@@ -458,6 +495,10 @@ watch(selectedDatasetOption2, (val) => {
 watch(selectedDatasetOption3, (val) => {
   if (val)
     selectField('Dataset date', val)
+})
+watch(selectedDatasetOption4, (val) => {
+  if (val)
+    selectField('Dataset checkbox', val)
 })
 watch(staticOption1Val, (val) => {
   if (val)
@@ -1033,6 +1074,8 @@ watch(() => templateEditorStore.fieldToAdd, (val) => {
     selectedDatasetOption2.value = ''
     showDatasetOptions3.value = false
     selectedDatasetOption3.value = ''
+    showDatasetOptions4.value = false
+    selectedDatasetOption4.value = ''
     showStaticOption1.value = false
     staticOption1Val.value = ''
     formFieldForNameInput.value = ''
@@ -1055,6 +1098,26 @@ async function selectField(field, option) {
     }
     else if (field === 'Dataset date') {
       templateEditorStore.fieldToAdd = { name: option || 'Select a date field', type: field, id: option || 'Lorem ipsum', dateFormat: 'MM/DD/YYYY' }
+    }
+    else if (field === 'Dataset checkbox') {
+      const allCheckboxes = await fetchCheckboxOptions()
+      let yesDesign
+      = allCheckboxes?.filter(f => f?.type === 'checked' && f?.default)[0]?.design
+      if (!yesDesign)
+        yesDesign = allCheckboxes?.filter(f => f?.type === 'checked')[0]?.design
+      if (!yesDesign)
+        yesDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png'
+      let noDesign
+      = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
+      if (!noDesign)
+        noDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
+      if (!noDesign)
+        noDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
+
+      templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum', designs: {
+        yes: yesDesign,
+        no: noDesign,
+      } }
     }
     else if (field === 'Static text') {
       templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' }

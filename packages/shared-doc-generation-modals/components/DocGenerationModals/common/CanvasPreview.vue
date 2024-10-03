@@ -157,6 +157,8 @@ watch(currentPreviewNo, () => {
 
 function renderOriginalData() {
   const canvas = canvasService.getCanvas()
+  console.log('rendering original data')
+  console.log('props?.useCase', props?.useCase)
 
   if (props?.useCase === 'formToDoc') {
     if (selectedData.value?.length > 0) {
@@ -282,6 +284,7 @@ function renderOriginalData() {
     }
   }
   else if (props?.useCase === 'dataToDoc') {
+    console.log('selected data value', selectedData.value)
     if (selectedData.value?.length > 0) {
       if (canvas) {
         const data = selectedData.value
@@ -296,12 +299,40 @@ function renderOriginalData() {
               const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
               correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
             }
+            else if (obj?.fieldType === 'Dataset checkbox') {
+              console.log('data', data)
+              console.log('obj id', obj?.id)
+              console.log('corresponding data', correspondingData)
+              const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+              console.log('corresponding field', correspondingField)
+              const isChecked = correspondingData === true
+
+              console.log('corresponding field designs', correspondingField?.designs)
+              if (correspondingField?.designs) {
+                const originalHeight = obj.height * obj.scaleY
+                const originalWidth = obj.width * obj.scaleX
+                const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+                obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, (myImg) => {
+                //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                //     ?
+                // obj.scaleToWidth(originalWidth )
+                  obj.set({
+                    scaleX: originalWidth / myImg.width,
+                    scaleY: originalHeight / myImg.height,
+                  })
+                  // : obj.scaleToHeight(originalHeight)
+                  canvas.renderAll()
+                })
+              }
+            }
             else {
               correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
             }
+
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
+
           else if (obj._element && obj.id !== 'Lorem ipsum') {
             let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData

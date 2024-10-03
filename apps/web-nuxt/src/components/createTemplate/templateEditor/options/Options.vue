@@ -39,7 +39,7 @@
           </p>
         </div>
 
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset date' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full">
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset date' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset checkbox'" class="w-full">
           <p class="mb-1 font-poppins text-surface-500">
             {{ $t('Cp_templateEditor_options.select_field') }}
           </p>
@@ -70,6 +70,9 @@
                 </div>
               </template>
             </Dropdown>
+          </div>
+          <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset checkbox' ">
+            <CheckboxOptions :is-checkbox="true" />
           </div>
         </div>
 
@@ -200,6 +203,7 @@ import TextFormatting from './TextFormatting.vue'
 import ElementRotation from './ElementRotation.vue'
 import TemplateOptions from './TemplateOptions.vue'
 import ImageOptions from './ImageOptions.vue'
+import CheckboxOptions from './CheckboxOptions.vue'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
@@ -386,7 +390,7 @@ watch(
     if (newVal) {
       fieldName.value = newVal.name
 
-      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image' || newVal?.fieldType === 'Dataset date')
+      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image' || newVal?.fieldType === 'Dataset date' || newVal?.fieldType === 'Dataset checkbox')
         activeDataField.value = newVal.name
       if (newVal?.fieldType === 'Dataset date')
         selectedDateFormat.value = { name: newVal.dateFormat }

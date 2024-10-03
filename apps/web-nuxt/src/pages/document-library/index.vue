@@ -62,6 +62,8 @@ const colomnData = ref([
   { field: 'template_name', header: 'Template name', filterField: 'template_name', showFilterMatchModes: false, filterMenuStyle: { width: '14rem' }, data_type: 'text' },
   { field: 'no_documents', header: 'No. of documents', filterField: 'no_documents', data_type: 'numeric' },
   { field: 'date', header: 'Date', filterField: 'date', data_type: 'date', filterMenuStyle: { width: '14rem' } },
+  { field: 'total_execution_time', header: 'Execution time', filterField: 'total_execution_time', data_type: 'total_execution_time' },
+  { field: 'total_processing_time', header: 'Processing time', filterField: 'total_processing_time', data_type: 'total_processing_time' },
 ])
 
 const hasActionsColumn = ref(true)
@@ -87,7 +89,7 @@ onMounted(async () => {
     const data = await response.json()
     console.log('document library data', data)
     const dataToUse = data?.generatedDocs?.map((d) => {
-      return { id: d?.batch_id, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name }
+      return { id: d?.batch_id, total_execution_time: d?.total_execution_time, total_processing_time: d?.total_processing_time, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name }
     })?.sort((a, b) => b.date - a.date)
     documentLibraryData.value = dataToUse
   }
