@@ -290,7 +290,7 @@ function renderOriginalData() {
         const data = selectedData.value
         const objs = canvas?.getObjects()
 
-        canvas.objects = objs.map((obj) => {
+        canvas._objects = objs.map((obj) => {
           if (obj.stroke || obj.isAlertIcon)
             return obj
           if (!obj._element && obj.id !== 'Lorem ipsum') {
@@ -299,7 +299,21 @@ function renderOriginalData() {
               const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
               correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
             }
-            else if (obj?.fieldType === 'Dataset checkbox') {
+
+            else {
+              correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+            }
+
+            if (correspondingData)
+              obj.set({ text: correspondingData?.toString() })
+          }
+
+          else if (obj._element && obj.id !== 'Lorem ipsum') {
+            let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
+            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
+
+            const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            if (obj?.fieldType === 'Dataset checkbox') {
               console.log('data', data)
               console.log('obj id', obj?.id)
               console.log('corresponding data', correspondingData)
@@ -325,21 +339,7 @@ function renderOriginalData() {
                 })
               }
             }
-            else {
-              correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-            }
-
-            if (correspondingData)
-              obj.set({ text: correspondingData?.toString() })
-          }
-
-          else if (obj._element && obj.id !== 'Lorem ipsum') {
-            let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
-            correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-
-            const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
-
-            if (correspondingData) {
+            else if (correspondingData) {
               const originalHeight = obj.height * obj.scaleY
               const originalWidth = obj.width * obj.scaleX
 

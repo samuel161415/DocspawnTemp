@@ -64,6 +64,8 @@ const colomnData = ref([
   { field: 'date', header: 'Date', filterField: 'date', data_type: 'date', filterMenuStyle: { width: '14rem' } },
   { field: 'total_execution_time', header: 'Execution time', filterField: 'total_execution_time', data_type: 'total_execution_time' },
   { field: 'total_processing_time', header: 'Processing time', filterField: 'total_processing_time', data_type: 'total_processing_time' },
+  { field: 'total_files_size', header: 'Total files size', filterField: 'total_files_size', data_type: 'total_files_size' },
+  { field: 'average_file_size', header: 'Average file size', filterField: 'average_file_size', data_type: 'average_file_size' },
 ])
 
 const hasActionsColumn = ref(true)
@@ -89,7 +91,16 @@ onMounted(async () => {
     const data = await response.json()
     console.log('document library data', data)
     const dataToUse = data?.generatedDocs?.map((d) => {
-      return { id: d?.batch_id, total_execution_time: d?.total_execution_time, total_processing_time: d?.total_processing_time, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name }
+      const totalFilesSize = d?.file_sizes
+        ? d?.file_sizes.reduce(
+          (accumulator, currentValue) => accumulator + Number.parseFloat(currentValue?.size),
+          0,
+        )
+        : 0
+
+      const averageFileSize = d?.file_sizes?.length > 0 ? totalFilesSize / d?.file_sizes?.length : 0
+
+      return { id: d?.batch_id, total_execution_time: d?.total_execution_time, total_processing_time: d?.total_processing_time, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name, total_files_size: `${totalFilesSize} KB`, average_file_size: `${averageFileSize} KB` }
     })?.sort((a, b) => b.date - a.date)
     documentLibraryData.value = dataToUse
   }

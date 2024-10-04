@@ -5,7 +5,7 @@
 
 <template>
   <div class="mt-8">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col justify-center gap-2">
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.checked_design') }}
       </p>
@@ -15,7 +15,7 @@
         :options="checkedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-12rem"
+        class="w-full md:w-full"
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
@@ -34,7 +34,7 @@
       </Dropdown>
       <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" /> -->
     </div>
-    <div class="flex justify-between items-center mt-2">
+    <div class="flex flex-col justify-center gap-2 mt-4">
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.unchecked_design') }}
       </p>
@@ -43,7 +43,7 @@
         :options="uncheckedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-12rem"
+        class="w-full md:w-fullrem"
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
