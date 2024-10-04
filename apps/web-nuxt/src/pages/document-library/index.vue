@@ -100,7 +100,7 @@ onMounted(async () => {
 
       const averageFileSize = d?.file_sizes?.length > 0 ? totalFilesSize / d?.file_sizes?.length : 0
 
-      return { id: d?.batch_id, total_execution_time: d?.total_execution_time, total_processing_time: d?.total_processing_time, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name, total_files_size: `${totalFilesSize} KB`, average_file_size: `${averageFileSize} KB` }
+      return { id: d?.batch_id, total_execution_time: d?.total_execution_time, total_processing_time: d?.total_processing_time, created_by: 'Docspawn user', no_documents: d?.docs?.length, urls: d?.docs, date: new Date(d?.created_at), type: d?.template_data?.use_case === 'Data to doc' ? 'Data to Doc' : 'Form to Doc', template_name: d?.template_data?.name, total_files_size: `${totalFilesSize?.toFixed(2)} KB`, average_file_size: `${averageFileSize?.toFixed(2)} KB` }
     })?.sort((a, b) => b.date - a.date)
     documentLibraryData.value = dataToUse
   }
