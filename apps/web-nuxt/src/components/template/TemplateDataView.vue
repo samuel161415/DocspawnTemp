@@ -94,6 +94,7 @@
                     <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="'Duplicate'" class="pointer-auto pi pi-clone text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="duplicateTemplate(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.set_as_favorites')" class="pointer-auto cursor-pointer text-surface-500" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem" @click="toggleFavourite(item)"></i>
                   </div>
 
@@ -250,6 +251,9 @@
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
           {{ $t('Cp_templateDataview.access_document') }}
         </p>
+        <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="duplicateTemplate(opItem)">
+          Duplicate
+        </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="toggleFavourite(opItem)">
           {{ favouriteStates[opItem?.id] ? $t('Cp_templateDataview.remove_from_favourites') : $t('Cp_templateDataview.set_as_favorites') }}
         </p>
@@ -350,7 +354,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites', 'refreshTemplates'])
 
 const { screenWidth } = useScreenWidth()
 
@@ -708,6 +712,50 @@ async function toggleFavourite(template) {
 
     layout.value === 'grid' && op.value.toggle()
     toast.add({ severity: 'success', summary: 'Succeed', detail: !favouriteStates[template?.id] ? 'Template removed from favourites' : 'Template set as favourite', life: 3000 })
+  }
+}
+async function duplicateTemplate(template) {
+  console.log('duplicating template', template)
+  const objToSend = {
+    account_type: template?.account_type,
+    name: `${template?.name}- copy`,
+    use_case: template?.use_case,
+    background_file_url: template?.background_file_url,
+    dataset_file_url: template?.dataset_file_urll,
+    dataset_start_line: template?.dataset_start_line,
+    template_options: JSON.stringify(template?.template_options),
+    last_text_options: JSON.stringify(template?.last_text_options),
+    page_sizes: JSON.stringify(template?.page_sizes),
+    added_fields: JSON.stringify(template?.added_fields),
+    dataset_data: JSON.stringify(template?.dataset_data),
+    canvas_data: JSON.stringify(template?.canvas_data),
+    delivery_options: JSON.stringify(template?.delivery_options),
+    canvas_size: JSON.stringify(template?.canvas_size),
+    editor_fields_data:
+    JSON.stringify(template.editor_fields_data),
+
+  }
+  console.log('obj to send', objToSend)
+
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify content type as JSON
+      },
+      body: JSON.stringify(objToSend), // Serialize the object to JSON string
+    })
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    // const data = await response.json()
+    toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+    emit('refreshTemplates')
+  }
+  catch (error) {
+    isSaving.value = false
+    console.error('Error:', error)
+    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
   }
 }
 </script>
