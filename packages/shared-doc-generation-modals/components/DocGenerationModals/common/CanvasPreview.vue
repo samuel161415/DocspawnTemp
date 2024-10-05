@@ -314,14 +314,13 @@ function renderOriginalData() {
 
             const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
             if (obj?.fieldType === 'Dataset checkbox') {
-              console.log('data', data)
-              console.log('obj id', obj?.id)
-              console.log('corresponding data', correspondingData)
               const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
-              console.log('corresponding field', correspondingField)
-              const isChecked = correspondingData === true
 
-              console.log('corresponding field designs', correspondingField?.designs)
+              let isChecked = correspondingData === true
+              if (correspondingField?.contentFields?.no?.includes(correspondingData))
+                isChecked = false
+              if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+                isChecked = true
               if (correspondingField?.designs) {
                 const originalHeight = obj.height * obj.scaleY
                 const originalWidth = obj.width * obj.scaleX
@@ -369,16 +368,29 @@ function renderOriginalData() {
               obj.set({ text: obj?.id })
           }
           else if (obj._element && obj.id !== 'Lorem ipsum') {
-            const correspondingData = 'https://placehold.co/300x200?text=Image'
+            let correspondingData = 'https://placehold.co/300x200?text=Image'
             const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            /** ********* for checkbox  */
+            if (obj?.fieldType === 'Dataset checkbox')
+              correspondingData = correspondingField?.designs.no
 
+            /** */
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                  ? obj.scaleToWidth(originalWidth)
+                  : obj.scaleToHeight(originalHeight)
+              }
+
               canvas.renderAll()
             })
           }

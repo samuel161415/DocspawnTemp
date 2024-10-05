@@ -43,7 +43,7 @@
         :options="uncheckedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-fullrem"
+        class="w-full md:w-full "
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
@@ -60,6 +60,73 @@
           </div>
         </template>
       </Dropdown>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
+    </div>
+  </div>
+  <div v-if="props?.isCheckbox">
+    <div class="flex flex-col justify-center gap-2 mt-3">
+      <p class="font-poppins text-surface-600">
+        Checked content
+      </p>
+      <!-- <Dropdown
+        v-model="selectedCheckedContent"
+
+        :options="contentOptions"
+
+        placeholder="Select an Image"
+        class="w-full md:w-full"
+      > -->
+      <MultiSelect
+        v-model="selectedCheckedContent" :options="contentOptions" filter placeholder="Select content"
+        :max-selected-labels="3" class="w-full md:w-80"
+      >
+        <!-- Custom template for each dropdown item -->
+        <!-- <template #option="slotProps">
+          <div class="flex align-items-center">
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8 " />
+          </div>
+        </template> -->
+
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <!-- <img :src="value?.design" alt="" class="w-12 h-12 mr-2" /> -->
+            <span>{{ value }}</span>
+          </div>
+        </template>
+      </MultiSelect>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" /> -->
+    </div>
+    <div class="flex flex-col justify-center gap-2 mt-4">
+      <p class="font-poppins text-surface-600">
+        Unchecked content
+      </p>
+      <!-- <Dropdown
+        v-model="selectedUncheckedContent"
+        :options="contentOptions"
+
+        placeholder="Select an Image"
+        class="w-full md:w-full "
+      > -->
+      <MultiSelect
+        v-model="selectedUncheckedContent" :options="contentOptions" filter placeholder="Select content"
+        :max-selected-labels="3" class="w-full md:w-80"
+      >
+        <!-- Custom template for each dropdown item -->
+        <!-- <template #option="slotProps">
+          <div class="flex align-items-center">
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8" />
+          </div>
+        </template> -->
+
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <!-- <img :src="value?.design" alt="" class="w-12 h-12 mr-2" /> -->
+            <span>{{ value }}</span>
+          </div>
+        </template>
+      </MultiSelect>
       <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
     </div>
   </div>
@@ -130,6 +197,10 @@ const currentField = ref()
 const selectedChecked = ref()
 const selectedUnchecked = ref()
 
+const contentOptions = ref()
+const selectedCheckedContent = ref()
+const selectedUncheckedContent = ref()
+
 const { user } = useAuth()
 
 const runtimeConfig = useRuntimeConfig()
@@ -179,11 +250,92 @@ async function fetchCheckboxOptions() {
     console.error('Error fetching templates:', error)
   }
 }
-watch(() => templateEditorStore.selectedAddedField, (val) => {
+
+// watch(() => templateEditorStore?.selectedAddedField?.name, (val, oldVal) => {
+//   console.log('new name', val)
+//   console.log('old name', oldVal)
+//   if (oldVal) {
+//     selectedCheckedContent.value = []
+//     selectedUncheckedContent.value = []
+//     templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+//       if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+//         // templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, yes: [], no: [] } }
+//         return { ...field, contentFields: { ...field?.contentFields, yes: [], no: [] } }
+//       }
+//       return field
+//     })
+//   }
+// })
+watch(() => templateEditorStore.selectedAddedField, (val, oldVal) => {
+  console.log('template editor store sleected added fie;d', val)
+  console.log('old val', oldVal)
+  console.log('val.name', val.name)
+  console.log('old val.name', oldVal.name)
+  console.log('chane on select added field')
   if (val?.fieldType === 'Form checkbox group') {
     selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
     selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
   }
+  if (val?.fieldType === 'Dataset checkbox') {
+    console.log('is dataset checkbox')
+    console.log('val?. hash', val?.hash)
+    console.log('val name', val?.name)
+    console.log('val old name', oldVal?.name)
+    if ((val?.hash === oldVal?.hash) && (val?.name !== oldVal?.name)) {
+      selectedCheckedContent.value = []
+      selectedUncheckedContent.value = []
+    }
+    else
+      if (templateEditorStore.selectedAddedField?.contentFields) {
+        selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
+        selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+      }
+  }
+}, { deep: true })
+function setContentOptions() {
+  const arrayofData = []
+  templateEditorStore.datasetData.allEntries?.forEach((entry) => {
+    const val = entry[templateEditorStore?.activeDataField]
+    if (val && !arrayofData?.includes(val))
+      arrayofData.push(val)
+  })
+
+  contentOptions.value = arrayofData
+}
+watch(() => templateEditorStore?.activeDataField, (val) => {
+  // if (templateEditorStore.selectedAddedField.name === val) {
+  //   selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes ? templateEditorStore.selectedAddedField?.contentFields?.yes : []
+  //   selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+  //     ? templateEditorStore.selectedAddedField?.contentFields?.no
+  //     : []
+  // }
+  // else {
+  //   selectedCheckedContent.value = []
+  //   selectedUncheckedContent.value = []
+  //   console.log('active data field', val)
+  // }
+
+  setContentOptions()
+})
+watch(selectedCheckedContent, (val) => {
+  console.log('selected checked content', val)
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, yes: val } }
+      return { ...field, contentFields: { ...field?.contentFields, yes: val } }
+    }
+    return field
+  })
+})
+watch(selectedUncheckedContent, (val) => {
+  console.log('selected unchecked content', val)
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, no: val } }
+      return { ...field, contentFields: { ...field?.contentFields, no: val } }
+    }
+    return field
+  })
 })
 
 onMounted(() => {
@@ -201,6 +353,11 @@ onMounted(() => {
     console.log('current field value', currentField.value)
   }
   fetchCheckboxOptions()
+  setContentOptions()
+  if (templateEditorStore.selectedAddedField?.contentFields) {
+    selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
+    selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+  }
 })
 watch(checkedOptions, val => console.log('checked options', val))
 watch(uncheckedOptions, val => console.log('unchecked options', val))

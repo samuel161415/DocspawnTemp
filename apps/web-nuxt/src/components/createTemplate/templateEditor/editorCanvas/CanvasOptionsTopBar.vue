@@ -265,14 +265,38 @@ watch(currentPreviewNo, (newVal) => {
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            console.log('checkbox dataset')
+            console.log('corresponding data', correspondingData)
+            console.log('corresponding field', correspondingField)
+            let isChecked = correspondingData === true
+            if (correspondingField?.contentFields?.no?.includes(correspondingData))
+              isChecked = false
+            if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+              isChecked = true
+            const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+            console.log('src to set', srcToSet)
+            correspondingData = srcToSet
+          }
+          /** */
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                  ? obj.scaleToWidth(originalWidth)
+                  : obj.scaleToHeight(originalHeight)
+              }
+
               // obj.scaleToWidth(originalWidth)
               canvas.renderAll()
             })
@@ -316,16 +340,38 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            console.log('checkbox dataset')
+            console.log('corresponding data', correspondingData)
+            console.log('corresponding field', correspondingField)
+            let isChecked = correspondingData === true
+            if (correspondingField?.contentFields?.no?.includes(correspondingData))
+              isChecked = false
+            if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+              isChecked = true
+            const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+            console.log('src to set', srcToSet)
+            correspondingData = srcToSet
+          }
+          /** */
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth')
-                obj.scaleToWidth(originalWidth)
-
-              else
-                obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth')
+                  obj.scaleToWidth(originalWidth)
+                else
+                  obj.scaleToHeight(originalHeight)
+              }
 
               // console.log('obj after scaling', obj)
               canvas.renderAll()
@@ -338,22 +384,45 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
       canvas.renderAll()
     }
     else {
+      console.log('hide preview')
       const objs = canvas._objects
       canvas.objects = objs.map((obj) => {
         if (obj?.id === 'watermark-docspawn')
           return obj
         if (obj.stroke || obj.isAlertIcon)
           return obj
-        if (!obj._element && obj.id !== 'Lorem ipsum') {
+        if (!obj._element && obj.id !== 'Lorem ipsum' && obj.fieldType !== 'checkbox-tooltip') {
+          console.log('wetting text', obj)
+          console.log('obj fieldTYpe', obj?.fieldType)
           obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingData = 'https://placehold.co/300x200?text=Image'
           const originalHeight = obj.height * obj.scaleY
           const originalWidth = obj.width * obj.scaleX
-
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
-          obj.setSrc(`https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`, () => {
+          let correspondingData = 'https://placehold.co/300x200?text=Image'
+          correspondingData = `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            console.log('checkbox dataset')
+            console.log('corresponding data', correspondingData)
+            console.log('corresponding field', correspondingField)
+
+            const srcToSet = correspondingField?.designs.no
+            console.log('src to set at null', srcToSet)
+            correspondingData = srcToSet
+          }
+          /** */
+          console.log('corresponding data', correspondingData)
+          // `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
+          const objXSize = obj.width * obj.scaleX
+          const objYSize = obj.height * obj.scaleY
+          obj.setSrc(correspondingData, (myImg) => {
+            obj.set({
+              scaleX: objXSize / (myImg.width), // ?.scaleX,
+              scaleY: objYSize / (myImg.height), // activeObject?.scaleY,
+            })
+
             // if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth') {
             //   console.log('scalin got width', originalWidth)
             //   obj.scaleToWidth(originalWidth)

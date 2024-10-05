@@ -1117,7 +1117,7 @@ async function selectField(field, option) {
       templateEditorStore.fieldToAdd = { name: option || 'Add field name', type: field, id: option || 'Lorem ipsum', designs: {
         yes: yesDesign,
         no: noDesign,
-      } }
+      }, contentFields: { yes: [], no: [] } }
     }
     else if (field === 'Static text') {
       templateEditorStore.fieldToAdd = { name: option || 'Add text', type: field, id: option || 'Lorem ipsum' }
