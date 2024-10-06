@@ -272,12 +272,16 @@ watch(() => props?.checkboxDatafield, (newVal) => {
   if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox') {
     selectedCheckedContent.value = []
     selectedUncheckedContent.value = []
+    templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash) {
+        templateEditorStore.selectedAddedField = { ...f, contentFields: { yes: [], no: [] } }
+        return { ...f, contentFields: { yes: [], no: [] } }
+      }
+      else { return f }
+    })
   }
 })
 watch(() => templateEditorStore.selectedAddedField, (val, oldVal) => {
-  console.log('chnage in sleected added field')
-  console.log('val name', val?.name)
-  console.log('old val name', oldVal?.name)
   if (val?.fieldType === 'Form checkbox group') {
     selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
     selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
@@ -288,9 +292,13 @@ watch(() => templateEditorStore.selectedAddedField, (val, oldVal) => {
     //   selectedUncheckedContent.value = []
     // }
     // else
-    if (templateEditorStore.selectedAddedField?.contentFields) {
+    if (templateEditorStore.selectedAddedField?.contentFields?.yes && templateEditorStore.selectedAddedField?.contentFields?.no) {
       selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
       selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+    }
+    else {
+      selectedCheckedContent.value = []
+      selectedUncheckedContent.value = []
     }
   }
 })
