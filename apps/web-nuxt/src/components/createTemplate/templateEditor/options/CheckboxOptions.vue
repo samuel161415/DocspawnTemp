@@ -142,13 +142,16 @@
         <label class="font-poppins my-2 text-surface-600">
           {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
         </label>
-        <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
+        <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="1" :max="noOfCheckboxes" class="custom-input-number" />
       </div>
       <div class="flex flex-col w-full">
         <label class="font-poppins my-2 text-surface-600">
           {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
         </label>
-        <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
+        <p v-if="optionSelectionError" class="text-red-400 text-sm mb-2">
+          Max. options should be equal to or greater than Min.
+        </p>
+        <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="1" :max="noOfCheckboxes" class="custom-input-number" />
       </div>
       <div class="flex flex-col w-full">
         <label class="font-poppins my-2 text-surface-600 mt-8">
@@ -190,12 +193,13 @@ import { useAuth } from '@/composables/useAuth'
 const props = defineProps(['isCheckbox', 'checkboxDatafield'])
 
 const noOfCheckboxes = ref(1)
-const minOptions = ref(0)
+const minOptions = ref(1)
 const maxOptions = ref(1)
 const fieldDescription = ref('')
 const currentField = ref()
 const selectedChecked = ref()
 const selectedUnchecked = ref()
+const optionSelectionError = ref(false)
 
 const contentOptions = ref()
 const selectedCheckedContent = ref()
@@ -313,18 +317,6 @@ function setContentOptions() {
   contentOptions.value = arrayofData
 }
 watch(() => templateEditorStore?.activeDataField, (val) => {
-  // if (templateEditorStore.selectedAddedField.name === val) {
-  //   selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes ? templateEditorStore.selectedAddedField?.contentFields?.yes : []
-  //   selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
-  //     ? templateEditorStore.selectedAddedField?.contentFields?.no
-  //     : []
-  // }
-  // else {
-  //   selectedCheckedContent.value = []
-  //   selectedUncheckedContent.value = []
-  //   console.log('active data field', val)
-  // }
-
   setContentOptions()
 })
 watch(selectedCheckedContent, (val) => {
@@ -345,11 +337,38 @@ watch(selectedUncheckedContent, (val) => {
     return field
   })
 })
-
+watch(minOptions, (val) => {
+  if (val > maxOptions.value)
+    optionSelectionError.value = true
+  else
+    optionSelectionError.value = false
+  console.log('change in min options', val)
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, minOptions: val }
+      return { ...field, minOptions: val }
+    }
+    return field
+  })
+})
+watch(maxOptions, (val) => {
+  if (val < minOptions.value)
+    optionSelectionError.value = true
+  else
+    optionSelectionError.value = false
+  console.log('chnage in max options', val)
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, maxOptions: val }
+      return { ...field, maxOptions: val }
+    }
+    return field
+  })
+})
 onMounted(() => {
   noOfCheckboxes.value = templateEditorStore.selectedAddedField?.checkboxes?.length >= 1 ? templateEditorStore.selectedAddedField?.checkboxes.length : 1
-  minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 0
-  maxOptions.value = templateEditorStore.selectedAddedField?.maxOptions >= 0 ? templateEditorStore.selectedAddedField?.maxOptions : 0
+  minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 1
+  maxOptions.value = templateEditorStore.selectedAddedField?.maxOptions >= 0 ? templateEditorStore.selectedAddedField?.maxOptions : 1
   fieldDescription.value = templateEditorStore.selectedAddedField?.name ? templateEditorStore.selectedAddedField?.name : 0
   const canvas = canvasService.getCanvas()
   if (canvas) {
@@ -366,8 +385,8 @@ onMounted(() => {
 
 watch(() => templateEditorStore.selectedAddedField, (val) => {
   noOfCheckboxes.value = val?.checkboxes?.length >= 1 ? val?.checkboxes.length : 1
-  minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 0
-  maxOptions.value = val?.maxOptions >= 0 ? val?.maxOptions : 0
+  minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 1
+  maxOptions.value = val?.maxOptions >= 0 ? val?.maxOptions : 1
   fieldDescription.value = val?.name ? val?.name : 0
 })
 function changeTextOfCheckboxOption(e, item) {

@@ -160,7 +160,7 @@ const characterAcceptionOptions = ref([
 
 function fillUpOptions() {
   const sF = templateEditorStore.selectedAddedField
-  console.log('sf', sF)
+  // console.log('sf', sF)
   if (sF?.name !== 'Lorem ipsum' && sF?.name !== 'Add field name')
     fieldName.value = sF?.name
   else

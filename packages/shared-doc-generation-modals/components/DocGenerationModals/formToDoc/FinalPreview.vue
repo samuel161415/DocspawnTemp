@@ -174,13 +174,14 @@
 
           <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
             <label :for="`${formField.name}-${index}`">
-              <div class="flex flex-row gap-2">
+              <div class="flex flex-col gap-2">
                 <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} </div>
+                <p class="text-xs">{{ `Min. ${formField.minOptions} and Max. ${formField.maxOptions} options can be checked` }}</p>
               </div>
             </label>
             <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-2">
               <div class="w-12 h-12 flex items-center">
-                <Checkbox v-model="checkbox.state" :binary="true" class="scale-150 m-2" />
+                <Checkbox v-model="checkbox.state" :disabled="checkbox.state !== true && (formField?.checkboxes.filter(c => c?.state)?.length === formField.maxOptions)" :binary="true" class="scale-150 m-2" />
               </div>
               <p class="font-poppins font-normal text-[rgb(107,114,128)] text-[16px] leading-[25px] ">
                 {{ checkbox?.text }}
@@ -207,7 +208,7 @@
           <Button
             class="font-poppins font-normal text-[16px] leading-[25px]"
             severity="success"
-            :disabled="!props?.isGeneratable || isGeneratingDoc || !allFieldsFilledUp"
+            :disabled="!props?.isGeneratable || isGeneratingDoc || !allFieldsFilledUp || validateCheckboxesFields "
             :label="$t('Cp_formEditor_finalPreview.spawn_document')"
             autofocus
             @click="generateDocument"
@@ -303,6 +304,20 @@ onMounted(() => {
   })
 })
 
+const validateCheckboxesFields = computed(() => {
+  console.log('fields for computing', fields.value)
+  let allChecked = true
+  fields.value?.forEach((f) => {
+    if (f?.fieldType === 'Form checkbox group') {
+      const allCheckedStates = f?.checkboxes?.filter(c => c?.state)?.length
+      console.log('all checked states', allCheckedStates)
+      if (allCheckedStates < f?.minOptions)
+        allChecked = false
+    }
+  })
+
+  return !allChecked
+})
 watch(() => props?.allFormFields, (newVal) => {
   if (newVal?.length < 1)
     return

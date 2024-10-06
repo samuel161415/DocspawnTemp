@@ -876,7 +876,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
-            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
+            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 1, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
             // console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
