@@ -51,7 +51,13 @@
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType !== 'Dataset image' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter :placeholder="$t('Cp_templateEditor_options.select_data_field')" class="w-full md:w-full">
+            <Dropdown
+              v-model="activeDataField"
+              :options="templateEditorStore.selectedAddedField?.fieldType !== 'Dataset image' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter
+              :placeholder="$t('Cp_templateEditor_options.select_data_field')"
+              class="w-full md:w-full"
+              @change="(e) => checkboxDatafield = e.value"
+            >
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -72,7 +78,7 @@
             </Dropdown>
           </div>
           <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset checkbox' ">
-            <CheckboxOptions :is-checkbox="true" />
+            <CheckboxOptions :is-checkbox="true" :checkbox-datafield="checkboxDatafield" />
           </div>
         </div>
 
@@ -219,6 +225,7 @@ const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
 const datasetImageProportionOption = ref('fitToHeight')
 const selectedContainerMode = ref()
+const checkboxDatafield = ref()
 
 // onMounted(() => {
 
@@ -346,6 +353,9 @@ watch(selectedDateFormat, () => {
 })
 
 watch(activeDataField, () => {
+  // if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox')
+  //   checkboxDatafield.value = activeDataField.value
+
   const canvas = canvasService.getCanvas()
   if (canvas) {
     templateEditorStore.activeDataField = activeDataField.value

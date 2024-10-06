@@ -78,7 +78,7 @@
       > -->
       <MultiSelect
         v-model="selectedCheckedContent" :options="contentOptions" filter placeholder="Select content"
-        :max-selected-labels="3" class="w-full md:w-80"
+        :max-selected-labels="3" class="w-full md:w-full min-h-12"
       >
         <!-- Custom template for each dropdown item -->
         <!-- <template #option="slotProps">
@@ -110,7 +110,7 @@
       > -->
       <MultiSelect
         v-model="selectedUncheckedContent" :options="contentOptions" filter placeholder="Select content"
-        :max-selected-labels="3" class="w-full md:w-80"
+        :max-selected-labels="3" class="w-full md:w-full min-h-12"
       >
         <!-- Custom template for each dropdown item -->
         <!-- <template #option="slotProps">
@@ -187,7 +187,7 @@ import canvasService from '@/composables/useTemplateCanvas'
 
 import { useAuth } from '@/composables/useAuth'
 
-const props = defineProps(['isCheckbox'])
+const props = defineProps(['isCheckbox', 'checkboxDatafield'])
 
 const noOfCheckboxes = ref(1)
 const minOptions = ref(0)
@@ -266,32 +266,34 @@ async function fetchCheckboxOptions() {
 //     })
 //   }
 // })
+
+watch(() => props?.checkboxDatafield, (newVal) => {
+  console.log('change in checkbox data field')
+  if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox') {
+    selectedCheckedContent.value = []
+    selectedUncheckedContent.value = []
+  }
+})
 watch(() => templateEditorStore.selectedAddedField, (val, oldVal) => {
-  console.log('template editor store sleected added fie;d', val)
-  console.log('old val', oldVal)
-  console.log('val.name', val.name)
-  console.log('old val.name', oldVal.name)
-  console.log('chane on select added field')
+  console.log('chnage in sleected added field')
+  console.log('val name', val?.name)
+  console.log('old val name', oldVal?.name)
   if (val?.fieldType === 'Form checkbox group') {
     selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
     selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
   }
   if (val?.fieldType === 'Dataset checkbox') {
-    console.log('is dataset checkbox')
-    console.log('val?. hash', val?.hash)
-    console.log('val name', val?.name)
-    console.log('val old name', oldVal?.name)
-    if ((val?.hash === oldVal?.hash) && (val?.name !== oldVal?.name)) {
-      selectedCheckedContent.value = []
-      selectedUncheckedContent.value = []
+    // if ((val?.hash === oldVal?.hash) && (val?.name !== oldVal?.name)) {
+    //   selectedCheckedContent.value = []
+    //   selectedUncheckedContent.value = []
+    // }
+    // else
+    if (templateEditorStore.selectedAddedField?.contentFields) {
+      selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
+      selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
     }
-    else
-      if (templateEditorStore.selectedAddedField?.contentFields) {
-        selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
-        selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
-      }
   }
-}, { deep: true })
+})
 function setContentOptions() {
   const arrayofData = []
   templateEditorStore.datasetData.allEntries?.forEach((entry) => {
@@ -318,7 +320,6 @@ watch(() => templateEditorStore?.activeDataField, (val) => {
   setContentOptions()
 })
 watch(selectedCheckedContent, (val) => {
-  console.log('selected checked content', val)
   templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
     if (field?.hash === templateEditorStore.selectedAddedField.hash) {
       templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, yes: val } }
@@ -328,7 +329,6 @@ watch(selectedCheckedContent, (val) => {
   })
 })
 watch(selectedUncheckedContent, (val) => {
-  console.log('selected unchecked content', val)
   templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
     if (field?.hash === templateEditorStore.selectedAddedField.hash) {
       templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, no: val } }
@@ -346,11 +346,7 @@ onMounted(() => {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     const activeObject = canvas.getActiveObject()
-    console.log('templateEditorStore.selectedAddedField', templateEditorStore.selectedAddedField)
-    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
-    console.log('templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes', templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0])
     // currentField.value = templateEditorStore.addedFields.filter(f => f?.hash === activeObject?.hash)[0]
-    console.log('current field value', currentField.value)
   }
   fetchCheckboxOptions()
   setContentOptions()
@@ -359,8 +355,7 @@ onMounted(() => {
     selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
   }
 })
-watch(checkedOptions, val => console.log('checked options', val))
-watch(uncheckedOptions, val => console.log('unchecked options', val))
+
 watch(() => templateEditorStore.selectedAddedField, (val) => {
   noOfCheckboxes.value = val?.checkboxes?.length >= 1 ? val?.checkboxes.length : 1
   minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 0
