@@ -305,12 +305,11 @@ onMounted(() => {
 })
 
 const validateCheckboxesFields = computed(() => {
-  console.log('fields for computing', fields.value)
   let allChecked = true
   fields.value?.forEach((f) => {
     if (f?.fieldType === 'Form checkbox group') {
       const allCheckedStates = f?.checkboxes?.filter(c => c?.state)?.length
-      console.log('all checked states', allCheckedStates)
+
       if (allCheckedStates < f?.minOptions)
         allChecked = false
     }
@@ -386,6 +385,7 @@ function validateFormEntries() {
   })
   return !anyError
 }
+
 async function generateDocument() {
   if (!validateFormEntries())
     return
