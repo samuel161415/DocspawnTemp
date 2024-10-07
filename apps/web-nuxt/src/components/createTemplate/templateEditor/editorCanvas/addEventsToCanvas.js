@@ -979,7 +979,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             /** ********creating checkbox info icon */
             // https://placehold.co/400/000000/ffffff?font=roboto&text=1
-            console.log('templateEditorStore.fieldToAdd.type', templateEditorStore.fieldToAdd.type)
+
             if (ftoadd.type !== 'Dataset checkbox') {
               fabric.Image.fromURL(
                 `https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=1`
@@ -1074,28 +1074,6 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
   }
 }
 
-// async function fetchCheckboxOptions(user, runtimeConfig) {
-//   if (!user?.value?.email)
-//     return
-//   try {
-//     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-//     const response = await fetch(
-//       `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
-//     )
-//     if (!response.ok)
-//       throw new Error(`Network response was not ok ${response.statusText}`)
-//     const data = await response.json()
-
-//     if (data?.length > 0)
-//       console.log('checkboxOptions', data)
-
-//     return data
-//     // console.log('response of fetching templates', data)
-//   }
-//   catch (error) {
-//     console.error('Error fetching templates:', error)
-//   }
-// }
 function getRandomHexColor(isLight) {
   let color = ''
   for (let i = 0; i < 3; i++) {

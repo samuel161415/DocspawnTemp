@@ -494,7 +494,6 @@ function addFormInputToTextbox() {
   selectedDateFormat.value = ''
 }
 function insertOnEditor(data) {
-  console.log('data in insert on editor', data)
   editor.value.chain().focus().insertContent(`{{dataset[${data?.name}]}}`).run()
   showAddFormFieldsForm.value = false
 }

@@ -42,10 +42,7 @@
           :editor-height="canvasWrapperHeight" :editor-width="computedCanvasWidth"
         />
       </div> -->
-      <!-- Dynamically inserted container -->
-      <!-- <div v-if="showExpertEditor" ref="editorContainer" class="editor-container">
-        <HtmlContainer />
-      </div> -->
+
       <!-- Loop through all editor instances and display them -->
       <div
         v-for="(editorContainer) in templateEditorStore.editorContainers"
@@ -75,7 +72,8 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import { useRouter } from 'vue-router'
 import { v4 as uuidv4 } from 'uuid'
 import TextFormatting from '../options/TextFormatting.vue'
-import RichTextEditor from './RichTextEditor.vue'
+
+// import RichTextEditor from './RichTextEditor.vue'
 import ThumbnailBar from './ThumbnailBar.vue'
 import CanvasOptionsTopBar from './CanvasOptionsTopBar.vue'
 import addEventsToCanvas from './addEventsToCanvas'

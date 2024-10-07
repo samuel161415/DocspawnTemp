@@ -68,24 +68,12 @@
       <p class="font-poppins text-surface-600">
         Checked content
       </p>
-      <!-- <Dropdown
-        v-model="selectedCheckedContent"
 
-        :options="contentOptions"
-
-        placeholder="Select an Image"
-        class="w-full md:w-full"
-      > -->
       <MultiSelect
         v-model="selectedCheckedContent" :options="contentOptions" filter placeholder="Select content"
         :max-selected-labels="3" class="w-full md:w-full min-h-12"
       >
         <!-- Custom template for each dropdown item -->
-        <!-- <template #option="slotProps">
-          <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8 " />
-          </div>
-        </template> -->
 
         <!-- Custom template for the selected item -->
         <template #value="{ value }">
@@ -101,24 +89,11 @@
       <p class="font-poppins text-surface-600">
         Unchecked content
       </p>
-      <!-- <Dropdown
-        v-model="selectedUncheckedContent"
-        :options="contentOptions"
 
-        placeholder="Select an Image"
-        class="w-full md:w-full "
-      > -->
       <MultiSelect
         v-model="selectedUncheckedContent" :options="contentOptions" filter placeholder="Select content"
         :max-selected-labels="3" class="w-full md:w-full min-h-12"
       >
-        <!-- Custom template for each dropdown item -->
-        <!-- <template #option="slotProps">
-          <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8" />
-          </div>
-        </template> -->
-
         <!-- Custom template for the selected item -->
         <template #value="{ value }">
           <div class="flex items-center">
@@ -255,22 +230,6 @@ async function fetchCheckboxOptions() {
   }
 }
 
-// watch(() => templateEditorStore?.selectedAddedField?.name, (val, oldVal) => {
-//   console.log('new name', val)
-//   console.log('old name', oldVal)
-//   if (oldVal) {
-//     selectedCheckedContent.value = []
-//     selectedUncheckedContent.value = []
-//     templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
-//       if (field?.hash === templateEditorStore.selectedAddedField.hash) {
-//         // templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, yes: [], no: [] } }
-//         return { ...field, contentFields: { ...field?.contentFields, yes: [], no: [] } }
-//       }
-//       return field
-//     })
-//   }
-// })
-
 watch(() => props?.checkboxDatafield, (newVal) => {
   console.log('change in checkbox data field')
   if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox') {
@@ -342,7 +301,7 @@ watch(minOptions, (val) => {
     optionSelectionError.value = true
   else
     optionSelectionError.value = false
-  console.log('change in min options', val)
+
   templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
     if (field?.hash === templateEditorStore.selectedAddedField.hash) {
       templateEditorStore.selectedAddedField = { ...field, minOptions: val }
@@ -356,7 +315,7 @@ watch(maxOptions, (val) => {
     optionSelectionError.value = true
   else
     optionSelectionError.value = false
-  console.log('chnage in max options', val)
+
   templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
     if (field?.hash === templateEditorStore.selectedAddedField.hash) {
       templateEditorStore.selectedAddedField = { ...field, maxOptions: val }

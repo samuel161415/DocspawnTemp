@@ -267,16 +267,13 @@ watch(currentPreviewNo, (newVal) => {
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
           /** ********* for checkbox  */
           if (obj?.fieldType === 'Dataset checkbox') {
-            console.log('checkbox dataset')
-            console.log('corresponding data', correspondingData)
-            console.log('corresponding field', correspondingField)
             let isChecked = correspondingData === true
             if (correspondingField?.contentFields?.no?.includes(correspondingData))
               isChecked = false
             if (correspondingField?.contentFields?.yes?.includes(correspondingData))
               isChecked = true
             const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-            console.log('src to set', srcToSet)
+
             correspondingData = srcToSet
           }
           /** */
@@ -342,16 +339,13 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
           /** ********* for checkbox  */
           if (obj?.fieldType === 'Dataset checkbox') {
-            console.log('checkbox dataset')
-            console.log('corresponding data', correspondingData)
-            console.log('corresponding field', correspondingField)
             let isChecked = correspondingData === true
             if (correspondingField?.contentFields?.no?.includes(correspondingData))
               isChecked = false
             if (correspondingField?.contentFields?.yes?.includes(correspondingData))
               isChecked = true
             const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-            console.log('src to set', srcToSet)
+
             correspondingData = srcToSet
           }
           /** */
@@ -384,7 +378,6 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
       canvas.renderAll()
     }
     else {
-      console.log('hide preview')
       const objs = canvas._objects
       canvas.objects = objs.map((obj) => {
         if (obj?.id === 'watermark-docspawn')
@@ -392,28 +385,21 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
         if (obj.stroke || obj.isAlertIcon)
           return obj
         if (!obj._element && obj.id !== 'Lorem ipsum' && obj.fieldType !== 'checkbox-tooltip') {
-          console.log('wetting text', obj)
-          console.log('obj fieldTYpe', obj?.fieldType)
           obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const originalHeight = obj.height * obj.scaleY
-          const originalWidth = obj.width * obj.scaleX
+          // const originalHeight = obj.height * obj.scaleY
+          // const originalWidth = obj.width * obj.scaleX
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
           let correspondingData = 'https://placehold.co/300x200?text=Image'
           correspondingData = `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
           /** ********* for checkbox  */
           if (obj?.fieldType === 'Dataset checkbox') {
-            console.log('checkbox dataset')
-            console.log('corresponding data', correspondingData)
-            console.log('corresponding field', correspondingField)
-
             const srcToSet = correspondingField?.designs.no
-            console.log('src to set at null', srcToSet)
             correspondingData = srcToSet
           }
           /** */
-          console.log('corresponding data', correspondingData)
+
           // `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
           const objXSize = obj.width * obj.scaleX
           const objYSize = obj.height * obj.scaleY
@@ -434,7 +420,7 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
             // obj.scaleToHeight(originalHeight)
             // }
             // obj.set({ width: obj.width, height: obj.height, scaleX: obj.scaleX, scaleY: obj.scaleY })
-            console.log('obj after rc setting', obj)
+
             canvas.renderAll()
           })
         }

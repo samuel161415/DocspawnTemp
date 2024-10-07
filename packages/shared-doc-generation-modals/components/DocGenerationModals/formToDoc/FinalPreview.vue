@@ -1,41 +1,4 @@
 <template>
-  <!-- <Dialog
-    v-model:visible="showPreview"
-    modal
-    :draggable="false"
-    :style="mobile ? { width: '28rem' } : { maxWidth: '90vw', width: 'max-content' }"
-    :pt="{
-      header: {
-        class: [
-          'flex items-center justify-between',
-          'shrink-0',
-          'p-6',
-          `pb-${mobile ? '0' : ''}`,
-          'border-t-0',
-          'rounded-tl-lg',
-          'rounded-tr-lg',
-          'bg-surface-0 dark:bg-surface-800',
-          'text-surface-700 dark:text-surface-0/80',
-        ],
-      },
-    }"
-  >
-    <template #header>
-      <div :class="`${mobile ? '' : 'pl-4'}`" class="flex flex-row gap-3 w-full">
-        <div v-if="isGeneratable" class="inline-flex align-items-center justify-content-center gap-2">
-          <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_formEditor_finalPreview.form_to_doc_generation') }}</span>
-        </div>
-        <div v-if="!props?.isGeneratable" class="flex flex-col">
-          <i class="pi pi-mobile"></i>
-          <RadioButton v-model="mobile" class="pl-0.5" input-id="mobile1" name="pizza" :value="true" />
-        </div>
-        <div v-if="!props?.isGeneratable" class="flex flex-col">
-          <i class="pi pi-desktop"></i>
-          <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
-        </div>
-      </div>
-    </template> -->
-  <!-- <template #default> -->
   <div class="flex">
     <div :class="`flex flex-col  ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`" :style="{ marginRight: '12px' }">
       <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }" :style="{ height: '58px', marginBottom: '8px' }">
@@ -225,12 +188,7 @@
     </p>
     <!-- </div> -->
   </div>
-  <!-- </template> -->
-  <!-- <template #footer>
-    </template> -->
-  <!-- </Dialog> -->
-  <!-- </dialog> -->
-  <!-- </dialog> -->
+
   <GenerationSuccessModal v-if="showGnerationSuccessMessage" />
   <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
     <template #message="slotProps">
@@ -370,6 +328,7 @@ async function onImageUpload(e, formField) {
   formField.state = url
   // fileUrl.value = url
 }
+
 // Function to collect all form data
 function validateFormEntries() {
   let anyError = false
