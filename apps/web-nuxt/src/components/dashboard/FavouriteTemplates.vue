@@ -471,9 +471,7 @@ const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
 
 const filterOption = ref(filterOptions.value[0])
-watch(filterOption, (val) => {
-  console.log('filter optipon', val)
-})
+
 const searchQuery = ref('')
 const fileTypeCheck = ref(false)
 
@@ -498,9 +496,7 @@ function handleFillForm(item) {
   currentTemplate.value = item
   currentTemplateAllFormFields.value = item.added_fields?.filter(f => f?.isFormField)
 }
-watch(currentTemplateAllFormFields, (val) => {
-  console.log('currentTemplateAllFormFields', currentTemplateAllFormFields.value)
-})
+
 // default favorite state based on template changes
 watch(() => props.templates, (newVal) => {
   newVal.forEach((template, index) => {
@@ -661,7 +657,7 @@ function handleFileDrop(template, event) {
 }
 function handleFileUpload(file, template) {
   const keysToCheck = template?.dataset_data?.selectedKeys
-  console.log('keys to check', keysToCheck)
+
   if (!file) {
     console.error('No file provided')
     return

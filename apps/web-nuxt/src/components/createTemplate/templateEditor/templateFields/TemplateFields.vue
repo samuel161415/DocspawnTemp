@@ -37,7 +37,6 @@
 </template>
 
 <script setup>
-import { v4 as uuidv4 } from 'uuid'
 import ShowAddedFields from './ShowAddedFields.vue'
 import AddTextboxButton from './AddTextboxButton.vue'
 import ShowDataFields from './ShowDataFields.vue'
@@ -56,7 +55,7 @@ onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id)
     templateEditorStore.ShowAddedFieldsinTemplateFields = true
 })
-watch(() => templateEditorStore.ShowAddedFieldsinTemplateFields, (val) => {
+watch(() => templateEditorStore.ShowAddedFieldsinTemplateFields, () => {
   templateEditorStore.activeTemplateField = false
 })
 
@@ -167,8 +166,8 @@ async function fetchCheckboxOptions() {
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
 
-    if (data?.length > 0)
-      console.log('checkboxOptions', data)
+    // if (data?.length > 0)
+    //   console.log('checkboxOptions', data)
 
     return data
   }

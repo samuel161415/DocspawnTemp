@@ -18,9 +18,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class=" flex items-center">
-      <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
-    </div> -->
+
     <div class="flex items-center gap-2 max-w-[150px]">
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="decreaseScale">
         <font-awesome-icon icon="fa-light fa-magnifying-glass-minus" size="xl" />
@@ -31,11 +29,6 @@
       </button>
     </div>
     <div class="flex gap-4">
-      <!-- <div>
-        <Button class="w-max px-2" @click="() => emit('toggleExpertEditor')">
-          {{ props?.showExpertEditor ? 'Hide expert editor' : 'Show expert editor' }}
-        </Button>
-      </div> -->
       <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
         <Button
           v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"

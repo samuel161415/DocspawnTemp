@@ -3,7 +3,6 @@
     <CanvasOptionsTopBar
       :show-expert-editor="templateEditorStore.showExpertEditor" @update-scale="updateScale" @toggle-expert-editor="() => {
         templateEditorStore.showExpertEditor = !templateEditorStore.showExpertEditor;
-        console.log('toggling expert editor')
       }"
     />
 

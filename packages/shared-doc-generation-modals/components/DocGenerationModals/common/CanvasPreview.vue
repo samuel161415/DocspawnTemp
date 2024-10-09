@@ -32,7 +32,6 @@
         </div>
       </div>
       <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
-        <!-- <ExpertEditorPreview v-if="docGenerationData?.templateToGenerateDocs?.id && canvasWrapperHeight > 100" :template="docGenerationData?.templateToGenerateDocs" :editor-height="canvasWrapperHeight" :editor-width="900" /> -->
         <div
           v-for="(editorContainer) in docGenerationData?.editorContainers"
           :key="editorContainer.id"
@@ -76,7 +75,7 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '../../../composables/useTemplateCanvas'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
-import ExpertEditorPreview from './ExpertEditorPreview.vue'
+
 import HtmlContainer from './HtmlContainer.vue'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 

@@ -497,23 +497,23 @@ function insertOnEditor(data) {
   editor.value.chain().focus().insertContent(`{{dataset[${data?.name}]}}`).run()
   showAddFormFieldsForm.value = false
 }
-async function getHTMLContent() {
-  if (editor.value)
-    htmlContent.value = editor.value.getHTML()
-}
+// async function getHTMLContent() {
+//   if (editor.value)
+//     htmlContent.value = editor.value.getHTML()
+// }
 
-const selectedDatasetkey = ref(null)
+// const selectedDatasetkey = ref(null)
 
-function insetDatasetKey() {
-  if (!selectedDatasetkey.value)
-    return
+// function insetDatasetKey() {
+//   if (!selectedDatasetkey.value)
+//     return
 
-  // Insert the selected fruit wrapped in {{}} into the editor
-  editor.value.chain().focus().insertContent(`{{dataset[${selectedDatasetkey.value}]}}`).run()
+//   // Insert the selected fruit wrapped in {{}} into the editor
+//   editor.value.chain().focus().insertContent(`{{dataset[${selectedDatasetkey.value}]}}`).run()
 
-  // Reset the dropdown
-  selectedDatasetkey.value = null
-}
+//   // Reset the dropdown
+//   selectedDatasetkey.value = null
+// }
 </script>
 
 <style scoped>

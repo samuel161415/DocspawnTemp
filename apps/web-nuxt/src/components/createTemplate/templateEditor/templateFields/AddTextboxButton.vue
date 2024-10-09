@@ -10,7 +10,7 @@
 
 <script setup>
 import { v4 as uuidv4 } from 'uuid'
-import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 
 function addHtmlContainer() {

@@ -52,11 +52,12 @@ import { ref } from 'vue'
 
 // or any other theme
 
-import { useAuth } from '@/composables/useAuth'
+// import { useAuth } from '@/composables/useAuth'
 
+const props = defineProps(['userValue'])
 const emit = defineEmits(['setImage'])
 const runtimeConfig = useRuntimeConfig()
-const { user } = useAuth()
+// const { user } = useAuth()
 
 // Sample array of images
 const images = ref([])
@@ -65,9 +66,10 @@ onMounted(async () => {
 })
 
 async function fetchImages() {
-  const response = await fetch(`${runtimeConfig.public.BASE_URL}/library-image/${user.value.email}`)
+  console.log('props user value', props.userValue)
+  const response = await fetch(`${runtimeConfig.public.BASE_URL}/library-image/${props.userValue?.email}`)
   const data = await response.json()
-  console.log('response data', data)
+  // console.log('response data', data)
   images.value = data
 }
 // [

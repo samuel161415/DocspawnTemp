@@ -121,7 +121,7 @@
             <p class="my-2">
               Or
             </p>
-            <ImageLibraryModal @set-image="url => { fileUrl = url;setFileToCanvasObject(url) }" />
+            <ImageLibraryModal :user-value="user" @set-image="url => { fileUrl = url;setFileToCanvasObject(url) }" />
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
@@ -167,15 +167,19 @@
 
 <script setup>
 import { ImageLibraryModal } from '@docspawn/image-library-modal'
+
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
 import TemplateOptions from './TemplateOptions.vue'
 import CheckboxOptions from './CheckboxOptions.vue'
+import { useAuth } from '@/composables/useAuth'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const emit = defineEmits(['saveTemplate'])
+
+const { user } = useAuth()
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()

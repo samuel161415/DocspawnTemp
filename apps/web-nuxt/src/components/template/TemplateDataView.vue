@@ -224,6 +224,7 @@
       <template #default>
         <div>
           <FormToDocGenerationModal
+            :user-value="user"
             :mobile="mobile"
             :form-title="formTitle"
             :all-form-fields="currentTemplateAllFormFields"
@@ -331,12 +332,12 @@ import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
-
 import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
+import { useAuth } from '@/composables/useAuth'
 
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
@@ -355,6 +356,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites', 'refreshTemplates'])
+
+const { user } = useAuth()
 
 const { screenWidth } = useScreenWidth()
 
@@ -715,7 +718,6 @@ async function toggleFavourite(template) {
   }
 }
 async function duplicateTemplate(template) {
-  console.log('duplicating template', template)
   const objToSend = {
     account_type: template?.account_type,
     name: `${template?.name}- copy`,

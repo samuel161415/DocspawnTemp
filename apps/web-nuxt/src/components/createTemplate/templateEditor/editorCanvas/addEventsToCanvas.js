@@ -1,13 +1,8 @@
-// checked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png
-// unchecked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png
-
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
-export default async function addEventsToCanvas(user, runtimeConfig) {
+export default async function addEventsToCanvas() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     canvas.on('after:render', () => {
@@ -32,7 +27,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     canvas.on('object:moving', (e) => {
       canvas.getObjects().forEach((obj) => {
         // lets add text box also
-        // console.log('obj moving', obj?.moving)
+
         if ((obj.id === 'watermark-docspawn' || obj.fieldType === 'Text box') && e.target.id === obj.id) {
           if (e.target.left <= 10)
             obj.set({ left: 10 })
@@ -66,8 +61,6 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
       if (e.target instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: e.target.scaleX, y: e.target.scaleY }
-
-      // if(e.target.fieldType==='Form text'||e.target.fieldType==='Data field'||e.target.)
 
       /** */
       canvas.getObjects().forEach((obj) => {
@@ -151,18 +144,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     let tempYMargin = null
     let currentHoveredEle = null
 
-    /** */
-    // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-
-    // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
-    // if (!defaultUncheckedDesign)
-    //   defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-    // if (!defaultUncheckedDesign)
-    //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-
-    /** */
     canvas.on('mouse:move', async (event) => {
-      // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = false
@@ -433,16 +415,8 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           canvas.renderAll()
         }
         else {
-          /** ***********default unchecked */
-          // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-
-          // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-          // if (!defaultUncheckedDesign)
-          //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-
-          /** */
           fabric.Image.fromURL(
-            // defaultUncheckedDesign
+
             templateEditorStore.fieldToAdd?.designs?.no
             , (myImg) => {
               if (currentHoveredEle)
@@ -822,17 +796,8 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
         )
       }
       if (templateEditorStore.fieldToAdd.type === 'Form checkbox group' || templateEditorStore.fieldToAdd.type === 'Dataset checkbox') {
-        /** ***********default unchecked */
-        // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-        // console.log('all checkboxes', allCheckboxes)
-        // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-        // if (!defaultUncheckedDesign)
-        //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-        // console.log('defaultUncheckedDesign', defaultUncheckedDesign)
-        /** */
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
-        // console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
           // defaultUncheckedDesign
           ftoadd?.designs?.no

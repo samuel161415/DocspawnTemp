@@ -307,32 +307,31 @@ onBeforeUnmount(() => {
 .bubble-menu {
   background-color: #ffffff;
   border: 1px solid #009ee2;
-
   border-radius: 0.7rem;
   box-shadow: var(--shadow);
   display: flex;
   padding: 0.2rem;
+}
 
-  button {
-    background-color: unset;
-    color:#009ee2;
-    border:1px solid #009ee2;
+.bubble-menu button {
+  background-color: unset;
+  color: #009ee2;
+  border: 1px solid #009ee2;
+}
 
-    &:hover {
-      background-color: var(--gray-3);
-      color:#000;
-    }
+.bubble-menu button:hover {
+  background-color: var(--gray-3);
+  color: #000;
+}
 
-    &.is-active {
-      background-color: #009ee2;
-      color:#fff;
+.bubble-menu button.is-active {
+  background-color: #009ee2;
+  color: #fff;
+}
 
-      &:hover {
-        background-color: var(--purple-contrast);
-        color:#000;
-      }
-    }
-  }
+.bubble-menu button.is-active:hover {
+  background-color: var(--purple-contrast);
+  color: #000;
 }
 
 .editor-wrapper {
@@ -358,14 +357,14 @@ onBeforeUnmount(() => {
   resize:both;
   overflow:auto;
 }
-::v-deep .ProseMirror *{
-  font-family:Arial, Helvetica, sans-serif;
+:deep(.ProseMirror *) {
+  font-family: Arial, Helvetica, sans-serif;
 }
 /* You can also apply different cursor styles to specific elements */
 .ProseMirror p {
   cursor: text; /* Cursor will appear as text in paragraphs */
 }
- .bubble-menu {
+.bubble-menu {
   background-color: white;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -387,7 +386,7 @@ onBeforeUnmount(() => {
 .bubble-menu button {
   @apply bg-blue-500 text-white px-4 py-2 rounded cursor-pointer; /* Tailwind classes */
 }
-::v-deep .ProseMirror {
+:deep(.ProseMirror) {
   background-color: transparent;
   padding: 0px;
   min-height: 100%;
@@ -395,61 +394,60 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   color: #333;
 
-   width: v-bind('editorWidth') !important;
+  width: v-bind('editorWidth') !important;
   height: v-bind('editorHeight') !important;
-  overflow:hidden;
+  overflow: hidden;
   /* border:3px solid red; */
-
 }
-::v-deep .ProseMirror:focus{
-/* border:none; */
-outline:none;
+:deep(.ProseMirror:focus) {
+  /* border:none; */
+  outline: none;
 }
 
-::v-deep .ProseMirror p {
+:deep(.ProseMirror p) {
   font-size: 18px;
 }
-::v-deep .ProseMirror p:empty::before {
+:deep(.ProseMirror p:empty::before) {
   content: '';
   display: inline-block;
 }
 /* Headings styles */
-::v-deep .ProseMirror h1 {
+:deep(.ProseMirror h1) {
   font-size: 44px;
   font-weight: bold;
   margin-top: 24px; /* 1.5em = 24px */
   margin-bottom: 8px; /* 0.5em = 8px */
 }
 
-::v-deep .ProseMirror h2 {
+:deep(.ProseMirror h2) {
   font-size: 36px;
   font-weight: bold;
   margin-top: 22.4px; /* 1.4em = 22.4px */
   margin-bottom: 6.4px; /* 0.4em = 6.4px */
 }
 
-::v-deep .ProseMirror h3 {
+:deep(.ProseMirror h3) {
   font-size: 30px;
   font-weight: bold;
   margin-top: 20.8px; /* 1.3em = 20.8px */
   margin-bottom: 6.4px; /* 0.4em = 6.4px */
 }
 
-::v-deep .ProseMirror h4 {
+:deep(.ProseMirror h4) {
   font-size: 24px;
   font-weight: bold;
   margin-top: 19.2px; /* 1.2em = 19.2px */
   margin-bottom: 4.8px; /* 0.3em = 4.8px */
 }
 
-::v-deep .ProseMirror h5 {
+:deep(.ProseMirror h5) {
   font-size: 20px;
   font-weight: bold;
   margin-top: 17.6px; /* 1.1em = 17.6px */
   margin-bottom: 4.8px; /* 0.3em = 4.8px */
 }
 
-::v-deep .ProseMirror h6 {
+:deep(.ProseMirror h6) {
   font-size: 18px;
   font-weight: bold;
   margin-top: 16px; /* 1em = 16px */
@@ -457,28 +455,28 @@ outline:none;
 }
 
 /* List styles */
-::v-deep .ProseMirror ul {
+:deep(.ProseMirror ul) {
   list-style-type: disc;
   padding-left: 24px; /* 1.5em = 24px */
   margin-top: 8px; /* 0.5em = 8px */
   margin-bottom: 8px; /* 0.5em = 8px */
 }
 
-::v-deep .ProseMirror ol {
+:deep(.ProseMirror ol) {
   list-style-type: decimal;
   padding-left: 24px; /* 1.5em = 24px */
   margin-top: 8px; /* 0.5em = 8px */
   margin-bottom: 8px; /* 0.5em = 8px */
 }
 
-::v-deep .ProseMirror li {
+:deep(.ProseMirror li) {
   margin-bottom: 8px; /* 0.5em = 8px */
 }
 
-::v-deep .ProseMirror ul ul,
-::v-deep .ProseMirror ol ol,
-::v-deep .ProseMirror ul ol,
-::v-deep .ProseMirror ol ul {
+:deep(.ProseMirror ul ul),
+:deep(.ProseMirror ol ol),
+:deep(.ProseMirror ul ol),
+:deep(.ProseMirror ol ul) {
   margin-top: 8px; /* 0.5em = 8px */
   margin-bottom: 8px; /* 0.5em = 8px */
   padding-left: 24px; /* 1.5em = 24px */
@@ -486,34 +484,34 @@ outline:none;
 }
 
 /* Table styles */
-::v-deep .ProseMirror table {
+:deep(.ProseMirror table) {
   width: 100%;
   border-collapse: collapse;
   margin-top: 16px; /* 1em = 16px */
   margin-bottom: 16px; /* 1em = 16px */
 }
 
-::v-deep .ProseMirror th,
-::v-deep .ProseMirror td {
+:deep(.ProseMirror th),
+:deep(.ProseMirror td) {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
 
-::v-deep .ProseMirror th {
+:deep(.ProseMirror th) {
   background-color: #f2f2f2;
   font-weight: bold;
 }
 
-::v-deep .ProseMirror td {
+:deep(.ProseMirror td) {
   background-color: #fff;
 }
 
-::v-deep .ProseMirror tr:nth-child(even) td {
+:deep(.ProseMirror tr:nth-child(even) td) {
   background-color: #f9f9f9;
 }
 
-::v-deep .ProseMirror tr:hover td {
+:deep(.ProseMirror tr:hover td) {
   background-color: #e9e9e9;
 }
 </style>

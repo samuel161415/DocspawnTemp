@@ -108,7 +108,7 @@
                   :id="`${formField.name}-${index}`" mode="basic" name="demo[]"
                   accept="image/*" @input="(e) => onImageUpload(e, formField)"
                 /> -->
-            <ImageInput :aspect-ratio="getCanvasElementProportions(formField)" @handle-save-cropped-image="(url) => formField.state = url" />
+            <ImageInput :user-value="props.userValue" :aspect-ratio="getCanvasElementProportions(formField)" @handle-save-cropped-image="(url) => formField.state = url" />
             <!-- <Input type="file" accept="image/*" class="font-poppins p-2" @input="(e) => onImageUpload(e, formField)" /> -->
           </div>
 
@@ -238,8 +238,9 @@ import GenerationSuccessModal from '../common/GenerationSuccessModal.vue'
 import ImageInput from './cropper/ImageInput'
 import { useRuntimeConfig } from '#app'
 
-const props = defineProps(['isExternal', 'showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
+const props = defineProps(['userValue', 'isExternal', 'showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
+
 const toast = useToast()
 const router = useRouter()
 const fields = ref([])
@@ -465,13 +466,11 @@ function validateMinChars(formField, leng) {
 </script>
 
 <style scoped>
-::v-deep .field-error {
-
-  box-shadow: none!important;
+:deep(.field-error) {
+  box-shadow: none !important;
 }
 
-::v-deep .field-error:focus {
-
+:deep(.field-error:focus) {
   box-shadow: none !important;
 }
 </style>

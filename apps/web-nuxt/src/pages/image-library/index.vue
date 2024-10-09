@@ -37,7 +37,7 @@ onMounted(async () => {
 async function fetchImages() {
   const response = await fetch(`${runtimeConfig.public.BASE_URL}/library-image/${user.value.email}`)
   const data = await response.json()
-  console.log('response data', data)
+
   images.value = data
 }
 async function deleteImage(img) {

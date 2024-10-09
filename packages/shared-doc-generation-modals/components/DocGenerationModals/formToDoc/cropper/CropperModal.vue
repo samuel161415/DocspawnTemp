@@ -1,6 +1,7 @@
 <template>
   <div>
     <ImageLibraryModal
+      :user-value="props.userValue"
       @set-image="url => {
         imageUrl = url;visible = true; originalImage = url
         emit('handleOriginalImage', url)
@@ -42,10 +43,9 @@ import { ref, watch } from 'vue'
 import Cropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
 import { ImageLibraryModal } from '@docspawn/image-library-modal'
-
 import uploadFileToBackend from '../../../../services/uploadFileToBackend'
 
-const props = defineProps(['isEdit', 'originalImage', 'aspectRatio', 'isCheckbox'])
+const props = defineProps(['isEdit', 'originalImage', 'aspectRatio', 'isCheckbox', 'userValue'])
 
 // adjust the path as necessary
 

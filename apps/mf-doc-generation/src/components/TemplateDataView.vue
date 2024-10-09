@@ -3,6 +3,7 @@
     <div v-if="previewFormVisible" class="w-max  min-w-[600px] w-max">
       <FormToDocGenerationModal
         v-model:visible="previewFormVisible"
+        :user-value="{ name: 'Hanan', email: 'hanan@gmail.com' }"
         :mobile="mobile"
         :form-title="formTitle"
         :all-form-fields="currentTemplateAllFormFields"

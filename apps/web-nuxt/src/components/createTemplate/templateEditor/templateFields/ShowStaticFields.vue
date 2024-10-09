@@ -75,7 +75,6 @@
 
 <script setup>
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
-import { templateGeneralInformation } from '~/composables/useTemplateCreationData'
 
 const props = defineProps(['showFieldsToAdd'])
 const emit = defineEmits(['setShowFieldsToAdd', 'selectField'])

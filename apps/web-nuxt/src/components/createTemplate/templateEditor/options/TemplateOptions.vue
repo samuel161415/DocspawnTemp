@@ -179,12 +179,12 @@ watch(() => templateEditorStore.watermarkImage, (newVal) => {
 </script>
 
 <style scoped>
-::v-deep .template-name-error {
+:deep(.template-name-error) {
 
   box-shadow: none!important;
 }
 
-::v-deep .template-name-error:focus {
+:deep(.template-name-error:focus) {
 
   box-shadow: none !important;
 }

@@ -507,25 +507,26 @@ async function changeActiveStatus(e, data) {
 </script>
 
 <style scoped>
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:first-of-type {
+:deep(.p-datatable-table > thead > tr:first-of-type > th:first-of-type) {
   border-radius: 0.5rem 0 0 0 !important;
 }
 
-/* Top Right Would be: */
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:last-of-type {
+/* Top Right */
+:deep(.p-datatable-table > thead > tr:first-of-type > th:last-of-type) {
   border-radius: 0 0.5rem 0 0 !important;
 }
 
-/* Bottom Left Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
+/* Bottom Left */
+:deep(.p-datatable-table > tbody > tr:last-of-type > td:first-of-type) {
   border-radius: 0 0 0 0.5rem !important;
 }
 
-/* Bottom Right Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
+/* Bottom Right */
+:deep(.p-datatable-table > tbody > tr:last-of-type > td:last-of-type) {
   border-radius: 0 0 0.5rem 0 !important;
 }
-::v-deep .p-inputswitch-input {
+
+:deep(.p-inputswitch-input) {
   opacity: 0 !important;
 }
 </style>

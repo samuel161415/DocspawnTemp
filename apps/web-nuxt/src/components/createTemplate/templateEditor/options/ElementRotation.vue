@@ -37,7 +37,7 @@
 
 <script setup>
 import canvasService from '@/composables/useTemplateCanvas'
-import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 const rotationVal = ref(0)
 

@@ -1,8 +1,3 @@
-// checked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png
-// unchecked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png
-
 <template>
   <div class="mt-8">
     <div class="flex flex-col justify-center gap-2">
@@ -230,8 +225,7 @@ async function fetchCheckboxOptions() {
   }
 }
 
-watch(() => props?.checkboxDatafield, (newVal) => {
-  console.log('change in checkbox data field')
+watch(() => props?.checkboxDatafield, () => {
   if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox') {
     selectedCheckedContent.value = []
     selectedUncheckedContent.value = []
@@ -244,7 +238,7 @@ watch(() => props?.checkboxDatafield, (newVal) => {
     })
   }
 })
-watch(() => templateEditorStore.selectedAddedField, (val, oldVal) => {
+watch(() => templateEditorStore.selectedAddedField, (val) => {
   if (val?.fieldType === 'Form checkbox group') {
     selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
     selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
@@ -331,7 +325,7 @@ onMounted(() => {
   fieldDescription.value = templateEditorStore.selectedAddedField?.name ? templateEditorStore.selectedAddedField?.name : 0
   const canvas = canvasService.getCanvas()
   if (canvas) {
-    const activeObject = canvas.getActiveObject()
+    // const activeObject = canvas.getActiveObject()
     // currentField.value = templateEditorStore.addedFields.filter(f => f?.hash === activeObject?.hash)[0]
   }
   fetchCheckboxOptions()

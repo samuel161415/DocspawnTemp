@@ -92,8 +92,7 @@ onMounted(() => {
     datasetFile.value = ''
   }
 })
-watch(datasetFile, val => console.log('dataset file', val))
-watch(templateFile, val => console.log('template filke', val))
+
 function setIsHovered(label, hovered) {
   currentData.value = hovered ? label : ''
 }
