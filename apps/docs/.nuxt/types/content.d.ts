@@ -1,4 +1,4 @@
 declare module '#content/server' {
-  const serverQueryContent: typeof import('C:/non windowa/Tec.tech/docspawn/DocSpawn/node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/dist/runtime/legacy/types').serverQueryContent
-  const parseContent: typeof import('C:/non windowa/Tec.tech/docspawn/DocSpawn/node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_rollup@3.29.4_vue@3.4.14/node_modules/@nuxt/content/dist/runtime/server').parseContent
+  const serverQueryContent: typeof import('C:/non windowa/Tec.tech/docspawn/DocSpawn/node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_@parcel+watcher@2.4.0_@types+node@20.11.4_encoding@0.1.13_esl_oc4bcw6e4pbzse7ypwb4htifgm/node_modules/@nuxt/content/dist/runtime/legacy/types').serverQueryContent
+  const parseContent: typeof import('C:/non windowa/Tec.tech/docspawn/DocSpawn/node_modules/.pnpm/@nuxt+content@2.12.0_nuxt@3.9.2_@parcel+watcher@2.4.0_@types+node@20.11.4_encoding@0.1.13_esl_oc4bcw6e4pbzse7ypwb4htifgm/node_modules/@nuxt/content/dist/runtime/server').parseContent
 }
