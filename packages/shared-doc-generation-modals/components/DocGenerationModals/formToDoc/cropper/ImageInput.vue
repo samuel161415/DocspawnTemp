@@ -11,10 +11,7 @@
       @handle-original-image="(val) => originalImage = val"
     />
     <Button v-if="croppedImageUrl" label="Edit image" class="font-poppins my-2" @click="editCroppedImage" />
-    <!-- <div v-if="croppedImageUrl">
-      <h3>Cropped Image:</h3>
-      <img :src="croppedImageUrl" alt="Cropped Image" />
-    </div> -->
+  
   </div>
 </template>
 

@@ -380,26 +380,7 @@ const allGeneratedDocs = ref()
 function updateGeneratedDocs(val) {
   allGeneratedDocs.value = val
 }
-// function downloadAllDocuments() {
-// allGeneratedDocs=docGenerationData.generatedDocs
-//   allGeneratedDocs?.value?.forEach((url, index) => {
-//     fetch(url)
-//       .then(response => response.blob())
-//       .then((blob) => {
-//         const a = document.createElement('a')
-//         const objectUrl = URL.createObjectURL(blob)
-//         a.href = objectUrl
-//         a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
-//         document.body.appendChild(a)
-//         a.click()
-//         document.body.removeChild(a)
-//         URL.revokeObjectURL(objectUrl)
-//       })
-//       .catch((error) => {
-//         console.error(`Error downloading file ${index + 1}:`, error)
-//       })
-//   })
-// }
+
 // const confirm = useConfirm()
 function confirmDelete(template) {
   confirm.require({
@@ -432,7 +413,7 @@ function confirmDelete(template) {
 
 const templatesLoading = ref(true)
 const layout = ref('grid')
-const hoverStates = reactive({})
+
 const favouriteStates = reactive({})
 const currentTemplate = ref()
 const visible = ref(false)
@@ -442,9 +423,7 @@ const isDragging = ref(Array.from({ length: props.templates.length }).fill(false
 const isLoading = ref(Array.from({ length: props.templates.length }).fill(false))
 
 const filterOption = ref(filterOptions.value[0])
-watch(filterOption, (val) => {
-  console.log('filter optipon', val)
-})
+
 const searchQuery = ref('')
 const fileTypeCheck = ref(false)
 
