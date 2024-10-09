@@ -160,7 +160,7 @@ const characterAcceptionOptions = ref([
 
 function fillUpOptions() {
   const sF = templateEditorStore.selectedAddedField
-  console.log('sf', sF)
+  // console.log('sf', sF)
   if (sF?.name !== 'Lorem ipsum' && sF?.name !== 'Add field name')
     fieldName.value = sF?.name
   else
@@ -276,7 +276,6 @@ watch(allowDecimals, () => {
   })
 })
 watch(selectedTimeFormat, () => {
-  console.log('selected time format', selectedTimeFormat.value)
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
@@ -285,7 +284,6 @@ watch(selectedTimeFormat, () => {
   })
 })
 watch(selectedDateFormat, () => {
-  console.log('selected date format', selectedDateFormat.value)
   const allFs = templateEditorStore.addedFields
   templateEditorStore.addedFields = allFs.map((f) => {
     if (f?.hash === templateEditorStore?.selectedAddedField?.hash)
@@ -294,77 +292,6 @@ watch(selectedDateFormat, () => {
   })
 })
 // /******************* */
-const selectedCity = ref()
-const countries = ref([
-  {
-    name: 'Australia',
-    code: 'AU',
-    states: [
-      { cname: 'Sydney', code: 'A-SY' },
-      { cname: 'Newcastle', code: 'A-NE' },
-
-      {
-        name: 'Queensland',
-        cities: [
-          { cname: 'Brisbane', code: 'A-BR' },
-          { cname: 'Townsville', code: 'A-TO' },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'Canada',
-    code: 'CA',
-    states: [
-      {
-        name: 'Quebec',
-        cities: [
-          { cname: 'Montreal', code: 'C-MO' },
-          { cname: 'Quebec City', code: 'C-QU' },
-        ],
-      },
-      {
-        name: 'Ontario',
-        cities: [
-          { cname: 'Ottawa', code: 'C-OT' },
-          { cname: 'Toronto', code: 'C-TO' },
-        ],
-      },
-    ],
-  },
-  {
-    name: 'United States',
-    code: 'US',
-    states: [
-      {
-        name: 'California',
-        cities: [
-          { cname: 'Los Angeles', code: 'US-LA' },
-          { cname: 'San Diego', code: 'US-SD' },
-          { cname: 'San Francisco', code: 'US-SF' },
-        ],
-      },
-      {
-        name: 'Florida',
-        cities: [
-          { cname: 'Jacksonville', code: 'US-JA' },
-          { cname: 'Miami', code: 'US-MI' },
-          { cname: 'Tampa', code: 'US-TA' },
-          { cname: 'Orlando', code: 'US-OR' },
-        ],
-      },
-      {
-        name: 'Texas',
-        cities: [
-          { cname: 'Austin', code: 'US-AU' },
-          { cname: 'Dallas', code: 'US-DA' },
-          { cname: 'Houston', code: 'US-HO' },
-        ],
-      },
-    ],
-  },
-  { cname: 'Wollongong', code: 'A-WO' },
-])
 </script>
 
   <style lang="scss" scoped>

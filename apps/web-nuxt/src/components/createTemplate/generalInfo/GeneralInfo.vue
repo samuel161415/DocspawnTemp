@@ -23,7 +23,7 @@
 
       <div class="border surface-border rounded-lg flex-auto flex p-6 ml-4">
         <p class="font-poppins text-surface-600 text-lg font-medium">
-          {{ currentData !== '' ? currentData : templateGeneralInformation.useCase }}
+          {{ (currentData !== '' ? currentData : templateGeneralInformation.useCase) === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
         </p>
       </div>
     </div>
@@ -48,8 +48,8 @@
       </div>
     </div>
     <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6 mb-8'" class="mt-8">
-      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" @upload="handleTemplateUpload" />
-      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" @upload="handleDatasetUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" :is-file-uploaded="templateFile ? true : false" @upload="handleTemplateUpload" />
+      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" :is-file-uploaded="datasetFile ? true : false" @upload="handleDatasetUpload" />
     </div>
   </div>
 </template>
@@ -92,6 +92,7 @@ onMounted(() => {
     datasetFile.value = ''
   }
 })
+
 function setIsHovered(label, hovered) {
   currentData.value = hovered ? label : ''
 }

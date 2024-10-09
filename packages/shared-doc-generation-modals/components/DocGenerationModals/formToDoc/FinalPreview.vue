@@ -1,41 +1,4 @@
 <template>
-  <!-- <Dialog
-    v-model:visible="showPreview"
-    modal
-    :draggable="false"
-    :style="mobile ? { width: '28rem' } : { maxWidth: '90vw', width: 'max-content' }"
-    :pt="{
-      header: {
-        class: [
-          'flex items-center justify-between',
-          'shrink-0',
-          'p-6',
-          `pb-${mobile ? '0' : ''}`,
-          'border-t-0',
-          'rounded-tl-lg',
-          'rounded-tr-lg',
-          'bg-surface-0 dark:bg-surface-800',
-          'text-surface-700 dark:text-surface-0/80',
-        ],
-      },
-    }"
-  >
-    <template #header>
-      <div :class="`${mobile ? '' : 'pl-4'}`" class="flex flex-row gap-3 w-full">
-        <div v-if="isGeneratable" class="inline-flex align-items-center justify-content-center gap-2">
-          <span class="text-lg text-primary-600 font-poppins font-normal">{{ $t('Cp_formEditor_finalPreview.form_to_doc_generation') }}</span>
-        </div>
-        <div v-if="!props?.isGeneratable" class="flex flex-col">
-          <i class="pi pi-mobile"></i>
-          <RadioButton v-model="mobile" class="pl-0.5" input-id="mobile1" name="pizza" :value="true" />
-        </div>
-        <div v-if="!props?.isGeneratable" class="flex flex-col">
-          <i class="pi pi-desktop"></i>
-          <RadioButton v-model="mobile" class="pl-0.5" input-id="desktop1" name="pizza" :value="false" />
-        </div>
-      </div>
-    </template> -->
-  <!-- <template #default> -->
   <div class="flex">
     <div :class="`flex flex-col  ${props?.isGeneratable && 'min-w-[400px]'} rounded-md w-96 ${mobile ? '' : 'pl-4'}`" :style="{ marginRight: '12px' }">
       <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :class="{ 'mt-4': !props?.isGeneratable }" :style="{ height: '58px', marginBottom: '8px' }">
@@ -145,7 +108,7 @@
                   :id="`${formField.name}-${index}`" mode="basic" name="demo[]"
                   accept="image/*" @input="(e) => onImageUpload(e, formField)"
                 /> -->
-            <ImageInput :aspect-ratio="getCanvasElementProportions(formField)" @handle-save-cropped-image="(url) => formField.state = url" />
+            <ImageInput :user-value="props.userValue" :aspect-ratio="getCanvasElementProportions(formField)" @handle-save-cropped-image="(url) => formField.state = url" />
             <!-- <Input type="file" accept="image/*" class="font-poppins p-2" @input="(e) => onImageUpload(e, formField)" /> -->
           </div>
 
@@ -174,13 +137,14 @@
 
           <div v-else-if="formField.fieldType === 'Form checkbox group' " class="flex flex-col gap-2">
             <label :for="`${formField.name}-${index}`">
-              <div class="flex flex-row gap-2">
+              <div class="flex flex-col gap-2">
                 <div class="font-poppins font-normal text-[rgb(75,85,99)] text-[16px] leading-[25px] ">{{ formField?.fieldDescription ? formField?.fieldDescription : formField.name }} </div>
+                <p class="text-xs">{{ `Min. ${formField.minOptions} and Max. ${formField.maxOptions} options can be checked` }}</p>
               </div>
             </label>
             <div v-for="(checkbox, i) in formField?.checkboxes" :key="i" class="flex items-center gap-2">
               <div class="w-12 h-12 flex items-center">
-                <Checkbox v-model="checkbox.state" :binary="true" class="scale-150 m-2" />
+                <Checkbox v-model="checkbox.state" :disabled="checkbox.state !== true && (formField?.checkboxes.filter(c => c?.state)?.length === formField.maxOptions)" :binary="true" class="scale-150 m-2" />
               </div>
               <p class="font-poppins font-normal text-[rgb(107,114,128)] text-[16px] leading-[25px] ">
                 {{ checkbox?.text }}
@@ -207,7 +171,7 @@
           <Button
             class="font-poppins font-normal text-[16px] leading-[25px]"
             severity="success"
-            :disabled="!props?.isGeneratable || isGeneratingDoc || !allFieldsFilledUp"
+            :disabled="!props?.isGeneratable || isGeneratingDoc || !allFieldsFilledUp || validateCheckboxesFields "
             :label="$t('Cp_formEditor_finalPreview.spawn_document')"
             autofocus
             @click="generateDocument"
@@ -224,12 +188,7 @@
     </p>
     <!-- </div> -->
   </div>
-  <!-- </template> -->
-  <!-- <template #footer>
-    </template> -->
-  <!-- </Dialog> -->
-  <!-- </dialog> -->
-  <!-- </dialog> -->
+
   <GenerationSuccessModal v-if="showGnerationSuccessMessage" />
   <Toast position="top-right" group="bc" :style="{ width: 'max-content' }" @close="onClose">
     <template #message="slotProps">
@@ -279,8 +238,9 @@ import GenerationSuccessModal from '../common/GenerationSuccessModal.vue'
 import ImageInput from './cropper/ImageInput'
 import { useRuntimeConfig } from '#app'
 
-const props = defineProps(['isExternal', 'showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
+const props = defineProps(['userValue', 'isExternal', 'showPreview', 'mobile', 'allFormFields', 'formTitle', 'formDescription', 'isGeneratable', 'templateData'])
 const emit = defineEmits(['changePreview', 'cancel', 'updateGeneratedDocs'])
+
 const toast = useToast()
 const router = useRouter()
 const fields = ref([])
@@ -303,6 +263,19 @@ onMounted(() => {
   })
 })
 
+const validateCheckboxesFields = computed(() => {
+  let allChecked = true
+  fields.value?.forEach((f) => {
+    if (f?.fieldType === 'Form checkbox group') {
+      const allCheckedStates = f?.checkboxes?.filter(c => c?.state)?.length
+
+      if (allCheckedStates < f?.minOptions)
+        allChecked = false
+    }
+  })
+
+  return !allChecked
+})
 watch(() => props?.allFormFields, (newVal) => {
   if (newVal?.length < 1)
     return
@@ -356,6 +329,7 @@ async function onImageUpload(e, formField) {
   formField.state = url
   // fileUrl.value = url
 }
+
 // Function to collect all form data
 function validateFormEntries() {
   let anyError = false
@@ -371,6 +345,7 @@ function validateFormEntries() {
   })
   return !anyError
 }
+
 async function generateDocument() {
   if (!validateFormEntries())
     return
@@ -491,13 +466,11 @@ function validateMinChars(formField, leng) {
 </script>
 
 <style scoped>
-::v-deep .field-error {
-
-  box-shadow: none!important;
+:deep(.field-error) {
+  box-shadow: none !important;
 }
 
-::v-deep .field-error:focus {
-
+:deep(.field-error:focus) {
   box-shadow: none !important;
 }
 </style>

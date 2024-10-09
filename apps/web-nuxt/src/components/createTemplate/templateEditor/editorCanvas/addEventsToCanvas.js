@@ -1,13 +1,8 @@
-// checked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png
-// unchecked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png
-
 import { uuid } from 'vue-uuid'
 import canvasService from '@/composables/useTemplateCanvas'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 
-export default async function addEventsToCanvas(user, runtimeConfig) {
+export default async function addEventsToCanvas() {
   const canvas = canvasService.getCanvas()
   if (canvas) {
     canvas.on('after:render', () => {
@@ -32,7 +27,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     canvas.on('object:moving', (e) => {
       canvas.getObjects().forEach((obj) => {
         // lets add text box also
-        // console.log('obj moving', obj?.moving)
+
         if ((obj.id === 'watermark-docspawn' || obj.fieldType === 'Text box') && e.target.id === obj.id) {
           if (e.target.left <= 10)
             obj.set({ left: 10 })
@@ -66,8 +61,6 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
       if (e.target instanceof fabric.Text)
         templateEditorStore.lastScaledTextOptions = { x: e.target.scaleX, y: e.target.scaleY }
-
-      // if(e.target.fieldType==='Form text'||e.target.fieldType==='Data field'||e.target.)
 
       /** */
       canvas.getObjects().forEach((obj) => {
@@ -151,18 +144,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
     let tempYMargin = null
     let currentHoveredEle = null
 
-    /** */
-    // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-
-    // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked' && f?.default)[0]?.design
-    // if (!defaultUncheckedDesign)
-    //   defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-    // if (!defaultUncheckedDesign)
-    //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-
-    /** */
     canvas.on('mouse:move', async (event) => {
-      // console.log('mouse event', event.absolutePointer)
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
           const isDatafield = false
@@ -394,7 +376,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           )
         }
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group' || templateEditorStore.fieldToAdd.type === 'Dataset checkbox') {
         if (currentHoveredEle && currentHoveredEle?._element) {
           currentHoveredEle.set({
             left: event.absolutePointer.x - (40 / currentHoveredEle.width),
@@ -433,16 +415,8 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           canvas.renderAll()
         }
         else {
-          /** ***********default unchecked */
-          // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-
-          // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-          // if (!defaultUncheckedDesign)
-          //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-
-          /** */
           fabric.Image.fromURL(
-            // defaultUncheckedDesign
+
             templateEditorStore.fieldToAdd?.designs?.no
             , (myImg) => {
               if (currentHoveredEle)
@@ -821,18 +795,9 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
           },
         )
       }
-      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group') {
-        /** ***********default unchecked */
-        // const allCheckboxes = await fetchCheckboxOptions(user, runtimeConfig)
-        // console.log('all checkboxes', allCheckboxes)
-        // let defaultUncheckedDesign = allCheckboxes?.filter(f => f?.type === 'unchecked')[0]?.design
-        // if (!defaultUncheckedDesign)
-        //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-        // console.log('defaultUncheckedDesign', defaultUncheckedDesign)
-        /** */
+      if (templateEditorStore.fieldToAdd.type === 'Form checkbox group' || templateEditorStore.fieldToAdd.type === 'Dataset checkbox') {
         const ftoadd = templateEditorStore.fieldToAdd
         templateEditorStore.fieldToAdd = {}
-        // console.log('ftoadd?.designs?.no>>>>>>', ftoadd?.designs?.no)
         fabric.Image.fromURL(
           // defaultUncheckedDesign
           ftoadd?.designs?.no
@@ -876,7 +841,7 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
             /** calculating no of checkbox groups and assigning position no */
             const totalCheckboxGroups = templateEditorStore?.addedFields?.filter(f => f?.fieldType === 'Form checkbox group')?.length
 
-            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 0, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
+            const fieldToAdd = { isFormField, isRequired: true, groupPosition: totalCheckboxGroups ? totalCheckboxGroups + 1 : 1, fieldType: ftoadd.type, designs: ftoadd?.designs, name: ftoadd.id, id: ftoadd.id, hash: myImg.hash, page: templateEditorStore.activePageForCanvas, minOptions: 1, maxOptions: 1, checkboxes: [{ text: '', id: 1, checkboxIdentifierHash: uniqueHashForEle }], colorsForCheckboxGroup,
             }
             // console.log('saving fieldToAdd', fieldToAdd, myImg)
             const allFields = []
@@ -979,7 +944,9 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
 
             /** ********creating checkbox info icon */
             // https://placehold.co/400/000000/ffffff?font=roboto&text=1
-            fabric.Image.fromURL(
+
+            if (ftoadd.type !== 'Dataset checkbox') {
+              fabric.Image.fromURL(
                 `https://placehold.co/100/${colorsForCheckboxGroup?.light}/${colorsForCheckboxGroup?.dark}?font=roboto&text=1`
                 , (icon) => {
                   icon.set({
@@ -1000,7 +967,8 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
                   canvas.add(icon)
                   canvas.renderAll()
                 },
-            )
+              )
+            }
 
             /** */
 
@@ -1071,28 +1039,6 @@ export default async function addEventsToCanvas(user, runtimeConfig) {
   }
 }
 
-// async function fetchCheckboxOptions(user, runtimeConfig) {
-//   if (!user?.value?.email)
-//     return
-//   try {
-//     // console.log('${runtimeConfig.public.BASE_URL}/templates', `${runtimeConfig.public.BASE_URL}/templates`)
-//     const response = await fetch(
-//       `${runtimeConfig.public.BASE_URL}/checkboxOptions/${user?.value?.email}`,
-//     )
-//     if (!response.ok)
-//       throw new Error(`Network response was not ok ${response.statusText}`)
-//     const data = await response.json()
-
-//     if (data?.length > 0)
-//       console.log('checkboxOptions', data)
-
-//     return data
-//     // console.log('response of fetching templates', data)
-//   }
-//   catch (error) {
-//     console.error('Error fetching templates:', error)
-//   }
-// }
 function getRandomHexColor(isLight) {
   let color = ''
   for (let i = 0; i < 3; i++) {

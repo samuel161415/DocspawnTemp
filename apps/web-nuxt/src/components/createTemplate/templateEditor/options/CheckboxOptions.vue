@@ -1,26 +1,21 @@
-// checked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png
-// unchecked image
-// https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png
-
 <template>
   <div class="mt-8">
-    <div class="flex justify-between items-center">
+    <div class="flex flex-col justify-center gap-2">
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.checked_design') }}
       </p>
       <Dropdown
         v-model="selectedChecked"
-        disabled
+
         :options="checkedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-14rem"
+        class="w-full md:w-full"
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
           <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8 " />
           </div>
         </template>
 
@@ -34,7 +29,7 @@
       </Dropdown>
       <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" /> -->
     </div>
-    <div class="flex justify-between items-center mt-2">
+    <div class="flex flex-col justify-center gap-2 mt-4">
       <p class="font-poppins text-surface-600">
         {{ $t('Cp_templateEditor_checkboxOptions.unchecked_design') }}
       </p>
@@ -43,13 +38,12 @@
         :options="uncheckedOptions"
         option-label="design"
         placeholder="Select an Image"
-        class="w-full md:w-14rem"
-        disabled
+        class="w-full md:w-full "
       >
         <!-- Custom template for each dropdown item -->
         <template #option="slotProps">
           <div class="flex align-items-center">
-            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 " style="width: 28px" />
+            <img :alt="slotProps.option.id" :src="slotProps.option.design" class="mr-2 w-8" />
           </div>
         </template>
 
@@ -64,49 +58,96 @@
       <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
     </div>
   </div>
-  <div class="flex flex-col mt-4">
-    <p class="font-poppins text-md text-surface-600 mb-2">
-      {{ $t('Cp_templateEditor_checkboxOptions.checkbox_description') }}
-    </p>
-    <Textarea v-model="fieldDescription" rows="3" />
-  </div>
-  <div class="mt-4">
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
-      </label>
-      <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
-    </div>
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
-      </label>
-      <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="0" :max="100" class="custom-input-number" />
-    </div>
-    <div class="flex flex-col w-full">
-      <label class="font-poppins my-2 text-surface-600 mt-8">
-        {{ $t('Cp_templateEditor_checkboxOptions.no_of_checkboxes') }}: <span class="text-primary-600">{{ noOfCheckboxes }}</span>
-      </label>
-    </div>
-  </div>
-  <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
-    {{ $t('Cp_templateEditor_checkboxOptions.select_all_checkboxes') }}
-  </Button>
-  <Button class="w-full mt-2" @click="addCheckboxToGroup">
-    {{ $t('Cp_templateEditor_checkboxOptions.add_checkbox_to_group') }}
-  </Button>
-  <div class="mt-4">
-    <div
-      v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
-    >
+  <div v-if="props?.isCheckbox">
+    <div class="flex flex-col justify-center gap-2 mt-3">
       <p class="font-poppins text-surface-600">
-        {{ $t('Cp_templateEditor_checkboxOptions.checkbox_text', { index: index + 1 }) }}
+        Checked content
       </p>
-      <div class="w-full flex mt-1 border rounded-lg">
-        <InputText class="flex-1 rounded rounded-r-none border-0" :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
-        <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
-          <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
-        </Button>
+
+      <MultiSelect
+        v-model="selectedCheckedContent" :options="contentOptions" filter placeholder="Select content"
+        :max-selected-labels="3" class="w-full md:w-full min-h-12"
+      >
+        <!-- Custom template for each dropdown item -->
+
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <!-- <img :src="value?.design" alt="" class="w-12 h-12 mr-2" /> -->
+            <span>{{ value }}</span>
+          </div>
+        </template>
+      </MultiSelect>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png" alt="checked" class="w-12 h-auto" /> -->
+    </div>
+    <div class="flex flex-col justify-center gap-2 mt-4">
+      <p class="font-poppins text-surface-600">
+        Unchecked content
+      </p>
+
+      <MultiSelect
+        v-model="selectedUncheckedContent" :options="contentOptions" filter placeholder="Select content"
+        :max-selected-labels="3" class="w-full md:w-full min-h-12"
+      >
+        <!-- Custom template for the selected item -->
+        <template #value="{ value }">
+          <div class="flex items-center">
+            <!-- <img :src="value?.design" alt="" class="w-12 h-12 mr-2" /> -->
+            <span>{{ value }}</span>
+          </div>
+        </template>
+      </MultiSelect>
+      <!-- <img src="https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png" alt="unchecked" class="w-12 h-auto" /> -->
+    </div>
+  </div>
+  <div v-if="!props?.isCheckbox">
+    <div class="flex flex-col mt-4">
+      <p class="font-poppins text-md text-surface-600 mb-2">
+        {{ $t('Cp_templateEditor_checkboxOptions.checkbox_description') }}
+      </p>
+      <Textarea v-model="fieldDescription" rows="3" />
+    </div>
+    <div class="mt-4">
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.min_no_of_options') }}
+        </label>
+        <InputNumber v-model="minOptions" mode="decimal" show-buttons :min="1" :max="noOfCheckboxes" class="custom-input-number" />
+      </div>
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.max_no_of_options') }}
+        </label>
+        <p v-if="optionSelectionError" class="text-red-400 text-sm mb-2">
+          Max. options should be equal to or greater than Min.
+        </p>
+        <InputNumber v-model="maxOptions" mode="decimal" show-buttons :min="1" :max="noOfCheckboxes" class="custom-input-number" />
+      </div>
+      <div class="flex flex-col w-full">
+        <label class="font-poppins my-2 text-surface-600 mt-8">
+          {{ $t('Cp_templateEditor_checkboxOptions.no_of_checkboxes') }}: <span class="text-primary-600">{{ noOfCheckboxes }}</span>
+        </label>
+      </div>
+    </div>
+    <Button outline class="w-full mt-2" outlined @click="selectAllInGroup">
+      {{ $t('Cp_templateEditor_checkboxOptions.select_all_checkboxes') }}
+    </Button>
+    <Button class="w-full mt-2" @click="addCheckboxToGroup">
+      {{ $t('Cp_templateEditor_checkboxOptions.add_checkbox_to_group') }}
+    </Button>
+    <div class="mt-4">
+      <div
+        v-for="(item, index) in templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes" :key="index" class="my-2"
+      >
+        <p class="font-poppins text-surface-600">
+          {{ $t('Cp_templateEditor_checkboxOptions.checkbox_text', { index: index + 1 }) }}
+        </p>
+        <div class="w-full flex mt-1 border rounded-lg">
+          <InputText class="flex-1 rounded rounded-r-none border-0" :value="item.text" @input="(e) => changeTextOfCheckboxOption(e, index + 1)" />
+          <Button v-if="noOfCheckboxes !== 1" v-tooltip.top="'Delete checkbox'" class="w-12 bg-white" outlined small @click="deleteCheckboxById(index + 1)">
+            <font-awesome-icon icon="fa-light fa-xmark" size="lg" />
+          </Button>
+        </div>
       </div>
     </div>
   </div>
@@ -119,13 +160,20 @@ import canvasService from '@/composables/useTemplateCanvas'
 
 import { useAuth } from '@/composables/useAuth'
 
+const props = defineProps(['isCheckbox', 'checkboxDatafield'])
+
 const noOfCheckboxes = ref(1)
-const minOptions = ref(0)
+const minOptions = ref(1)
 const maxOptions = ref(1)
 const fieldDescription = ref('')
 const currentField = ref()
 const selectedChecked = ref()
 const selectedUnchecked = ref()
+const optionSelectionError = ref(false)
+
+const contentOptions = ref()
+const selectedCheckedContent = ref()
+const selectedUncheckedContent = ref()
 
 const { user } = useAuth()
 
@@ -143,25 +191,31 @@ async function fetchCheckboxOptions() {
     )
     if (!response.ok)
       throw new Error(`Network response was not ok ${response.statusText}`)
-    const data = await response.json()
+    const rawData = await response.json()
+    const data = rawData?.filter(f => f?.active === 'yes')
 
     if (data?.length > 0) {
-      console.log('checkboxOptions at options', data)
-      // checkedOptions.value = data?.filter(f => f?.type === 'checked')
-      // const def = checkedOptions.value?.filter(c => c?.default)[0]
-      // if (def)
-      //   selectedChecked.value = def
-      // else
-      selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
-      // checkedOptions.value[0]
+      checkedOptions.value = data?.filter(f => f?.type === 'checked')
+      const def = checkedOptions.value?.filter(c => c?.default)[0]
+      if (templateEditorStore?.selectedAddedField?.designs?.yes)
+        selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
 
-      // uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
-      // const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
-      // if (def2)
-      //   selectedUnchecked.value = def2
-      // else
-      selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
-      //  uncheckedOptions.value[0]
+      else if (def)
+        selectedChecked.value = def
+      else
+      // selectedChecked.value = { id: 1, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/cb212f15-9a46-420d-b091-6f9f8096a048_yes1.png' }
+        selectedChecked.value = checkedOptions.value[0]
+
+      uncheckedOptions.value = data?.filter(f => f?.type === 'unchecked')
+      const def2 = uncheckedOptions.value?.filter(c => c?.default)[0]
+
+      if (templateEditorStore?.selectedAddedField?.designs?.no)
+        selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
+      else if (def2)
+        selectedUnchecked.value = def2
+      else
+      // selectedUnchecked.value = { id: 2, design: 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png' }
+        selectedUnchecked.value = uncheckedOptions.value[0]
     }
 
     // console.log('response of fetching templates', data)
@@ -171,28 +225,121 @@ async function fetchCheckboxOptions() {
   }
 }
 
+watch(() => props?.checkboxDatafield, () => {
+  if (templateEditorStore?.selectedAddedField?.fieldType === 'Dataset checkbox') {
+    selectedCheckedContent.value = []
+    selectedUncheckedContent.value = []
+    templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((f) => {
+      if (f?.hash === templateEditorStore?.selectedAddedField?.hash) {
+        templateEditorStore.selectedAddedField = { ...f, contentFields: { yes: [], no: [] } }
+        return { ...f, contentFields: { yes: [], no: [] } }
+      }
+      else { return f }
+    })
+  }
+})
+watch(() => templateEditorStore.selectedAddedField, (val) => {
+  if (val?.fieldType === 'Form checkbox group') {
+    selectedChecked.value = checkedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.yes)[0]
+    selectedUnchecked.value = uncheckedOptions.value?.filter(c => c?.design === templateEditorStore?.selectedAddedField?.designs?.no)[0]
+  }
+  if (val?.fieldType === 'Dataset checkbox') {
+    // if ((val?.hash === oldVal?.hash) && (val?.name !== oldVal?.name)) {
+    //   selectedCheckedContent.value = []
+    //   selectedUncheckedContent.value = []
+    // }
+    // else
+    if (templateEditorStore.selectedAddedField?.contentFields?.yes && templateEditorStore.selectedAddedField?.contentFields?.no) {
+      selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
+      selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+    }
+    else {
+      selectedCheckedContent.value = []
+      selectedUncheckedContent.value = []
+    }
+  }
+})
+function setContentOptions() {
+  const arrayofData = []
+  templateEditorStore.datasetData.allEntries?.forEach((entry) => {
+    const val = entry[templateEditorStore?.activeDataField]
+    if (val && !arrayofData?.includes(val))
+      arrayofData.push(val)
+  })
+
+  contentOptions.value = arrayofData
+}
+watch(() => templateEditorStore?.activeDataField, (val) => {
+  setContentOptions()
+})
+watch(selectedCheckedContent, (val) => {
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, yes: val } }
+      return { ...field, contentFields: { ...field?.contentFields, yes: val } }
+    }
+    return field
+  })
+})
+watch(selectedUncheckedContent, (val) => {
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, contentFields: { ...field?.contentFields, no: val } }
+      return { ...field, contentFields: { ...field?.contentFields, no: val } }
+    }
+    return field
+  })
+})
+watch(minOptions, (val) => {
+  if (val > maxOptions.value)
+    optionSelectionError.value = true
+  else
+    optionSelectionError.value = false
+
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, minOptions: val }
+      return { ...field, minOptions: val }
+    }
+    return field
+  })
+})
+watch(maxOptions, (val) => {
+  if (val < minOptions.value)
+    optionSelectionError.value = true
+  else
+    optionSelectionError.value = false
+
+  templateEditorStore.addedFields = templateEditorStore.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      templateEditorStore.selectedAddedField = { ...field, maxOptions: val }
+      return { ...field, maxOptions: val }
+    }
+    return field
+  })
+})
 onMounted(() => {
   noOfCheckboxes.value = templateEditorStore.selectedAddedField?.checkboxes?.length >= 1 ? templateEditorStore.selectedAddedField?.checkboxes.length : 1
-  minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 0
-  maxOptions.value = templateEditorStore.selectedAddedField?.maxOptions >= 0 ? templateEditorStore.selectedAddedField?.maxOptions : 0
+  minOptions.value = templateEditorStore.selectedAddedField?.minOptions >= 0 ? templateEditorStore.selectedAddedField?.minOptions : 1
+  maxOptions.value = templateEditorStore.selectedAddedField?.maxOptions >= 0 ? templateEditorStore.selectedAddedField?.maxOptions : 1
   fieldDescription.value = templateEditorStore.selectedAddedField?.name ? templateEditorStore.selectedAddedField?.name : 0
   const canvas = canvasService.getCanvas()
   if (canvas) {
-    const activeObject = canvas.getActiveObject()
-    console.log('templateEditorStore.selectedAddedField', templateEditorStore.selectedAddedField)
-    console.log('activeobjec id hash', activeObject?.id, activeObject?.hash)
-    console.log('templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0]?.checkboxes', templateEditorStore.addedFields.filter(f => f?.hash === templateEditorStore.selectedAddedField?.hash)[0])
+    // const activeObject = canvas.getActiveObject()
     // currentField.value = templateEditorStore.addedFields.filter(f => f?.hash === activeObject?.hash)[0]
-    console.log('current field value', currentField.value)
   }
   fetchCheckboxOptions()
+  setContentOptions()
+  if (templateEditorStore.selectedAddedField?.contentFields) {
+    selectedCheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.yes
+    selectedUncheckedContent.value = templateEditorStore.selectedAddedField?.contentFields?.no
+  }
 })
-watch(checkedOptions, val => console.log('checked options', val))
-watch(uncheckedOptions, val => console.log('unchecked options', val))
+
 watch(() => templateEditorStore.selectedAddedField, (val) => {
   noOfCheckboxes.value = val?.checkboxes?.length >= 1 ? val?.checkboxes.length : 1
-  minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 0
-  maxOptions.value = val?.maxOptions >= 0 ? val?.maxOptions : 0
+  minOptions.value = val?.minOptions >= 0 ? val?.minOptions : 1
+  maxOptions.value = val?.maxOptions >= 0 ? val?.maxOptions : 1
   fieldDescription.value = val?.name ? val?.name : 0
 })
 function changeTextOfCheckboxOption(e, item) {
@@ -264,7 +411,6 @@ function addCheckboxToGroup() {
     //   defaultUncheckedDesign = uncheckedOptions.value?.filter(f => f?.type === 'unchecked')[0]?.design
     // if (!defaultUncheckedDesign)
     //   defaultUncheckedDesign = 'https://docspawn-bucket-1.s3.eu-central-1.amazonaws.com/docspawn-bucket-1/4cc552c3-7ae4-407f-a7f3-33f3a47aa9d8_No3.png'
-    console.log('templateEditorStore?.selectedAddedField?.designs?.no', templateEditorStore?.selectedAddedField?.designs?.no)
     fabric.Image.fromURL(
       // defaultUncheckedDesign
       templateEditorStore?.selectedAddedField?.designs?.no
@@ -278,10 +424,10 @@ function addCheckboxToGroup() {
 
           left: activeObject?.left + (activeObject?.width * activeObject?.scaleX),
           top: activeObject?.top,
-          scaleX: activeObject?.scaleX,
-          scaleY: activeObject?.scaleY,
-          width: activeObject?.width,
-          height: activeObject?.height,
+          scaleX: (activeObject.width * activeObject.scaleX) / (myImg.width), // ?.scaleX,
+          scaleY: (activeObject.height * activeObject.scaleY) / (myImg.height), // activeObject?.scaleY,
+          // width: activeObject?.width,
+          // height: activeObject?.height,
           id: activeObject?.id,
           hash: activeObject?.hash,
           checkboxIdentifierHash: uniqueHashForEle,
@@ -373,7 +519,7 @@ function addCheckboxToGroup() {
           if (myImg.tooltip) {
             // canvas.remove(myImg.tooltip)
             // myImg.tooltip = null
-            console.log('mouseout myImg tooltip', myImg.tooltip)
+
             myImg.tooltip.set({ visible: false, opacity: 0 })
             canvas.renderAll()
           }
@@ -549,6 +695,61 @@ function deleteCheckboxById(id) {
     }
   }
 }
+watch(selectedChecked, (val) => {
+  const canvas = canvasService.getCanvas()
+  // commenting this because we will set check to either yes or no, if while insertion we are using yes, then yes else no
+
+  // const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && f?.fieldType === 'Form checkbox group')
+  // allCheckBoxesObjects.forEach((obj) => {
+  //   if (val?.design) {
+  //     const scaleXToBe = (obj.width * obj.scaleX)
+  //     const scaleYToBe = (obj.height * obj.scaleY)
+  //     obj.setSrc(val?.design, (myImg) => {
+  //       obj.set({
+  //         scaleX: scaleXToBe / (myImg.width),
+  //         scaleY: scaleYToBe / (myImg.height),
+  //       })
+
+  //       canvas.renderAll()
+  //     })
+  //   }
+  // })
+  templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      const updated = { ...field, designs: { ...field?.designs, yes: val?.design } }
+      templateEditorStore.selectedAddedField = updated
+      return updated
+    }
+    else { return field }
+  })
+})
+watch(selectedUnchecked, (val) => {
+  const canvas = canvasService.getCanvas()
+  // commenting this because we will set check to either yes or no, if while insertion we are using yes, then yes else no
+  const allCheckBoxesObjects = canvas?.getObjects()?.filter(f => f?.hash === templateEditorStore?.selectedAddedField?.hash && (f?.fieldType === 'Form checkbox group' || (props?.isCheckbox && f?.fieldType === 'Dataset checkbox')))
+  allCheckBoxesObjects.forEach((obj) => {
+    if (val?.design) {
+      const scaleXToBe = (obj.width * obj.scaleX)
+      const scaleYToBe = (obj.height * obj.scaleY)
+      obj.setSrc(val?.design, (myImg) => {
+        obj.set({
+          scaleX: scaleXToBe / (myImg.width),
+          scaleY: scaleYToBe / (myImg.height),
+        })
+
+        canvas.renderAll()
+      })
+    }
+  })
+  templateEditorStore.addedFields = templateEditorStore?.addedFields?.map((field) => {
+    if (field?.hash === templateEditorStore.selectedAddedField.hash) {
+      const updated = { ...field, designs: { ...field?.designs, no: val?.design } }
+      templateEditorStore.selectedAddedField = updated
+      return updated
+    }
+    else { return field }
+  })
+})
 </script>
 
   <style scoped>

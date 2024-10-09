@@ -15,7 +15,7 @@
             </div>
           </div>
 
-          <TemplateDataView :templates="templateData" @delete-template="deleteTemplate" @update-templates-for-favourites="updateTemplateData" />
+          <TemplateDataView :templates="templateData" @refresh-templates="fetchTemplates" @delete-template="deleteTemplate" @update-templates-for-favourites="updateTemplateData" />
         </div>
       </div>
 

@@ -1,12 +1,12 @@
 <template>
   <div class="flex justify-center space-x-8 h-3/4 w-[92vw]" :style="{ width: '92vw' }">
-    <div class="w-6/12 h-full mt-0" :style="{ marginRight: '12px' }">
+    <div class=" h-full mt-0" :style="{ marginRight: '12px' }">
       <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :style="{ height: '58px' }">
         <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
           {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
         </p>
       </div>
-      <div class="w-[30px] overflow-auto" :style="{ maxWidth: '40vw' }">
+      <div class="overflow-auto" :style="{ maxWidth: '40vw' }">
         <EditDatasetTable
           v-if="template?.dataset_data?.keys?.length > 0"
           :data-source-file-complete-j-s-o-n="allData"

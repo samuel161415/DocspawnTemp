@@ -14,7 +14,7 @@
               placeholder="Select a filter"
             />
             <h2 v-else class=" text-xl font-semibold text-surface-600 ">
-              Favourite Templates
+              {{ $t('Pg_home.favorite_templates') }}
             </h2>
           </div>
           <div class="flex items-center  ">
@@ -52,7 +52,7 @@
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event, index)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
               <font-awesome-icon :icon="fad.faUpload" size="2xl" style="--fa-primary-color: #009ee2; --fa-secondary-color: #009ee2; width: 40px; height: 30px;" />
@@ -63,8 +63,18 @@
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
+            <div v-if="isLoading[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 flex-col h-[255px] md:h-[150px] sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-50">
+              <p>Uploading file</p>
+              <ProgressSpinner
+                :style="{ width: '50px', height: '50px' }"
+                stroke-width="4"
+                fill="#fff"
+                animation-duration=".5s"
+                class="progress-spinner-circle"
+              />
+            </div>
 
-            <div v-show="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
+            <div v-else-if="!isDragging[index]" class="flex flex-col sm:flex-row sm:items-center px-4 py-2 gap-2 rounded-lg bg-surface-5050">
               <div class="min-w-[6rem] relative cursor-pointer " @click="handleTemplatePreview(item)">
                 <div class="h-max w-full flex justify-center py-1 ">
                   <ImagePreview :preview-hash="item.image_preview_hash" :background-file-url="item.background_file_url" :filtered-templates="filteredTemplates" />
@@ -84,12 +94,13 @@
                     <i v-tooltip.top="$t('Cp_templateDataview.delete_template')" class="pointer-auto pi pi-trash text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="confirmDelete(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_data')" class="pointer-auto pi pi-file text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.access_document')" class="pointer-auto pi pi-folder-open text-surface-500 cursor-pointer" style="font-size: 1.3rem"></i>
+                    <i v-tooltip.top="'Duplicate'" class="pointer-auto pi pi-clone text-surface-500 cursor-pointer" style="font-size: 1.3rem" @click="duplicateTemplate(item)"></i>
                     <i v-tooltip.top="$t('Cp_templateDataview.set_as_favorites')" class="pointer-auto cursor-pointer text-surface-500" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']" style="font-size: 1.3rem" @click="toggleFavourite(item)"></i>
                   </div>
 
                   <div class="flex flex-row-reverse md:flex-row">
                     <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="handleFillForm(item)" />
-                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e); }" />
+                    <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e, index); }" />
                   </div>
                 </div>
               </div>
@@ -106,7 +117,7 @@
             @dragover.prevent="item.use_case !== 'Form to doc' && handleDragOver(item, index)"
             @dragenter.prevent="item.use_case !== 'Form to doc' && handleDragEnter(item, index)"
             @dragleave.prevent="item.use_case !== 'Form to doc' && handleDragLeave(item, index)"
-            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event)"
+            @drop.prevent="item.use_case !== 'Form to doc' && handleFileDrop(item, $event, index)"
           >
             <div v-show="isDragging[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
               <font-awesome-icon :icon="fad.faUpload" size="lg" style="--fa-primary-color: #43AF79; --fa-secondary-color: #43AF79; width: 50px; height: 40px;" />
@@ -118,8 +129,17 @@
                 {{ $t('Cp_templateDataview.supported_formats') }}
               </p>
             </div>
-
-            <div v-show="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
+            <div v-if="isLoading[index]" class="flex justify-center items-center border-dashed border-2 border-gray-400 px-6 sm:px-4 md:px-4 w-11/12 min-h-[16rem] h-full lg:px-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex-col bg-white">
+              <p>Uploading file</p>
+              <ProgressSpinner
+                :style="{ width: '50px', height: '50px' }"
+                stroke-width="4"
+                fill="#fff"
+                animation-duration=".5s"
+                class="progress-spinner-circle"
+              />
+            </div>
+            <div v-else-if="!isDragging[index]" class="px-3 sm:px-4 md:px-4 min-h-[14rem] h-full lg:px-4 mr-6 py-1 dark:border-surface-700 dark:bg-surface-900 rounded-lg flex flex-col bg-surface-50">
               <div class="flex items-center p-2 pt-4" :class="favouriteStates[item?.id] ? 'justify-between' : 'justify-between'">
                 <div class="">
                   <i v-if="favouriteStates[item?.id]" class="cursor-pointer" :class="[favouriteStates[item?.id] ? 'pi pi-star-fill text-warning' : 'pi pi-star hover:text-warning']"></i>
@@ -154,7 +174,7 @@
                     outlined
                     severity="success" :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto white-space-nowrap font-poppins cursor-pointer  text-[16px]" @click="(e) => {
                       templateSelectedForUploadingFile = item;
-                      uploadFile(e);
+                      uploadFile(e, index);
                     }"
                   />
                 </div>
@@ -204,6 +224,7 @@
       <template #default>
         <div>
           <FormToDocGenerationModal
+            :user-value="user"
             :mobile="mobile"
             :form-title="formTitle"
             :all-form-fields="currentTemplateAllFormFields"
@@ -230,6 +251,9 @@
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded">
           {{ $t('Cp_templateDataview.access_document') }}
+        </p>
+        <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="duplicateTemplate(opItem)">
+          Duplicate
         </p>
         <p class="text-lg text-surface-500 font-poppins font-normal p-2 hover:bg-surface-100 cursor-pointer rounded" @click="toggleFavourite(opItem)">
           {{ favouriteStates[opItem?.id] ? $t('Cp_templateDataview.remove_from_favourites') : $t('Cp_templateDataview.set_as_favorites') }}
@@ -308,12 +332,12 @@ import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
-
 import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
 import ListSkeleton from './skeletons/ListSkeleton.vue'
+import { useAuth } from '@/composables/useAuth'
 
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import { docGenerationData } from '@/composables/useDocGenerationData'
@@ -331,7 +355,9 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites'])
+const emit = defineEmits(['deleteTemplate', 'updateTemplatesForFavourites', 'refreshTemplates'])
+
+const { user } = useAuth()
 
 const { screenWidth } = useScreenWidth()
 
@@ -354,26 +380,7 @@ const allGeneratedDocs = ref()
 function updateGeneratedDocs(val) {
   allGeneratedDocs.value = val
 }
-// function downloadAllDocuments() {
-// allGeneratedDocs=docGenerationData.generatedDocs
-//   allGeneratedDocs?.value?.forEach((url, index) => {
-//     fetch(url)
-//       .then(response => response.blob())
-//       .then((blob) => {
-//         const a = document.createElement('a')
-//         const objectUrl = URL.createObjectURL(blob)
-//         a.href = objectUrl
-//         a.download = `file_${index + 1}.pdf` // Adjust the file name as needed
-//         document.body.appendChild(a)
-//         a.click()
-//         document.body.removeChild(a)
-//         URL.revokeObjectURL(objectUrl)
-//       })
-//       .catch((error) => {
-//         console.error(`Error downloading file ${index + 1}:`, error)
-//       })
-//   })
-// }
+
 // const confirm = useConfirm()
 function confirmDelete(template) {
   confirm.require({
@@ -406,18 +413,17 @@ function confirmDelete(template) {
 
 const templatesLoading = ref(true)
 const layout = ref('grid')
-const hoverStates = reactive({})
+
 const favouriteStates = reactive({})
 const currentTemplate = ref()
 const visible = ref(false)
 const visibleDataToDoc = ref(false)
 const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
+const isLoading = ref(Array.from({ length: props.templates.length }).fill(false))
 
 const filterOption = ref(filterOptions.value[0])
-watch(filterOption, (val) => {
-  console.log('filter optipon', val)
-})
+
 const searchQuery = ref('')
 const fileTypeCheck = ref(false)
 
@@ -543,7 +549,7 @@ function handleDragOver(item, index) {
 function showError() {
   toast.add({ severity: 'error', summary: 'Invalid file', detail: 'Please upload a .csv, .xls or .xlsx file', life: 10000 })
 }
-function handleFileDrop(template, event) {
+function handleFileDrop(template, event, index) {
   const files = event.dataTransfer.files
 
   if (!files[0]) {
@@ -556,7 +562,7 @@ function handleFileDrop(template, event) {
 
     if (fileType === 'xlsx' || fileType === 'xls' || fileType === 'csv') {
       fileTypeCheck.value = true
-      handleFileUpload(files[0], template)
+      handleFileUpload(files[0], template, index)
     }
     else {
       fileTypeCheck.value = false
@@ -565,7 +571,11 @@ function handleFileDrop(template, event) {
     isDragging.value.fill(false)
   }
 }
-function handleFileUpload(file, template) {
+function handleFileUpload(file, template, index) {
+  /** */
+  isLoading.value.fill(false)
+  isLoading.value[index] = true
+  /** */
   const keysToCheck = template?.dataset_data?.selectedKeys
 
   if (!file) {
@@ -625,15 +635,18 @@ function compareAndNotify(headers, keysToCheck, template) {
 
   if (isAllKeysPresent) {
     // You can use a toast or some UI element to notify the user
+    isLoading.value.fill(false)
+
     toast.add({ severity: 'success', summary: 'Congrats', detail: 'All keys present', life: 3000 })
     handleDataToDocGenerationPreview(template)
   }
   else {
+    isLoading.value.fill(false)
     toast.add({ severity: 'error', summary: 'Invalid file', detail: 'This file doesn\'t match the template data', life: 10000 })
   }
 }
 
-function uploadFile() {
+function uploadFile(e, index) {
   const template = templateSelectedForUploadingFile.value
   templateSelectedForUploadingFile.value = null
   const fileInput = document.createElement('input')
@@ -644,7 +657,7 @@ function uploadFile() {
   fileInput.addEventListener('change', (event) => {
     const file = event.target.files[0]
     file
-    && handleFileUpload(file, template)
+    && handleFileUpload(file, template, index)
     // const reader = new FileReader()
 
     // reader.onload = () => {
@@ -681,6 +694,49 @@ async function toggleFavourite(template) {
 
     layout.value === 'grid' && op.value.toggle()
     toast.add({ severity: 'success', summary: 'Succeed', detail: !favouriteStates[template?.id] ? 'Template removed from favourites' : 'Template set as favourite', life: 3000 })
+  }
+}
+async function duplicateTemplate(template) {
+  const objToSend = {
+    account_type: template?.account_type,
+    name: `${template?.name}- copy`,
+    use_case: template?.use_case,
+    background_file_url: template?.background_file_url,
+    dataset_file_url: template?.dataset_file_urll,
+    dataset_start_line: template?.dataset_start_line,
+    template_options: JSON.stringify(template?.template_options),
+    last_text_options: JSON.stringify(template?.last_text_options),
+    page_sizes: JSON.stringify(template?.page_sizes),
+    added_fields: JSON.stringify(template?.added_fields),
+    dataset_data: JSON.stringify(template?.dataset_data),
+    canvas_data: JSON.stringify(template?.canvas_data),
+    delivery_options: JSON.stringify(template?.delivery_options),
+    canvas_size: JSON.stringify(template?.canvas_size),
+    editor_fields_data:
+    JSON.stringify(template.editor_fields_data),
+
+  }
+  console.log('obj to send', objToSend)
+
+  try {
+    const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify content type as JSON
+      },
+      body: JSON.stringify(objToSend), // Serialize the object to JSON string
+    })
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+
+    // const data = await response.json()
+    toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+    emit('refreshTemplates')
+  }
+  catch (error) {
+    isSaving.value = false
+    console.error('Error:', error)
+    toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
   }
 }
 </script>

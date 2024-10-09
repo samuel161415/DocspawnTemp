@@ -32,7 +32,6 @@
         </div>
       </div>
       <div id="canvas-wrapper" ref="canvasWrapper" class="rounded-md min-h-full flex flex-col w-[900px]  relative  ">
-        <!-- <ExpertEditorPreview v-if="docGenerationData?.templateToGenerateDocs?.id && canvasWrapperHeight > 100" :template="docGenerationData?.templateToGenerateDocs" :editor-height="canvasWrapperHeight" :editor-width="900" /> -->
         <div
           v-for="(editorContainer) in docGenerationData?.editorContainers"
           :key="editorContainer.id"
@@ -76,7 +75,7 @@ import * as pdfjsWorker from 'pdfjs-dist/legacy/build/pdf.worker.min.mjs'
 import ThumbnailBar from '../common/ThumbnailBar'
 import canvasService from '../../../composables/useTemplateCanvas'
 import { docGenerationData } from '../../../composables/useDocGenerationData'
-import ExpertEditorPreview from './ExpertEditorPreview.vue'
+
 import HtmlContainer from './HtmlContainer.vue'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
 
@@ -182,7 +181,7 @@ function renderOriginalData() {
             else { correspondingData = data?.filter(d => d?.hash === obj?.hash)[0]?.state }
 
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
-            console.log('corresponsing data', correspondingData)
+            // console.log('corresponsing data', correspondingData)
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
@@ -194,10 +193,14 @@ function renderOriginalData() {
               const originalHeight = obj.height * obj.scaleY
               const originalWidth = obj.width * obj.scaleX
               const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
-              obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, () => {
+              obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, (myImg) => {
                 //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
                 //     ?
-                obj.scaleToWidth(originalWidth)
+                // obj.scaleToWidth(originalWidth )
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
                 // : obj.scaleToHeight(originalHeight)
                 canvas.renderAll()
               })
@@ -238,9 +241,6 @@ function renderOriginalData() {
         canvas.renderAll()
       }
       // here we should replace keys in html conatiner with form field values
-      console.log('template editor store editor containers', templateEditorStore?.editorContainers)
-      console.log('template editor store editorCOntainersRefs')
-      console.log('template Editor store ')
     }
     else {
     // alert('problem problem')
@@ -283,7 +283,7 @@ function renderOriginalData() {
         const data = selectedData.value
         const objs = canvas?.getObjects()
 
-        canvas.objects = objs.map((obj) => {
+        canvas._objects = objs.map((obj) => {
           if (obj.stroke || obj.isAlertIcon)
             return obj
           if (!obj._element && obj.id !== 'Lorem ipsum') {
@@ -292,19 +292,46 @@ function renderOriginalData() {
               const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
               correspondingData = parseDateString(correspondingData) && formatDateForInput(parseDateString(correspondingData), correspondingField?.dateFormat)
             }
+
             else {
               correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
             }
+
             if (correspondingData)
               obj.set({ text: correspondingData?.toString() })
           }
+
           else if (obj._element && obj.id !== 'Lorem ipsum') {
             let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
             correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
             const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            if (obj?.fieldType === 'Dataset checkbox') {
+              const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
 
-            if (correspondingData) {
+              let isChecked = correspondingData === true
+              if (correspondingField?.contentFields?.no?.includes(correspondingData))
+                isChecked = false
+              if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+                isChecked = true
+              if (correspondingField?.designs) {
+                const originalHeight = obj.height * obj.scaleY
+                const originalWidth = obj.width * obj.scaleX
+                const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+                obj.setSrc(isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no, (myImg) => {
+                //   correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                //     ?
+                // obj.scaleToWidth(originalWidth )
+                  obj.set({
+                    scaleX: originalWidth / myImg.width,
+                    scaleY: originalHeight / myImg.height,
+                  })
+                  // : obj.scaleToHeight(originalHeight)
+                  canvas.renderAll()
+                })
+              }
+            }
+            else if (correspondingData) {
               const originalHeight = obj.height * obj.scaleY
               const originalWidth = obj.width * obj.scaleX
 
@@ -334,16 +361,29 @@ function renderOriginalData() {
               obj.set({ text: obj?.id })
           }
           else if (obj._element && obj.id !== 'Lorem ipsum') {
-            const correspondingData = 'https://placehold.co/300x200?text=Image'
+            let correspondingData = 'https://placehold.co/300x200?text=Image'
             const correspondingField = docGenerationData?.templateToGenerateDocs?.added_fields?.filter(a => a?.hash === obj?.hash)[0]
+            /** ********* for checkbox  */
+            if (obj?.fieldType === 'Dataset checkbox')
+              correspondingData = correspondingField?.designs.no
 
+            /** */
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                  ? obj.scaleToWidth(originalWidth)
+                  : obj.scaleToHeight(originalHeight)
+              }
+
               canvas.renderAll()
             })
           }
@@ -445,107 +485,6 @@ async function createCanvas() {
       )
     }
   })
-  if (canvas) {
-    // setTimeout(() => {
-    //   console.log('docGenerationData.canvasScalingFactor', docGenerationData.canvasScalingFactor)
-
-    //   if (!docGenerationData?.templateToGenerateDocs?.editor_fields_data)
-    //     return
-    //   const { editorContainers, editorContainersRefs, fabricObjectRefs } = docGenerationData?.templateToGenerateDocs?.editor_fields_data
-    //   if (editorContainers && editorContainersRefs && fabricObjectRefs) {
-    //     docGenerationData.editorContainers = editorContainers?.map((e) => {
-    //       return { ...e, style: { ...e.style, width: `${Number.parseInt(e.style.width)}px`, height: `${Number.parseInt(e.style.height)}px` } }
-    //     })
-    //     // top: `${extractNumber(e?.style?.top) * docGenerationData?.canvasScalingFactor?.y}px`, left: `${extractNumber(e?.style?.left) * docGenerationData?.canvasScalingFactor?.x}px`
-    //     // transform: `scale(${Number.parseFloat(docGenerationData?.canvasScalingFactor?.x)?.toFixed(1)},${Number.parseFloat(docGenerationData?.canvasScalingFactor?.y)?.toFixed(1)})`
-    //     // transform: `scale(${Number.parseFloat(docGenerationData?.canvasScalingFactor?.x)?.toFixed(1)},${Number.parseFloat(docGenerationData?.canvasScalingFactor?.y)?.toFixed(1)})`,
-    //     // templateEditorStore.editorContainersRefs = editorContainersRefs
-    //     docGenerationData.fabricObjectRefs = fabricObjectRefs
-    //     // editor container ref will be assigned at runtime but fabric ref, we have to re assign to recreate canvas objects
-    //     let objectsIop = {}
-    //     canvas.getObjects()?.forEach((f) => {
-    //       if (docGenerationData.fabricObjectRefs[f?.id]) {
-    //         objectsIop = { ...objectsIop, [f?.id]: f }
-    //         if (f?.fieldType === 'Text box') {
-    //           const editorContainer = editorContainers?.filter(s => f?.id === s?.id)[0]
-    //           f.set({
-    //             width:
-    //               // Number.parseFloat(
-    //               editorContainer.style.width, // .replace('px', '')) + 5
-
-    //             height:
-    //               // Number.parseFloat(
-    //               editorContainer.style.height, // .replace('px', '')) + 5
-
-    //           })
-
-    //           f.on('moving', () => {
-    //             const editorContainer = docGenerationData.editorContainerRefs[f?.id]
-    //             if (editorContainer) {
-    //               editorContainer.style.left = `${f.left}px`
-    //               editorContainer.style.top = `${f.top}px`
-    //               docGenerationData.editorContainers = docGenerationData.editorContainers?.map((c) => {
-    //                 if (c?.id === f?.id)
-    //                   return { ...c, style: { ...c?.style, left: `${f.left}px`, top: `${f.top}px` } }
-    //                 else
-    //                   return c
-    //               })
-    //             }
-    //           })
-
-    //           canvas.renderAll() // Re-render the canvas to reflect changes
-    //         }
-    //       }
-    //     })
-
-    //     docGenerationData.fabricObjectRefs = objectsIop
-
-    //     // console.log('fabric object at resizing>>>', fabricObj)
-    //     // nextTick(() => {
-    //     //   docGenerationData?.editorContainers?.forEach((f) => {
-    //     //     const id = f?.id
-    //     //     // Add a resize listener for the editor container
-    //     //     const editorContainer = docGenerationData.editorContainerRefs[id]
-    //     //     if (editorContainer) {
-    //     //       // Add a resize event listener
-    //     //       const resizeObserver = new ResizeObserver((entries) => {
-    //     //         for (const entry of entries) {
-    //     //           // console.log('entry', entry)
-    //     //           const newWidth = entry.contentRect.width
-    //     //           const newHeight = entry.contentRect.height
-
-    //     //           const sample = docGenerationData.editorContainers
-    //     //           docGenerationData.editorContainers = sample?.map((s) => {
-    //     //             if (s?.id === id)
-    //     //               // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
-    //     //               return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
-
-    //     //             else return s
-    //     //           })
-
-    //     //           // Update the corresponding Fabric.js object dimensions
-
-    //     //           const fabricObj = docGenerationData.fabricObjectRefs[id]
-    //     //           console.log('fabric object at resizing>>>', fabricObj)
-    //     //           if (fabricObj) {
-    //     //             fabricObj.set({
-    //     //               width: newWidth + 5,
-    //     //               height: newHeight + 5,
-    //     //             })
-
-    //     //             canvas.renderAll() // Re-render the canvas to reflect changes
-    //     //           }
-    //     //         }
-    //     //       })
-
-    //     //       // Observe the editor container for size changes
-    //     //       resizeObserver.observe(editorContainer)
-    //     //     }
-    //     //   })
-    //     // })
-    //   }
-    // }, 5000)
-  }
 }
 
 async function showThumbnail() {

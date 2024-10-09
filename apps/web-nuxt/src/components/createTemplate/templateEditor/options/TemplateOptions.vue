@@ -6,67 +6,76 @@
       </p>
       <InputText v-model="templateName" :invalid="templateNameError && !templateName" :class="{ 'p-invalid template-name-error': templateNameError && !templateName }" class="w-full md:w-full mt-2" />
     </div>
-    <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showWatermarkOptions = !showWatermarkOptions">
+    <div class="flex items-center gap-2 cursor-pointer text-primary-600 mt-6" @click="showAdvancedOptions = !showAdvancedOptions">
       <p class="font-poppins text-md">
-        {{ $t('Cp_templateEditor_templateOptions.watermark') }}
+        {{ $t('Cp_templateEditor_formOptions.advanced_options') }}
       </p>
-      <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showWatermarkOptions }" />
+      <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
     </div>
-    <div v-if="showWatermarkOptions" class="mt-4">
-      <p class="font-poppins text-sm text-surface-400">
-        {{ $t('Cp_templateEditor_templateOptions.watermark_description') }}
-      </p>
-      <div class="flex gap-2 my-6">
-        <Checkbox v-model="disableWatermark" :binary="true" />
-        <p class="font-poppins text-surface-500">
-          {{ $t('Cp_templateEditor_templateOptions.disable_watermark') }}
+    <div v-if="showAdvancedOptions">
+      <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showWatermarkOptions = !showWatermarkOptions">
+        <p class="font-poppins text-md">
+          {{ $t('Cp_templateEditor_templateOptions.watermark') }}
         </p>
-        <div v-tooltip.top="tooltipText">
-          <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
-        </div>
+        <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showWatermarkOptions }" />
       </div>
-      <p class="font-poppins italic text-surface-400 text-sm mb-4">
-        {{ $t('Cp_templateEditor_templateOptions.tip') }}
-      </p>
-      <p class="font-poppins text-md text-surface-600">
-        {{ $t('Cp_templateEditor_templateOptions.select_watermark_design') }}
-      </p>
-      <div v-for="image in watermarkImages" :key="image.id" class="flex items-center mt-4">
-        <RadioButton v-model="templateEditorStore.watermarkImage" :input-id="image.id" name="dynamic" :value="image" />
-        <label :for="image.id" class="ml-2">
-          <div class="w-full h-max">
-            <img id="output" accept="image/*" class="object-cover h-auto" :class="{ 'w-9/12': image.id === 2, 'w-5/12': image.id === 1 }" :src="image.src" />
+      <div v-if="showWatermarkOptions" class="mt-4">
+        <p class="font-poppins text-sm text-surface-400">
+          {{ $t('Cp_templateEditor_templateOptions.watermark_description') }}
+        </p>
+        <div class="flex gap-2 my-6">
+          <Checkbox v-model="disableWatermark" :binary="true" />
+          <p class="font-poppins text-surface-500">
+            {{ $t('Cp_templateEditor_templateOptions.disable_watermark') }}
+          </p>
+          <div v-tooltip.top="tooltipText">
+            <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
           </div>
-        </label>
-      </div>
-    </div>
-    <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showFileNamingoptions = !showFileNamingoptions">
-      <p class="font-poppins text-md">
-        File naming
-      </p>
-      <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showFileNamingoptions }" />
-    </div>
-    <div v-if="showFileNamingoptions" class="mt-4">
-      <p class="font-poppins text-sm text-surface-400">
-        Set name string for all generated documents
-      </p>
-      <div class="flex gap-2 my-6">
-        <Checkbox v-model="enableCustomFileNaming" :binary="true" />
-        <p class="font-poppins text-surface-500">
-          Enable custom file naming
+        </div>
+        <p class="font-poppins italic text-surface-400 text-sm mb-4">
+          {{ $t('Cp_templateEditor_templateOptions.tip') }}
         </p>
-        <div v-tooltip.top="tooltipText">
-          <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+        <p class="font-poppins text-md text-surface-600">
+          {{ $t('Cp_templateEditor_templateOptions.select_watermark_design') }}
+        </p>
+        <div v-for="image in watermarkImages" :key="image.id" class="flex items-center mt-4">
+          <RadioButton v-model="templateEditorStore.watermarkImage" :input-id="image.id" name="dynamic" :value="image" />
+          <label :for="image.id" class="ml-2">
+            <div class="w-full h-max">
+              <img id="output" accept="image/*" class="object-cover h-auto" :class="{ 'w-9/12': image.id === 2, 'w-5/12': image.id === 1 }" :src="image.src" />
+            </div>
+          </label>
         </div>
       </div>
-      <p class="font-poppins italic text-surface-400 text-sm mb-4">
-        use "<" character at last to add variables
-      </p>
+      <div class="flex items-center gap-2 cursor-pointer text-surface-600 mt-6" @click="showFileNamingoptions = !showFileNamingoptions">
+        <p class="font-poppins text-md">
+          {{ $t('Cp_templateEditor_templateOptions.file_naming') }}
+        </p>
+        <font-awesome-icon icon="fa-light fa-caret-right transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showFileNamingoptions }" />
+      </div>
+      <div v-if="showFileNamingoptions" class="mt-4">
+        <p class="font-poppins text-sm text-surface-400">
+          {{ $t('Cp_templateEditor_templateOptions.file_naming_description_one') }}
+        </p>
+        <div class="flex gap-2 my-6">
+          <Checkbox v-model="enableCustomFileNaming" :binary="true" />
+          <p class="font-poppins text-surface-500">
+            {{ $t('Cp_templateEditor_templateOptions.file_naming_checkbox_label') }}
+          </p>
+          <div v-tooltip.top="tooltipText">
+            <font-awesome-icon icon="fa-duotone fa-square-question transition-all duration-300 text-surface-600" size="lg" :class="{ 'rotate-90': showAdvancedOptions }" />
+          </div>
+        </div>
+        <p class="font-poppins italic text-surface-400 text-sm mb-4">
+          {{ $t('Cp_templateEditor_templateOptions.file_naming_description_two') }}
+        </p>
 
-      <FileNamingOptions v-if="enableCustomFileNaming" />
+        <FileNamingOptions v-if="enableCustomFileNaming" />
+      </div>
     </div>
+
     <Button
-      label="Save template" class="mt-8 w-full md:w-full" @click="() => {
+      :label="$t('Cp_templateEditor_templateOptions.save_template')" class="mt-8 w-full md:w-full" @click="() => {
         if (templateName){
 
           templateEditorStore.editor_fields_data = {
@@ -101,6 +110,7 @@ const templateName = ref('')
 const disableWatermark = ref(false)
 const enableCustomFileNaming = ref(false)
 const showFileNamingoptions = ref(false)
+const showAdvancedOptions = ref(false)
 watch(enableCustomFileNaming, () => {
   templateEditorStore.enableCustomFileNaming = enableCustomFileNaming.value
 })
@@ -169,12 +179,12 @@ watch(() => templateEditorStore.watermarkImage, (newVal) => {
 </script>
 
 <style scoped>
-::v-deep .template-name-error {
+:deep(.template-name-error) {
 
   box-shadow: none!important;
 }
 
-::v-deep .template-name-error:focus {
+:deep(.template-name-error:focus) {
 
   box-shadow: none !important;
 }

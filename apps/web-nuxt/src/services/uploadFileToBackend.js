@@ -1,3 +1,6 @@
+import { useAuth } from '@/composables/useAuth'
+
+const { user } = useAuth()
 export default async function uploadFileToBackend(file, isJSON) {
   const runtimeConfig = useRuntimeConfig()
 
@@ -21,7 +24,28 @@ export default async function uploadFileToBackend(file, isJSON) {
 
     const data = await response.json()
 
-    return data.url // Assuming the response contains the S3 URL
+    // return data.url // Assuming the response contains the S3 URL
+    const fileUrl = data.url // Assuming the response contains the S3 URL
+
+    // Check if the file is an image
+    // console.log('user', user)
+    // console.log('file.type', file.type)
+
+    if (file.type.startsWith('image/')) {
+      // Create a new image element
+      fetch(`${runtimeConfig.public.BASE_URL}/library-image/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Make sure to specify the content type
+        },
+        body: JSON.stringify({
+          account_type: user.value?.email,
+          image_url: fileUrl,
+        }),
+      })
+    }
+
+    return fileUrl
   }
   catch (error) {
     console.error('Error:', error)

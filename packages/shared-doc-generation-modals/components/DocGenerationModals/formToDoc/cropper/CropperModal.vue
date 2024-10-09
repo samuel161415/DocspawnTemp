@@ -1,14 +1,37 @@
 <template>
   <div>
+    <ImageLibraryModal
+      :user-value="props.userValue"
+      @set-image="url => {
+        imageUrl = url;visible = true; originalImage = url
+        emit('handleOriginalImage', url)
+      }"
+    />
+    <p class="my-2">
+      Or
+    </p>
+
     <input type="file" @change="onFileChange" />
-    <Dialog v-model:visible="visible" modal :style="{ width: '50vw' }">
-      <div v-if="imageUrl">
-        <Cropper
-          ref="cropper"
-          :src="imageUrl"
-          :aspect-ratio="props?.aspectRatio ? props.aspectRatio : 1"
-          style="height: 400px; width: 100%;"
-        />
+    <Dialog v-model:visible="visible" modal :style="{ width: props?.isCheckbox ? '30vw' : '50vw' }">
+      <div v-if="imageUrl && originalImage">
+        <div v-if="props?.isCheckbox" class=" flex w-full justify-center  h-[330px]">
+          <Cropper
+            ref="cropper"
+            :src="imageUrl"
+            :aspect-ratio="props?.aspectRatio ? props.aspectRatio : 1"
+            style="height: 300px; width: 300px;"
+          />
+        </div>
+        <div v-else>
+          <Cropper
+            ref="cropper"
+            :src="imageUrl"
+            :aspect-ratio="props?.aspectRatio ? props.aspectRatio : 1"
+            style="height: 400px; width: 100%;"
+          />
+        </div>
+
+        <!--  -->
         <Button label="Save" icon="pi pi-check" @click="saveCroppedImage" />
       </div>
     </Dialog>
@@ -19,10 +42,10 @@
 import { ref, watch } from 'vue'
 import Cropper from 'vue-cropperjs'
 import 'cropperjs/dist/cropper.css'
-
+import { ImageLibraryModal } from '@docspawn/image-library-modal'
 import uploadFileToBackend from '../../../../services/uploadFileToBackend'
 
-const props = defineProps(['isEdit', 'originalImage', 'aspectRatio'])
+const props = defineProps(['isEdit', 'originalImage', 'aspectRatio', 'isCheckbox', 'userValue'])
 
 // adjust the path as necessary
 

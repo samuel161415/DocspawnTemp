@@ -18,9 +18,7 @@
         </div>
       </div>
     </div>
-    <!-- <div class=" flex items-center">
-      <Slider v-model="scale" :step="0.01" :min="0.7" :max="1.7" class="w-56" />
-    </div> -->
+
     <div class="flex items-center gap-2 max-w-[150px]">
       <button class="p-button p-component p-button-rounded p-button-icon-only text-surface-600" @click="decreaseScale">
         <font-awesome-icon icon="fa-light fa-magnifying-glass-minus" size="xl" />
@@ -31,11 +29,6 @@
       </button>
     </div>
     <div class="flex gap-4">
-      <!-- <div>
-        <Button class="w-max px-2" @click="() => emit('toggleExpertEditor')">
-          {{ props?.showExpertEditor ? 'Hide expert editor' : 'Show expert editor' }}
-        </Button>
-      </div> -->
       <div v-if="templateGeneralInformation?.useCase === 'Data to doc'" class="flex flex-row-reverse">
         <Button
           v-if="!templateEditorStore.showPreview" v-tooltip.top="$t('Cp_templateEditor_topbar.show_preview')" text outlined class="w-max px-3 text-primary-500" @click="templateEditorStore.showPreview = true"
@@ -265,14 +258,35 @@ watch(currentPreviewNo, (newVal) => {
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
 
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            let isChecked = correspondingData === true
+            if (correspondingField?.contentFields?.no?.includes(correspondingData))
+              isChecked = false
+            if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+              isChecked = true
+            const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+
+            correspondingData = srcToSet
+          }
+          /** */
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
-                ? obj.scaleToWidth(originalWidth)
-                : obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth'
+                  ? obj.scaleToWidth(originalWidth)
+                  : obj.scaleToHeight(originalHeight)
+              }
+
               // obj.scaleToWidth(originalWidth)
               canvas.renderAll()
             })
@@ -316,16 +330,35 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           let correspondingData = data[currentPreviewNo.value - 1][obj?.id]
           correspondingData = correspondingData?.text ? correspondingData?.text : correspondingData
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            let isChecked = correspondingData === true
+            if (correspondingField?.contentFields?.no?.includes(correspondingData))
+              isChecked = false
+            if (correspondingField?.contentFields?.yes?.includes(correspondingData))
+              isChecked = true
+            const srcToSet = isChecked ? correspondingField?.designs.yes : correspondingField?.designs.no
+
+            correspondingData = srcToSet
+          }
+          /** */
           if (correspondingData) {
             const originalHeight = obj.height * obj.scaleY
             const originalWidth = obj.width * obj.scaleX
 
-            obj.setSrc(correspondingData, () => {
-              if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth')
-                obj.scaleToWidth(originalWidth)
-
-              else
-                obj.scaleToHeight(originalHeight)
+            obj.setSrc(correspondingData, (myImg) => {
+              if (obj?.fieldType === 'Dataset checkbox') {
+                obj.set({
+                  scaleX: originalWidth / myImg.width,
+                  scaleY: originalHeight / myImg.height,
+                })
+              }
+              else {
+                if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth')
+                  obj.scaleToWidth(originalWidth)
+                else
+                  obj.scaleToHeight(originalHeight)
+              }
 
               // console.log('obj after scaling', obj)
               canvas.renderAll()
@@ -344,16 +377,31 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
           return obj
         if (obj.stroke || obj.isAlertIcon)
           return obj
-        if (!obj._element && obj.id !== 'Lorem ipsum') {
+        if (!obj._element && obj.id !== 'Lorem ipsum' && obj.fieldType !== 'checkbox-tooltip') {
           obj.set({ text: obj?.id })
         }
         else if (obj._element && obj.id !== 'Lorem ipsum') {
-          const correspondingData = 'https://placehold.co/300x200?text=Image'
-          const originalHeight = obj.height * obj.scaleY
-          const originalWidth = obj.width * obj.scaleX
-
+          // const originalHeight = obj.height * obj.scaleY
+          // const originalWidth = obj.width * obj.scaleX
           const correspondingField = templateEditorStore?.addedFields?.filter(a => a?.hash === obj?.hash)[0]
-          obj.setSrc(`https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`, () => {
+          let correspondingData = 'https://placehold.co/300x200?text=Image'
+          correspondingData = `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
+          /** ********* for checkbox  */
+          if (obj?.fieldType === 'Dataset checkbox') {
+            const srcToSet = correspondingField?.designs.no
+            correspondingData = srcToSet
+          }
+          /** */
+
+          // `https://placehold.co/${Number.parseInt(obj?.height)}x${Number.parseInt(obj?.width)}?text=Image`
+          const objXSize = obj.width * obj.scaleX
+          const objYSize = obj.height * obj.scaleY
+          obj.setSrc(correspondingData, (myImg) => {
+            obj.set({
+              scaleX: objXSize / (myImg.width), // ?.scaleX,
+              scaleY: objYSize / (myImg.height), // activeObject?.scaleY,
+            })
+
             // if (correspondingField?.imageProportionMethod && correspondingField?.imageProportionMethod === 'fitToWidth') {
             //   console.log('scalin got width', originalWidth)
             //   obj.scaleToWidth(originalWidth)
@@ -365,7 +413,7 @@ watch(() => templateEditorStore.showPreview, (newVal) => {
             // obj.scaleToHeight(originalHeight)
             // }
             // obj.set({ width: obj.width, height: obj.height, scaleX: obj.scaleX, scaleY: obj.scaleY })
-            console.log('obj after rc setting', obj)
+
             canvas.renderAll()
           })
         }

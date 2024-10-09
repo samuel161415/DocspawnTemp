@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref } from 'vue'
+import { ref } from 'vue'
 import dataToDoc from '../../assets/icons/data2doc_icon.svg'
 import formToDocWhiteIcon from '../../assets/icons/formToDocWhiteIcon.svg'
 import dataToDocWhiteIcon from '../../assets/icons/data2docwhite_icon.svg'

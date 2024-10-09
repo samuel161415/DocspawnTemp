@@ -898,31 +898,28 @@ async function saveView(name) {
 </script>
 
   <style scoped>
-  .custom-multiselect ::v-deep .p-multiselect-label-container {
+  .custom-multiselect :deep(.p-multiselect-label-container) {
+  background-color: #ffffff !important; /* Replace with your desired background color */
+  border-radius: 4px;
+  /* height:45px; */
+}
 
-    background-color: #ffffff !important; /* Replace with your desired background color */
-    border-radius: 4px;
-    /* height:45px; */
+.custom-multiselect :deep(.p-multiselect-token) {
+  background-color: transparent;
+  padding: 0px;
+  margin-right: 12px;
+  color: #009ee2; /* Replace with your desired text color */
+}
 
-  }
-  .custom-multiselect ::v-deep .p-multiselect-token {
-    /* background-color: #009ee222; */
-    background-color: transparent;
-    padding:0px;
-    margin-right:12px;
-    color: #009ee2; /* Replace with your desired text color */
+.custom-multiselect :deep(.p-multiselect-token-label) {
+  color: inherit; /* Ensure the text color inherits from the parent */
+}
 
-  }
+/* Optionally, you can also style the close icon if present */
+.custom-multiselect :deep(.p-multiselect-token-icon) {
+  color: #000000;
+}
 
-  .custom-multiselect ::v-deep .p-multiselect-token-label {
-    color: inherit; /* Ensure the text color inherits from the parent */
-  }
-
-  /* Optionally, you can also style the close icon if present */
-  .custom-multiselect ::v-deep .p-multiselect-token-icon {
-    /* color: #009ee2;  */
-    color: #000000;
-  }
   .gray-chip {
     background-color: #abadaf33; /* Red background */
     /* color: #; */
@@ -1004,47 +1001,44 @@ async function saveView(name) {
     --fa-secondary-color: transparent;
 
   }
-  ::v-deep .p-datatable {
-    background-color: white !important;
-    border: none !important;
-  }
+  :deep(.p-datatable) {
+  background-color: white !important;
+  border: none !important;
+}
 
-  ::v-deep .p-datatable-header,
-  ::v-deep .p-datatable-footer {
-    background-color: white !important;
-    border: none !important;
-  }
+:deep(.p-datatable-header),
+:deep(.p-datatable-footer) {
+  background-color: white !important;
+  border: none !important;
+}
 
-  ::v-deep .p-datatable-thead > tr > th,
-  ::v-deep .p-datatable-tbody > tr > td,
-  ::v-deep .p-datatable-tfoot > tr > td {
-    /* border: none !important; */
-    border-right:none!important;
-    border-left:none!important;
-    background-color: #ffffff !important;
-  }
-  ::v-deep .p-datatable-thead > tr > th{
+:deep(.p-datatable-thead > tr > th),
+:deep(.p-datatable-tbody > tr > td),
+:deep(.p-datatable-tfoot > tr > td) {
+  border-right: none !important;
+  border-left: none !important;
+  background-color: #ffffff !important;
+}
 
-    background-color: #e0f6ff !important;
-    /* background-color: #009ee233 !important; */
-    border-right:2px solid #ffffff!important;
-    border-radius: 4px;
-    border-top:none!important;
-    border-bottom:none!important;
-  }
+:deep(.p-datatable-thead > tr > th) {
+  background-color: #e0f6ff !important;
+  border-right: 2px solid #ffffff !important;
+  border-radius: 4px;
+  border-top: none !important;
+  border-bottom: none !important;
+}
 
-  ::v-deep .p-datatable-tbody > tr {
-    background-color: white !important;
-  }
+:deep(.p-datatable-tbody > tr) {
+  background-color: white !important;
+}
 
-  ::v-deep .p-datatable-tbody > tr:nth-child(odd) {
-    background-color: #f9f9f9 !important; /* For striped rows effect */
-  }
+:deep(.p-datatable-tbody > tr:nth-child(odd)) {
+  background-color: #f9f9f9 !important; /* For striped rows effect */
+}
 
-  ::v-deep .p-datatable-gridlines .p-datatable-tbody > tr > td {
-    /* border-right: none !important; */
-    /* border-bottom: none !important; */
-  }
+:deep(.p-datatable-gridlines .p-datatable-tbody > tr > td) {
+  /* No border changes */
+}
 
   .custom-dialog .p-dialog {
     @apply w-10/12 md:w-7/12;

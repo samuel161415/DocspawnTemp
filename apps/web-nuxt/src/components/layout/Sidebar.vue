@@ -107,12 +107,7 @@
             </div>
           </li>
           <!--  -->
-          <div class="px-3 flex items-center mb-4 gap-2">
-            <LanguageDropDown />
-            <p v-if="!isCollapsed" class="font-poppins text-lg text-surface-600 ">
-              {{ $t('Cp_sidebar.language') }}
-            </p>
-          </div>
+
           <div class="px-3">
             <NuxtLink to="/profile-settings">
               <div
@@ -159,7 +154,6 @@ import ArrowLeft from '../../assets/icons/arrow-left.svg'
 import ArrowRight from '../../assets/icons/arrow-right.svg'
 import ArrowLeftWhite from '../../assets/icons/arrow-left-white.svg'
 import ArrowRightWhite from '../../assets/icons/arrow-right-white.svg'
-import LanguageDropDown from './LanguageDropDown'
 
 import { useAuth } from '@/composables/useAuth'
 

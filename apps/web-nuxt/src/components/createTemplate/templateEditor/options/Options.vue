@@ -1,24 +1,23 @@
 <template>
   <div class="flex-1 h-full overflow-auto" :style="{ minWidth: '200px' }">
-    <div v-if="templateEditorStore.showOptionsBar" icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
-      <p class="font-poppins">
-        {{ $t('Cp_templateEditor_options.field_options') }}
-      </p>
-    </div>
-    <div v-else icon="pi pi-angle-left" class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
-      <p class="font-poppins">
-        {{ $t('Cp_templateEditor_options.template_options') }}
-      </p>
-    </div>
-    <div class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6 bg-surface-50 px-5 py-2 overflow-hidden">
-      <div v-if="templateEditorStore.showOptionsBar === false">
-        <TemplateOptions @save-template="emit('saveTemplate')" />
-      </div>
-      <div v-else-if="templateEditorStore.showOptionsBar === true && templateEditorStore.selectedAddedField?.fieldType !== ''">
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType === ''" class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
-          {{ $t('Cp_templateEditor_options.no_template_field_selected') }}
+    <!-- template options -->
+    <div v-if="!templateEditorStore.showOptionsBar" class="px-4">
+      <div class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
+        <p class="font-poppins">
+          {{ $t('Cp_templateEditor_options.template_options') }}
         </p>
-        <p v-if="templateEditorStore.selectedAddedField?.fieldType !== ''" class="font-poppins text-lg justify-center text-center text-gray-400 text-primaryBlue font-thin my-3">
+      </div>
+      <TemplateOptions @save-template="emit('saveTemplate')" />
+    </div>
+    <!-- field options -->
+    <div v-else-if="templateEditorStore.selectedAddedField?.fieldType !== ''">
+      <div class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
+        <p class="font-poppins">
+          {{ $t('Cp_templateEditor_options.field_options') }}
+        </p>
+      </div>
+      <div class="transition-all duration-200 ease-linear rounded-md min-h-max pb-6 bg-surface-50 px-5 py-2 overflow-hidden">
+        <p class="font-poppins text-lg justify-center text-center text-gray-400 text-primaryBlue font-thin my-3">
           <span v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static text' || templateEditorStore.selectedAddedField?.fieldType === 'Static date' || templateEditorStore.selectedAddedField?.fieldType === 'Static time' || templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' ">
             {{ $t(`Cp_templateEditor_options.${templateEditorStore?.selectedAddedField?.fieldType.replace(' ', '_').toLowerCase()}`) }}
           </span>
@@ -30,7 +29,6 @@
           </span>
         </p>
         <div v-if="templateEditorStore?.selectedAddedField?.fieldType !== 'Form checkbox group'" class="mb-6">
-          <!-- <TextFormatting /> -->
           <p v-if="(activeDataField === 'Lorem ipsum' && templateEditorStore.selectedAddedField?.fieldType === 'Data field')" class="font-poppins text-sm text-red-500 mt-2">
             {{ $t('Cp_templateEditor_options.styles_applied_on_select') }}
           </p>
@@ -38,8 +36,8 @@
             {{ $t('Cp_templateEditor_options.styles_applied_on_add_name') }}
           </p>
         </div>
-
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset date' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'" class="w-full">
+        <!-- Dataset field options -->
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Data field' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset date' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset image' || templateEditorStore.selectedAddedField?.fieldType === 'Dataset checkbox'" class="w-full">
           <p class="mb-1 font-poppins text-surface-500">
             {{ $t('Cp_templateEditor_options.select_field') }}
           </p>
@@ -51,7 +49,13 @@
             </p>
           </div>
           <div class="p-0 flex justify-content-center">
-            <Dropdown v-model="activeDataField" :options="templateEditorStore.selectedAddedField?.fieldType !== 'Dataset image' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter :placeholder="$t('Cp_templateEditor_options.select_data_field')" class="w-full md:w-full">
+            <Dropdown
+              v-model="activeDataField"
+              :options="templateEditorStore.selectedAddedField?.fieldType !== 'Dataset image' ? templateEditorStore.datasetData.selectedKeys : templateEditorStore?.datasetData?.urlKeys?.filter((d) => templateEditorStore.datasetData.selectedKeys?.includes(d))" filter
+              :placeholder="$t('Cp_templateEditor_options.select_data_field')"
+              class="w-full md:w-full"
+              @change="(e) => checkboxDatafield = e.value"
+            >
               <template #value="slotProps">
                 <div v-if="slotProps.value" class="flex align-items-center">
                   <p class="font-poppins">
@@ -71,15 +75,12 @@
               </template>
             </Dropdown>
           </div>
+          <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset checkbox' ">
+            <CheckboxOptions :is-checkbox="true" :checkbox-datafield="checkboxDatafield" />
+          </div>
         </div>
-
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="">
-          <FormOptions />
-        </div>
-
         <div
           v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset date'
-          // || templateEditorStore.selectedAddedField?.fieldType === 'Form image'
           " class="my-6"
         >
           <p class="font-poppins text-md text-surafce-600 mb-2">
@@ -89,7 +90,7 @@
         </div>
         <div
           v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'
-          // || templateEditorStore.selectedAddedField?.fieldType === 'Form image'
+
           " class="mb-6"
         >
           <p class="font-poppins text-surface-500 mt-4 mb-2">
@@ -106,13 +107,21 @@
             </div>
           </div>
         </div>
-
+        <!-- Form field options -->
+        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Form text' || templateEditorStore.selectedAddedField?.fieldType === 'Form long text' || templateEditorStore.selectedAddedField?.fieldType === 'Form image' || templateEditorStore.selectedAddedField?.fieldType === 'Form date' || templateEditorStore.selectedAddedField?.fieldType === 'Form time' || templateEditorStore.selectedAddedField?.fieldType === 'Form list' || templateEditorStore.selectedAddedField?.fieldType === 'Form checkbox group'" class="">
+          <FormOptions />
+        </div>
+        <!-- Static field options options -->
         <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Static image'" class="">
           <div class="mt-4">
             <h1 class="font-poppins">
               {{ $t('Cp_templateEditor_options.upload_image') }}
             </h1>
             <input class="border border-gray-300 p-1 mt-2 w-full text-sm" type="file" @change="getFile" />
+            <p class="my-2">
+              Or
+            </p>
+            <ImageLibraryModal :user-value="user" @set-image="url => { fileUrl = url;setFileToCanvasObject(url) }" />
             <img v-if="fileUrl" id="output" accept="image/*" class="mt-5 object-cover h-auto w-full" :src="fileUrl" />
           </div>
         </div>
@@ -146,60 +155,31 @@
             {{ $t('Cp_templateEditor_options.static_date_help') }}
           </p>
         </div>
-
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'checkbox'" class=""></div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'radio'" class=""></div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'dropdown'" class=""></div>
-        <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="">
-          <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'signature'" class="w-full pt-4 font-poppins">
-            {{ $t('Cp_templateEditor_options.draw_signature') }}
-            <div class="mt-3 bg-white h-32 w-full border border-blue-300 rounded-md"></div>
-            <Button text class="mt-2 w-full font-poppins">
-              {{ $t('Cp_templateEditor_options.save_signature') }}
-            </Button>
-          </div>
-        </div>
-        <!-- <div v-if="templateEditorStore.selectedAddedField?.fieldType === 'Text box'" class="w-full pt-4">
-          <p class="font-poppins text-md text-surface-600 mb-2">
-            Select container behaviour
-          </p>
-
-          <div class="flex items-center space-x-4 mb-4">
-            <label class="flex items-center">
-              <input v-model="selectedContainerMode" type="radio" value="drag" />
-              <span class="ml-2">Drag Mode</span>
-            </label>
-            <label class="flex items-center">
-              <input v-model="selectedContainerMode" type="radio" value="edit" />
-              <span class="ml-2">Edit Mode</span>
-            </label>
-          </div>
-        </div> -->
       </div>
-      <div v-else>
-        <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
-          {{ $t('Cp_templateEditor_options.field_options') }}
-        </p>
-        <p class="font-poppins mt-3">
-          {{ $t('Cp_templateEditor_options.no_field_selected') }}
-        </p>
-      </div>
+    </div>
+    <div v-else>
+      <p class="text-md text-gray-400 text-primaryBlue font-thin font-poppins">
+        {{ $t('Cp_templateEditor_options.no_template_field_selected') }}
+      </p>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ImageLibraryModal } from '@docspawn/image-library-modal'
+
 import { useTimestampFormats } from '../../../../composables/useTimestampFormats'
 import FormOptions from './FormOptions.vue'
-import TextFormatting from './TextFormatting.vue'
-import ElementRotation from './ElementRotation.vue'
 import TemplateOptions from './TemplateOptions.vue'
-import ImageOptions from './ImageOptions.vue'
+import CheckboxOptions from './CheckboxOptions.vue'
+import { useAuth } from '@/composables/useAuth'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
 const emit = defineEmits(['saveTemplate'])
+
+const { user } = useAuth()
 
 const activeDataField = ref()
 const selectedTimeFormat = ref()
@@ -210,10 +190,8 @@ const { timeFormats, dateFormats } = useTimestampFormats()
 const fieldName = ref(null)
 const datasetImageProportionOption = ref('fitToHeight')
 const selectedContainerMode = ref()
+const checkboxDatafield = ref()
 
-// onMounted(() => {
-
-// })
 watch(() => templateEditorStore.showOptionsBar, () => {
   // updating dataset image proportion
   const canvas = canvasService.getCanvas()
@@ -256,6 +234,9 @@ async function getFile(e) {
   const file = e.target.files[0]
   const url = await uploadFileToBackend(file)
   fileUrl.value = url
+  setFileToCanvasObject(url)
+}
+function setFileToCanvasObject(url) {
   const canvas = canvasService.getCanvas()
   const activeObj = canvas.getActiveObject()
   if (canvas) {
@@ -378,7 +359,7 @@ watch(
     if (newVal) {
       fieldName.value = newVal.name
 
-      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image' || newVal?.fieldType === 'Dataset date')
+      if (newVal?.fieldType === 'Data field' || newVal?.fieldType === 'Dataset image' || newVal?.fieldType === 'Dataset date' || newVal?.fieldType === 'Dataset checkbox')
         activeDataField.value = newVal.name
       if (newVal?.fieldType === 'Dataset date')
         selectedDateFormat.value = { name: newVal.dateFormat }

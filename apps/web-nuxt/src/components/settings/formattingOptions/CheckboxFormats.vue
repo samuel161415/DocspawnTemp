@@ -107,10 +107,12 @@
             Add checkboxes options
           </p>
         </template>
-        <p class="text-surface-600 font-poppins text-lg font-normal">
+        <p class="text-surface-600 font-poppins text-lg font-semibold">
           Type:
         </p>
-
+        <p v-if="!selection" class="text-red-500">
+          required
+        </p>
         <div class="flex space-x-24 mt-4">
           <div class="flex items-center">
             <RadioButton
@@ -139,18 +141,20 @@
           </p>
         </div>
         <div class="mt-7">
-          <p class="text-surface-600 font-poppins text-lg font-normal mb-2">
+          <p class="text-surface-600 font-poppins text-lg font-semibold mb-2">
             Select option image to upload
           </p>
-          <p class="text-surface-600 font-poppins text-lg font-normal mb-6">
+          <!-- <p class="text-surface-600 font-poppins text-lg font-normal mb-6">
             Accepted image formats: transparent PNG files, 64x64px
-          </p>
+          </p> -->
           <!-- <FileUpload ref="fileupload" mode="basic" name="demo[]" url="/api/upload" accept="image/png" :max-file-size="1000000" @upload="onUpload" /> -->
-          <input
+          <!-- <input
             class="border border-gray-300 p-1 mt-2 w-full text-sm"
             type="file"
             @change="getFile"
-          />
+          /> -->
+          <ImageInput :aspect-ratio="1" :is-checkbox="true" @handle-save-cropped-image="(url) => fileUrl = url" />
+
           <img
             v-if="fileUrl"
             id="output"
@@ -218,6 +222,7 @@ import { fal } from '@fortawesome/pro-light-svg-icons'
 
 // import ToggleButton from 'primevue/togglebutton'
 // import InputSwitch @click="chnageActiveStatus" from "primevue/inputswitch";
+import { ImageInput } from '@docspawn/shared-doc-generation-modals'
 import ToggleSwitch from './ToggleSwitch.vue'
 
 import uploadFileToBackend from '~/services/uploadFileToBackend'
@@ -502,25 +507,26 @@ async function changeActiveStatus(e, data) {
 </script>
 
 <style scoped>
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:first-of-type {
+:deep(.p-datatable-table > thead > tr:first-of-type > th:first-of-type) {
   border-radius: 0.5rem 0 0 0 !important;
 }
 
-/* Top Right Would be: */
-::v-deep .p-datatable-table > thead > tr:first-of-type > th:last-of-type {
+/* Top Right */
+:deep(.p-datatable-table > thead > tr:first-of-type > th:last-of-type) {
   border-radius: 0 0.5rem 0 0 !important;
 }
 
-/* Bottom Left Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:first-of-type {
+/* Bottom Left */
+:deep(.p-datatable-table > tbody > tr:last-of-type > td:first-of-type) {
   border-radius: 0 0 0 0.5rem !important;
 }
 
-/* Bottom Right Would Be: */
-::v-deep .p-datatable-table > tbody > tr:last-of-type > td:last-of-type {
+/* Bottom Right */
+:deep(.p-datatable-table > tbody > tr:last-of-type > td:last-of-type) {
   border-radius: 0 0 0.5rem 0 !important;
 }
-::v-deep .p-inputswitch-input {
+
+:deep(.p-inputswitch-input) {
   opacity: 0 !important;
 }
 </style>
