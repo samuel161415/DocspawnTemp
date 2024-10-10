@@ -274,6 +274,7 @@ class CanvasService {
                         obj.set({ width: Number.parseFloat(obj.width.replace('px', '')) })
 
                       this.canvas.setActiveObject(obj)
+                      templateEditorStore.showOptionsBar = true
                       this.canvas.renderAll()
                     }
                   })

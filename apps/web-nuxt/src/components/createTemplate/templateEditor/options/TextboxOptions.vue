@@ -1,9 +1,10 @@
 <template>
   <div class="flex items-center gap-2 my-4">
-    <Checkbox />
-    <p class="text-md">
+    <!-- <Checkbox /> -->
+    <!-- <p class="text-md">
       Set text box to full page
-    </p>
+    </p> -->
+    <Button outlined="" label="Set textbox to full page" class="w-full" @click="setTextboxToFullPage" />
   </div>
   <div class="flex flex-col gap-4 my-2">
     <p class="text-lg text-surface-500 font-normal">
@@ -31,4 +32,49 @@
 </template>
 
 <script setup>
+import { templateEditorStore } from '@/composables/useTemplateEditorData'
+import canvasService from '@/composables/useTemplateCanvas'
+
+function setTextboxToFullPage() {
+  const canvas = canvasService.getCanvas()
+  const selectedField = templateEditorStore.selectedAddedField
+  const activeObj = canvas.getActiveObject()
+
+  console.log('selected field', selectedField)
+  console.log('active object', activeObj)
+  activeObj.set(({
+    left: 10,
+    top: 10,
+    scaleX: 1,
+    scaleY: 1,
+    width: canvas.width - 20,
+    height: canvas.height - 20,
+
+  }))
+  const editorContainer = templateEditorStore.editorContainerRefs[activeObj.id]
+  if (editorContainer) {
+    editorContainer.style.width = `${canvas.width - 20}px`
+    editorContainer.style.height = `${canvas.height - 20}px`
+    editorContainer.style.left = `${10}px`
+    editorContainer.style.top = `${10}px`
+
+    // Update editor container in the store
+    templateEditorStore.editorContainers = templateEditorStore.editorContainers.map((c) => {
+      if (c.id === activeObj.id) {
+        return {
+          ...c,
+          style: {
+            ...c.style,
+            width: `${canvas.width - 20}px`,
+            height: `${canvas.height - 20}px`,
+            left: `${10}px`,
+            top: `${10}px`,
+          },
+        }
+      }
+      return c
+    })
+  }
+  canvas.renderAll()
+}
 </script>
