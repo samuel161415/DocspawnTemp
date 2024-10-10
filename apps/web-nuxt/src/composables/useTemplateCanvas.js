@@ -128,6 +128,75 @@ class CanvasService {
                   ,
                 })
                 /** ********** set moving event on fabric */
+                f.on('scaling', (e) => {
+                  console.log('scalinf f run')
+                  const f = e.transform.target
+
+                  // Get the current scale and size
+                  let newWidth = f.width * f.scaleX
+                  let newHeight = f.height * f.scaleY
+                  let newLeft = f.left
+                  let newTop = f.top
+
+                  // Ensure the new dimensions stay within the canvas boundaries
+                  if (newLeft < 10) {
+                    // Adjust newLeft to stay within the left boundary
+                    newLeft = 10
+                  }
+
+                  // Ensure the right side doesn't cross the canvas right boundary
+                  if (newLeft + newWidth > this.canvas.width - 10) {
+                    // Adjust the width to fit within the canvas
+                    newWidth = this.canvas.width - newLeft - 10
+                  }
+
+                  // Ensure the top doesn't cross the canvas top boundary
+                  if (newTop < 10)
+                    newTop = 10
+
+                  // Ensure the bottom doesn't cross the canvas bottom boundary
+                  if (newTop + newHeight > this.canvas.height - 10)
+                    newHeight = this.canvas.height - newTop - 10
+
+                  // Reset the scale back to 1 after calculating new dimensions
+                  f.set({
+                    scaleX: 1,
+                    scaleY: 1,
+                    width: newWidth,
+                    height: newHeight,
+                    left: newLeft,
+                    top: newTop,
+                  })
+
+                  // Update the corresponding editor container size
+                  const editorContainer = templateEditorStore.editorContainerRefs[f.id]
+                  if (editorContainer) {
+                    editorContainer.style.width = `${newWidth}px`
+                    editorContainer.style.height = `${newHeight}px`
+                    editorContainer.style.left = `${newLeft}px`
+                    editorContainer.style.top = `${newTop}px`
+
+                    // Update editor container in the store
+                    templateEditorStore.editorContainers = templateEditorStore.editorContainers.map((c) => {
+                      if (c.id === f.id) {
+                        return {
+                          ...c,
+                          style: {
+                            ...c.style,
+                            width: `${newWidth}px`,
+                            height: `${newHeight}px`,
+                            left: `${newLeft}px`,
+                            top: `${newTop}px`,
+                          },
+                        }
+                      }
+                      return c
+                    })
+                  }
+
+                  // Re-render the canvas to reflect the changes
+                  this.canvas.renderAll()
+                })
                 f.on('moving', () => {
                   const editorContainer = templateEditorStore.editorContainerRefs[f?.id]
                   if (editorContainer) {
@@ -198,6 +267,12 @@ class CanvasService {
                   this.canvas.getObjects()?.forEach((obj) => {
                     if (id === obj?.id) {
                       templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
+                      if (typeof obj.height === 'string' && obj.height.includes('px'))
+                        obj.set({ height: Number.parseFloat(obj.height.replace('px', '')) })
+
+                      if (typeof obj.width === 'string' && obj.width.includes('px'))
+                        obj.set({ width: Number.parseFloat(obj.width.replace('px', '')) })
+
                       this.canvas.setActiveObject(obj)
                       this.canvas.renderAll()
                     }
@@ -221,7 +296,9 @@ class CanvasService {
                   const isBottomRight = mouseX > rect.width - borderThreshold && mouseY > rect.height - borderThreshold
 
                   // Check if the mouse is on any border except the bottom-right corner
-                  if ((isTopBorder || isLeftBorder || isRightBorder || isBottomBorder) && !isBottomRight) {
+                  if (isTopBorder || isLeftBorder || isRightBorder || isBottomBorder
+                  //  && !isBottomRight
+                  ) {
                     // Change the cursor to "move"
                     editorContainer.style.cursor = 'move'
 
@@ -238,40 +315,40 @@ class CanvasService {
                   }
                 })
                 // Add a resize event listener
-                const resizeObserver = new ResizeObserver((entries) => {
-                  for (const entry of entries) {
-                    // console.log('entry', entry)
-                    const newWidth = entry.contentRect.width
-                    const newHeight = entry.contentRect.height
-                    /** */
-                    const sample = templateEditorStore.editorContainers
-                    templateEditorStore.editorContainers = sample?.map((s) => {
-                      if (s?.id === id)
-                        // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
-                        return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
+                // const resizeObserver = new ResizeObserver((entries) => {
+                //   for (const entry of entries) {
+                //     // console.log('entry', entry)
+                //     const newWidth = entry.contentRect.width
+                //     const newHeight = entry.contentRect.height
+                //     /** */
+                //     const sample = templateEditorStore.editorContainers
+                //     templateEditorStore.editorContainers = sample?.map((s) => {
+                //       if (s?.id === id)
+                //         // return { ...s, style: { ...s?.style, width: `${entry.contentRect.width}px`, height: `${entry.contentRect.height}px` } }
+                //         return { ...s, style: { ...s?.style, width: entry.contentRect.width, height: entry.contentRect.height } }
 
-                      else return s
-                    })
+                //       else return s
+                //     })
 
-                    /** */
+                //     /** */
 
-                    // Update the corresponding Fabric.js object dimensions
+                //     // Update the corresponding Fabric.js object dimensions
 
-                    const fabricObj = templateEditorStore.fabricObjectRefs[id]
+                //     const fabricObj = templateEditorStore.fabricObjectRefs[id]
 
-                    if (fabricObj) {
-                      fabricObj.set({
-                        width: newWidth, // + 5,
-                        height: newHeight, // + 5,
-                      })
+                //     if (fabricObj) {
+                //       fabricObj.set({
+                //         width: newWidth, // + 5,
+                //         height: newHeight, // + 5,
+                //       })
 
-                      this.canvas.renderAll() // Re-render the canvas to reflect changes
-                    }
-                  }
-                })
+                //       this.canvas.renderAll() // Re-render the canvas to reflect changes
+                //     }
+                //   }
+                // })
 
-                // Observe the editor container for size changes
-                resizeObserver.observe(editorContainer)
+                // // Observe the editor container for size changes
+                // resizeObserver.observe(editorContainer)
               }
             })
           })

@@ -90,7 +90,6 @@
         </div>
         <div
           v-if="templateEditorStore.selectedAddedField?.fieldType === 'Dataset image'
-
           " class="mb-6"
         >
           <p class="font-poppins text-surface-500 mt-4 mb-2">
@@ -155,6 +154,12 @@
             {{ $t('Cp_templateEditor_options.static_date_help') }}
           </p>
         </div>
+        <!-- text box options -->
+        <div
+          v-if="templateEditorStore.selectedAddedField?.fieldType === 'Text box'"
+        >
+          <TextboxOptions />
+        </div>
       </div>
     </div>
     <div v-else>
@@ -172,6 +177,7 @@ import { useTimestampFormats } from '../../../../composables/useTimestampFormats
 import FormOptions from './FormOptions.vue'
 import TemplateOptions from './TemplateOptions.vue'
 import CheckboxOptions from './CheckboxOptions.vue'
+import TextboxOptions from './TextboxOptions'
 import { useAuth } from '@/composables/useAuth'
 import { activeTextStyles, templateEditorStore } from '@/composables/useTemplateEditorData'
 import canvasService from '@/composables/useTemplateCanvas'
