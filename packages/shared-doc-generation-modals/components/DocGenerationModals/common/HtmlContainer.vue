@@ -37,6 +37,12 @@ import TiptapTable from '@tiptap/extension-table'
 import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import TextStyle from '@tiptap/extension-text-style'
+import TiptapImage from '@tiptap/extension-image'
+import { Color } from '@tiptap/extension-color'
 
 import { docGenerationData } from '../../../composables/useDocGenerationData'
 import { formatDateForInput, formatTimeForInput, parseDateString } from '@/utils/dateFunctions'
@@ -65,6 +71,14 @@ const editor = useEditor({
     TiptapTableRow,
     TiptapTableCell,
     TiptapTableHeader,
+    Text,
+    Color,
+    TextStyle,
+    Paragraph,
+    TiptapImage.configure({
+      inline: true, // Configuring image to be inline
+      allowBase64: true,
+    }),
   ],
 })
 function replaceDatasetValues(html, dataset) {

@@ -42,6 +42,8 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
 import TextStyle from '@tiptap/extension-text-style'
+import TiptapImage from '@tiptap/extension-image'
+
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 import canvasService from '@/composables/useTemplateCanvas'
@@ -72,6 +74,10 @@ const editor = useEditor({
     Color,
     TextStyle,
     Paragraph,
+    TiptapImage.configure({
+      inline: true, // Configuring image to be inline
+      allowBase64: true,
+    }),
   ],
 })
 const selectedDatasetkey = ref(null)

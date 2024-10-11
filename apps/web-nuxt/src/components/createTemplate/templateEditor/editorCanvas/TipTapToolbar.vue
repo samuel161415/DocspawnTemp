@@ -322,11 +322,6 @@
       >
         <font-awesome-icon icon="fa-light fa-rows" size="lg" />
       </Button>
-      <input
-        type="color"
-        :value="editor.getAttributes('textStyle').color"
-        @input="editor.chain().focus().setColor($event.target.value).run()"
-      />
 
       <!-- Toggle Header Cell -->
       <Button
@@ -337,6 +332,17 @@
       >
         <font-awesome-icon icon="fa-solid fa-table-cells" size="lg" />
       </Button>
+      <Button
+        v-tooltip="'Insert image'"
+        class="w-max px-2"
+      >
+        <font-awesome-icon icon="fa-solid fa-image" size="lg" @click="() => showInsertImageForm = true" />
+      </Button>
+      <input
+        type="color"
+        :value="editor.getAttributes('textStyle').color"
+        @input="editor.chain().focus().setColor($event.target.value).run()"
+      />
 
       <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" :label="$t('Cp_templateEditor_tiptap_topbar.add_form_field')" @click="showAddFormFieldsForm = true" />
     </div>
@@ -403,20 +409,49 @@
         </template>
       </DataTable>
     </Dialog>
+    <Dialog v-model:visible="showInsertImageForm" modal header="Insert image" :style="{ minWidth: '20rem' }" @hide="() => showInsertImageForm = false">
+      <div class="flex flex-col gap-4">
+        <div>
+          <p class="font-semibold text-surface-500">
+            Enter URL
+          </p>
+          <InputText v-model="imageUrlToInsert" />
+        </div>
+        <p>OR</p>
+        <div class="flex flex-col gap-2">
+          <p class="font-semibold text-surface-500">
+            Select from image library
+          </p>
+          <ImageLibraryModal :user-value="user" @set-image="url => { imageUrlToInsert = url }" />
+        </div>
+        <div v-if="imageUrlToInsert">
+          <p class="font-semibold text-surface-500">
+            Selected Image:
+          </p>
+          <img :src="imageUrlToInsert" width="120" height="auto" alt="image to insert" />
+        </div>
+        <Button label="insert" @click="insertImage" />
+      </div>
+    </Dialog>
   </div>
 </template>
 
 <script setup>
 import { v4 as uuidv4 } from 'uuid'
 import { FilterMatchMode, FilterOperator } from 'primevue/api'
+import { ImageLibraryModal } from '@docspawn/image-library-modal'
 import { useTimestampFormats } from '@/composables/useTimestampFormats'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData.js'
+import { useAuth } from '@/composables/useAuth'
+
+const { user } = useAuth()
 
 // Data for the form fields
 
 // Selected field for table row selection
 const selectedField = ref(null)
+const imageUrlToInsert = ref()
 
 // Filters configuration for DataTable
 const filters = ref({
@@ -445,6 +480,15 @@ const selectedFormInput = ref()
 const formInputName = ref()
 const formInputDescription = ref()
 const showAddFieldForm = ref(false)
+const showInsertImageForm = ref(false)
+
+watch(showInsertImageForm, (val) => {
+  console.log('show insert image form value', showInsertImageForm)
+})
+function insertImage() {
+  editor.value.chain().focus().setImage({ src: imageUrlToInsert.value }).run()
+  showInsertImageForm.value = false
+}
 
 // Table-related actions
 const addTable = () => editor.value.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()

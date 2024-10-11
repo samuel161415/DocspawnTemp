@@ -18,4 +18,7 @@ module.exports = antfu({
     },
 
   },
+  rules: {
+    'no-undef': 'off', // Disable no-undef for Vue Composition API functions
+  },
 })
