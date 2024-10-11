@@ -322,6 +322,11 @@
       >
         <font-awesome-icon icon="fa-light fa-rows" size="lg" />
       </Button>
+      <input
+        type="color"
+        :value="editor.getAttributes('textStyle').color"
+        @input="editor.chain().focus().setColor($event.target.value).run()"
+      />
 
       <!-- Toggle Header Cell -->
       <Button

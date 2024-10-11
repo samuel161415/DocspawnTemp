@@ -37,6 +37,11 @@ import TiptapTableRow from '@tiptap/extension-table-row'
 import TiptapTableCell from '@tiptap/extension-table-cell'
 import TiptapTableHeader from '@tiptap/extension-table-header'
 import Dropdown from 'primevue/dropdown'
+import { Color } from '@tiptap/extension-color'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
+import TextStyle from '@tiptap/extension-text-style'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 
 import canvasService from '@/composables/useTemplateCanvas'
@@ -57,13 +62,16 @@ const editor = useEditor({
   },
   extensions: [
     TiptapStarterKit,
-
     TiptapTable.configure({
       resizable: true,
     }),
     TiptapTableRow,
     TiptapTableCell,
     TiptapTableHeader,
+    Text,
+    Color,
+    TextStyle,
+    Paragraph,
   ],
 })
 const selectedDatasetkey = ref(null)
@@ -266,9 +274,10 @@ function addToExpertEditor() {
   templateEditorStore.ShowAddedFieldsinTemplateFields = true
   const canvas = canvasService.getCanvas()
   const activeObj = canvas.getObjects()?.filter(obj => obj?.hash === props?.editorId)[0]
-  // console.log('active obj', activeObj)
+
   activeObj
   && canvas.setActiveObject(activeObj)
+  canvas.renderAll()
   templateEditorStore.showExpertEditor = true
 }
 

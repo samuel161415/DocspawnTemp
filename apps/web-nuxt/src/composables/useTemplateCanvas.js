@@ -266,15 +266,15 @@ class CanvasService {
                 editorContainer.addEventListener('mousemove', (event) => {
                   this.canvas.getObjects()?.forEach((obj) => {
                     if (id === obj?.id) {
-                      templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
+                      // templateEditorStore.selectedAddedField = templateEditorStore?.addedFields?.filter(field => field?.id === id)[0]
                       if (typeof obj.height === 'string' && obj.height.includes('px'))
                         obj.set({ height: Number.parseFloat(obj.height.replace('px', '')) })
 
                       if (typeof obj.width === 'string' && obj.width.includes('px'))
                         obj.set({ width: Number.parseFloat(obj.width.replace('px', '')) })
 
-                      this.canvas.setActiveObject(obj)
-                      templateEditorStore.showOptionsBar = true
+                      // this.canvas.setActiveObject(obj)
+                      // templateEditorStore.showOptionsBar = true
                       this.canvas.renderAll()
                     }
                   })

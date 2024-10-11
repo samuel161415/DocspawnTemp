@@ -48,12 +48,12 @@
         :key="editorContainer.id"
         :ref="setEditorContainerRef(editorContainer.id)"
         :style="{ ...editorContainer.style,
-                  zIndex: editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? '10' : '-1',
-                  pointerEvents: editorContainer?.behaviourMode === 'drag' ? 'none' : 'auto',
-
+                  zIndex: editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? (editorContainer.style?.zIndex && editorContainer.style?.zIndex) : '-1',
+                  pointerEvents: (editorContainer?.behaviourMode === 'drag' || editorContainer.id !== templateEditorStore.selectedAddedField?.id) ? 'none' : 'auto',
         }"
         class="editor-container"
       >
+        <!-- {{ editorContainer?.pageNo === templateEditorStore?.activePageForCanvas ? (editorContainer.style?.zIndex && editorContainer.style?.zIndex) : '-1' }} -->
         <HtmlContainer :editor-id="editorContainer.id" />
       </div>
 
