@@ -335,8 +335,9 @@
       <Button
         v-tooltip="'Insert image'"
         class="w-max px-2"
+        @click="() => showInsertImageForm = true"
       >
-        <font-awesome-icon icon="fa-solid fa-image" size="lg" @click="() => showInsertImageForm = true" />
+        <font-awesome-icon icon="fa-solid fa-image" size="lg" />
       </Button>
       <input
         type="color"
