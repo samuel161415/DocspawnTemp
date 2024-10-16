@@ -5,6 +5,7 @@ const initialTemplateGeneralInformation = {
   useCase: '', // dataToDoc or forToDoc
   backgroundFileUrl: '',
   datasetFileUrl: '',
+  selectedPageSize: '',
 }
 
 const initialTemplateDeliveryOptions = {

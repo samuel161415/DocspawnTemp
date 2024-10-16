@@ -5,7 +5,9 @@
     class="p-5 rounded-lg shadow-sm w-80 border font-poppins text-surface-500 transition-transform duration-300 "
   >
     <p class="font-poppins text-surface-600 text-lg">
-      {{ label === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
+      {{ label === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc')
+        : label === 'Expert editor' ? 'Expert editor'
+          : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
     </p>
   </div>
   <div
@@ -18,7 +20,7 @@
     @click="handleSelect"
   >
     <p class="font-poppins text-surface-600 text-lg">
-      {{ label === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
+      {{ label === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : label === 'Expert editor' ? 'Expert editor' : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
     </p>
   </div>
 </template>

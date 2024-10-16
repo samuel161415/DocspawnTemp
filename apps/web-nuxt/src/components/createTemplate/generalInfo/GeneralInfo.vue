@@ -23,7 +23,10 @@
 
       <div class="border surface-border rounded-lg flex-auto flex p-6 ml-4">
         <p class="font-poppins text-surface-600 text-lg font-medium">
-          {{ (currentData !== '' ? currentData : templateGeneralInformation.useCase) === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc') }}
+          {{
+            //  (currentData !== '' ? currentData : templateGeneralInformation.useCase) === 'Form to doc' ? $t('Cp_createTemplate_generalInfo.form_to_doc') : $t('Cp_createTemplate_generalInfo.data_to_doc')
+            currentData !== '' ? currentData : templateGeneralInformation.useCase
+          }}
         </p>
       </div>
     </div>
@@ -47,9 +50,17 @@
         </Button>
       </div>
     </div>
-    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex mx-8 space-x-6 mb-8'" class="mt-8">
-      <UploadSection v-if="templateGeneralInformation.useCase !== ''" :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" :is-file-uploaded="templateFile ? true : false" @upload="handleTemplateUpload" />
-      <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" :is-file-uploaded="datasetFile ? true : false" @upload="handleDatasetUpload" />
+    <div v-else :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : ''" class="mt-8">
+      <div v-if="templateGeneralInformation.useCase !== 'Expert editor'" class="flex mx-8 space-x-6 mb-8">
+        <UploadSection v-if="templateGeneralInformation.useCase !== '' " :title="$t('Cp_createTemplate_generalInfo.upload_your_template')" :is-background="true" :is-file-uploaded="templateFile ? true : false" @upload="handleTemplateUpload" />
+        <UploadSection v-if="templateGeneralInformation.useCase !== '' && isDataToDoc" :title="$t('Cp_createTemplate_generalInfo.upload_your_data_source')" :is-file-uploaded="datasetFile ? true : false" @upload="handleDatasetUpload" />
+      </div>
+      <div v-else class="mt-4 flex flex-col gap-4 mx-8">
+        <p class="text-lg font-semibold text-surface-500">
+          Select page size
+        </p>
+        <Dropdown v-model="selectedPageSize" :options="pageSizes" />
+      </div>
     </div>
   </div>
 </template>
@@ -69,13 +80,18 @@ const currentData = ref('Content I')
 const useCase = ref('')
 const templateFile = ref()
 const datasetFile = ref()
-
+const selectedPageSize = ref()
+const pageSizes = ref([
+  'A4',
+  'Legal',
+])
 const isEditing = ref(false)
 const isUploading = ref(false)
 
 const options = ref([
   { label: 'Data to doc' },
   { label: 'Form to doc' },
+  { label: 'Expert editor' },
 ])
 
 onMounted(() => {
@@ -147,13 +163,19 @@ watch(isUploading, (val) => {
     emit('updateData', { isValid, step: 1 })
   }
 })
-
-watch([templateFile, datasetFile], () => {
+// watch(selectedPageSize, (val) => {
+//   console.log('change in selecte dpage size', val)
+//   templateGeneralInformation.selectedPageSize = val
+// })
+watch([templateFile, datasetFile, selectedPageSize], () => {
   templateGeneralInformation.backgroundFileUrl = templateFile.value
   templateGeneralInformation.datasetFileUrl = datasetFile.value
-  const isValid
+  templateGeneralInformation.selectedPageSize = selectedPageSize.value
+  let isValid
   = templateGeneralInformation.useCase !== ''
   // && templateFile.value && (templateGeneralInformation.useCase !== 'Data to doc' || datasetFile.value)
+  if (templateGeneralInformation.useCase === 'Expert editor')
+    isValid = !!selectedPageSize.value
 
   emit('updateData', { isValid, step: 1 })
 })

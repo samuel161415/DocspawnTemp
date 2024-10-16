@@ -346,6 +346,8 @@
       />
 
       <Button v-if="templateGeneralInformation?.useCase === 'Form to doc'" :label="$t('Cp_templateEditor_tiptap_topbar.add_form_field')" @click="showAddFormFieldsForm = true" />
+      <Button v-if="props.isExpertEditor" label=" Add Draggable Block" sx="w-max nowrap " @click="addDraggableBlock" />
+      <Button label="get html content" @click="console.log(editor.getHTML())" />
     </div>
 
     <Dialog v-model:visible="showAddFormFieldsForm" modal :header="$t('Cp_tiptap_toolbar_formOptions.add_form_field_dialog_title')" :style="{ minWidth: '40rem' }">
@@ -446,8 +448,8 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData.js'
 import { useAuth } from '@/composables/useAuth'
 
+const props = defineProps(['isExpertEditor'])
 const { user } = useAuth()
-
 // Data for the form fields
 
 // Selected field for table row selection
@@ -564,6 +566,28 @@ function insertOnEditor(data) {
 //   // Reset the dropdown
 //   selectedDatasetkey.value = null
 // }
+function addDraggableBlock() {
+  const view = editor.value.view
+  const { state, dispatch } = view
+
+  // Get the current cursor position
+  const currentPos = state.selection.from
+
+  // Insert the new draggable item at the cursor position
+  editor.value
+    .chain()
+    .insertContentAt(currentPos, {
+      type: 'draggableItem', // The draggable block type
+      content: [
+        {
+          type: 'paragraph',
+          content: [{ type: 'text', text: '/' }],
+        },
+      ],
+    })
+    .focus() // Keep the focus on the editor after inserting
+    .run()
+}
 </script>
 
 <style scoped>
