@@ -69,7 +69,6 @@ const editor = useEditor({
           </div>
        `,
   // contentStates.value[selectedContentKey.value],
-  // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   onFocus() {
     // Set the active editor when it gains focus
     addToExpertEditor()
@@ -203,7 +202,7 @@ function handleContextMenu(event) {
     menu.remove()
   }, { once: true })
 }
-// const editorContentHeight = ref()
+
 // const editorContentWidth = ref()
 const editorContentWidth = computed(() => {
   if (screenWidth.value > 1600)
