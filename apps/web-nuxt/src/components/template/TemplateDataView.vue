@@ -100,6 +100,7 @@
 
                   <div class="flex flex-row-reverse md:flex-row">
                     <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="handleFillForm(item)" />
+                    <Button v-else-if="item.use_case === 'expertEditor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
                     <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e, index); }" />
                   </div>
                 </div>
@@ -169,6 +170,8 @@
               <div class="mt-4 mb-3">
                 <div class="flex flex-col">
                   <Button v-if="item.use_case === 'Form to doc'" outlined :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleFillForm(item)" />
+                  <Button v-else-if="item.use_case === 'expertEditor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
+
                   <Button
                     v-else
                     outlined
@@ -273,6 +276,16 @@
       <DataToDocGenerationModal v-if="visibleDataToDoc" v-model:visible="visibleDataToDoc" :template="currentTemplate" @cancel="visibleDataToDoc = false" @outside-click="handleOutsideClick" />
     </template>
   </Dialog>
+  <Dialog v-model:visible="visibleExpertEditorPreview" :draggable="false" modal :header="$t('Cp_dataToDoc_generation.header')" class="w-max" :style="{ width: '92vw' }">
+    <template #header>
+      <div class="inline-flex align-items-center justify-content-center gap-2">
+        <span class="text-lg text-primary-600 font-poppins font-normal">Exert editor generation</span>
+      </div>
+    </template>
+    <template #default>
+      <ExpertDocGenerationModal v-if="visibleExpertEditorPreview" v-model:visible="visibleExpertEditorPreview" :template="currentTemplate" @cancel="visibleExpertEditorPreview = false" @outside-click="handleOutsideClick" />
+    </template>
+  </Dialog>
   <ConfirmDialog group="templating">
     <template #message="slotProps">
       <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700">
@@ -332,7 +345,7 @@ import Papa from 'papaparse'
 import { useRouter } from 'vue-router'
 import Dropdown from 'primevue/dropdown'
 import { useI18n } from 'vue-i18n'
-import { DataToDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
+import { DataToDocGenerationModal, ExpertDocGenerationModal, FormToDocGenerationModal } from '@docspawn/shared-doc-generation-modals'
 import TemplatePreview from './TemplatePreview.vue'
 import ImagePreview from './ImagePreview'
 import GridSkeleton from './skeletons/GridSkeleton.vue'
@@ -421,6 +434,7 @@ const visibleDataToDoc = ref(false)
 const previewFormVisible = ref(false)
 const isDragging = ref(Array.from({ length: props.templates.length }).fill(false))
 const isLoading = ref(Array.from({ length: props.templates.length }).fill(false))
+const visibleExpertEditorPreview = ref(false)
 
 const filterOption = ref(filterOptions.value[0])
 
@@ -466,7 +480,10 @@ function handleDataToDocGenerationPreview(template) {
   visibleDataToDoc.value = true
   currentTemplate.value = template
 }
-
+function handleExpertEditorGenerationPreview(template) {
+  visibleExpertEditorPreview.value = true
+  currentTemplate.value = template
+}
 const op = ref()
 
 function toggle(event) {
@@ -501,6 +518,7 @@ const filteredTemplates = computed(() => {
 function handleOutsideClick() {
   visible.value = false
   visibleDataToDoc.value = false
+  visibleExpertEditorPreview.value = false
 }
 
 function editTemplate(temp) {

@@ -66,9 +66,19 @@ async function fetchTemplates() {
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data = await response.json()
     // console.log('templates', data)
+    // lets fetch expert templates also
+    const response2 = await fetch(`${runtimeConfig.public.BASE_URL}/expert-templates/${user?.value?.email}`)
+    if (!response.ok)
+      throw new Error(`Network response was not ok ${response.statusText}`)
+    const data2 = await response2.json()
+    const expertData = data2?.map((d) => {
+      return { ...d, use_case: 'expertEditor' }
+    })
+    // console.log('templates', data)
+    const allTemplates = [...data, ...expertData].sort((a, b) => new Date(b?.created_at) - new Date(a?.created_at))
 
     if (data?.length > 0) {
-      templateData.value = data?.map((d) => {
+      templateData.value = allTemplates?.map((d) => {
         return { ...d, image_preview_hash: uuid.v1() }
       })
     }

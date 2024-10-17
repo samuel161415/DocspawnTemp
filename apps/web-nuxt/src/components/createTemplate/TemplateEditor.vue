@@ -2,10 +2,12 @@
   <p class="font-semibold text-surface-600 text-2xl flex text-center justify-center pb-5">
     {{ templateGeneralInformation?.useCase === 'Expert editor' ? 'Expert editor' : $t('Pg_template_create_templateEditor.template_editor') }}
   </p>
-  <div v-if="templateGeneralInformation?.useCase === 'Expert editor'">
-    <div class="w-[80vw]  ml-[50%] translate-x-[-50%] min-h-[800px]">
+  <!-- w-[80vw]  ml-[50%] translate-x-[-50%]  -->
+  <div v-if="templateGeneralInformation?.useCase === 'Expert editor'" class="flex gap-8 ">
+    <div class="min-h-[800px]">
       <ExperEditor />
     </div>
+    <Options :is-expert-editor="true" @save-template="emit('saveTemplate')" />
   </div>
   <div v-else class="flex w-full space-x-3 relative mb-12 h-[90vh] overflow-hidden ">
     <TemplateFields />

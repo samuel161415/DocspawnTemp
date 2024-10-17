@@ -1,6 +1,5 @@
 <template>
-  <!-- {{ editorContentScaleX }}  {{ editorContentScaleY }} -->
-  <div class=" left-0 z-50 w-full h-full  ml-[50%] translate-x-[-50%] border border-red-500" :style="{ width: `${expertEditorWrapperWidth}` }">
+  <div class=" left-0 z-50 w-full h-full  ml-[50%] translate-x-[-50%] " :style="{ width: `${expertEditorWrapperWidth}` }">
     <div v-show="templateEditorStore.showExpertEditor || templateEditorStore?.selectedAddedField?.fieldType === 'Text box'">
       <TipTapToolbar :is-expert-editor="true" />
     </div>
@@ -24,7 +23,7 @@
     </BubbleMenu>
     <TiptapEditorContent
       id="editor-content"
-      :editor="editor" class="editor-content " :style="editorContentStyle"
+      :editor="editor" class="editor-content border " :style="editorContentStyle"
     />
   </div>
 </template>
@@ -54,11 +53,10 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import { useScreenWidth } from '@/composables/useScreenWidth'
 
-import canvasService from '@/composables/useTemplateCanvas'
-
 const props = defineProps(['editorId'])
-
 const { screenWidth } = useScreenWidth()
+const expertEditorWrapperWidth = ref()
+const expertEditorWrapperHeight = ref()
 
 // Manage dynamic width and height
 const editorWidth = ref('100%')
@@ -69,13 +67,18 @@ const editor = useEditor({
           <div data-type="draggable-item">
             <p>Followed by a fancy draggable item.</p>
           </div>
-          
        `,
   // contentStates.value[selectedContentKey.value],
   // '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   onFocus() {
     // Set the active editor when it gains focus
     addToExpertEditor()
+  },
+  onUpdate() {
+    templateEditorStore.expertEditorHtmlContent = editor.value.getHTML()
+    templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
+    templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
+    checkContentOverflow()
   },
   extensions: [
     TiptapStarterKit,
@@ -105,63 +108,22 @@ const editor = useEditor({
     }),
   ],
 })
-const selectedDatasetkey = ref(null)
+function checkContentOverflow() {
+  // Get the editor's content DOM element
+  const editorContent = document.getElementById('editor-content')
 
-function insetDatasetKey() {
-  if (!selectedDatasetkey.value)
-    return
-  // Insert the selected fruit wrapped in {{}} into the editor
-  editor.value.chain().focus().insertContent(`{{dataset[${selectedDatasetkey.value}]}}`).run()
-  // Reset the dropdown
-  selectedDatasetkey.value = null
+  if (!editorContent)
+    return // Guard clause if the element is not found
+
+  // Get the height of the editor content and the maximum allowed height
+  const contentHeight = editorContent.scrollHeight
+  const maxHeight = editorContent.clientHeight
+
+  // Log a message if the content exceeds the allowed height
+  if (contentHeight > maxHeight)
+    console.log('Content is overflowing the page boundaries')
 }
-// templateEditorStore.expertEditor=editor
-// function handleContextMenu(event) {
-//   event.preventDefault() // Disable the default browser context menu
 
-//   // Remove any existing custom menu
-//   const existingMenu = document.getElementById('custom-context-menu')
-//   if (existingMenu)
-//     existingMenu.remove()
-
-//   // Create the custom context menu
-//   const menu = document.createElement('div')
-//   menu.id = 'custom-context-menu'
-//   menu.style.position = 'absolute'
-//   menu.style.top = `${event.clientY}px`
-//   menu.style.left = `${event.clientX}px`
-//   menu.style.background = '#fff'
-//   menu.style.border = '1px solid #ccc'
-//   menu.style.padding = '10px'
-//   menu.style.zIndex = '1000'
-
-//   // Add a custom option (like Make Heading)
-//   const makeHeadingOption = document.createElement('div')
-//   makeHeadingOption.textContent = 'Make Heading'
-//   makeHeadingOption.style.cursor = 'pointer'
-//   makeHeadingOption.onclick = () => {
-//     editor.value.chain().focus().toggleHeading({ level: 4 }).run() // Toggle Heading level 1
-//     menu.remove() // Remove menu after applying action
-//   }
-
-//   // Add more custom options as needed
-//   // const anotherOption = document.createElement('div');
-//   // anotherOption.textContent = 'Another Option';
-//   // anotherOption.style.cursor = 'pointer';
-//   // anotherOption.onclick = () => { ... };
-
-//   // Append options to the custom menu
-//   menu.appendChild(makeHeadingOption)
-//   // menu.appendChild(anotherOption);
-
-//   // Append the custom menu to the body
-//   document.body.appendChild(menu)
-
-//   // Remove the menu if clicking elsewhere
-//   document.addEventListener('click', () => {
-//     menu.remove()
-//   }, { once: true })
-// }
 // Function to handle custom context menu creation
 function handleContextMenu(event) {
   event.preventDefault() // Disable the default browser context menu
@@ -241,7 +203,7 @@ function handleContextMenu(event) {
     menu.remove()
   }, { once: true })
 }
-const editorContentHeight = ref()
+// const editorContentHeight = ref()
 // const editorContentWidth = ref()
 const editorContentWidth = computed(() => {
   if (screenWidth.value > 1600)
@@ -250,20 +212,24 @@ const editorContentWidth = computed(() => {
   else
     return (Number.parseInt(screenWidth.value / 100) - 3) * 100
 })
-const expertEditorWrapperWidth = ref()
-const expertEditorWrapperHeight = ref()
+
 const editorContentStyle = computed(() => ({
   width: expertEditorWrapperWidth.value,
-  height: expertEditorWrapperHeight.value,
-
+  minHeight: expertEditorWrapperHeight.value,
+  maxHeight: expertEditorWrapperHeight.value,
+  //   height: 29.7cm; /* A4 height */
+  //   width: 21cm; /* A4 width */
+  overflowY: 'auto', /* Enable vertical scrolling */
+  overflowX: 'hidden', /* Disable horizontal scrolling */
+  //   padding: '1cm', /* Optional padding */
+  boxSizing: 'border-box',
+//   background: '#f1f1f1',
 }))
 
 onMounted(() => {
   expertEditorWrapperWidth.value = `${editorContentWidth.value}px`
   expertEditorWrapperHeight.value = `${templateGeneralInformation?.selectedPageSize === 'A4' ? editorContentWidth.value * 1.414 : editorContentWidth.value * 1.647}px`
-  console.log('on mounted')
-  console.log('editorContentStyle.height', editorContentStyle.height)
-  console.log('editorContentStyle.width', editorContentStyle.width)
+
   templateEditorStore.expertEditor = editor.value
   // console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
   if (templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
@@ -322,34 +288,9 @@ function addToExpertEditor() {
   templateEditorStore.selectedAddedField = toBeCurrent
   templateEditorStore.showOptionsBar = true
   templateEditorStore.ShowAddedFieldsinTemplateFields = true
-  //   const canvas = canvasService.getCanvas()
-  //   const activeObj = canvas.getObjects()?.filter(obj => obj?.hash === props?.editorId)[0]
 
-  //   activeObj
-  //   && canvas.setActiveObject(activeObj)
-  //   canvas.renderAll()
   templateEditorStore.showExpertEditor = true
 }
-
-// Watch the editor for updates and save the content to the current state
-watch(editor, (newEditor) => {
-  templateEditorStore.expertEditor = editor.value
-  // console.log('chnage in editor setting expert editor')
-  if (newEditor) {
-    newEditor.on('update', () => {
-      // console.log('editor updated')
-      // contentStates.value[selectedContentKey.value] = newEditor.getHTML()
-      templateEditorStore.editorContainers = templateEditorStore.editorContainers?.map((e) => {
-        if (e?.id === props?.editorId)
-          return { ...e, content: newEditor.getHTML() }
-        else return e
-      })
-    })
-    newEditor.on('selection', () => {
-      // console.log('editor changed')
-    })
-  }
-})
 
 // Function to get HTML content
 
@@ -360,10 +301,8 @@ onBeforeUnmount(() => {
 })
 </script>
 
-  <style scoped>
-  /* Wrapper styles */
-  /* Bubble menu */
-  .bubble-menu {
+<style scoped>
+.bubble-menu {
     background-color: #ffffff;
     border: 1px solid #009ee2;
     border-radius: 0.7rem;
@@ -396,11 +335,9 @@ onBeforeUnmount(() => {
   .editor-wrapper {
     padding: 10px;
     border: 1px solid #ccc;
-    /* resize:both;
-    overflow:auto; */
+
   }
 
-  /* Toolbar styles */
   .toolbar button {
     margin-right: 5px;
   }
@@ -557,30 +494,30 @@ onBeforeUnmount(() => {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: left;
-  }
+}
 
-  :deep(.ProseMirror th) {
+:deep(.ProseMirror th) {
     background-color: #f2f2f2;
     font-weight: bold;
-  }
+}
 
-  :deep(.ProseMirror td) {
+:deep(.ProseMirror td) {
     background-color: #fff;
-  }
+}
 
-  :deep(.ProseMirror tr:nth-child(even) td) {
+:deep(.ProseMirror tr:nth-child(even) td) {
     background-color: #f9f9f9;
-  }
+}
 
-  :deep(.ProseMirror tr:hover td) {
+:deep(.ProseMirror tr:hover td) {
     background-color: #e9e9e9;
-  }
-  :deep(.tiptap-code-node){
+}
+:deep(.tiptap-code-node){
     background:rgb(var(--primary-50));
     /* background-color: var(--purple-light); */
     border-radius: 0.4rem;
     color: var(--black);
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
-  }
+}
 </style>

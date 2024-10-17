@@ -165,127 +165,211 @@ const isSaving = ref(false)
 async function saveTemplate() {
   isSaving.value = true
   toast.add({ severity: 'success', summary: templateEditorStore?.templateToEdit?.id ? 'Updating template' : 'Saving template', detail: 'Process started', life: 1000 })
-  const canvas = canvasService.getCanvas()
-  if (!canvas)
-    return
-  const pageSizes = await fetchSizes(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl)
-  // return
-  const canvasSize = { height: canvas.height, width: canvas.width }
+  if (templateGeneralInformation.useCase === 'Expert editor') {
+    const pageSizes = [{ width: templateEditorStore.expertEditorWidth, height: templateEditorStore.expertEditorHeight }]
 
-  // map is for- when it will be loaded first page will be visible
-  const objects = canvas?.getObjects().filter(obj =>
-    obj.type !== 'line',
-    //  && obj?.fieldType !== 'checkboxIdNoIcon',
-  ).map((obj) => {
-    if (obj?.id === 'watermark-docspawn')
-      return obj
+    // return
+    const objToSend = {
+      account_type: user?.value?.email,
+      name: templateGeneralInformation?.name || 'sample',
+      template_options: JSON.stringify({ fileNamingString: templateEditorStore?.fileNamingString || 'Sample expert editor template' }),
+      page_sizes: JSON.stringify(pageSizes),
+      delivery_options: JSON.stringify(templateDeliveryOptions),
+      editors_data: JSON.stringify(templateEditorStore?.expertEditorHtmlContent),
+    }
 
-    if (obj.pageNo === 1)
-      obj.set({ visible: true, opacity: 1 })
-    else obj.set({ visible: false, opacity: 0 })
-    return obj
-  })
-  // creating deserialized because by default canvas does not save its all attributes of object
-  const deserializedObjects = objects.map((obj) => {
-    return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash', 'lockScalingFlip'])
-  })
-
-  let canvasToSend = JSON.parse(JSON.stringify(canvas))
-  canvasToSend = { ...canvasToSend, objects: deserializedObjects }
-  // return
-  const objToSend = {
-    account_type: user?.value?.email,
-    name: templateGeneralInformation?.name || 'sample',
-    use_case: templateGeneralInformation?.useCase,
-    background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
-    dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
-    dataset_start_line: templateEditorStore.datasetStartAtLine,
-    template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage, fileNamingString: templateEditorStore?.fileNamingString, enableCustomFileNaming: templateEditorStore?.enableCustomFileNaming }),
-    last_text_options: JSON.stringify({ activeTextStyles, lastScaledTextOptions: templateEditorStore?.lastScaledTextOptions }),
-    page_sizes: JSON.stringify(pageSizes),
-    added_fields: JSON.stringify(templateEditorStore?.addedFields),
-    dataset_data: JSON.stringify(templateEditorStore?.datasetData),
-    canvas_data: JSON.stringify(canvasToSend),
-    delivery_options: JSON.stringify(templateDeliveryOptions),
-    canvas_size: JSON.stringify(canvasSize),
-    editor_fields_data:
-    JSON.stringify(templateEditorStore.editor_fields_data),
-    //  JSON.stringify({
-    //   editorContainers: templateEditorStore?.editorContainers,
-    //   editorContainersRefs: templateEditorStore?.editorContainerRefs,
-    //   fabricObjectRefs: templateEditorStore?.fabricObjectRefs,
-    // }),
-    // expert_container_html_content: JSON.stringify(templateEditorStore?.expertEditorHtmlContent),
-    // expert_editor_dimensions: JSON.stringify({ height: templateEditorStore?.expertEditorHeight, width: templateEditorStore?.expertEditorWidth }),
-
-  }
-
-  // return true
-  if (templateEditorStore?.templateToEdit?.id) {
-    try {
-      const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${templateEditorStore?.templateToEdit?.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json', // Specify content type as JSON
-        },
-        body: JSON.stringify(objToSend), // Serialize the object to JSON string
-      })
-      if (!response.ok)
-        throw new Error(`Network response was not ok ${response.statusText}`)
-
-      // const data = await response.json()
-      toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
-
+    // return true
+    if (templateEditorStore?.templateToEdit?.id) {
       try {
-        setTimeout(() => {
-          resetAllTemplateCreationValues()
-          resetAllTemplateEditorValues()
-          canvasService.refreshCanvas()
-          router.currentRoute.value.path = '/'
-          router.push('templates')
-        }, 500)
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/expert-templates/${templateEditorStore?.templateToEdit?.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json', // Specify content type as JSON
+          },
+          body: JSON.stringify(objToSend), // Serialize the object to JSON string
+        })
+        if (!response.ok)
+          throw new Error(`Network response was not ok ${response.statusText}`)
+
+        // const data = await response.json()
+        toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
+
+        try {
+          setTimeout(() => {
+            resetAllTemplateCreationValues()
+            resetAllTemplateEditorValues()
+            canvasService.refreshCanvas()
+            router.currentRoute.value.path = '/'
+            router.push('templates')
+          }, 500)
+        }
+        catch (err) {
+          // console.log('error', err)
+        }
       }
-      catch (err) {
-      // console.log('error', err)
+      catch (error) {
+        isSaving.value = false
+        console.error('Error:', error)
+        toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
       }
     }
-    catch (error) {
-      isSaving.value = false
-      console.error('Error:', error)
-      toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
+    else {
+      try {
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/expert-templates`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Specify content type as JSON
+          },
+          body: JSON.stringify(objToSend), // Serialize the object to JSON string
+        })
+        if (!response.ok)
+          throw new Error(`Network response was not ok ${response.statusText}`)
+
+        // const data = await response.json()
+        toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+        try {
+          setTimeout(() => {
+            resetAllTemplateCreationValues()
+            resetAllTemplateEditorValues()
+            canvasService.refreshCanvas()
+            router.currentRoute.value.path = '/'
+            router.push('templates')
+          }, 500)
+        }
+        catch (err) {
+          // console.log('error', err)
+        }
+      }
+      catch (error) {
+        isSaving.value = false
+        console.error('Error:', error)
+        toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
+      }
     }
   }
   else {
-    try {
-      const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json', // Specify content type as JSON
-        },
-        body: JSON.stringify(objToSend), // Serialize the object to JSON string
-      })
-      if (!response.ok)
-        throw new Error(`Network response was not ok ${response.statusText}`)
+    const canvas = canvasService.getCanvas()
+    if (!canvas)
+      return
+    const pageSizes = await fetchSizes(templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl)
+    // return
+    const canvasSize = { height: canvas.height, width: canvas.width }
 
-      // const data = await response.json()
-      toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+    // map is for- when it will be loaded first page will be visible
+    const objects = canvas?.getObjects().filter(obj =>
+      obj.type !== 'line',
+    //  && obj?.fieldType !== 'checkboxIdNoIcon',
+    ).map((obj) => {
+      if (obj?.id === 'watermark-docspawn')
+        return obj
+
+      if (obj.pageNo === 1)
+        obj.set({ visible: true, opacity: 1 })
+      else obj.set({ visible: false, opacity: 0 })
+      return obj
+    })
+    // creating deserialized because by default canvas does not save its all attributes of object
+    const deserializedObjects = objects.map((obj) => {
+      return obj.toObject(['id', 'hash', '_controlsVisibility', '__eventListeners', 'fontFamily', 'fontSize', 'fontStyle', 'fontWeight', 'fieldType', 'displayGuide', 'charSpacing', 'cornerColor', 'cornerStyle', 'borderColor', 'transparentCorners', 'checkboxIdentifierHash', 'checkboxGroupHash', 'selectable', 'visible', 'opacity', 'pageNo', 'checkboxHash', 'lockScalingFlip'])
+    })
+
+    let canvasToSend = JSON.parse(JSON.stringify(canvas))
+    canvasToSend = { ...canvasToSend, objects: deserializedObjects }
+    // return
+    const objToSend = {
+      account_type: user?.value?.email,
+      name: templateGeneralInformation?.name || 'sample',
+      use_case: templateGeneralInformation?.useCase,
+      background_file_url: templateGeneralInformation?.backgroundFileUrl ? templateGeneralInformation?.backgroundFileUrl : templateEditorStore?.templateBackgroundUrl,
+      dataset_file_url: templateGeneralInformation?.datasetFileUrl || null,
+      dataset_start_line: templateEditorStore.datasetStartAtLine,
+      template_options: JSON.stringify({ watermarkDisabled: templateEditorStore?.watermarkDisabled, watermarkImage: templateEditorStore?.watermarkImage, fileNamingString: templateEditorStore?.fileNamingString, enableCustomFileNaming: templateEditorStore?.enableCustomFileNaming }),
+      last_text_options: JSON.stringify({ activeTextStyles, lastScaledTextOptions: templateEditorStore?.lastScaledTextOptions }),
+      page_sizes: JSON.stringify(pageSizes),
+      added_fields: JSON.stringify(templateEditorStore?.addedFields),
+      dataset_data: JSON.stringify(templateEditorStore?.datasetData),
+      canvas_data: JSON.stringify(canvasToSend),
+      delivery_options: JSON.stringify(templateDeliveryOptions),
+      canvas_size: JSON.stringify(canvasSize),
+      editor_fields_data:
+    JSON.stringify(templateEditorStore.editor_fields_data),
+      //  JSON.stringify({
+      //   editorContainers: templateEditorStore?.editorContainers,
+      //   editorContainersRefs: templateEditorStore?.editorContainerRefs,
+      //   fabricObjectRefs: templateEditorStore?.fabricObjectRefs,
+      // }),
+      // expert_container_html_content: JSON.stringify(templateEditorStore?.expertEditorHtmlContent),
+      // expert_editor_dimensions: JSON.stringify({ height: templateEditorStore?.expertEditorHeight, width: templateEditorStore?.expertEditorWidth }),
+
+    }
+
+    // return true
+    if (templateEditorStore?.templateToEdit?.id) {
       try {
-        setTimeout(() => {
-          resetAllTemplateCreationValues()
-          resetAllTemplateEditorValues()
-          canvasService.refreshCanvas()
-          router.currentRoute.value.path = '/'
-          router.push('templates')
-        }, 500)
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates/${templateEditorStore?.templateToEdit?.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json', // Specify content type as JSON
+          },
+          body: JSON.stringify(objToSend), // Serialize the object to JSON string
+        })
+        if (!response.ok)
+          throw new Error(`Network response was not ok ${response.statusText}`)
+
+        // const data = await response.json()
+        toast.add({ severity: 'success', summary: 'Info', detail: 'Template updated successfully', life: 1000 })
+
+        try {
+          setTimeout(() => {
+            resetAllTemplateCreationValues()
+            resetAllTemplateEditorValues()
+            canvasService.refreshCanvas()
+            router.currentRoute.value.path = '/'
+            router.push('templates')
+          }, 500)
+        }
+        catch (err) {
+          // console.log('error', err)
+        }
       }
-      catch (err) {
-      // console.log('error', err)
+      catch (error) {
+        isSaving.value = false
+        console.error('Error:', error)
+        toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to update the template', life: 5000 })
       }
     }
-    catch (error) {
-      isSaving.value = false
-      console.error('Error:', error)
-      toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
+    else {
+      try {
+        const response = await fetch(`${runtimeConfig.public.BASE_URL}/templates`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json', // Specify content type as JSON
+          },
+          body: JSON.stringify(objToSend), // Serialize the object to JSON string
+        })
+        if (!response.ok)
+          throw new Error(`Network response was not ok ${response.statusText}`)
+
+        // const data = await response.json()
+        toast.add({ severity: 'success', summary: 'Info', detail: 'Template saved successfully', life: 1000 })
+        try {
+          setTimeout(() => {
+            resetAllTemplateCreationValues()
+            resetAllTemplateEditorValues()
+            canvasService.refreshCanvas()
+            router.currentRoute.value.path = '/'
+            router.push('templates')
+          }, 500)
+        }
+        catch (err) {
+          // console.log('error', err)
+        }
+      }
+      catch (error) {
+        isSaving.value = false
+        console.error('Error:', error)
+        toast.add({ severity: 'error', summary: 'Info', detail: 'Unable to save the template', life: 5000 })
+      }
     }
   }
 }

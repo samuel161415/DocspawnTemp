@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 h-full overflow-auto" :style="{ minWidth: '200px' }">
     <!-- template options -->
-    <div v-if="!templateEditorStore.showOptionsBar" class="px-4">
+    <div v-if="!templateEditorStore.showOptionsBar || props?.isExpertEditor" class="px-4">
       <div class="w-full mb-6 justify-left gap-2 h-[62px] rounded-md text-lg text-primary-500 bg-primary-50 flex items-center justify-center gap-2 transition-all ease-linear duration-75">
         <p class="font-poppins">
           {{ $t('Cp_templateEditor_options.template_options') }}
@@ -183,8 +183,8 @@ import { activeTextStyles, templateEditorStore } from '@/composables/useTemplate
 import canvasService from '@/composables/useTemplateCanvas'
 import uploadFileToBackend from '~/services/uploadFileToBackend'
 
+const props = defineProps(['isExpertEditor'])
 const emit = defineEmits(['saveTemplate'])
-
 const { user } = useAuth()
 
 const activeDataField = ref()
