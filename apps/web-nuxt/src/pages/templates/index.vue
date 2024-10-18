@@ -72,7 +72,7 @@ async function fetchTemplates() {
       throw new Error(`Network response was not ok ${response.statusText}`)
     const data2 = await response2.json()
     const expertData = data2?.map((d) => {
-      return { ...d, use_case: 'expertEditor' }
+      return { ...d, use_case: 'Expert editor' }
     })
     // console.log('templates', data)
     const allTemplates = [...data, ...expertData].sort((a, b) => new Date(b?.created_at) - new Date(a?.created_at))

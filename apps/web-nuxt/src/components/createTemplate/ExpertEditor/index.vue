@@ -63,7 +63,7 @@ const editorWidth = ref('100%')
 const editorHeight = ref('100%')
 const editor = useEditor({
   // content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
-  content: templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content || ` 
+  content: templateEditorStore.templateToEdit?.editors_data || ` 
           <div data-type="draggable-item">
             <p>Followed by a fancy draggable item.</p>
           </div>

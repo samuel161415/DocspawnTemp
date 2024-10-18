@@ -100,7 +100,7 @@
 
                   <div class="flex flex-row-reverse md:flex-row">
                     <Button v-if="item.templateType === 'form to doc'" :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="handleFillForm(item)" />
-                    <Button v-else-if="item.use_case === 'expertEditor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
+                    <Button v-else-if="item.use_case === 'Expert editor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
                     <Button v-else :label="$t('Cp_templateDataview.select_or_drop_file')" class="pointer-auto flex-auto md:flex-initial white-space-nowrap w-40 h-12 text-xs" @click="(e) => { templateSelectedForUploadingFile = item; uploadFile(e, index); }" />
                   </div>
                 </div>
@@ -170,7 +170,7 @@
               <div class="mt-4 mb-3">
                 <div class="flex flex-col">
                   <Button v-if="item.use_case === 'Form to doc'" outlined :label="$t('Cp_templateDataview.fill_form')" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleFillForm(item)" />
-                  <Button v-else-if="item.use_case === 'expertEditor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
+                  <Button v-else-if="item.use_case === 'Expert editor'" outlined label="Preview and Generate" class="pointer-auto flex-auto cursor-pointer font-poppins  text-[16px]" @click="handleExpertEditorGenerationPreview(item)" />
 
                   <Button
                     v-else

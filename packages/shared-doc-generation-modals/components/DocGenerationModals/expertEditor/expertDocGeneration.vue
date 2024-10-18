@@ -3,7 +3,7 @@
     <div class=" h-full mt-0" :style="{ marginRight: '12px' }">
       <div class="mb-0  w-200 flex items-center justify-between px-3 mb-0 rounded-md bg-primary-50" :style="{ height: '58px' }">
         <p class="text-surface-600 capitalize text-[18px] text-[rgb(75,85,99)] font-semibold font-poppins form-title-preview text-center w-full">
-          {{ template?.name }} - {{ $t('Cp_dataToDoc_generation.template_selected_data') }}
+          {{ template?.name }}
         </p>
       </div>
       <div class="overflow-auto" :style="{ maxWidth: '40vw' }">

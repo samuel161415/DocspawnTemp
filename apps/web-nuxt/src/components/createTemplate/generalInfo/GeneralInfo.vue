@@ -15,7 +15,7 @@
           :is-editing="isEditing"
           :label="option.label"
           :is-current="currentData === option.label"
-          :is-selected="templateGeneralInformation.useCase === option.label"
+          :is-selected="templateGeneralInformation.useCase === option.label "
           @select="handleSelectTemplate"
           @hover="setIsHovered"
         />
@@ -33,7 +33,12 @@
 
     <!-- uploads -->
     <div v-if="isEditing" :class="templateGeneralInformation.useCase === '' ? 'h-[187px]' : 'rounded-lg flex  mx-8 flex-col gap-8'" class="mt-8">
-      <div v-if="templateGeneralInformation.useCase !== '' && templateFile">
+      <div v-if="templateGeneralInformation.useCase === 'Expert editor' ">
+        <p class="font-medium text-surface-600 text-lg font-poppins">
+          Selected page size:{{ selectedPageSize }}
+        </p>
+      </div>
+      <div v-else-if="templateGeneralInformation.useCase !== '' && templateFile">
         <p class="font-medium text-surface-600 text-lg font-poppins">
           {{ $t('Cp_createTemplate_generalInfo.background_file') }}
         </p>
@@ -94,12 +99,23 @@ const options = ref([
   { label: 'Expert editor' },
 ])
 
+watch(isEditing, (val) => {
+  console.log('is editing', val)
+})
+watch(useCase, (val) => {
+  console.log('use case ', val)
+})
+
 onMounted(() => {
   if (templateEditorStore?.templateToEdit?.id) {
+    console.log('template editor store templateToEdit', templateEditorStore?.templateToEdit)
+    console.log('template general information', templateGeneralInformation)
     isEditing.value = true
+
     useCase.value = templateGeneralInformation?.useCase
     templateFile.value = templateGeneralInformation?.backgroundFileUrl
     datasetFile.value = templateGeneralInformation?.datasetFileUrl
+    selectedPageSize.value = getPageType(templateEditorStore?.templateToEdit?.page_sizes)
   }
   else {
     isEditing.value = false
@@ -181,4 +197,36 @@ watch([templateFile, datasetFile, selectedPageSize], () => {
 })
 
 const isDataToDoc = computed(() => templateGeneralInformation.useCase === 'Data to doc')
+function getPageType(pageSizes) {
+  console.log('page sizes>>>', pageSizes)
+  if (!pageSizes || pageSizes.length === 0)
+    return 'No page size provided'
+
+  const page = pageSizes[0] // Assuming only one page size in the array
+
+  // Convert the width and height to numbers
+  const width = Number.parseFloat(page.width)
+  const height = Number.parseFloat(page.height)
+
+  // Ratios for A4 and Legal
+  const a4Ratio = 1.414 // A4 height/width ratio
+  const legalRatio = 1.647 // Legal height/width ratio
+
+  // Calculate the actual ratios for the provided page size
+  const actualRatio = height / width
+
+  // Allow a small tolerance for floating-point precision
+  const tolerance = 0.01
+
+  // Check if the actual ratio matches A4 or Legal
+  const isA4 = Math.abs(actualRatio - a4Ratio) <= tolerance
+  const isLegal = Math.abs(actualRatio - legalRatio) <= tolerance
+
+  if (isA4)
+    return 'A4'
+  else if (isLegal)
+    return 'Legal'
+  else
+    return 'Unknown page size'
+}
 </script>
