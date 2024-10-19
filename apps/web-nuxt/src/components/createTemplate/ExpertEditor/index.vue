@@ -73,8 +73,35 @@ const editor = useEditor({
     // Set the active editor when it gains focus
     addToExpertEditor()
   },
-  onUpdate() {
-    templateEditorStore.expertEditorHtmlContent = editor.value.getHTML()
+  //   onUpdate() {
+  //     templateEditorStore.expertEditorHtmlContent = editor.value.getHTML()
+  //     templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
+  //     templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
+  //     checkContentOverflow()
+  //   },
+  onCreate({ editor }) {
+    // Ensure that the content always has a draggable item
+    if (editor.isEmpty) {
+      editor.commands.setContent(`
+        <div data-type="draggable-item">
+          <p></p>
+        </div>
+      `)
+    }
+  },
+  onUpdate({ editor }) {
+    // console.log('editor', editor)
+
+    // Check if the content is empty, then insert a draggableItem
+    if (editor.isEmpty) {
+      editor.commands.setContent(`
+        <div data-type="draggable-item">
+          <p></p>
+        </div>
+      `)
+    }
+
+    templateEditorStore.expertEditorHtmlContent = editor.getHTML()
     templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
     templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
     checkContentOverflow()
