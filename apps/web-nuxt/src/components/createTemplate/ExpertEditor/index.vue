@@ -49,6 +49,11 @@ import TipTapToolbar from '../templateEditor/editorCanvas/TipTapToolbar'
 import DraggableItem from './DragExtension/DraggableItem.js'
 import Commands from './CommandExtension/commands.js'
 import suggestion from './CommandExtension/suggestion.js'
+
+// import { BlockDraggableExtension } from './BlockDraggableExtension/BlockDraggableExtension.js'
+import DraggableBlock from './AllBlocksDraggableExtension/DraggableBlock'
+import DraggableParagraph from './DraggableNodes/DraggableParagraph.js'
+import DraggableHeading from './DraggableNodes/DraggableHeading.js'
 import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import { useScreenWidth } from '@/composables/useScreenWidth'
@@ -83,9 +88,9 @@ const editor = useEditor({
     // Ensure that the content always has a draggable item
     if (editor.isEmpty) {
       editor.commands.setContent(`
-        <div data-type="draggable-item">
+        
           <p></p>
-        </div>
+      
       `)
     }
   },
@@ -95,12 +100,12 @@ const editor = useEditor({
     // Check if the content is empty, then insert a draggableItem
     if (editor.isEmpty) {
       editor.commands.setContent(`
-        <div data-type="draggable-item">
+      
           <p></p>
-        </div>
+        
       `)
     }
-
+    console.log('change in html', editor.getHTML())
     templateEditorStore.expertEditorHtmlContent = editor.getHTML()
     templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
     templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
@@ -110,19 +115,25 @@ const editor = useEditor({
     TiptapStarterKit,
     TiptapTable.configure({
       resizable: true,
+    //   paragraph: false, // Disable the default paragraph node
+    //   heading: false, // Disable the default heading node
     }),
+    DraggableBlock,
     TiptapTableRow,
     TiptapTableCell,
     TiptapTableHeader,
     Text,
     Color,
     TextStyle,
-    Paragraph,
+    // Paragraph,
+    DraggableHeading,
+    DraggableParagraph,
+    // BlockDraggableExtension,
     TiptapImage.configure({
       inline: true, // Configuring image to be inline
       allowBase64: true,
     }),
-    DraggableItem,
+    // DraggableItem,
     Commands.configure({
       suggestion,
     }),
@@ -428,9 +439,10 @@ onBeforeUnmount(() => {
     outline: none;
   }
 
-  :deep(.ProseMirror p) {
+  :deep(.ProseMirror p)  {
     font-size: 22px;
   }
+
   :deep(.ProseMirror p:empty::before) {
     content: '';
     display: inline-block;
@@ -545,5 +557,25 @@ onBeforeUnmount(() => {
     color: var(--black);
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
+}
+.draggable-block {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.drag-handle {
+  cursor: grab;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  margin-right: 8px;
+}
+
+.draggable-block:hover .drag-handle {
+  opacity: 1;
+}
+
+.drag-handle:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }
 </style>
