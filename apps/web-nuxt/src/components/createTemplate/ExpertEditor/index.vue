@@ -45,12 +45,13 @@ import TextStyle from '@tiptap/extension-text-style'
 import TiptapImage from '@tiptap/extension-image'
 import CodeBlock from '@tiptap/extension-code-block'
 import Code from '@tiptap/extension-code'
+import Dropcursor from '@tiptap/extension-dropcursor'
 import TipTapToolbar from '../templateEditor/editorCanvas/TipTapToolbar'
 import DraggableItem from './DragExtension/DraggableItem.js'
 import Commands from './CommandExtension/commands.js'
 import suggestion from './CommandExtension/suggestion.js'
 
-// import { BlockDraggableExtension } from './BlockDraggableExtension/BlockDraggableExtension.js'
+import { BlockDraggableExtension } from './BlockDraggableExtension/BlockDraggableExtension.js'
 import DraggableBlock from './AllBlocksDraggableExtension/DraggableBlock'
 import DraggableParagraph from './DraggableNodes/DraggableParagraph.js'
 import DraggableHeading from './DraggableNodes/DraggableHeading.js'
@@ -98,10 +99,15 @@ const editor = useEditor({
     Text,
     Color,
     TextStyle,
-    // Paragraph,
-    DraggableHeading,
-    DraggableParagraph,
-    // BlockDraggableExtension,
+    Paragraph,
+    // Dropcursor, // .configure({
+    //   color: '#ff0000',
+    //   width: 5,
+    // })
+
+    // DraggableHeading,
+    // DraggableParagraph,
+    BlockDraggableExtension,
     TiptapImage.configure({
       inline: true, // Configuring image to be inline
       allowBase64: true,
@@ -531,7 +537,7 @@ onBeforeUnmount(() => {
     font-size: 0.85rem;
     padding: 0.25em 0.3em;
 }
-.draggable-block {
+/* .draggable-block {
   display: flex;
   align-items: center;
   position: relative;
@@ -550,5 +556,44 @@ onBeforeUnmount(() => {
 
 .drag-handle:hover {
   background-color: rgba(0, 0, 0, 0.1);
+} */
+/* :deep(.block-draggable) {
+  position: relative;
+  padding-left: 40px;
 }
+
+:deep(.block-icons-container ){
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+   opacity: 0;
+  transition: opacity 0.2s;
+  display: flex;
+}
+
+:deep(.block-draggable:hover .block-icons-container) {
+  opacity: 1;
+}
+
+:deep(.drag-handle),
+:deep(.add-sibling-button) {
+  cursor: pointer;
+  user-select: none;
+  width:20px;
+  height: 20px;
+  line-height: 10px;
+  text-align: center;
+  background-color: #f0f0f0;
+  margin-bottom: 5px;
+  border-radius: 3px;
+  font-size: 30px;
+  color:#000;
+}
+
+:deep(.drag-handle:hover,)
+:deep(.add-sibling-button:hover ){
+  background-color: #e0e0e0;
+} */
 </style>

@@ -14,8 +14,8 @@
       class="drag-handle mt-2 text-md font-normal "
       contenteditable="false"
       draggable="true"
-      data-drag-handle
     >
+      <!-- data-drag-handle -->
       <font-awesome-icon icon="fa-solid fa-grip-vertical" size="md" />
     </div>
     <!-- Content of the draggable item -->
