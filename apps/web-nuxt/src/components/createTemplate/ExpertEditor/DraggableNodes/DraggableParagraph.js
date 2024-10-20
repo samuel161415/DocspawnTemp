@@ -22,7 +22,7 @@ export default Paragraph.extend({
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['p', mergeAttributes(HTMLAttributes, { class: 'paragraph' }), 0]
+    return ['p', mergeAttributes(HTMLAttributes), 0]
   },
 
   addNodeView() {

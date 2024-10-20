@@ -23,7 +23,7 @@
     </BubbleMenu>
     <TiptapEditorContent
       id="editor-content"
-      :editor="editor" class="editor-content border " :style="editorContentStyle"
+      :editor="editor" class="editor-content border  " :style="editorContentStyle"
     />
   </div>
 </template>
@@ -69,42 +69,15 @@ const editorHeight = ref('100%')
 const editor = useEditor({
   // content: templateEditorStore?.templateToEdit?.expert_container_html_content || '<p>I\'m running Tiptap with Vue.js. 🎉</p>',
   content: templateEditorStore.templateToEdit?.editors_data || ` 
-          <div data-type="draggable-item">
             <p>Followed by a fancy draggable item.</p>
-          </div>
        `,
   // contentStates.value[selectedContentKey.value],
   onFocus() {
     // Set the active editor when it gains focus
     addToExpertEditor()
   },
-  //   onUpdate() {
-  //     templateEditorStore.expertEditorHtmlContent = editor.value.getHTML()
-  //     templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
-  //     templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
-  //     checkContentOverflow()
-  //   },
-  onCreate({ editor }) {
-    // Ensure that the content always has a draggable item
-    if (editor.isEmpty) {
-      editor.commands.setContent(`
-        
-          <p></p>
-      
-      `)
-    }
-  },
-  onUpdate({ editor }) {
-    // console.log('editor', editor)
 
-    // Check if the content is empty, then insert a draggableItem
-    if (editor.isEmpty) {
-      editor.commands.setContent(`
-      
-          <p></p>
-        
-      `)
-    }
+  onUpdate({ editor }) {
     console.log('change in html', editor.getHTML())
     templateEditorStore.expertEditorHtmlContent = editor.getHTML()
     templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
