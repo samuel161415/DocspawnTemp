@@ -86,7 +86,7 @@ export const BlockDraggableExtension = Extension.create({
                 // Add a node decoration for the block
                 const nodeDecoration = Decoration.node(pos, pos + node.nodeSize, {
                   class: 'block-draggable',
-                  style: 'position: relative; padding-left: 40px; display:flex;border:1px solid red;', // Add styles directly
+                  style: 'position: relative;padding-bottom:20px; padding-left: 40px; display:flex;', // Add styles directly
                 })
                 decorations.push(nodeDecoration)
 
@@ -102,7 +102,7 @@ export const BlockDraggableExtension = Extension.create({
                     container.style.display = 'flex'
                     container.style.gap = '10px'
                     container.style.flexDirection = 'row'
-                    container.style.border = '1px solid red'
+                    // container.style.border = '1px solid red'
                     // container.style.left = '0'
                     // container.style.top = '0'
                     // container.style.opacity = '0'

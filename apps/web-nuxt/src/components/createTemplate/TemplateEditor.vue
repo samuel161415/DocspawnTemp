@@ -4,6 +4,7 @@
   </p>
   <!-- w-[80vw]  ml-[50%] translate-x-[-50%]  -->
   <div v-if="templateGeneralInformation?.useCase === 'Expert editor'" class="flex gap-8 ">
+    <SnippetLibraryIntegration />
     <div class="min-h-[800px]">
       <ExperEditor />
     </div>
@@ -21,6 +22,7 @@ import TemplateFields from './templateEditor/templateFields/TemplateFields.vue'
 import Options from './templateEditor/options/Options.vue'
 import EditorCanvas from './templateEditor/editorCanvas/EditorCanvas.vue'
 import ExperEditor from './ExpertEditor'
+import SnippetLibraryIntegration from './ExpertEditor/SnippetLibraryIntegration'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 
 const emit = defineEmits(['saveTemplate'])

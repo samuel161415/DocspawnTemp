@@ -51,7 +51,7 @@ import DraggableItem from './DragExtension/DraggableItem.js'
 import Commands from './CommandExtension/commands.js'
 import suggestion from './CommandExtension/suggestion.js'
 
-import { BlockDraggableExtension } from './BlockDraggableExtension/BlockDraggableExtension.js'
+// import { BlockDraggableExtension } from './BlockDraggableExtension/BlockDraggableExtension.js'
 import DraggableBlock from './AllBlocksDraggableExtension/DraggableBlock'
 import DraggableParagraph from './DraggableNodes/DraggableParagraph.js'
 import DraggableHeading from './DraggableNodes/DraggableHeading.js'
@@ -107,7 +107,7 @@ const editor = useEditor({
 
     // DraggableHeading,
     // DraggableParagraph,
-    BlockDraggableExtension,
+    // BlockDraggableExtension,
     TiptapImage.configure({
       inline: true, // Configuring image to be inline
       allowBase64: true,
@@ -224,9 +224,9 @@ function handleContextMenu(event) {
 const editorContentWidth = computed(() => {
   if (screenWidth.value > 1600)
     // return 900
-    return (Number.parseInt(screenWidth.value / 100) - 6) * 100
+    return (Number.parseInt(screenWidth.value / 100) - 9) * 100
   else
-    return (Number.parseInt(screenWidth.value / 100) - 3) * 100
+    return (Number.parseInt(screenWidth.value / 100) - 6) * 100
 })
 
 const editorContentStyle = computed(() => ({

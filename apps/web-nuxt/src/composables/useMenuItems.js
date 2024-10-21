@@ -33,6 +33,12 @@ export function useMenuItems() {
       isHovered: false,
     },
     {
+      title: 'Snippet library',
+      icon: 'pi pi-images',
+      route: '/snippet-library',
+      isHovered: false,
+    },
+    {
       title: 'Settings',
       icon: 'pi pi-cog',
       route: '/settings',
