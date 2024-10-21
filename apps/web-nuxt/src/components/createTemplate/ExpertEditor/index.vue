@@ -1,7 +1,7 @@
 <template>
   <div class=" left-0 z-50 w-full h-full  ml-[50%] translate-x-[-50%] " :style="{ width: `${expertEditorWrapperWidth}` }">
     <div v-show="templateEditorStore.showExpertEditor || templateEditorStore?.selectedAddedField?.fieldType === 'Text box'">
-      <TipTapToolbar :is-expert-editor="true" />
+      <TipTapToolbar v-if="!props?.isSnippetLibrary " :is-expert-editor="true" />
     </div>
 
     <BubbleMenu
@@ -59,7 +59,7 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import { useScreenWidth } from '@/composables/useScreenWidth'
 
-const props = defineProps(['editorId'])
+const props = defineProps(['editorId', 'isSnippetLibrary'])
 const { screenWidth } = useScreenWidth()
 const expertEditorWrapperWidth = ref()
 const expertEditorWrapperHeight = ref()
@@ -80,9 +80,12 @@ const editor = useEditor({
 
   onUpdate({ editor }) {
     console.log('change in html', editor.getHTML())
-    templateEditorStore.expertEditorHtmlContent = editor.getHTML()
-    templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
-    templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
+    if (!props?.isSnippetLibrary) {
+      templateEditorStore.expertEditorHtmlContent = editor.getHTML()
+      templateEditorStore.expertEditorWidth = expertEditorWrapperWidth.value
+      templateEditorStore.expertEditorHeight = expertEditorWrapperHeight.value
+    }
+
     checkContentOverflow()
   },
   extensions: [
@@ -222,6 +225,10 @@ function handleContextMenu(event) {
 
 // const editorContentWidth = ref()
 const editorContentWidth = computed(() => {
+  console.log('props?.isSnippetLibrary', props?.isSnippetLibrary)
+  if (props?.isSnippetLibrary)
+    return 400
+
   if (screenWidth.value > 1600)
     // return 900
     return (Number.parseInt(screenWidth.value / 100) - 9) * 100
@@ -245,8 +252,14 @@ const editorContentStyle = computed(() => ({
 onMounted(() => {
   expertEditorWrapperWidth.value = `${editorContentWidth.value}px`
   expertEditorWrapperHeight.value = `${templateGeneralInformation?.selectedPageSize === 'A4' ? editorContentWidth.value * 1.414 : editorContentWidth.value * 1.647}px`
-
-  templateEditorStore.expertEditor = editor.value
+  if (props?.isSnippetLibrary) {
+    expertEditorWrapperWidth.value = '100%'
+    expertEditorWrapperHeight.value = '400px'
+  }
+  if (props?.isSnippetLibrary)
+    templateEditorStore.snippetEditor = editor.value
+  else
+    templateEditorStore.expertEditor = editor.value
   // console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
   if (templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
     editor.value.commands.setContent(templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
@@ -297,7 +310,10 @@ function replaceDatasetValues(html, dataset) {
 }
 function addToExpertEditor() {
   // console.log(' add to expert editor running')
-  templateEditorStore.expertEditor = editor.value
+  if (props?.isSnippetLibrary)
+    templateEditorStore.snippetEditor = editor.value
+  else
+    templateEditorStore.expertEditor = editor.value
   // setting current added field when focus on container
   const toBeCurrent = templateEditorStore?.addedFields?.filter(f => f?.hash === props?.editorId)[0]
 

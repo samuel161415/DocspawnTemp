@@ -48,6 +48,7 @@ const initialTemplateEditorStore = {
   expertEditorWidth: 0,
   expertEditorHeight: 0,
   expertEditor: null,
+  snippetEditor: null,
   editorContainers: [],
   editorContainerRefs: {},
   fabricObjectRefs: {},

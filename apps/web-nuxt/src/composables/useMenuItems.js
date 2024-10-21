@@ -34,7 +34,7 @@ export function useMenuItems() {
     },
     {
       title: 'Snippet library',
-      icon: 'pi pi-images',
+      icon: 'pi pi-wallet',
       route: '/snippet-library',
       isHovered: false,
     },

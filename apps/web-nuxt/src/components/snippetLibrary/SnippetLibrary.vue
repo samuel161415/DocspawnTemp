@@ -6,10 +6,7 @@
       </p>
       <div class="flex gap-2 justify-between">
         <InputText placeholder="Search snippets..." />
-        <Button v-if="props?.isExpertEditor" v-tooltip.top="'Add snippet'">
-          <font-awesome-icon icon="fa-solid fa-plus" size="lg" />
-        </Button>
-        <Button v-else label="Add Snippet" />
+        <AddSnippModal :is-expert-editor="props?.isExpertEditor" :snippets="snippets" @set-snippets="(val) => snippets = val" />
       </div>
     </div>
     <Accordion multiple>
@@ -26,15 +23,15 @@
                 </Button>
                 <Button v-else label="Edit" />
 
-                <Button v-if="props?.isExpertEditor" v-tooltip.top="snippet.viewMode === 'rendered' ? 'Show Snippet Code' : 'Show Output'" text @click="toggleViewMode(category, idx)">
+                <Button v-if="!props?.isExpertEditor" v-tooltip.top="snippet.viewMode === 'rendered' ? 'Show Snippet Code' : 'Show Output'" text @click="toggleViewMode(category, idx)">
                   <font-awesome-icon icon="fa-solid fa-eye" size="lg" />
                 </Button>
-                <Button
+                <!-- <Button
                   v-else
                   outlined
                   :label="snippet.viewMode === 'rendered' ? 'Show Snippet Code' : 'Show Output'"
                   @click="toggleViewMode(category, idx)"
-                />
+                /> -->
                 <Button
                   v-if="props?.isExpertEditor" v-tooltip.top="'Add to template'"
                   @click="() => addSinppetToTemplate(snippet)"
@@ -44,7 +41,7 @@
               </div>
             </div>
 
-            <div class="py-2 bg-surface-50">
+            <div v-if="!props?.isExpertEditor" class="py-2 bg-surface-50">
               <!-- Toggle between HTML output and raw snippet code -->
               <div v-if="snippet.viewMode === 'rendered'" v-html="snippet.Html"></div>
               <pre v-else>{{ snippet.Html }}</pre>
@@ -58,6 +55,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import AddSnippModal from './AddSnippetModal'
 
 const props = defineProps(['isExpertEditor'])
 
@@ -79,7 +77,9 @@ const snippets = ref([
     ],
   },
 ])
-
+watch(snippets, (val) => {
+  console.log('snippets', val)
+})
 // Define the toggleViewMode function
 function toggleViewMode(category, idx) {
   const snippet = category.snippets[idx]
