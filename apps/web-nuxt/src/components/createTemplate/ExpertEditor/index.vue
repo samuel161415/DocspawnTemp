@@ -59,7 +59,7 @@ import { templateEditorStore } from '@/composables/useTemplateEditorData'
 import { templateGeneralInformation } from '@/composables/useTemplateCreationData'
 import { useScreenWidth } from '@/composables/useScreenWidth'
 
-const props = defineProps(['editorId', 'isSnippetLibrary'])
+const props = defineProps(['editorId', 'isSnippetLibrary', 'isEditing', 'currentSnippet'])
 const { screenWidth } = useScreenWidth()
 const expertEditorWrapperWidth = ref()
 const expertEditorWrapperHeight = ref()
@@ -256,10 +256,12 @@ onMounted(() => {
     expertEditorWrapperWidth.value = '100%'
     expertEditorWrapperHeight.value = '400px'
   }
-  if (props?.isSnippetLibrary)
+  if (props?.isSnippetLibrary) {
     templateEditorStore.snippetEditor = editor.value
-  else
-    templateEditorStore.expertEditor = editor.value
+    if (props?.isEditing && props?.currentSnippet)
+      editor.value.commands.setContent(props?.currentSnippet?.Html)
+  }
+  else { templateEditorStore.expertEditor = editor.value }
   // console.log('templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content', templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
   if (templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)
     editor.value.commands.setContent(templateEditorStore.editorContainers?.filter(e => e?.id === props?.editorId)[0]?.content)

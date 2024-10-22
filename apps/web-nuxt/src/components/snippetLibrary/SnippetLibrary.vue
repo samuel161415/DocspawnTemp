@@ -18,10 +18,11 @@
                 Snippet {{ snippet.name }}
               </p>
               <div class="flex gap-2">
-                <Button v-if="props?.isExpertEditor" v-tooltip.top="'Edit'" text size="xs">
+                <AddSnippModal :is-expert-editor="props?.isExpertEditor" :is-editing="true" :snippets="snippets" :current-snippet="snippet" @set-snippets="(val) => snippets = val" />
+                <!-- <Button v-if="props?.isExpertEditor" v-tooltip.top="'Edit'" text size="xs">
                   <font-awesome-icon icon="fa-solid fa-pen-to-square" size="lg" />
                 </Button>
-                <Button v-else label="Edit" />
+                <Button v-else label="Edit" /> -->
 
                 <Button v-if="!props?.isExpertEditor" v-tooltip.top="snippet.viewMode === 'rendered' ? 'Show Snippet Code' : 'Show Output'" text @click="toggleViewMode(category, idx)">
                   <font-awesome-icon icon="fa-solid fa-eye" size="lg" />
@@ -55,6 +56,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 import AddSnippModal from './AddSnippetModal'
 
 const props = defineProps(['isExpertEditor'])
@@ -64,16 +66,16 @@ const snippets = ref([
   {
     category: 'Personal',
     snippets: [
-      { name: 'A', Html: '<p>What\'s your name?</p>', viewMode: 'rendered' },
-      { name: 'B', Html: '<p>What\'s your age?</p>', viewMode: 'rendered' },
+      { id: uuidv4(), name: 'A', Html: '<p>What\'s your name?</p>', viewMode: 'rendered' },
+      { id: uuidv4(), name: 'B', Html: '<p>What\'s your age?</p>', viewMode: 'rendered' },
     ],
   },
   {
     category: 'Work',
     snippets: [
-      { name: 'C', Html: '<p>What\'s your job?</p>', viewMode: 'rendered' },
-      { name: 'D', Html: '<p>What\'s your salary?</p>', viewMode: 'rendered' },
-      { name: 'E', Html: '<p>What\'s your designation?</p>', viewMode: 'rendered' },
+      { id: uuidv4(), name: 'C', Html: '<p>What\'s your job?</p>', viewMode: 'rendered' },
+      { id: uuidv4(), name: 'D', Html: '<p>What\'s your salary?</p>', viewMode: 'rendered' },
+      { id: uuidv4(), name: 'E', Html: '<p>What\'s your designation?</p>', viewMode: 'rendered' },
     ],
   },
 ])
