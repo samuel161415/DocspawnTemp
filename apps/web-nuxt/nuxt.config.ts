@@ -88,6 +88,7 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
+    '~/plugins/syncfusion.js',
   ],
   app: {
     layoutTransition: {
@@ -98,6 +99,18 @@ export default defineNuxtConfig({
   css: [
     '@fortawesome/fontawesome-svg-core/styles.css',
     '~/assets/scss/main.scss',
+    // 'node_modules/@syncfusion/ej2-base/styles/material.css',
+
+    '@syncfusion/ej2-base/styles/material.css',
+    '@syncfusion/ej2-buttons/styles/material.css',
+    '@syncfusion/ej2-inputs/styles/material.css',
+    '@syncfusion/ej2-popups/styles/material.css',
+    '@syncfusion/ej2-lists/styles/material.css',
+    '@syncfusion/ej2-navigations/styles/material.css',
+    '@syncfusion/ej2-splitbuttons/styles/material.css',
+    '@syncfusion/ej2-dropdowns/styles/material.css',
+    '@syncfusion/ej2-vue-documenteditor/styles/material.css',
+
   ],
   runtimeConfig: {
     public: {
