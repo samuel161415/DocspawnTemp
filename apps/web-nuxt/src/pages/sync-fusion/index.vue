@@ -15,7 +15,7 @@ provide('DocumentEditorContainer', [Toolbar])
   <EjsDocumenteditorcontainer
     :service-url="serviceUrl"
     :enable-toolbar="true"
-    :style="{ height: '1000px' }"
+    :style="{ height: '100vh !important' }"
   />
 </template>
 
