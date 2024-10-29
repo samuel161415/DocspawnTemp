@@ -32,6 +32,7 @@
 import { registerLicense } from '@syncfusion/ej2-base'
 
 // // Register your Syncfusion license key
-registerLicense('ORg4AjUWIQA/Gnt2UlhhQlVMfV5DQmFIYVF2R2dJfFRxcV9HZkwxOX1dQl9nSH5RdERlWHhbdXdVQmk=')
-
+export default defineNuxtPlugin(() => {
+    registerLicense('ORg4AjUWIQA/Gnt2UlhhQlVMfV5DQmFIYVF2R2dJfFRxcV9HZkwxOX1dQl9nSH5RdERlWHhbdXdVQmk=');
+});
 // Vue.use(DocumentEditorPlugin)

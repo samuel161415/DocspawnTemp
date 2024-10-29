@@ -9,7 +9,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http'
 export default defineNuxtConfig({
   experimental: {
     asyncEntry: true,
-  },
+  },  
 
   vite: {
 
@@ -33,6 +33,10 @@ export default defineNuxtConfig({
       cors: { origin: '*' },
     },
 
+  },
+
+  build: {
+    transpile: [/@syncfusion/]
   },
   devServer: {
     port: 3001,
@@ -88,7 +92,8 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
-    '~/plugins/syncFusion.js',
+    '~/plugins/syncfusion.js',
+    '~/plugins/syncfusion-components.js'
   ],
   app: {
     layoutTransition: {
@@ -110,6 +115,7 @@ export default defineNuxtConfig({
     '@syncfusion/ej2-splitbuttons/styles/material.css',
     '@syncfusion/ej2-dropdowns/styles/material.css',
     '@syncfusion/ej2-vue-documenteditor/styles/material.css',
+    "@syncfusion/ej2-vue-navigations/styles/material.css",
 
   ],
   runtimeConfig: {

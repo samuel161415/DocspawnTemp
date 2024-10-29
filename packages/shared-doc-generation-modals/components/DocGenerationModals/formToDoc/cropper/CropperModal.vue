@@ -48,7 +48,6 @@ import uploadFileToBackend from '../../../../services/uploadFileToBackend'
 const props = defineProps(['isEdit', 'originalImage', 'aspectRatio', 'isCheckbox', 'userValue'])
 
 // adjust the path as necessary
-
 const emit = defineEmits(['handleCroppedUrl', 'handleOriginalImage', 'toggleEdit'])
 
 const visible = ref(false)
