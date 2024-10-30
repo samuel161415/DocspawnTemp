@@ -340,9 +340,7 @@ const insertInside = (parentItem, newItem) => {
 ::v-deep .e-treeview .e-ul .e-level-1 {
   margin-left: -14px !important
 }
-::v-deep .e-treeview .e-list-icon {
-width : 14px !important;
-}
+
 ::v-deep .e-treeview .e-list-text {
   font-family: "Poppins", sans-serif; /* font-poppins */
   font-weight: 400; /* font-normal */
