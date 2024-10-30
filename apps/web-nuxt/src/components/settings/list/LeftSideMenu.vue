@@ -1,13 +1,13 @@
 <template>
   <div
-    class="flex w-full md:max-w-[25%] flex-col justify-between h-full overflow-auto pt-5 no-scrollbar"
+    class="flex md:max-w-[30vw] flex-col justify-between h-full overflow-y-scroll pt-5 no-scrollbar"
   >
     <div class="flex max-md:justify-center ml-1">
       <Button
         icon="pi pi-plus"
         label="Create new list"
         outlined
-        class="text-success whitespace-nowrap border-success hover:bg-green-50 hover:border-success max-md:w-3/4 w-48"
+        class="text-success border-success hover:bg-green-50 hover:border-success max-md:w-3/4 w-48"
         @click="visible = true"
       />
     </div>
@@ -36,6 +36,8 @@
       </span>
     </div>
 
+  
+
     <ejs-treeview
       :fields="treeFields"
       @nodeClicked="onNodeClicked"
@@ -55,18 +57,14 @@ const transformData = (items) => {
   return items.map((item) => ({
     nodeId: item.path,
     nodeText: item.title,
-    nodeChild: item.isSublistSimple
-      ? item.sublists
-        ? transformData(item.sublists)
-        : []
-      : [],
+    nodeChild: item.isSublistSimple ? (item.sublists ? transformData(item.sublists) : []) : [],
     iconCss: item.isSublistSimple ? "" : "pi pi-file-excel text-success",
     cssClass:
       item.sublists && item.sublists.length > 0 ? "clickable" : "non-clickable",
   }));
 };
 const nodeTemplate = (data) => {
-  return `<p >${data.nodeText} <i class="${data.iconCss}" style="width: 100px;"></i></p>`;
+  return `<span>${data.nodeText} <i class="${data.iconCss}" style="margin-right: 5px;"></i></span>`;
 };
 
 const props = defineProps({
@@ -96,6 +94,7 @@ const treeFields = ref({
   nodeTemplate: nodeTemplate,
 });
 
+
 const filteredList = computed(() => {
   const filterItems = (items, fn) => {
     return items.reduce((result, item) => {
@@ -122,9 +121,6 @@ watch(searchQuery, (newValue) => {
   if (newValue === "") {
     filteredLists.value = addNewListItem.value;
   } else {
-    console.log("searchQuery", searchQuery);
-    console.log("filteredLists", filteredLists.value);
-    console.log("single filteredList", filteredList.value);
     filteredLists.value = filteredList.value;
   }
 });
@@ -132,6 +128,7 @@ watch(searchQuery, (newValue) => {
 watch(
   filteredLists,
   (newValue) => {
+    
     treeData.value = transformData(newValue);
   },
   { deep: true }
@@ -157,7 +154,6 @@ watch(addNewListItem, (newValue) => {
 const onNodeClicked = (args) => {
   const clickedNode = args.node;
   const nodeId = clickedNode.getAttribute("data-uid");
-  console.log("clicked node", nodeId);
   const clickedItem = props.findItemByPath(
     addNewListItem.value,
     nodeId,
@@ -245,13 +241,9 @@ const expandParentNodeById = (nodeId) => {
   nextTick(() => {
     setTimeout(() => {
       const treeView = document.querySelector(".e-treeview");
-      console.log("treeView", treeView);
       const node = treeView.querySelector(`[data-uid="${nodeId}"]`);
-      console.log("nodeId", nodeId);
-      console.log("node ", node);
       if (node) {
-        const parentNode = node.closest("li.e-list-item.e-level-1");
-        console.log("parentNode ", parentNode);
+        const parentNode = node.closest('li.e-list-item.e-level-1');
         if (parentNode) {
           try {
             treeView.ej2_instances[0].expandNode(parentNode);
@@ -332,9 +324,17 @@ const insertInside = (parentItem, newItem) => {
   }
   parentItem.sublists.push(newItem);
 };
+
+
 </script>
 
 <style scoped>
+::v-deep .e-treeview {
+  max-height: 600px; /* Set the fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
+  -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer and Edge */
+  scrollbar-width: none;
+}
 
 
 ::v-deep .e-treeview .e-ul .e-level-1 {
