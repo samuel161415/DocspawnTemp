@@ -1,4 +1,5 @@
-<!-- commit to trigger sami.listOption deployment 3 -->
+<!-- commit to trigger sami.listOption deployment 4 -->
+ <!-- commit to trigger sami.listOption deployment 5 -->
 <!-- <template>
   <div v-if="!isAuthenticated" class="flex flex-col justify-center items-center w-full h-[100vh] gap-4">
     <InputText v-model="email" placeholder="Enter your email" />
