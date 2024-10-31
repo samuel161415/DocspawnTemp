@@ -35,9 +35,9 @@ export default defineNuxtConfig({
 
   },
 
-  build: {
-    transpile: [/@syncfusion/],
-  },
+  // build: {
+  //   transpile: [/@syncfusion/],
+  // },
   devServer: {
     port: 3001,
 
@@ -89,12 +89,12 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  // plugins: [
-  //   '~/plugins/fontawesome.js',
-  //   '~/plugins/vue-recaptcha.js',
-  //   '~/plugins/syncfusion.js',
-  //   '~/plugins/syncfusion-components.js',
-  // ],
+  plugins: [
+    '~/plugins/fontawesome.js',
+    '~/plugins/vue-recaptcha.js',
+    '~/plugins/syncfusion.js',
+    '~/plugins/syncfusion-components.js',
+  ],
   app: {
     layoutTransition: {
       name: 'slide-right',
