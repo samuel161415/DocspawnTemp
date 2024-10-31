@@ -1,3 +1,4 @@
+<!-- commit to trigger sami.listOption deployment -->
 <!-- <template>
   <div v-if="!isAuthenticated" class="flex flex-col justify-center items-center w-full h-[100vh] gap-4">
     <InputText v-model="email" placeholder="Enter your email" />

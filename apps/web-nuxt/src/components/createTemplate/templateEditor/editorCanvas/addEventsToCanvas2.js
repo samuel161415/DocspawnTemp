@@ -54,7 +54,7 @@ export default async function addEventsToCanvas() {
           obj.set({ left: e.target?.left + (e.target?.width * e.target?.scaleX) - 13, top: e.target?.top + (e.target.height * e.target?.scaleY) - 13 })
       })
 
-      canvas.requestRenderAll()
+      canvas.renderAll()
     })
     canvas.on('object:scaling', (e) => {
       /** *updating last scaled options */
@@ -133,11 +133,11 @@ export default async function addEventsToCanvas() {
           obj.initDimensions()
 
           obj.setCoords()
-          canvas.requestRenderAll()
+          canvas.renderAll()
         }
       })
 
-      canvas.requestRenderAll()
+      canvas.renderAll()
     })
 
     let tempXMargin = null
@@ -147,7 +147,6 @@ export default async function addEventsToCanvas() {
     canvas.on('mouse:move', async (event) => {
       if (templateEditorStore.fieldToAdd.type === 'text' || templateEditorStore.fieldToAdd.type === 'Form text' || templateEditorStore.fieldToAdd.type === 'Data field' || templateEditorStore.fieldToAdd.type === 'Dataset date' || templateEditorStore.fieldToAdd.type === 'Form date' || templateEditorStore.fieldToAdd.type === 'Form time' || templateEditorStore.fieldToAdd.type === 'Form list' || templateEditorStore.fieldToAdd.type === 'Static date' || templateEditorStore.fieldToAdd.type === 'Static time' || templateEditorStore.fieldToAdd.type === 'Static text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
-          console.log('changing of element size')
           const isDatafield = false
           currentHoveredEle.set({
             left: event.absolutePointer.x,
@@ -170,7 +169,6 @@ export default async function addEventsToCanvas() {
           )
         }
         else {
-          console.log('removing and creation of canvas element')
           canvas.remove(currentHoveredEle)
           const isDatafield = false
           currentHoveredEle = new templateEditorStore.fabric.Text(
@@ -198,14 +196,12 @@ export default async function addEventsToCanvas() {
 
         if (templateEditorStore.activeAdvancedPointer) {
           if (tempXMargin && tempYMargin) {
-            console.log('change of margin sizes')
             tempXMargin.set({ left: event.absolutePointer.x })
             tempYMargin.set({ top: currentHoveredEle.top + (Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) - (1 * ((Number.parseFloat(currentHoveredEle.height) * currentHoveredEle.scaleY) / 5)),
               // event.absolutePointer.y + (Number.parseFloat(activeTextStyles.fontSize) / 10)
             })
           }
           else {
-            console.log('creating new margins')
             tempXMargin = new fabric.Line([100, 1000, 100, 5000], {
               left: event.absolutePointer.x,
               top: 0,
@@ -225,7 +221,7 @@ export default async function addEventsToCanvas() {
           }
         }
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
       }
       if (templateEditorStore.fieldToAdd.type === 'Form long text') {
         if (currentHoveredEle && currentHoveredEle?.text) {
@@ -294,7 +290,7 @@ export default async function addEventsToCanvas() {
           }
         }
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
       }
       if (templateEditorStore.fieldToAdd.type === 'Dataset image' || templateEditorStore.fieldToAdd.type === 'fixed-image' || templateEditorStore.fieldToAdd.type === 'Form image' || templateEditorStore.fieldToAdd.type === 'Static image') {
         if (currentHoveredEle && currentHoveredEle?._element) {
@@ -332,7 +328,7 @@ export default async function addEventsToCanvas() {
               canvas.add(tempYMargin)
             }
           }
-          canvas.requestRenderAll()
+          canvas.renderAll()
         }
         else {
           fabric.Image.fromURL(
@@ -375,7 +371,7 @@ export default async function addEventsToCanvas() {
                 }
               }
               canvas.add(myImg)
-              canvas.requestRenderAll()
+              canvas.renderAll()
             },
           )
         }
@@ -416,7 +412,7 @@ export default async function addEventsToCanvas() {
               canvas.add(tempYMargin)
             }
           }
-          canvas.requestRenderAll()
+          canvas.renderAll()
         }
         else {
           fabric.Image.fromURL(
@@ -460,7 +456,7 @@ export default async function addEventsToCanvas() {
                 }
               }
               canvas.add(myImg)
-              canvas.requestRenderAll()
+              canvas.renderAll()
             },
           )
         }
@@ -483,7 +479,7 @@ export default async function addEventsToCanvas() {
               return true
           })
         }
-        canvas.requestRenderAll()
+        canvas.renderAll()
 
         const isDatafield = false
 
@@ -540,7 +536,7 @@ export default async function addEventsToCanvas() {
         allFields.push(fieldToAdd)
         templateEditorStore.addedFields = allFields
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
 
         templateEditorStore.fieldToAdd = {}
         textEle.on('mouseover', (e) => {
@@ -575,11 +571,11 @@ export default async function addEventsToCanvas() {
               return true
           })
 
-          canvas.requestRenderAll()
+          canvas.renderAll()
         })
         canvas.add(textEle)
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
         /** remove field */
         const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
         templateEditorStore.addedFields = remainingFields
@@ -596,7 +592,7 @@ export default async function addEventsToCanvas() {
               return true
           })
         }
-        canvas.requestRenderAll()
+        canvas.renderAll()
 
         const isDatafield = false
 
@@ -656,7 +652,7 @@ export default async function addEventsToCanvas() {
         allFields.push(fieldToAdd)
         templateEditorStore.addedFields = allFields
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
 
         templateEditorStore.fieldToAdd = {}
         textEle.on('mouseover', (e) => {
@@ -693,11 +689,11 @@ export default async function addEventsToCanvas() {
               return true
           })
 
-          canvas.requestRenderAll()
+          canvas.renderAll()
         })
         canvas.add(textEle)
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
         /** remove field */
         const remainingFields = templateEditorStore.addedFields.filter(f => f?.name !== templateEditorStore.fieldToAdd?.name)
         templateEditorStore.addedFields = remainingFields
@@ -722,7 +718,7 @@ export default async function addEventsToCanvas() {
                   return true
               })
             }
-            canvas.requestRenderAll()
+            canvas.renderAll()
 
             myImg.set({
               cornerStyle: 'circle',
@@ -753,7 +749,7 @@ export default async function addEventsToCanvas() {
 
             allFields.push(fieldToAdd)
             templateEditorStore.addedFields = allFields
-            canvas.requestRenderAll()
+            canvas.renderAll()
             templateEditorStore.fieldToAdd = {}
 
             myImg.on('mouseover', (e) => {
@@ -791,11 +787,11 @@ export default async function addEventsToCanvas() {
                   return true
               })
 
-              canvas.requestRenderAll()
+              canvas.renderAll()
             })
 
             canvas.add(myImg)
-            canvas.requestRenderAll()
+            canvas.renderAll()
           },
         )
       }
@@ -819,7 +815,7 @@ export default async function addEventsToCanvas() {
                   return true
               })
             }
-            canvas.requestRenderAll()
+            canvas.renderAll()
             const colorsForCheckboxGroup = generateLightAndDarkColors()
             const uniqueHashForEle = uuid.v1()
             myImg.set({
@@ -855,7 +851,7 @@ export default async function addEventsToCanvas() {
 
             allFields.push(fieldToAdd)
             templateEditorStore.addedFields = allFields
-            canvas.requestRenderAll()
+            canvas.renderAll()
             templateEditorStore.fieldToAdd = {}
 
             const tooltip = new fabric.Text(' Enter label ', {
@@ -877,7 +873,7 @@ export default async function addEventsToCanvas() {
 
             myImg.on('mouseover', (e) => {
               myImg.tooltip.set({ visible: true, opacity: 1 })
-              canvas.requestRenderAll()
+              canvas.renderAll()
               // const tooltip = new fabric.Text('Tooltip Text', {
               //   left: myImg.left + (myImg.width * myImg.scaleX),
               //   top: myImg.top - 10,
@@ -920,7 +916,7 @@ export default async function addEventsToCanvas() {
                 // canvas.remove(myImg.tooltip)
                 // myImg.tooltip = null
                 myImg.tooltip.set({ visible: false, opacity: 0 })
-                canvas.requestRenderAll()
+                canvas.renderAll()
               }
 
               if (!templateEditorStore.activeAdvancedPointer)
@@ -934,7 +930,7 @@ export default async function addEventsToCanvas() {
                   return true
               })
 
-              canvas.requestRenderAll()
+              canvas.renderAll()
             })
             myImg.on('moving', () => {
               if (myImg.tooltip.visible) {
@@ -942,7 +938,7 @@ export default async function addEventsToCanvas() {
                   left: myImg.left + (myImg.width * myImg.scaleX),
                   top: myImg.top - 10,
                 })
-                canvas.requestRenderAll()
+                canvas.renderAll()
               }
             })
 
@@ -969,7 +965,7 @@ export default async function addEventsToCanvas() {
                     selectable: false,
                   })
                   canvas.add(icon)
-                  canvas.requestRenderAll()
+                  canvas.renderAll()
                 },
               )
             }
@@ -977,7 +973,7 @@ export default async function addEventsToCanvas() {
             /** */
 
             canvas.add(myImg)
-            canvas.requestRenderAll()
+            canvas.renderAll()
           },
         )
       }
@@ -1020,7 +1016,7 @@ export default async function addEventsToCanvas() {
       // if (currentHoveredEle)
       //   canvas.remove(currentHoveredEle)
 
-      canvas.requestRenderAll()
+      canvas.renderAll()
     })
     document.addEventListener('click', (event) => {
       // Get the canvas element's bounding box
@@ -1037,7 +1033,7 @@ export default async function addEventsToCanvas() {
           canvas.remove(currentHoveredEle)
           // templateEditorStore.fieldToAdd = null
 
-        canvas.requestRenderAll()
+        canvas.renderAll()
       }
     })
   }
