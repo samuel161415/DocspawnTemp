@@ -92,8 +92,10 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
-    '~/plugins/syncfusion.js',
+    '~/plugins/syncFusion.js',
     '~/plugins/syncfusion-components.js',
+    // { src: '~/plugins/syncFusion.js', ssr: false },
+    // { src: '~/plugins/syncfusion-components.js', ssr: false },
   ],
   app: {
     layoutTransition: {
