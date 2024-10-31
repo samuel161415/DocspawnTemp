@@ -89,12 +89,12 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
-  plugins: [
-    '~/plugins/fontawesome.js',
-    '~/plugins/vue-recaptcha.js',
-    '~/plugins/syncfusion.js',
-    '~/plugins/syncfusion-components.js',
-  ],
+  // plugins: [
+  //   '~/plugins/fontawesome.js',
+  //   '~/plugins/vue-recaptcha.js',
+  //   '~/plugins/syncfusion.js',
+  //   '~/plugins/syncfusion-components.js',
+  // ],
   app: {
     layoutTransition: {
       name: 'slide-right',
