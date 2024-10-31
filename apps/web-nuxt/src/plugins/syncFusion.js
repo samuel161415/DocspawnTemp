@@ -30,9 +30,10 @@
 //   WordExport,
 // } from '@syncfusion/ej2-vue-documenteditor'
 import { registerLicense } from '@syncfusion/ej2-base'
+import { defineNuxtPlugin } from '#app'
 
 // // Register your Syncfusion license key
 export default defineNuxtPlugin(() => {
-    registerLicense('ORg4AjUWIQA/Gnt2UlhhQlVMfV5DQmFIYVF2R2dJfFRxcV9HZkwxOX1dQl9nSH5RdERlWHhbdXdVQmk=');
-});
+  registerLicense('ORg4AjUWIQA/Gnt2UlhhQlVMfV5DQmFIYVF2R2dJfFRxcV9HZkwxOX1dQl9nSH5RdERlWHhbdXdVQmk=')
+})
 // Vue.use(DocumentEditorPlugin)
