@@ -400,10 +400,14 @@
     "date": "Date",
     "checkboxes": "Checkboxes",
     "billing": "Billing",
-    "data_sources": "Data sources",
+    "element_libraries": "Element Libraries",
     "lists": "Lists",
     "databases": "Databases",
-    "integrations": "Integrations"
+    "integrations": "Integrations",
+    "snippers": "Snippers",
+    "form_elements":"Form Elements",
+    "image_library":"Image Library",
+    "check_boxes":"Check Boxes"
   }
 
 }

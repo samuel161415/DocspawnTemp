@@ -1,9 +1,9 @@
 <template>
   <div class="w-full h-full  bg-white overflow-scroll no-scrollbar ">
     <div class=" py-8 rounded-lg">
-      <p class="font-semibold text-surface-600 text-xl py-2">
+      <!-- <p class="font-semibold text-surface-600 text-xl py-2">
         Data source
-      </p>
+      </p> -->
       <div>
         <div class="flex flex-col">
           <!-- left side menu -->

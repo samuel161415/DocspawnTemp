@@ -35,9 +35,9 @@ export default defineNuxtConfig({
 
   },
 
-  build: {
-    transpile: [/@syncfusion/]
-  },
+  // build: {
+  //   transpile: [/@syncfusion/]
+  // },
   devServer: {
     port: 3001,
 
@@ -92,7 +92,7 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
-    '~/plugins/syncfusion.js',
+    '~/plugins/syncFusion.js',
     '~/plugins/syncfusion-components.js'
   ],
   app: {

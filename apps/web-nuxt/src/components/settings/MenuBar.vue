@@ -89,6 +89,7 @@ function navigate(item, baseRoute = '') {
   const route = baseRoute + item.route
   currentTitle.value = item.title
 
+  console.log("base route ",baseRoute, " item ",item, " route ",route," currentTitle",currentTitle.value)
   router.push(route)
   if (route.includes('#')) {
     const targetId = route.split('#')[1]
@@ -96,6 +97,8 @@ function navigate(item, baseRoute = '') {
 
     if (targetElement)
       targetElement.scrollIntoView({ behavior: 'smooth' })
+      const event = new CustomEvent('set-active-index', { detail: targetId })
+      window.dispatchEvent(event)
   }
   settingsBaseRoute.value = route
 }

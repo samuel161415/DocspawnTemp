@@ -226,7 +226,6 @@
     "file_naming_checkbox_label": "Activer le nommage de fichier personnalisé",
     "file_naming_description_two": "utilisez le caractère \"<\" à la fin pour ajouter des variables",
     "save_template": "Enregistrer le modèle"
-
   },
   "Cp_templateEditor_checkboxOptions": {
     "checked_design": "Conception cochée",
@@ -396,10 +395,14 @@
     "date": "Date",
     "checkboxes": "Cases à cocher",
     "billing": "Facturation",
-    "data_sources": "Sources de données",
+    "element_libraries": "Bibliothèques d'éléments",
     "lists": "Listes",
     "databases": "Bases de données",
-    "integrations": "Intégrations"
+    "integrations": "Intégrations",
+    "snippers": "Snippers",
+    "form_elements": "Éléments de formulaire",
+    "image_library": "Bibliothèque d'images",
+    "check_boxes": "Cases à cocher"
   },
   "docs_created": "Documents créés",
   "created_on": "Créé le",

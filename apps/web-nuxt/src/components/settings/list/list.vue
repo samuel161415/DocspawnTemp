@@ -1,7 +1,7 @@
 <template>
   <div class="w-full flex bg-white overflow-scroll no-scrollbar">
     <div class=" py-2 rounded-md bg-white w-full">
-      <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p>
+      <!-- <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p> -->
       <div class="flex flex-col md:flex-row md:justify-between w-full ">
         <!-- left side menu -->
         <LeftSideMenu

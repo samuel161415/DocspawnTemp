@@ -515,6 +515,7 @@ watch(selectedFiles, () => {
     dataSourceFileCompleteJSON.value = [];
     dataSourceSelectedColumns.value = [];
   }
+  
 });
 
 watch(dataSourceFileCompleteJSON, () => {
