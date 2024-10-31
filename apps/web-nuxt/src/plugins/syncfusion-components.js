@@ -1,6 +1,6 @@
-import { defineNuxtPlugin } from '#app';
-import { TreeViewPlugin } from '@syncfusion/ej2-vue-navigations';
+import { TreeViewPlugin } from '@syncfusion/ej2-vue-navigations'
+import { defineNuxtPlugin } from '#app'
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(TreeViewPlugin);
-});
+  nuxtApp.vueApp.use(TreeViewPlugin)
+})
