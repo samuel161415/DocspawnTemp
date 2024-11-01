@@ -4,7 +4,7 @@
       <!-- <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p> -->
       <div class="flex flex-col md:flex-row md:justify-between w-full">
         <!-- left side menu -->
-        <LeftSideMenu
+        <!-- <LeftSideMenu
           :tableData="tableData"
           :filters="filters"
           :visible="visible"
@@ -14,7 +14,7 @@
           @update:filteredLists="filteredLists = $event"
           @update:tableData="tableData = $event"
           @handleopensubmenu="handleopensubmenu"
-        />
+        /> -->
 
         <!-- right section -->
         <div class="w-full md:w-[75%] py-2 ml-2">

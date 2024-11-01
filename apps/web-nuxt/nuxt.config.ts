@@ -35,14 +35,14 @@ export default defineNuxtConfig({
 
   },
 
-  build: {
-    transpile: [
-      '@syncfusion/ej2-base',
-      '@syncfusion/ej2-vue-documenteditor',
-      '@syncfusion/ej2-vue-navigations',
-      '@syncfusion/ej2-vue-base'
-    ],
-  },
+  // build: {
+  //   transpile: [
+  //     '@syncfusion/ej2-base',
+  //     '@syncfusion/ej2-vue-documenteditor',
+  //     '@syncfusion/ej2-vue-navigations',
+  //     '@syncfusion/ej2-vue-base'
+  //   ],
+  // },
   devServer: {
     port: 3001,
 
@@ -97,8 +97,8 @@ export default defineNuxtConfig({
   plugins: [
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
-    '~/plugins/syncFusion.js',
-    '~/plugins/syncfusion-components.js',
+    // '~/plugins/syncFusion.js',
+    // '~/plugins/syncfusion-components.js',
     // { src: '~/plugins/syncFusion.js', ssr: false },
     // { src: '~/plugins/syncfusion-components.js', ssr: false },
   ],

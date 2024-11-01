@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full ml-4 bg-white overflow-scroll no-scrollbar">
     <div class="px-8 py-8 rounded-lg">
-      <div id="lists">
+      <!-- <div id="lists">
         <List />
       </div>
       <div id="databases">
@@ -9,9 +9,9 @@
       </div>
       <div id="integration">
         <Integration />
-      </div>
+      </div> -->
 
-      <!-- <Accordion v-model:activeIndex="activeIndex">
+      <Accordion v-model:activeIndex="activeIndex">
         <AccordionTab header="List">
           <List />
         </AccordionTab>
@@ -21,7 +21,7 @@
         <AccordionTab header="Integration">
           <Integration />
         </AccordionTab>
-      </Accordion> -->
+      </Accordion>
     </div>
   </div>
 </template>
