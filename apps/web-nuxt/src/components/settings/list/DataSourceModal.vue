@@ -89,22 +89,20 @@ const updateVisible = (value) => {
 .custom-header {
   display: flex;
   align-items: center;
-  padding:0;
-  
+  padding: 0;
 }
 
-
-::v-deep .p-datatable-thead > tr {
+:deep(.p-datatable-thead > tr) {
   border: none !important;
 }
 
-::v-deep .p-datatable-thead > tr > th {
+:deep(.p-datatable-thead > tr > th) {
   border-top: none !important;
   border-left: none !important;
   white-space: nowrap;
 }
 
-::v-deep .p-datatable-tbody > tr > td {
+:deep(.p-datatable-tbody > tr > td) {
   border-left: none !important;
 }
 </style>
