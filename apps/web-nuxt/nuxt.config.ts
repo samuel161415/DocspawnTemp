@@ -35,9 +35,13 @@ export default defineNuxtConfig({
 
   },
 
-  // build: {
-  //   transpile: [/@syncfusion/],
-  // },
+  build: {
+    transpile: [
+      '@syncfusion/ej2-base',
+      '@syncfusion/ej2-vue-documenteditor',
+      '@syncfusion/ej2-vue-navigations'
+    ],
+  },
   devServer: {
     port: 3001,
 
@@ -53,9 +57,7 @@ export default defineNuxtConfig({
     prefix: 'Tiptap', // This prefix will be used for importing Tiptap components
   },
 
-  build: {
-    transpile: [/@syncfusion/]
-  },
+
   i18n: {
     locales: [
       { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
