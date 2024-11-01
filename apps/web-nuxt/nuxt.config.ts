@@ -53,6 +53,9 @@ export default defineNuxtConfig({
     prefix: 'Tiptap', // This prefix will be used for importing Tiptap components
   },
 
+  build: {
+    transpile: [/@syncfusion/]
+  },
   i18n: {
     locales: [
       { code: 'en', name: 'English', iso: 'en-US', file: 'en.json' },
