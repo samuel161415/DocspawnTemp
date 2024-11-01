@@ -110,7 +110,7 @@ export default defineNuxtConfig({
 
     '@syncfusion/ej2-base/styles/material.css',
     '@syncfusion/ej2-buttons/styles/material.css',
-    // '@syncfusion/ej2-inputs/styles/material.css',
+    '@syncfusion/ej2-inputs/styles/material.css',
     '@syncfusion/ej2-popups/styles/material.css',
     '@syncfusion/ej2-lists/styles/material.css',
     '@syncfusion/ej2-navigations/styles/material.css',

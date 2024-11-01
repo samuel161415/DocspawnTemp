@@ -14,6 +14,7 @@
     "@docspawn/shared-doc-generation-modals": "workspace:^",
     "@nuxtjs/dotenv": "^1.4.2",
     "@nuxtjs/i18n": "^8.3.1",
+    "@syncfusion/ej2-base": "^27.1.55",
     "@syncfusion/ej2-vue-documenteditor": "^27.1.55",
     "@syncfusion/ej2-vue-navigations": "^27.1.57",
     "@tiptap/extension-bubble-menu": "^2.6.6",
