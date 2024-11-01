@@ -1,8 +1,8 @@
 <template>
   <div class="w-full flex bg-white overflow-scroll no-scrollbar">
-    <div class=" py-2 rounded-md bg-white w-full">
+    <div class="py-2 rounded-md bg-white w-full">
       <!-- <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p> -->
-      <div class="flex flex-col md:flex-row md:justify-between w-full ">
+      <div class="flex flex-col md:flex-row md:justify-between w-full">
         <!-- left side menu -->
         <LeftSideMenu
           :tableData="tableData"
@@ -123,7 +123,7 @@ import EditItemOptionModal from "~/components/settings/list/EditItemOptionModal.
 import ListOptionModal from "~/components/settings/list/ListOptionModal.vue";
 import CreateSublistModal from "~/components/settings/list/CreateSublistModal.vue";
 import { addNewListItem } from "~/services/newListData.js";
-import LeftSideMenu from '~/components/settings/list/LeftSideMenu.vue';
+import LeftSideMenu from "~/components/settings/list/LeftSideMenu.vue";
 
 const toast = useToast();
 const visible = ref(false);
@@ -366,19 +366,19 @@ const showSuccess = () => {
   color: black;
 }
 
-::v-deep .e-list-text {
+:deep(.e-list-text) {
   color: black; /* Default color for all text */
 }
 
-::v-deep .clickable .e-list-text {
+:deep(.clickable .e-list-text) {
   cursor: pointer;
 }
 
-/* ::v-deep .e-active .e-list-text {
+/* :deep(.e-active .e-list-text) {
   color: #009EE2 !important; 
 } */
 
-::v-deep .non-clickable .e-list-text {
+:deep(.non-clickable .e-list-text) {
   pointer-events: none;
   color: gray; /* Change the text color of non-clickable nodes to gray */
   cursor: not-allowed; /* Change the cursor to not-allowed for non-clickable nodes */

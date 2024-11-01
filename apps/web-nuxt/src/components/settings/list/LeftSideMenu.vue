@@ -329,37 +329,36 @@ const insertInside = (parentItem, newItem) => {
 </script>
 
 <style scoped>
-::v-deep .e-treeview {
+:deep(.e-treeview) {
   max-height: 600px; /* Set the fixed height */
   overflow-y: auto; /* Enable vertical scrolling */
   -ms-overflow-style: none; /* Hide scrollbar in Internet Explorer and Edge */
   scrollbar-width: none;
 }
 
-
-::v-deep .e-treeview .e-ul .e-level-1 {
-  margin-left: -14px !important
+:deep(.e-treeview .e-ul .e-level-1) {
+  margin-left: -14px !important;
 }
 
-::v-deep .e-treeview .e-list-text {
+:deep(.e-treeview .e-list-text) {
   font-family: "Poppins", sans-serif; /* font-poppins */
   font-weight: 400; /* font-normal */
   font-size: 14px !important; /* Ensure font size is applied */
   color: #4b5563 !important; /* Ensure color is applied */
 }
 
-::v-deep .clickable .e-list-text {
+:deep(.clickable .e-list-text) {
   cursor: pointer;
 }
 
-::v-deep .e-active > .e-text-content > .e-list-text {
+:deep(.e-active > .e-text-content > .e-list-text) {
   color: #009ee2 !important;
 }
-::v-deep .e-drag-item.e-dragging::before {
+:deep(.e-drag-item.e-dragging::before) {
   background-color: #009ee2 !important; /* Change the color of the drag indicator dot */
 }
 
-::v-deep .non-clickable .e-list-text {
+:deep(.non-clickable .e-list-text) {
   pointer-events: none;
   color: #4b5563 !important; /* Ensure color is applied */
   cursor: not-allowed; /* Change the cursor to not-allowed for non-clickable nodes */
