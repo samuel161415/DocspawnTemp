@@ -19,7 +19,7 @@
         <!-- right section -->
         <!-- md:max-w-[70vw] -->
         <div class="w-full md:w-[80%] py-5 ml-2">
-          <div class="mb-12 md:w-full relative">
+          <div class="mb-12 md:w-full relative max-h-[630px] overflow-y-auto">
             <!-- Iterate over addNewListItem to call DataTableComponent for each list initially -->
             <template v-if="isInitialLoad">
               <DataTableComponent
