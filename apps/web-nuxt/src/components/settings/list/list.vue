@@ -1,8 +1,8 @@
 <template>
   <div class="w-full flex bg-white overflow-scroll no-scrollbar">
-    <div class="py-2 rounded-md bg-white w-full">
+    <div class="px-4 py-2 rounded-md bg-white w-full">
       <!-- <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p> -->
-      <div class="flex flex-col md:flex-row md:justify-between w-full">
+      <div class="flex flex-col md:flex-row md:justify-end w-full">
         <!-- left side menu -->
         <!-- <LeftSideMenu
           :tableData="tableData"
@@ -17,20 +17,42 @@
         /> -->
 
         <!-- right section -->
-        <div class="w-full md:w-[75%] py-2 ml-2">
-          <div class="mb-12 w-full relative">
-            <DataTableComponent
-              :tableData="tableData"
-              :filters="filters"
-              @row-reorder="onRowReorder"
-              @edit-item="handleEditItem"
-              @open-delete="handleOpenDelete"
-              @open-add-items="handleOpenAddItems"
-              @open-list-options="openListOptions = true"
-              @open-create-sublist-modal="createSubList"
-              calledFrom="root"
-              :c_level="0"
-            />
+        <!-- md:max-w-[70vw] -->
+        <div class="w-full md:w-[80%] py-5 ml-2">
+          <div class="mb-12 md:w-full relative">
+            <!-- Iterate over addNewListItem to call DataTableComponent for each list initially -->
+            <template v-if="isInitialLoad">
+              <DataTableComponent
+                v-for="list in addNewListItem"
+                :key="list.id"
+                :tableData="list"
+                :filters="filters"
+                @row-reorder="onRowReorder"
+                @edit-item="handleEditItem"
+                @open-delete="handleOpenDelete"
+                @open-add-items="handleOpenAddItems"
+                @open-list-options="openListOptions = true"
+                @open-create-sublist-modal="createSubList"
+                calledFrom="root"
+                :c_level="0"
+              />
+            </template>
+
+            <!-- Call DataTableComponent with the selected value when a list is selected -->
+            <template v-else>
+              <DataTableComponent
+                :tableData="tableData"
+                :filters="filters"
+                @row-reorder="onRowReorder"
+                @edit-item="handleEditItem"
+                @open-delete="handleOpenDelete"
+                @open-add-items="handleOpenAddItems"
+                @open-list-options="openListOptions = true"
+                @open-create-sublist-modal="createSubList"
+                calledFrom="root"
+                :c_level="0"
+              />
+            </template>
 
             <Toast />
           </div>
@@ -143,29 +165,15 @@ const sublistId = ref();
 const sublistPath = ref();
 const searchQuery = ref("");
 const filteredLists = ref(addNewListItem.value);
+const isInitialLoad = ref(true); // Track if the page is loaded initially
 
 const handleopensubmenu = (clickedItem) => {
   tableData.value = clickedItem;
+  isInitialLoad.value = false; // Update the state to indicate that a list is selected
 };
 
 onMounted(() => {
-  // tableData.value = addNewListItem.value[0];
-  const combinedLists = {
-    id: 0,
-    title: "All Lists",
-    isHovered: false,
-    opensubmenu: true,
-    level: 0,
-    isSublistSimple: true,
-    path: "0",
-    sublists: [],
-  };
-
-  addNewListItem.value.forEach((list) => {
-    combinedLists.sublists.push(...list.sublists);
-  });
-
-  tableData.value = combinedLists;
+  tableData.value = addNewListItem.value[0];
 });
 
 const filters = ref({
@@ -366,19 +374,19 @@ const showSuccess = () => {
   color: black;
 }
 
-:deep(.e-list-text) {
+::v-deep .e-list-text {
   color: black; /* Default color for all text */
 }
 
-:deep(.clickable .e-list-text) {
+::v-deep .clickable .e-list-text {
   cursor: pointer;
 }
 
-/* :deep(.e-active .e-list-text) {
+/* ::v-deep .e-active .e-list-text {
   color: #009EE2 !important; 
 } */
 
-:deep(.non-clickable .e-list-text) {
+::v-deep .non-clickable .e-list-text {
   pointer-events: none;
   color: gray; /* Change the text color of non-clickable nodes to gray */
   cursor: not-allowed; /* Change the cursor to not-allowed for non-clickable nodes */
