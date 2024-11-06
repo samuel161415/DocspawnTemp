@@ -98,7 +98,7 @@ export default defineNuxtConfig({
     '~/plugins/fontawesome.js',
     '~/plugins/vue-recaptcha.js',
     "~/plugins/syncfusion.js",
-    "~/plugins/syncfusion-components.js"
+    // "~/plugins/syncfusion-components.js"
     // '~/plugins/syncFusion.js',
     // '~/plugins/syncfusion-components.js',
     // { src: '~/plugins/syncFusion.js', ssr: false },

@@ -1,10 +1,10 @@
 <template>
   <div class="w-full flex bg-white overflow-scroll no-scrollbar">
     <div class="px-4 py-2 rounded-md bg-white w-full">
-      <!-- <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p> -->
-      <div class="flex flex-col md:flex-row md:justify-end w-full">
+      <p class="font-semibold text-surface-700 text-xl my-5 ml-1">List</p>
+      <div class="flex flex-col md:flex-row md:justify-between w-full">
         <!-- left side menu -->
-        <!-- <LeftSideMenu
+        <LeftSideMenu
           :tableData="tableData"
           :filters="filters"
           :visible="visible"
@@ -14,14 +14,14 @@
           @update:filteredLists="filteredLists = $event"
           @update:tableData="tableData = $event"
           @handleopensubmenu="handleopensubmenu"
-        /> -->
+        />
 
         <!-- right section -->
         <!-- md:max-w-[70vw] -->
-        <div class="w-full md:w-[80%] py-5 ml-2">
-          <div class="mb-12 md:w-full relative max-h-[630px] overflow-y-auto">
+        <div class="w-full py-2 ml-2">
+          <div class="mb-12 md:w-full relative overflow-y-auto">
             <!-- Iterate over addNewListItem to call DataTableComponent for each list initially -->
-            <template v-if="isInitialLoad">
+            <template v-if="isRootSelected">
               <DataTableComponent
                 v-for="list in addNewListItem"
                 :key="list.id"
@@ -166,10 +166,16 @@ const sublistPath = ref();
 const searchQuery = ref("");
 const filteredLists = ref(addNewListItem.value);
 const isInitialLoad = ref(true); // Track if the page is loaded initially
+const isRootSelected = ref(true); // Track if the root list is selected
 
 const handleopensubmenu = (clickedItem) => {
-  tableData.value = clickedItem;
-  isInitialLoad.value = false; // Update the state to indicate that a list is selected
+  if (clickedItem.path === "root") {
+    isRootSelected.value = true;
+  } else {
+    tableData.value = clickedItem;
+    isInitialLoad.value = false; // Update the state to indicate that a list is selected
+    isRootSelected.value = false;
+  }
 };
 
 onMounted(() => {
@@ -373,12 +379,12 @@ const showSuccess = () => {
   background-color: yellow;
   color: black;
 }
-
-::v-deep .e-list-text {
+/* :deep(.p-datatable-row-expansion) */
+:deep(.e-list-text) {
   color: black; /* Default color for all text */
 }
 
-::v-deep .clickable .e-list-text {
+:deep(.clickable .e-list-text) {
   cursor: pointer;
 }
 
@@ -386,7 +392,7 @@ const showSuccess = () => {
   color: #009EE2 !important; 
 } */
 
-::v-deep .non-clickable .e-list-text {
+:deep(.non-clickable .e-list-text) {
   pointer-events: none;
   color: gray; /* Change the text color of non-clickable nodes to gray */
   cursor: not-allowed; /* Change the cursor to not-allowed for non-clickable nodes */

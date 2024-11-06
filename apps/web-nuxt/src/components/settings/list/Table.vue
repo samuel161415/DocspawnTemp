@@ -1,14 +1,11 @@
 <template>
-  <div
-    :class="isSublistData ? `max-w-[calc(80%-${c_level * 65}px)]` : 'w-full'"
-    class=""
-  >
+  <div :class="isSublistData ? `max-w-[70vw]` : 'w-full'" class="">
     <DataTable
       v-model:expandedRows="expandedRows"
       :value="tableData?.sublists"
       dataKey="id"
       scrollable
-      :scrollHeight="calledFrom === 'root' ? '550px':'400px'"
+      :scrollHeight="calledFrom === 'root' ? '550px' : '400px'"
       scrollDirection="both"
       frozenHeader
       :paginator="showPaginator"
@@ -50,7 +47,7 @@
       </template>
 
       <template v-if="!isSublistData">
-        <Column class="w-[48px] text-center" >
+        <Column class="w-[48px] text-center">
           <template #body="{ data }">
             <span
               v-if="hasSublists(data)"
@@ -129,7 +126,7 @@
           :header="column"
           :sortable="true"
           :frozen="index === 0"
-          class="w-[calc(100% - 80px)] pl-[33px] header-white"
+          class="w-[70vw]"
           :class="headerClass"
         >
           <template #body="{ data, field }">
@@ -145,7 +142,7 @@
       <template v-if="tableData?.sublists?.length" #expansion="{ data }">
         <div
           v-if="hasSublists(data)"
-          :class="isChildSublistSimple(data) ? '' : 'max-w-[calc(80%-34px)]'"
+          :class="isChildSublistSimple(data) ? '' : 'max-w-[calc(100%-34px)]'"
           class="pl-[47px] border-none mb-[-1px] overflow-x-auto"
         >
           <Table
@@ -184,6 +181,7 @@ import DataSourceModal from "~/components/settings/list/DataSourceModal.vue";
 
 const props = defineProps({
   tableData: Object,
+  // tableData: Array,
   filters: Object,
   calledFrom: String,
   c_level: Number,
@@ -302,6 +300,9 @@ const columns = computed(() => {
 });
 
 const toggleRow = (data) => {
+  console.log("toggleRow called for data:", data);
+  console.log("expandedRows before toggle:", expandedRows.value);
+  console.log("isChildSublistSimple:", isChildSublistSimple(data));
   if (props.tableData.level > 2) {
     return; // Prevent expanding if level is greater than 3
   }
@@ -317,9 +318,11 @@ const toggleRow = (data) => {
       expandedRows.value[data.id] = true;
     }
   }
+  console.log("expandedRows after toggle:", expandedRows.value);
 };
 
 const showModal = (data) => {
+  console.log("show modal is clicked and the passed props is", data);
   modalTableData.value = data;
   isModalVisible.value = true;
 };
@@ -351,7 +354,9 @@ const showModal = (data) => {
   border: none !important;
 }
 
-:deep(.p-datatable-tbody > tr.p-row-expanded > td > .p-datatable-row-expansion) {
+:deep(
+    .p-datatable-tbody > tr.p-row-expanded > td > .p-datatable-row-expansion
+  ) {
   margin: 0 !important;
   padding: 0 !important;
   border: none !important;

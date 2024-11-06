@@ -1,9 +1,9 @@
 <template>
   <div class="mb-10">
     <div class="py-2 ml-1">
-      <!-- <p class="font-medium text-surface-600 font-poppins text-xl mb-5 ml-2">
+      <p class="font-medium text-surface-600 font-poppins text-xl mb-5 ml-2">
         Integration
-      </p> -->
+      </p>
 
       <div class="flex justify-between mt-5 ml-2">
         <span class="relative flex">
